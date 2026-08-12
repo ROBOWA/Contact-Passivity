@@ -1,0 +1,7 @@
+# Planar contact-sliding simulation (mujoco_sliding)
+mujoco>=3.3.0
+numpy
+matplotlib
+
+# Tests
+pytest
