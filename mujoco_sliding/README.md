@@ -1,14 +1,16 @@
 # mujoco_sliding — planar contact-sliding proof of concept
 
-MuJoCo-based 2D contact-sliding simulation: the first proof of concept for a
-contact-model-aware **selective-passivation** project. A planar two-link robot
+MuJoCo-based 2D contact-sliding simulation: a proof of concept for
+contact-model-aware **selective passivation**. A planar two-link robot
 approaches a horizontal surface, regulates a desired normal contact force,
 and slides tangentially, while ground-truth **task-contact** and
-**human-interaction** force channels are logged separately for a later
-selective-passivation QP. The QP itself is *not* implemented here; this is the
-validated nominal force/motion controller and its data interfaces.
+**human-interaction** force channels are logged separately. On top of the
+validated nominal force/motion controller sits a selective-passivation layer
+(residual energy ledger + nested human energy ledger + task-weighted OSQP
+filter, modes C0–C4) — see *Selective-passivation layer* below.
 
-Tested with MuJoCo 3.3.1 (official `mujoco` Python bindings), NumPy, matplotlib.
+Tested with MuJoCo 3.3.1 (official `mujoco` Python bindings), NumPy,
+matplotlib, SciPy, OSQP ≥ 1.0.
 
 ## Running
 
@@ -20,7 +22,15 @@ python -m mujoco_sliding.simulation --human-force   # with the known human push
 python -m mujoco_sliding.simulation --duration 8 --output-dir results --no-animation
 python -m mujoco_sliding.viewer                     # interactive viewer (needs display)
 python -m mujoco_sliding.viewer --human-force
+python -m mujoco_sliding.viewer --scenario C --mode C3_dual_ledger_qp  # live passivation demo
 python -m pytest mujoco_sliding/tests               # test suite
+
+# Selective-passivation experiments (headless, deterministic):
+python -m mujoco_sliding.experiments --all          # scenarios A-F + summary + acceptance
+python -m mujoco_sliding.experiments --scenario C   # one scenario, its default modes
+python -m mujoco_sliding.experiments --scenario C --modes C3_dual_ledger_qp C4_dual_ledger_scalar
+python -m mujoco_sliding.experiments --sweep        # mu_hat sweep of the friction predictor
+python -m mujoco_sliding.experiments --all --animate  # + GIF for the C3 runs
 ```
 
 The headless run writes to `results/` (configurable): `log.npz` (full log),
@@ -162,16 +172,67 @@ position/distance/penetration/normal/tangent, `F_n`, `F_t`, full `f_task`,
 saturation flag. `meta_*` entries record F_d, v_d, timestep, and the
 geometry used by the animation.
 
-## Connection to the selective-passivation QP
+## Selective-passivation layer
 
-The later QP will modulate the nominal command per direction (C vs. U space)
-to keep the human-interaction port passive without sacrificing task-force
-regulation. Everything it needs is already produced here with clean
-interfaces: the directional split (`τ_C`, `τ_U`, projectors), the separate
-ground-truth channels (`f_task`, `f_h`), the port velocity (`v_ee`, `v_c`),
-and the power bookkeeping (`P_task`, `P_{h→r}`). Replacing
-`SlidingForceController.update`'s output with a QP-filtered torque is a
-drop-in change; the simulation loop, extraction, logging, and tests stay.
+`contact_model.py` + `energy_ledgers.py` + `passivity_qp.py` +
+`experiments.py`, enabled by setting `SimulationConfig.passivation`
+(a `PassivationConfig`). The simulation loop, extraction and base logging
+are unchanged; per step the layer wraps the nominal controller:
+
+1. **Predict** the task contact: `oracle` (`F̂_T = F_T`) or `friction`
+   (`F̂_{T,n} = F_{T,n}`, `F̂_{T,t} = −μ̂ F_{T,n} tanh(v_t/v_s)`,
+   `μ̂ ∈ {0.20…0.35}` vs. true `μ = 0.30`). The predictor only sees the task
+   channel and `v_ee` — it can never explain away the human force.
+2. **Decompose**: `F_meas = F_T + F_H`, residual `F_R = F_meas − F̂_T`,
+   mismatch `F_Δ = F_R − F_H`. Identities (tested): oracle ⇒ `F_R = F_H`,
+   `F_Δ = 0`; no human ⇒ oracle `F_R = 0`, imperfect `F_R = F_Δ`.
+3. **Port powers** use the *physical* EE velocity, never the tracking
+   error: `p_H = F_H·v_ee`, `p_R = F_R·v_ee = p_H + p_Δ` (p > 0 = into the
+   robot). The predicted nominal task power `F̂_T·v_ee` is deliberately
+   excluded — this is selective **port** passivation, not global passivity
+   of the active robot.
+4. **Ledgers** (nested constraints, not additive tanks): residual
+   `E_R ∈ [0.02, 0.50] J` (init 0.30) and human `E_H ∈ [0.005, 0.08] J`
+   (init 0.05); charge is capped at `E_max`, discharge is *never* clamped —
+   raw below-floor values stay logged. A conventional whole-port ledger
+   `E_W` (on `F_meas·v_ee`) is observed everywhere and constrained in C1.
+5. **One-step affine prediction** `v_tn⁺(u) = A u + b` from
+   `τ(u) = τ₀ + J_eeᵀ B_tn u`, `τ₀ = qfrc_bias − D_q q̇`, with the measured
+   force sample held over the 1 ms step (`J̇q̇` ignored; validated against
+   explicit dynamics *and* real MuJoCo transitions; per-step prediction
+   error logged, median ≈ 1e-4 m/s in closed loop).
+6. **QP** (OSQP, warm-started, 2 vars × 7 rows): minimize
+   `½(u−u_nom)ᵀ diag(1,20) (u−u_nom) + 1e-6‖u‖²` s.t. hard one-step ledger
+   floors (`ε = 1e-4 J`), human instantaneous power `−p_H⁺ ≤ 0.10 W`,
+   torque `|τ| ≤ 60 N·m` and torque rate `|Δτ| ≤ 5 N·m/step` — all
+   *inside* the QP (no post-hoc clipping of QP solutions). Two documented
+   engineering additions keep the hard set feasible: CBF-style smoothing
+   rows `−p⁺ ≤ k_cbf (E − E_min)` (`k_cbf = 50 s⁻¹`; makes depletion
+   approach the floor exponentially so the torque-rate limit is never
+   overwhelmed) and a `δ_p = 5e-5 W` feasibility tolerance on ledger rows
+   (bounds extraction once a ledger sits marginally below floor by
+   prediction-error accumulation; eats into ε, not below `E_min`).
+   Certified ledger updates use the SAME held force sample with the actual
+   next velocity: `p_k = F_kᵀ v_{ee,k+1}`. On infeasibility: full state +
+   margins logged, bounded emergency damping applied, event counted.
+7. **Anti-windup**: the force-PI integrator is frozen on steps where the
+   filter modified the normal command.
+
+Controller modes: `C0_nominal` (ledgers observed only),
+`C1_whole_port_scalar` (single whole-port ledger, `u = γ u_nom` — depletes
+on ordinary task friction), `C2_residual_qp` (residual constraint only),
+`C3_dual_ledger_qp` (**proposed**: residual + human + power), and
+`C4_dual_ledger_scalar` (C3's constraints, γ-only — task-preservation
+ablation). Scalar modes solve the consistent 1-D problem with the same
+one-step prediction and constraint rows.
+
+Scenarios (`experiments.py`, deterministic — fixed keyframe, scripted
+forces, no RNG): A exact/no human, B mismatch (`μ̂ = 0.20`, 20 s), C oracle
++ blocking human (−3 N·t, 6.5–8.5 s, cosine ramps), D mismatch + blocking,
+E oblique human (3/√2·(−t−n), C3 vs C4), F helping-then-blocking
+(charging → cap → discharge), plus a `μ̂` sweep. Artifacts: per-run
+`log.npz/csv` + 9-panel `run.png`, per-scenario `comparison.png`,
+`summary.{json,csv}`, `acceptance.json`.
 
 ## Known limitations
 

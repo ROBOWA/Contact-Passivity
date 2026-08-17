@@ -36,7 +36,7 @@ import numpy as np
 from .config import MODEL_XML_PATH, SimulationConfig
 from .contact_extraction import ModelHandles, extract_task_contact, site_jacobian
 from .controller import Phase, SlidingForceController
-from .human_interaction import HumanForce
+from .human_interaction import HumanForce, HumanForceSequence
 
 
 def load_model() -> mujoco.MjModel:
@@ -58,7 +58,17 @@ def run_simulation(cfg: SimulationConfig | None = None) -> dict:
     data = mujoco.MjData(model)
     handles = ModelHandles.from_model(model)
     controller = SlidingForceController(model, handles, cfg.controller)
-    human = HumanForce(cfg.human)
+    if cfg.human_pulses:
+        human = HumanForceSequence([cfg.human, *cfg.human_pulses])
+    else:
+        human = HumanForce(cfg.human)
+
+    runtime = None
+    if cfg.passivation is not None:
+        from .passivity_qp import PassivationRuntime
+
+        runtime = PassivationRuntime(cfg.passivation, cfg.controller,
+                                     handles, model.opt.timestep)
 
     reset_to_keyframe(model, data)
 
@@ -67,11 +77,16 @@ def run_simulation(cfg: SimulationConfig | None = None) -> dict:
 
     for _ in range(nsteps):
         contact = extract_task_contact(model, data, handles)
-        out = controller.update(data, contact)
-
-        data.ctrl[:] = out.tau
-        data.qfrc_applied[:] = 0.0
         f_h = human.force(data.time)
+        if runtime is None:
+            out = controller.update(data, contact)
+            tau_applied = out.tau
+        else:
+            out, tau_applied = runtime.control_step(model, data, contact,
+                                                    f_h, controller)
+
+        data.ctrl[:] = tau_applied
+        data.qfrc_applied[:] = 0.0
         human.apply(model, data, handles, f_h)
 
         # --- log (state at time t; contact force one step delayed) ---
@@ -85,7 +100,7 @@ def run_simulation(cfg: SimulationConfig | None = None) -> dict:
         log["phase"].append(int(out.phase))
         log["qpos"].append(data.qpos.copy())
         log["qvel"].append(data.qvel.copy())
-        log["ctrl"].append(out.tau.copy())
+        log["ctrl"].append(np.asarray(tau_applied).copy())
         log["tau_applied"].append(data.qfrc_actuator.copy())
         log["tau_bias"].append(out.tau_bias)
         log["tau_damping"].append(out.tau_damping)
@@ -127,8 +142,15 @@ def run_simulation(cfg: SimulationConfig | None = None) -> dict:
         log["saturated"].append(out.saturated)
 
         mujoco.mj_step(model, data)
+        if runtime is not None:
+            # Certified ledger updates: held force sample x actual v_{k+1}.
+            runtime.post_step(model, data)
 
     arrays = {k: np.asarray(v) for k, v in log.items()}
+    if runtime is not None:
+        arrays.update(runtime.arrays())
+        arrays["meta_n_infeasible"] = np.array(runtime.n_infeasible)
+        arrays["meta_n_emergency"] = np.array(runtime.n_emergency)
     arrays["meta_f_desired"] = np.array(cfg.controller.f_desired)
     arrays["meta_v_slide"] = np.array(cfg.controller.v_slide)
     arrays["meta_timestep"] = np.array(model.opt.timestep)

@@ -68,3 +68,23 @@ class HumanForce:
         mujoco.mj_applyFT(
             model, data, f_h, torque, point, handles.ee_body, data.qfrc_applied
         )
+
+
+class HumanForceSequence:
+    """Sum of several trapezoidal pulses (e.g. helping then blocking).
+
+    With a single pulse this is identical to :class:`HumanForce`; the
+    ``force``/``apply`` API is shared.
+    """
+
+    def __init__(self, cfgs):
+        self._pulses = [HumanForce(c) for c in cfgs]
+
+    def force(self, t: float) -> np.ndarray:
+        f = np.zeros(3)
+        for p in self._pulses:
+            f = f + p.force(t)
+        return f
+
+    def apply(self, model, data, handles, f_h: np.ndarray) -> None:
+        self._pulses[0].apply(model, data, handles, f_h)

@@ -130,6 +130,239 @@ def plot_results(log: dict, output_dir: str, stem: str = "results") -> str:
     return path
 
 
+# Fixed controller-mode identities (never cycled or re-ranked).
+MODE_COLORS = {
+    "C0_nominal": TEXT_2,
+    "C1_whole_port_scalar": YELLOW,
+    "C2_residual_qp": AQUA,
+    "C3_dual_ledger_qp": BLUE,
+    "C4_dual_ledger_scalar": MAGENTA,
+}
+MODE_SHORT = {
+    "C0_nominal": "C0 nominal",
+    "C1_whole_port_scalar": "C1 whole-port",
+    "C2_residual_qp": "C2 residual QP",
+    "C3_dual_ledger_qp": "C3 dual-ledger QP",
+    "C4_dual_ledger_scalar": "C4 dual-ledger scalar",
+}
+_QP_ROW_NAMES = ("E_H", "E_R", "CBF_H", "CBF_R", "P_H", "tau_0", "tau_1")
+
+# Ledger parameters mirrored for plotting reference lines (kept in sync with
+# config.PassivationConfig defaults through the tests).
+_E_H_LINES = (0.005, 0.08)
+_E_R_LINES = (0.02, 0.50)
+_P_H_MAX = 0.10
+
+
+def _shade_human(ax, t, f_h):
+    """Recessive band marking where the scripted human force is nonzero."""
+    on = np.linalg.norm(f_h, axis=1) > 1e-12
+    if not on.any():
+        return
+    idx = np.flatnonzero(on)
+    splits = np.flatnonzero(np.diff(idx) > 1)
+    seg_starts = [idx[0]] + list(idx[splits + 1])
+    seg_ends = list(idx[splits]) + [idx[-1]]
+    for a, b in zip(seg_starts, seg_ends):
+        ax.axvspan(t[a], t[b], color="#f6e8ef", zorder=0)
+
+
+def plot_passivation_run(log: dict, output_dir: str, stem: str = "run",
+                         title: str = "") -> str:
+    """3x3 per-run figure for a passivation-enabled simulation log."""
+    os.makedirs(output_dir, exist_ok=True)
+    t = log["time"]
+
+    fig, axes = plt.subplots(3, 3, figsize=(15, 10), constrained_layout=True)
+    fig.patch.set_facecolor(SURFACE)
+    if title:
+        fig.suptitle(title, fontsize=12, color=TEXT)
+
+    # 1. Tangential position tracking
+    ax = axes[0, 0]
+    ax.plot(t, log["ee_pos"][:, 0], color=BLUE, lw=1.4, label="x")
+    ax.plot(t, log["x_desired"], color=ORANGE, lw=1.2, ls="--", label="x_d")
+    _style(ax, "Tangential position", "m")
+    ax.legend(fontsize=7, loc="upper left")
+
+    # 2. Tangential velocity tracking
+    ax = axes[0, 1]
+    ax.plot(t, log["ee_vel"][:, 0], color=BLUE, lw=1.2, label="v_t")
+    ax.plot(t, log["vx_desired"], color=ORANGE, lw=1.2, ls="--", label="v_d")
+    _style(ax, "Tangential velocity", "m/s")
+    ax.legend(fontsize=7, loc="upper left")
+
+    # 3. Normal force regulation
+    ax = axes[0, 2]
+    ax.plot(t, log["f_n"], color=BLUE, lw=1.2, label="F_n")
+    ax.plot(t, log["f_n_desired"], color=ORANGE, lw=1.2, ls="--", label="F_d")
+    _style(ax, "Normal force", "N")
+    ax.legend(fontsize=7, loc="lower right")
+
+    # 4. Force decomposition (tangential components)
+    ax = axes[1, 0]
+    ax.plot(t, log["f_task"][:, 0], color=BLUE, lw=1.2, label="F_T,t")
+    ax.plot(t, log["sp_f_hat"][:, 0], color=ORANGE, lw=1.0, ls="--",
+            label="F_T_hat,t")
+    ax.plot(t, log["sp_f_r"][:, 0], color=VIOLET, lw=1.2, label="F_R,t")
+    ax.plot(t, log["f_h"][:, 0], color=MAGENTA, lw=1.2, label="F_H,t")
+    _style(ax, "Force decomposition (tangential)", "N")
+    ax.legend(fontsize=7, loc="upper left", ncol=2)
+
+    # 5. Physical port powers (actual, held-force x next velocity)
+    ax = axes[1, 1]
+    ax.plot(t, log["sp_p_h_act"], color=MAGENTA, lw=1.2, label="p_H")
+    ax.plot(t, log["sp_p_r_act"], color=VIOLET, lw=1.2, label="p_R")
+    ax.plot(t, log["sp_p_delta_act"], color=YELLOW, lw=1.0, label="p_Delta")
+    ax.axhline(-_P_H_MAX, color=TEXT_2, lw=0.8, ls=":",
+               label="-P_H_max")
+    _style(ax, "Port powers", "W")
+    ax.legend(fontsize=7, loc="lower left", ncol=2)
+
+    # 6. Human ledger
+    ax = axes[1, 2]
+    ax.plot(t, log["sp_e_h"], color=MAGENTA, lw=1.4, label="E_H")
+    ax.plot(t, log["sp_e_h_raw"], color=MAGENTA, lw=0.8, ls=":",
+            label="E_H raw")
+    for y in _E_H_LINES:
+        ax.axhline(y, color=TEXT_2, lw=0.8, ls="--")
+    _style(ax, "Human ledger (min/max dashed)", "J")
+    ax.legend(fontsize=7, loc="center right")
+
+    # 7. Residual + whole-port ledgers
+    ax = axes[2, 0]
+    ax.plot(t, log["sp_e_r"], color=VIOLET, lw=1.4, label="E_R")
+    ax.plot(t, log["sp_e_w"], color=YELLOW, lw=1.2, label="E_W (whole)")
+    for y in _E_R_LINES:
+        ax.axhline(y, color=TEXT_2, lw=0.8, ls="--")
+    _style(ax, "Residual / whole-port ledgers (min/max dashed)", "J")
+    ax.legend(fontsize=7, loc="center right")
+
+    # 8. Nominal vs filtered commands
+    ax = axes[2, 1]
+    ax.plot(t, log["sp_u_nom"][:, 0], color=BLUE, lw=0.9, ls="--",
+            label="u_t nom")
+    ax.plot(t, log["sp_u"][:, 0], color=BLUE, lw=1.3, label="u_t")
+    ax.plot(t, log["sp_u_nom"][:, 1], color=AQUA, lw=0.9, ls="--",
+            label="u_n nom")
+    ax.plot(t, log["sp_u"][:, 1], color=AQUA, lw=1.3, label="u_n")
+    _style(ax, "Nominal vs filtered command", "N")
+    ax.legend(fontsize=7, loc="upper left", ncol=2)
+
+    # 9. Active constraints + solver
+    ax = axes[2, 2]
+    act = log["sp_active"]
+    for i in range(act.shape[1]):
+        on = act[:, i] > 0.5
+        if on.any():
+            ax.plot(t[on], np.full(on.sum(), i), ".", color=VIOLET, ms=2)
+    infeas = log["sp_infeasible"].astype(bool)
+    if infeas.any():
+        ax.plot(t[infeas], np.full(infeas.sum(), 7.0), ".", color=ORANGE,
+                ms=2, label="infeasible")
+        ax.legend(fontsize=7, loc="upper left")
+    ax.set_yticks(range(8), [*_QP_ROW_NAMES, "infeas"])
+    ax.set_ylim(-0.5, 7.5)
+    st = log["sp_solve_time"]
+    ax.text(0.98, 0.02,
+            f"solve med {1e3 * np.median(st):.3f} ms | "
+            f"p99 {1e3 * np.percentile(st, 99):.3f} ms",
+            transform=ax.transAxes, fontsize=7, color=TEXT_2,
+            ha="right", va="bottom")
+    _style(ax, "Active constraints / solver")
+
+    for ax in axes.flat:
+        _shade_human(ax, t, log["f_h"])
+        ax.set_xlabel("time [s]", fontsize=8, color=TEXT_2)
+
+    path = os.path.join(output_dir, f"{stem}.png")
+    fig.savefig(path, dpi=130)
+    plt.close(fig)
+    return path
+
+
+def plot_passivation_comparison(logs: dict[str, dict], output_dir: str,
+                                stem: str = "comparison",
+                                title: str = "") -> str:
+    """Cross-controller comparison figure (one scenario, several modes)."""
+    os.makedirs(output_dir, exist_ok=True)
+    fig, axes = plt.subplots(2, 3, figsize=(15, 7), constrained_layout=True)
+    fig.patch.set_facecolor(SURFACE)
+    if title:
+        fig.suptitle(title, fontsize=12, color=TEXT)
+
+    any_log = next(iter(logs.values()))
+    dt = float(any_log["meta_timestep"])
+
+    panels = [
+        ("Tangential velocity", "m/s",
+         lambda lg: lg["ee_vel"][:, 0], axes[0, 0]),
+        ("Normal force", "N", lambda lg: lg["f_n"], axes[0, 1]),
+        ("Human ledger E_H", "J", lambda lg: lg["sp_e_h"], axes[0, 2]),
+        ("Residual ledger E_R", "J", lambda lg: lg["sp_e_r"], axes[1, 0]),
+        ("Cumulative human extraction W_H", "J",
+         lambda lg: -np.cumsum(lg["sp_p_h_act"]) * dt, axes[1, 1]),
+        ("Tangential tracking error", "m",
+         lambda lg: lg["ee_pos"][:, 0] - lg["x_desired"], axes[1, 2]),
+    ]
+    for name, unit, getter, ax in panels:
+        for mode, lg in logs.items():
+            ax.plot(lg["time"], getter(lg), color=MODE_COLORS[mode], lw=1.2,
+                    label=MODE_SHORT[mode])
+        _style(ax, name, unit)
+        _shade_human(ax, any_log["time"], any_log["f_h"])
+        ax.set_xlabel("time [s]", fontsize=8, color=TEXT_2)
+
+    # Reference lines where meaningful.
+    axes[0, 0].axhline(float(any_log["meta_v_slide"]), color=ORANGE, lw=0.9,
+                       ls="--")
+    axes[0, 1].axhline(float(any_log["meta_f_desired"]), color=ORANGE, lw=0.9,
+                       ls="--")
+    axes[0, 2].axhline(_E_H_LINES[0], color=TEXT_2, lw=0.8, ls="--")
+    axes[1, 0].axhline(_E_R_LINES[0], color=TEXT_2, lw=0.8, ls="--")
+    axes[1, 1].axhline(0.05 - 0.005, color=TEXT_2, lw=0.8, ls="--")
+    axes[0, 0].legend(fontsize=7, loc="lower left")
+
+    path = os.path.join(output_dir, f"{stem}.png")
+    fig.savefig(path, dpi=130)
+    plt.close(fig)
+    return path
+
+
+def plot_sweep(rows: list[dict], output_dir: str, stem: str = "sweep") -> str:
+    """mu_hat sweep summary: residual response and tracking vs mu_hat."""
+    os.makedirs(output_dir, exist_ok=True)
+    fig, axes = plt.subplots(1, 3, figsize=(13, 3.6), constrained_layout=True)
+    fig.patch.set_facecolor(SURFACE)
+
+    groups = {False: ("no human", BLUE, "o"), True: ("blocking human",
+                                                     MAGENTA, "s")}
+    for with_human, (label, color, marker) in groups.items():
+        sel = [r for r in rows if r["with_human"] == with_human]
+        sel.sort(key=lambda r: r["mu_hat"])
+        mu = [r["mu_hat"] for r in sel]
+        axes[0].plot(mu, [r["e_r_min_raw"] for r in sel], marker=marker,
+                     color=color, lw=1.2, label=label)
+        axes[1].plot(mu, [r["t_first_ledger_active"]
+                          if r["t_first_ledger_active"] is not None
+                          else np.nan for r in sel],
+                     marker=marker, color=color, lw=1.2, label=label)
+        axes[2].plot(mu, [r["rmse_fn"] for r in sel], marker=marker,
+                     color=color, lw=1.2, label=label)
+    axes[0].axhline(_E_R_LINES[0], color=TEXT_2, lw=0.8, ls="--")
+    _style(axes[0], "min E_R (raw)", "J")
+    _style(axes[1], "first activation time", "s")
+    _style(axes[2], "RMSE F_n (slide)", "N")
+    for ax in axes:
+        ax.set_xlabel("mu_hat (true mu = 0.30)", fontsize=8, color=TEXT_2)
+        ax.legend(fontsize=7)
+
+    path = os.path.join(output_dir, f"{stem}.png")
+    fig.savefig(path, dpi=130)
+    plt.close(fig)
+    return path
+
+
 def _forward_kinematics(log: dict, i: int):
     """Base, elbow, and EE points in the x-z plane at log index i."""
     base = log["meta_base_pos"][[0, 2]]

@@ -3,5 +3,9 @@ mujoco>=3.3.0
 numpy
 matplotlib
 
+# Selective-passivation QP layer
+scipy
+osqp>=1.0
+
 # Tests
 pytest

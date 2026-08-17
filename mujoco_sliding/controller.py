@@ -85,8 +85,22 @@ class SlidingForceController:
 
     # ------------------------------------------------------------------
     def update(
-        self, data: mujoco.MjData, contact: ContactResult
+        self, data: mujoco.MjData, contact: ContactResult,
+        integrate: bool = True,
     ) -> ControlOutput:
+        """Compute the nominal command.
+
+        With ``integrate=True`` (default) the PI force-error integration and
+        anti-windup run inside this call, exactly as before. An external
+        command filter (the passivation QP) passes ``integrate=False`` and
+        calls :meth:`finish_step` after deciding the applied command, so the
+        integrator can be frozen when the filter modified the normal command
+        (anti-windup by integrator freezing).
+
+        ``out.f_cmd`` is the UNLIMITED nominal Cartesian command; the nominal
+        u is u_nom = B_tn^T f_cmd, and tau(u_nom) = tau0 + J^T f_cmd equals
+        ``tau_bias + tau_task + tau_damping`` below (before limits).
+        """
         cfg = self.cfg
         t = data.time
         p_ee = data.site_xpos[self.handles.ee_site].copy()
@@ -161,16 +175,8 @@ class SlidingForceController:
         self._tau_prev = tau.copy()
 
         # ---------------- anti-windup integration ----------------
-        # Integrate after computing the command; skip integration when the
-        # torque command is saturated and the error would push it further
-        # (conditional integration), and clamp the stored integral so the
-        # integral term contribution stays within +/- integral_limit.
-        if self.phase != Phase.APPROACH:
-            if not (saturated and e_f * f_push > 0):
-                self.integral += e_f * self.dt
-            if cfg.k_i > 0:
-                bound = cfg.integral_limit / cfg.k_i
-                self.integral = float(np.clip(self.integral, -bound, bound))
+        if integrate:
+            self._integrate(e_f, f_push, saturated)
 
         return ControlOutput(
             tau=tau,
@@ -189,3 +195,34 @@ class SlidingForceController:
             v_desired=v_des,
             saturated=saturated,
         )
+
+    # ------------------------------------------------------------------
+    def _integrate(self, e_f: float, f_push: float, saturated: bool) -> None:
+        """PI integration with anti-windup.
+
+        Skips integration when the torque command is saturated and the error
+        would push it further (conditional integration), and clamps the
+        stored integral so the integral-term contribution stays within
+        +/- integral_limit.
+        """
+        cfg = self.cfg
+        if self.phase != Phase.APPROACH:
+            if not (saturated and e_f * f_push > 0):
+                self.integral += e_f * self.dt
+            if cfg.k_i > 0:
+                bound = cfg.integral_limit / cfg.k_i
+                self.integral = float(np.clip(self.integral, -bound, bound))
+
+    def finish_step(self, out: ControlOutput, frozen: bool,
+                    tau_applied: np.ndarray | None = None) -> None:
+        """Complete a step started with ``update(..., integrate=False)``.
+
+        ``frozen=True`` freezes the force integrator for this step (used
+        when an external filter modified the normal command — anti-windup by
+        integrator freezing). ``tau_applied`` records the torque actually
+        sent to the plant so the internal rate-limit reference tracks it.
+        """
+        if not frozen:
+            self._integrate(out.e_f, out.f_push, out.saturated)
+        if tau_applied is not None:
+            self._tau_prev = np.asarray(tau_applied, dtype=float).copy()
