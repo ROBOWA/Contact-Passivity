@@ -112,9 +112,22 @@ class AffinePrediction:
         return self.tau0 + self.G @ u
 
 
+#: MuJoCo renamed the packed mass matrix ``qM`` -> ``M`` and changed the
+#: ``mj_fullM`` signature at the same time:
+#:   <= 3.3.x   data.qM      mj_fullM(model, dst, qM_packed)
+#:   >= 3.10    data.M       mj_fullM(model, data, dst)
+#: Resolved once at import so the 1 kHz call path stays branch-cheap and a
+#: fresh install on a current MuJoCo does not die with an AttributeError.
+_MJ_FULLM_TAKES_DATA = not hasattr(mujoco.MjData, "qM")
+
+
 def mass_matrix(model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
+    """Dense joint-space mass matrix M(q), across MuJoCo binding revisions."""
     m = np.zeros((model.nv, model.nv))
-    mujoco.mj_fullM(model, m, data.qM)
+    if _MJ_FULLM_TAKES_DATA:
+        mujoco.mj_fullM(model, data, m)
+    else:
+        mujoco.mj_fullM(model, m, data.qM)
     return m
 
 

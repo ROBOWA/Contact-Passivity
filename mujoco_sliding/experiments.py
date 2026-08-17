@@ -78,7 +78,23 @@ class ScenarioSpec:
 
 SCENARIOS: dict[str, ScenarioSpec] = {s.key: s for s in [
     ScenarioSpec("A", "exact_no_human", 12.0),
-    ScenarioSpec("B", "mismatch_no_human", 20.0,
+    # 17 s, not the original 20 s. The residual tank absorbs
+    # E_R(0) - E_R,min = 0.28 J at rate d_mu * F_N * v_t, so the sliding
+    # DISTANCE to the floor is 0.28 / (d_mu * F_N) -- independent of v_slide,
+    # since rate and travel both scale with v_t. At d_mu = 0.10 that is 0.56 m
+    # against roughly 0.60 m of runway before the two 0.6 m links reach their
+    # limit, so the floor is reached at 15.55 s and contact degrades shortly
+    # after. 20 s left contact active only 80.4% of the sliding phase and
+    # contaminated every tracking RMSE in the scenario; 17 s keeps 96.8% while
+    # still showing 1.5 s of the residual constraint holding the floor.
+    #
+    # Enlarging d_mu to fit more margin does NOT work and is worth recording:
+    # at mu_hat = 0.18 the run takes 86 infeasible steps and at mu_hat = 0.15
+    # it takes 1227, driving E_R to -0.039 J through the uncertified emergency
+    # fallback. Depleting the tank faster also demands a larger correction to
+    # hold the floor, and past |p_delta| ~ 0.035 W that correction is not
+    # reachable under the 5 N.m/step torque-rate limit while contact is kept.
+    ScenarioSpec("B", "mismatch_no_human", 17.0,
                  predictor="friction", mu_hat=0.20),
     ScenarioSpec("C", "oracle_blocking", 12.0, human=_BLOCKING,
                  modes=MODES_ALL),
@@ -182,6 +198,13 @@ def compute_metrics(log: dict, spec: ScenarioSpec, mode: str) -> dict:
         "pred_err_med": float(np.median(log["sp_pred_err"])),
         "pred_err_p99": float(np.percentile(log["sp_pred_err"], 99)),
         "pred_err_max": float(log["sp_pred_err"].max()),
+        # Fraction of the sliding phase with live pad-surface contact. A
+        # scenario whose sliding target outruns the arm's reach loses contact
+        # and silently contaminates every RMSE above; this makes that
+        # visible instead (see the workspace acceptance criterion).
+        "contact_fraction_slide": (
+            float(log["contact_active"].astype(bool)[slide].mean())
+            if slide.any() else float("nan")),
     })
 
     # First activation time (any constraint modifies the command), and the
@@ -271,7 +294,7 @@ def run_sweep(output_root: str, plots: bool = True) -> list[dict]:
     rows: list[dict] = []
     for with_human in (False, True):
         base = SCENARIOS["D" if with_human else "B"]
-        for mu_hat in (0.20, 0.25, 0.30, 0.35):
+        for mu_hat in (0.15, 0.20, 0.25, 0.30, 0.35):
             spec = replace(base, key=base.key, mu_hat=mu_hat)
             cfg = build_config(spec, "C3_dual_ledger_qp", mu_hat=mu_hat)
             tag = f"mu{mu_hat:.2f}_{'human' if with_human else 'nohuman'}"
@@ -301,9 +324,19 @@ def check_acceptance(metrics: list[dict]) -> list[dict]:
     by = {(m["scenario"], m["mode"]): m for m in metrics}
     checks: list[dict] = []
 
-    def add(name, ok, value, threshold):
+    def add(name, ok, value, threshold, scope="method"):
+        """Record one criterion.
+
+        scope="method"   the proposed controller (C3) or the scenario setup
+                         must satisfy this; a failure is a defect.
+        scope="ablation" a claim about a baseline (C1/C2/C4). A failure is a
+                         reportable finding about that baseline, not a defect
+                         in the proposed method, so it is tallied separately
+                         and must not be read as "the method failed".
+        """
         checks.append({"criterion": name, "pass": bool(ok),
-                       "value": value, "threshold": threshold})
+                       "value": value, "threshold": threshold,
+                       "scope": scope})
 
     a3 = by.get(("A", "C3_dual_ledger_qp"))
     a0 = by.get(("A", "C0_nominal"))
@@ -334,6 +367,40 @@ def check_acceptance(metrics: list[dict]) -> list[dict]:
         add("B: residual intervenes later than whole-port", later,
             {"C3": b3["t_first_ledger_active"],
              "C1": b1["t_first_ledger_active"]}, None)
+
+    # Scenario-sizing guard. If the sliding target outruns the arm's reach the
+    # pad leaves the surface and every tracking RMSE in that scenario silently
+    # becomes a workspace measurement instead of a controller one. Checked on
+    # C0 so it reflects the SCENARIO, not the passivation layer (C3 legitimately
+    # backs off contact while a constraint is active).
+    for key in sorted(SCENARIOS):
+        c0 = by.get((key, "C0_nominal"))
+        if c0 and not np.isnan(c0.get("contact_fraction_slide", np.nan)):
+            # 95%: the reach limit is structural to this two-link arm (see the
+            # scenario-sizing note in the README), so the bar is set to catch a
+            # scenario that has genuinely run out of workspace -- B at 20 s
+            # scored 80.4% -- rather than the sub-1% contact transients every
+            # scenario shows when a constraint first engages.
+            add(f"{key}: scenario fits workspace (C0 contact >= 95% of slide)",
+                c0["contact_fraction_slide"] >= 0.95,
+                c0["contact_fraction_slide"], 0.95)
+
+    # Cumulative residual inequality, Eq. (39): -sum dt p_R <= E_R(0) - E_R,min
+    # = 0.28 J. The human counterpart Eq. (38) is checked per human scenario
+    # below; this is the second, looser certificate and applies in EVERY
+    # scenario, including the two with no human at all.
+    for key in sorted(SCENARIOS):
+        c3 = by.get((key, "C3_dual_ledger_qp"))
+        if c3:
+            add(f"{key}: cumulative residual inequality (margin >= -1e-3 J)",
+                c3["w_r_margin"] >= -1e-3, c3["w_r_margin"], -1e-3)
+        # Same bound on the residual-only ablation, which enforces exactly
+        # this row and nothing else -- so Eq. (39) is precisely its claim.
+        c2 = by.get((key, "C2_residual_qp"))
+        if c2:
+            add(f"{key}: C2 residual-only honours its own Eq. (39) bound",
+                c2["w_r_margin"] >= -1e-3, c2["w_r_margin"], -1e-3,
+                scope="ablation")
 
     for key in ("C", "D", "E", "F"):
         c3 = by.get((key, "C3_dual_ledger_qp"))
@@ -408,11 +475,21 @@ def main(argv=None) -> None:
             with open(os.path.join(args.output_root, "acceptance.json"),
                       "w") as fh:
                 json.dump(checks, fh, indent=2)
-            n_pass = sum(c["pass"] for c in checks)
-            print(f"\nacceptance: {n_pass}/{len(checks)} criteria pass")
-            for c in checks:
+            method = [c for c in checks if c.get("scope", "method") == "method"]
+            ablat = [c for c in checks if c.get("scope") == "ablation"]
+            n_pass = sum(c["pass"] for c in method)
+            print(f"\nacceptance: {n_pass}/{len(method)} method criteria pass")
+            for c in method:
                 mark = "PASS" if c["pass"] else "FAIL"
                 print(f"  [{mark}] {c['criterion']}: {c['value']}")
+            if ablat:
+                n_ab = sum(c["pass"] for c in ablat)
+                print(f"\nablation baselines: {n_ab}/{len(ablat)} hold "
+                      f"(a failure here is a finding about the baseline, "
+                      f"not a defect in C3)")
+                for c in ablat:
+                    mark = "HOLDS" if c["pass"] else "BROKEN"
+                    print(f"  [{mark}] {c['criterion']}: {c['value']}")
 
     if args.sweep:
         run_sweep(args.output_root, plots=plots)

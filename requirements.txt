@@ -1,4 +1,8 @@
 # Planar contact-sliding simulation (mujoco_sliding)
+# Verified on 3.3.1 and 3.11.0 (46/46 tests, results agree to ~1e-12).
+# MuJoCo renamed MjData.qM -> MjData.M and changed the mj_fullM signature
+# after 3.3.x; passivity_qp.mass_matrix feature-detects both, so either side
+# of that rename works. Pin a version here only to freeze published numbers.
 mujoco>=3.3.0
 numpy
 matplotlib

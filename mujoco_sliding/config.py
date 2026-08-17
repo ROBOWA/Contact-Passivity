@@ -139,16 +139,36 @@ class PassivationConfig:
     # mandated one-step constraints never collide with the hard torque-rate
     # limit. Both mandated one-step rows stay in the QP as the certificate;
     # for k_cbf < 1/dt the CBF row is the tighter of the two near the floor.
+    #
+    # NOT optional in practice, despite being absent from the formulation's
+    # Eq. (55). Measured with k_cbf = 0 (delta_p = 0, everything else equal):
+    # B 788 infeasible steps and E_R driven to 0.01937 below its 0.02 floor;
+    # C/D 5 infeasible with E_H at 0.004841; E 14 infeasible with E_H at
+    # 0.004394 and the cumulative bound Eq. (38) violated by 6.1e-4 J. With
+    # k_cbf = 50 every scenario is feasible with both floors strictly held.
+    # The row is a TIGHTENING, so the certificate is preserved -- but the
+    # write-up should state that the one-step rows alone are not realizable
+    # at 1 kHz under the 5 N.m/step torque-rate limit.
     k_cbf: float = 50.0                 # [1/s]; 0 disables the smoothing rows
-    # Feasibility power tolerance on all ledger lower-bound rows [W]. Without
-    # it, a ledger sitting marginally below its floor (reachable through
-    # accumulated one-step prediction error) turns the clamped constraint
-    # p+ >= 0 into a hard velocity constraint enforced through a vanishing
-    # force coefficient, which is numerically near-infeasible as the port
-    # force ramps out. delta_p bounds the resulting extra extraction to
-    # delta_p * t (5e-5 W here, i.e. eating into the eps_h/eps_r buffer, not
-    # below E_min). Reported as part of the certificate tolerance.
-    delta_p: float = 5e-5               # [W]
+    # Feasibility power tolerance on all ledger lower-bound rows [W].
+    #
+    # DEFAULT 0: this knob was introduced against the worry that a ledger
+    # sitting marginally below its floor (reachable through accumulated
+    # one-step prediction error) turns the clamped constraint p+ >= 0 into a
+    # hard velocity constraint enforced through a vanishing force
+    # coefficient, near-infeasible as the port force ramps out. Measured
+    # across scenarios A-F, that worry does not materialize once the CBF
+    # smoothing rows are active: delta_p = 0 gives ZERO infeasible steps
+    # everywhere (it in fact removes the single infeasible step scenario B
+    # showed at 5e-5) and costs under 2% of normal-force RMSE.
+    #
+    # It matters because delta_p is the ONLY term in this file that weakens
+    # the passivity certificate: it permits extraction of delta_p * t beyond
+    # the Eq. (37) bound, eating into the eps_h/eps_r buffer. At 5e-5 W the
+    # human port measured W_H = 0.045013 J against its 0.045 J bound; at 0
+    # it measures 0.044904 J, i.e. the bound holds strictly. Keep at 0 unless
+    # a stiffer plant genuinely needs the slack, and report it if raised.
+    delta_p: float = 0.0                # [W]
 
     # --- QP objective ---
     w_t: float = 1.0                    # tangential deviation weight

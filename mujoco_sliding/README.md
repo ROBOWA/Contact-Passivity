@@ -9,8 +9,11 @@ validated nominal force/motion controller sits a selective-passivation layer
 (residual energy ledger + nested human energy ledger + task-weighted OSQP
 filter, modes C0–C4) — see *Selective-passivation layer* below.
 
-Tested with MuJoCo 3.3.1 (official `mujoco` Python bindings), NumPy,
-matplotlib, SciPy, OSQP ≥ 1.0.
+Tested with MuJoCo 3.3.1 **and** 3.11.0 (official `mujoco` Python bindings),
+NumPy, matplotlib, SciPy, OSQP ≥ 1.0. MuJoCo renamed `MjData.qM` → `MjData.M`
+and changed the `mj_fullM` signature after 3.3.x; `passivity_qp.mass_matrix`
+feature-detects both, and the two versions reproduce every published metric to
+≈1e-12.
 
 ## Running
 
@@ -205,13 +208,21 @@ are unchanged; per step the layer wraps the nominal controller:
    `½(u−u_nom)ᵀ diag(1,20) (u−u_nom) + 1e-6‖u‖²` s.t. hard one-step ledger
    floors (`ε = 1e-4 J`), human instantaneous power `−p_H⁺ ≤ 0.10 W`,
    torque `|τ| ≤ 60 N·m` and torque rate `|Δτ| ≤ 5 N·m/step` — all
-   *inside* the QP (no post-hoc clipping of QP solutions). Two documented
-   engineering additions keep the hard set feasible: CBF-style smoothing
-   rows `−p⁺ ≤ k_cbf (E − E_min)` (`k_cbf = 50 s⁻¹`; makes depletion
-   approach the floor exponentially so the torque-rate limit is never
-   overwhelmed) and a `δ_p = 5e-5 W` feasibility tolerance on ledger rows
-   (bounds extraction once a ledger sits marginally below floor by
-   prediction-error accumulation; eats into ε, not below `E_min`).
+   *inside* the QP (no post-hoc clipping of QP solutions). One documented
+   addition beyond the formulation's QP keeps the hard set feasible:
+   CBF-style smoothing rows `−p⁺ ≤ k_cbf (E − E_min)` (`k_cbf = 50 s⁻¹`),
+   which make depletion approach the floor exponentially so the torque-rate
+   limit is never overwhelmed. These are a *tightening*, so the certificate
+   is preserved — and they are **not optional**: with `k_cbf = 0` scenario B
+   takes 788 infeasible steps and drives `E_R` to 0.0194 below its 0.02
+   floor, and C/D/E violate the human bound. The one-step rows alone are not
+   realizable at 1 kHz under the 5 N·m/step torque-rate limit.
+   A `δ_p` feasibility tolerance on ledger rows also exists but now
+   **defaults to 0**: it was the only term that weakened the certificate
+   (permitting `δ_p · t` of extraction beyond the bound), and measurement
+   showed it buys nothing — at `δ_p = 0` every scenario is feasible, the
+   floors hold strictly, and `W_H` = 0.0449 J against its 0.045 J bound
+   instead of overshooting to 0.045013 J.
    Certified ledger updates use the SAME held force sample with the actual
    next velocity: `p_k = F_kᵀ v_{ee,k+1}`. On infeasibility: full state +
    margins logged, bounded emergency damping applied, event counted.
@@ -227,12 +238,34 @@ ablation). Scalar modes solve the consistent 1-D problem with the same
 one-step prediction and constraint rows.
 
 Scenarios (`experiments.py`, deterministic — fixed keyframe, scripted
-forces, no RNG): A exact/no human, B mismatch (`μ̂ = 0.20`, 20 s), C oracle
+forces, no RNG): A exact/no human, B mismatch (`μ̂ = 0.20`, 17 s), C oracle
 + blocking human (−3 N·t, 6.5–8.5 s, cosine ramps), D mismatch + blocking,
 E oblique human (3/√2·(−t−n), C3 vs C4), F helping-then-blocking
 (charging → cap → discharge), plus a `μ̂` sweep. Artifacts: per-run
 `log.npz/csv` + 9-panel `run.png`, per-scenario `comparison.png`,
 `summary.{json,csv}`, `acceptance.json`.
+
+**Scenario sizing.** The residual tank absorbs `E_R(0) − E_R,min = 0.28 J`
+at rate `Δμ · F_N · v_t`, so the sliding *distance* needed to reach the floor
+is `0.28 / (Δμ · F_N)` — independent of `v_slide`, since rate and travel both
+scale with `v_t`. At `Δμ = 0.10` that is 0.56 m against ≈0.60 m of runway
+before the two 0.6 m links reach their limit: the floor is reached at 15.55 s
+and contact degrades shortly after. B ran 20 s, so contact was active only
+80.4 % of the sliding phase and every tracking RMSE in the scenario was really
+a workspace measurement. B is now 17 s (96.8 % contact, still 1.5 s of the
+residual constraint holding the floor).
+
+Enlarging `Δμ` to buy margin does **not** work, and the reason is worth
+recording: depleting the tank faster also demands a larger correction to hold
+the floor. At `μ̂ = 0.18` the run takes 86 infeasible steps; at `μ̂ = 0.15`,
+1227, and `E_R` is driven to −0.039 J through the uncertified emergency
+fallback. Past `|p_Δ| ≈ 0.035 W` the correction is simply not reachable under
+the 5 N·m/step torque-rate limit while contact is maintained — the hard
+certificate has a finite model-error operating envelope, visible in the sweep
+at `μ̂ = 0.15`.
+
+`compute_metrics` reports `contact_fraction_slide`, and `check_acceptance`
+fails any scenario whose C0 run drops below 95 %.
 
 ## Known limitations
 
@@ -246,3 +279,10 @@ E oblique human (3/√2·(−t−n), C3 vs C4), F helping-then-blocking
 * Single contact geometry (sphere on plane); multi-contact summation is
   implemented but untested beyond one contact point.
 * No sensor noise; both channels are perfect ground truth by design.
+* **Finite reach bounds every run.** Two 0.6 m links give ≈0.6 m of sliding
+  runway from the keyframe before the pad leaves the surface; at
+  `v_slide = 0.05 m/s` that is ≈12 s of sliding. Any scenario longer than
+  that measures the workspace limit rather than the controller. The
+  `contact_fraction_slide` metric and its acceptance criterion exist to catch
+  this, but the underlying constraint is structural — a longer experiment
+  needs a longer arm, a slower slide, or a repositioned keyframe.
