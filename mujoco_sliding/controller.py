@@ -60,7 +60,8 @@ class ControlOutput:
     f_push: float = 0.0
     e_f: float = 0.0
     integral: float = 0.0
-    x_desired: float = 0.0
+    x_desired: float = 0.0              # governed reference actually tracked
+    x_desired_free: float = 0.0         # ungoverned x_start + v_d (t - t0)
     v_desired: float = 0.0
     saturated: bool = False
 
@@ -130,6 +131,7 @@ class SlidingForceController:
         f_push = 0.0
         e_f = 0.0
         x_des = self._x_hold
+        x_free = x_des          # ungoverned task clock; differs only in SLIDE
         v_des = 0.0
 
         if self.phase == Phase.APPROACH:
@@ -149,7 +151,15 @@ class SlidingForceController:
             fz = -f_push - cfg.d_f * vz
 
             if self.phase == Phase.SLIDE:
-                x_des = self._x_slide_start + cfg.v_slide * (t - self._t_slide_start)
+                x_free = self._x_slide_start + cfg.v_slide * (t - self._t_slide_start)
+                # Reference governor: the task clock may not run more than
+                # max_track_lag ahead of where the arm actually is, so a hold
+                # (blocking human, saturation, lost contact) cannot accumulate
+                # unbounded position debt that discharges as a surge on
+                # release. Inert whenever the arm is keeping up.
+                x_des = x_free
+                if cfg.max_track_lag > 0.0:
+                    x_des = min(x_free, x + cfg.max_track_lag)
                 v_des = cfg.v_slide
                 fx = cfg.kx_slide * (x_des - x) + cfg.dx_slide * (v_des - vx)
             else:
@@ -192,6 +202,7 @@ class SlidingForceController:
             e_f=e_f,
             integral=self.integral,
             x_desired=x_des,
+            x_desired_free=x_free,
             v_desired=v_des,
             saturated=saturated,
         )

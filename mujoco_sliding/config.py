@@ -66,6 +66,24 @@ class ControllerConfig:
     v_slide: float = 0.05               # desired tangential speed v_d [m/s]
     kx_slide: float = 400.0             # tangential position gain [N/m]
     dx_slide: float = 60.0              # tangential velocity gain [N·s/m]
+    # Reference governor: cap on how far the sliding reference may run ahead
+    # of the achieved position, |x_d - x| <= max_track_lag [m].
+    #
+    # x_d(t) = x_start + v_d (t - t0) advances on wall-clock time and knows
+    # nothing about the robot being held still. Whenever the passivation layer
+    # stops the arm against a blocking human, the reference keeps integrating
+    # and the position error winds up without bound; on release the PD term
+    # kx_slide * lag discharges it in one surge. Measured without this cap: a
+    # 2 s block left 128 mm of lag and released at 0.735 m/s (14.7x the target
+    # speed), an 8.5 s block left 428 mm and released at 2.39 m/s with the
+    # torque limit saturating and F_n peaking at 88 N.
+    #
+    # This is the reference-side twin of the force-PI integrator freeze the
+    # passivation layer already performs. It bounds the catch-up command at
+    # kx_slide * max_track_lag = 8 N and is inert in nominal operation, where
+    # the steady tracking lag is ~4.6 mm (scenario A) and peaks at ~13.7 mm
+    # when the residual constraint engages (scenario B).
+    max_track_lag: float = 0.02         # [m]; 0 or negative disables the cap
 
     # --- Joint-space terms ---
     # Controller joint damping D_q. The MJCF model already has small joint

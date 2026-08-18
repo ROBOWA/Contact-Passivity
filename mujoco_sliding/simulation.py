@@ -109,6 +109,7 @@ def run_simulation(cfg: SimulationConfig | None = None) -> dict:
         log["ee_pos"].append(p_ee)
         log["ee_vel"].append(v_ee.copy())
         log["x_desired"].append(out.x_desired)
+        log["x_desired_free"].append(out.x_desired_free)
         log["vx_desired"].append(out.v_desired)
         log["f_n_desired"].append(out.f_desired)
         log["f_n"].append(contact.f_n)
@@ -163,6 +164,7 @@ def run_simulation(cfg: SimulationConfig | None = None) -> dict:
 _LOG_KEYS = [
     "time", "phase", "qpos", "qvel", "ctrl", "tau_applied", "tau_bias",
     "tau_damping", "tau_c", "tau_u", "ee_pos", "ee_vel", "x_desired",
+    "x_desired_free",
     "vx_desired", "f_n_desired", "f_n", "f_t", "f_task", "f_push", "e_f",
     "integral", "contact_active", "ncontacts", "contact_pos", "contact_dist",
     "penetration", "contact_normal", "contact_tangent", "f_h", "f_measured",

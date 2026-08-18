@@ -205,6 +205,21 @@ def compute_metrics(log: dict, spec: ScenarioSpec, mode: str) -> dict:
         "contact_fraction_slide": (
             float(log["contact_active"].astype(bool)[slide].mean())
             if slide.any() else float("nan")),
+        # Release-surge diagnostics. A blocking human that stops the arm makes
+        # the sliding reference wind up unless the governor caps it, and the
+        # stored position error then discharges as one burst after release --
+        # fast motion the port certificate cannot see, because f_H = 0 there
+        # makes p_H = 0 at any speed. Guard both the cause and the effect.
+        "track_lag_max": (float(np.abs(log["ee_pos"][:, 0]
+                                       - log["x_desired"])[slide].max())
+                          if slide.any() else float("nan")),
+        "task_debt_max": (float(np.abs(log["x_desired_free"]
+                                       - log["x_desired"])[slide].max())
+                          if slide.any() else float("nan")),
+        "vt_peak": (float(np.abs(log["ee_vel"][:, 0])[slide].max())
+                    if slide.any() else float("nan")),
+        "fn_peak": (float(log["f_n"][slide].max())
+                    if slide.any() else float("nan")),
     })
 
     # First activation time (any constraint modifies the command), and the
