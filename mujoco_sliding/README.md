@@ -26,10 +26,12 @@ python -m mujoco_sliding.viewer --scenario C --mode C3_dual_ledger_qp  # live pa
 python -m pytest mujoco_sliding/tests               # test suite
 
 # Selective-passivation experiments (headless, deterministic):
-python -m mujoco_sliding.experiments --all          # scenarios A-F + summary + acceptance
+python -m mujoco_sliding.experiments --all          # A-F + stress + governor + sweep + compact
 python -m mujoco_sliding.experiments --scenario C   # one scenario, its default modes
-python -m mujoco_sliding.experiments --scenario C --modes C3_dual_ledger_qp C4_dual_ledger_scalar
+python -m mujoco_sliding.experiments --scenario C --modes C3_dual_ledger_qp C4_dual_ledger_safe_scalar
 python -m mujoco_sliding.experiments --sweep        # mu_hat sweep of the friction predictor
+python -m mujoco_sliding.experiments --governor-compare  # governor on/off release comparison
+python -m mujoco_sliding.experiments --legacy       # legacy origin-scalar diagnostics
 python -m mujoco_sliding.experiments --all --animate  # + GIF for the C3 runs
 ```
 
@@ -201,38 +203,68 @@ are unchanged; per step the layer wraps the nominal controller:
    force sample held over the 1 ms step (`J̇q̇` ignored; validated against
    explicit dynamics *and* real MuJoCo transitions; per-step prediction
    error logged, median ≈ 1e-4 m/s in closed loop).
-6. **QP** (OSQP, warm-started, 2 vars × 7 rows): minimize
-   `½(u−u_nom)ᵀ diag(1,20) (u−u_nom) + 1e-6‖u‖²` s.t. hard one-step ledger
-   floors (`ε = 1e-4 J`), human instantaneous power `−p_H⁺ ≤ 0.10 W`,
-   torque `|τ| ≤ 60 N·m` and torque rate `|Δτ| ≤ 5 N·m/step` — all
-   *inside* the QP (no post-hoc clipping of QP solutions). Two documented
-   engineering additions keep the hard set feasible: CBF-style smoothing
-   rows `−p⁺ ≤ k_cbf (E − E_min)` (`k_cbf = 50 s⁻¹`; makes depletion
-   approach the floor exponentially so the torque-rate limit is never
-   overwhelmed) and a `δ_p = 5e-5 W` feasibility tolerance on ledger rows
-   (bounds extraction once a ledger sits marginally below floor by
-   prediction-error accumulation; eats into ε, not below `E_min`).
+6. **Robust QP** (OSQP, warm-started, 2 vars × 7 rows): minimize
+   `½(u−u_nom)ᵀ diag(1,20) (u−u_nom) + 1e-6‖u‖²` s.t. hard rows, all
+   *inside* the QP (no post-hoc clipping of feasible solutions). With the
+   configured one-step velocity prediction-error bound
+   `‖v⁺_actual − v⁺_pred‖ ≤ ē_v` (`ē_v = 0.025 m/s`, set ABOVE the maximum
+   error measured across all scenarios and the sweep — median ≈ 1.5e-4,
+   p99 ≈ 1e-3, max ≈ 1.8e-2 at the ungoverned post-release transient) and
+   `ē_p,i = ‖F_i‖ ē_v`, each ledger constrains the robust lower power
+   `p̲_i⁺(u) = p_pred,i⁺(u) − ē_p,i`:
+   `E_i + Δt p̲_i⁺(u) ≥ E_safe,i = E_i,min + ε_i` plus the CBF smoothing
+   row `p̲_i⁺(u) ≥ −k_cbf (E_i − E_safe,i)` (`k_cbf = 10 s⁻¹`,
+   `0 < k_cbf Δt ≤ 1` asserted). Given the bound holds, these imply
+   `E_{i,k+1} ≥ E_safe,i ≥ E_i,min` EXACTLY — no constant power slack, no
+   clamped right-hand sides, no finite-horizon leak. The human
+   instantaneous-power row `−p_pred,H⁺ ≤ 0.10 W` stays prediction-based.
+   Torque `|τ| ≤ 60 N·m` and rate `|Δτ| ≤ 5 N·m/step` bounds are rows.
    Certified ledger updates use the SAME held force sample with the actual
-   next velocity: `p_k = F_kᵀ v_{ee,k+1}`. On infeasibility: full state +
-   margins logged, bounded emergency damping applied, event counted.
+   next velocity: `p_k = F_kᵀ v_{ee,k+1}`. The bound is checked every step
+   and NEVER adapted: a violation is logged, counted, and fails
+   acceptance. On infeasibility: full state + margins logged, a bounded
+   fallback applied (tangential damping + bounded nominal normal command,
+   preserving contact), event counted.
+
+   **The discrete certificate is guaranteed under the configured one-step
+   end-effector velocity prediction-error bound.** It is conditional on
+   that measured assumption — no unconditional global passivity of the
+   actively controlled robot is claimed, and the nominal task-contact
+   power is deliberately outside the certificate (selective port
+   passivation).
 7. **Anti-windup**: the force-PI integrator is frozen on steps where the
    filter modified the normal command.
+8. **Reference governor** (optional, `GovernorConfig`): freezes and
+   continuously rebases the tangential reference onto the end-effector
+   while the human interacts (perfect sensing, `|F_H| > 0.1 N` or an
+   active human row), then ramps back to `v_d` over 0.75 s — removing the
+   accumulated-error catch-up burst after release. A task/recovery policy
+   only; it never enters the passivity certificate (port powers keep the
+   physical `v_ee`).
 
-Controller modes: `C0_nominal` (ledgers observed only),
-`C1_whole_port_scalar` (single whole-port ledger, `u = γ u_nom` — depletes
-on ordinary task friction), `C2_residual_qp` (residual constraint only),
-`C3_dual_ledger_qp` (**proposed**: residual + human + power), and
-`C4_dual_ledger_scalar` (C3's constraints, γ-only — task-preservation
-ablation). Scalar modes solve the consistent 1-D problem with the same
-one-step prediction and constraint rows.
+Controller modes — primary (paper-grade): `C0_nominal` (ledgers observed
+only), `C1_whole_port_qp` (QP with ONE conventional whole-port ledger on
+`F_meas·v_ee`, no model subtraction — the accounting baseline; depletes on
+ordinary task friction and false-passivates the task), `C2_residual_qp`
+(residual constraint only), `C3_dual_ledger_qp` (**proposed**: residual +
+human + power), `C4_dual_ledger_safe_scalar` (C3's constraints; the
+command moves on the line from a feasible minimum-norm safety anchor
+toward `u_nom` — feasible whenever the anchor QP is). Legacy diagnostics
+(origin-ray `u = γ u_nom`, can miss the feasible set, excluded from
+paper-grade acceptance): `C1_legacy_whole_port_origin_scalar`,
+`C4_legacy_origin_scalar`.
 
 Scenarios (`experiments.py`, deterministic — fixed keyframe, scripted
-forces, no RNG): A exact/no human, B mismatch (`μ̂ = 0.20`, 20 s), C oracle
-+ blocking human (−3 N·t, 6.5–8.5 s, cosine ramps), D mismatch + blocking,
-E oblique human (3/√2·(−t−n), C3 vs C4), F helping-then-blocking
-(charging → cap → discharge), plus a `μ̂` sweep. Artifacts: per-run
-`log.npz/csv` + 9-panel `run.png`, per-scenario `comparison.png`,
-`summary.{json,csv}`, `acceptance.json`.
+forces, no RNG): A exact/no human (14 s), B mismatch (`μ̂ = 0.20`, 15 s —
+kept inside the arm's ~1.0 m reachable workspace), C oracle + blocking
+human (−3 N·t, 6.5–8.5 s, cosine ramps), D mismatch + blocking, E oblique
+human (3/√2·(−t−n), C3 vs C4), F helping-then-blocking (charging → cap →
+discharge), S 32 s alternating-pulse certificate stress (governor on),
+plus a `μ̂` sweep and a governor on/off release comparison. Artifacts:
+per-run `log.npz/csv` + 9-panel `run.png`, per-scenario `comparison.png`,
+`summary.{json,csv}`, `acceptance.json`,
+`prediction_bound_summary.json`, and a compact headline set in
+`results_compact/`.
 
 ## Known limitations
 

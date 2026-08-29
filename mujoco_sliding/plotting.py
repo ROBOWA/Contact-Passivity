@@ -130,20 +130,26 @@ def plot_results(log: dict, output_dir: str, stem: str = "results") -> str:
     return path
 
 
-# Fixed controller-mode identities (never cycled or re-ranked).
+# Fixed controller-mode identities (never cycled or re-ranked). Legacy
+# origin-scalar diagnostics reuse their primary counterpart's hue; they are
+# never co-plotted with it.
 MODE_COLORS = {
     "C0_nominal": TEXT_2,
-    "C1_whole_port_scalar": YELLOW,
+    "C1_whole_port_qp": YELLOW,
     "C2_residual_qp": AQUA,
     "C3_dual_ledger_qp": BLUE,
-    "C4_dual_ledger_scalar": MAGENTA,
+    "C4_dual_ledger_safe_scalar": MAGENTA,
+    "C1_legacy_whole_port_origin_scalar": YELLOW,
+    "C4_legacy_origin_scalar": MAGENTA,
 }
 MODE_SHORT = {
     "C0_nominal": "C0 nominal",
-    "C1_whole_port_scalar": "C1 whole-port",
+    "C1_whole_port_qp": "C1 whole-port QP",
     "C2_residual_qp": "C2 residual QP",
     "C3_dual_ledger_qp": "C3 dual-ledger QP",
-    "C4_dual_ledger_scalar": "C4 dual-ledger scalar",
+    "C4_dual_ledger_safe_scalar": "C4 safe-anchor scalar",
+    "C1_legacy_whole_port_origin_scalar": "C1 legacy origin-scalar",
+    "C4_legacy_origin_scalar": "C4 legacy origin-scalar",
 }
 _QP_ROW_NAMES = ("E_H", "E_R", "CBF_H", "CBF_R", "P_H", "tau_0", "tau_1")
 
@@ -357,6 +363,111 @@ def plot_sweep(rows: list[dict], output_dir: str, stem: str = "sweep") -> str:
         ax.set_xlabel("mu_hat (true mu = 0.30)", fontsize=8, color=TEXT_2)
         ax.legend(fontsize=7)
 
+    path = os.path.join(output_dir, f"{stem}.png")
+    fig.savefig(path, dpi=130)
+    plt.close(fig)
+    return path
+
+
+def plot_governor_comparison(logs: dict[str, dict], output_dir: str,
+                             stem: str = "governor_comparison") -> str:
+    """Reference-governor off vs on, scenario C release behavior."""
+    os.makedirs(output_dir, exist_ok=True)
+    fig, axes = plt.subplots(2, 3, figsize=(15, 7), constrained_layout=True)
+    fig.patch.set_facecolor(SURFACE)
+    fig.suptitle("Reference governor: off vs on (scenario C, C3)",
+                 fontsize=12, color=TEXT)
+    variants = {"governor_off": (TEXT_2, "governor off"),
+                "governor_on": (BLUE, "governor on")}
+
+    any_log = next(iter(logs.values()))
+    dt = float(any_log["meta_timestep"])
+    panels = [
+        ("Tangential position vs governed reference", "m", axes[0, 0]),
+        ("Tangential velocity", "m/s", axes[0, 1]),
+        ("Normal force", "N", axes[0, 2]),
+        ("Commanded torque (max |joint|)", "N·m", axes[1, 0]),
+        ("Human power p_H", "W", axes[1, 1]),
+        ("Human ledger E_H", "J", axes[1, 2]),
+    ]
+    for tag, lg in logs.items():
+        color, label = variants[tag]
+        t = lg["time"]
+        axes[0, 0].plot(t, lg["ee_pos"][:, 0], color=color, lw=1.2,
+                        label=label)
+        axes[0, 0].plot(t, lg["x_desired"], color=color, lw=0.8, ls="--")
+        axes[0, 1].plot(t, lg["ee_vel"][:, 0], color=color, lw=1.2,
+                        label=label)
+        axes[0, 2].plot(t, lg["f_n"], color=color, lw=1.2, label=label)
+        axes[1, 0].plot(t, np.abs(lg["ctrl"]).max(axis=1), color=color,
+                        lw=1.2, label=label)
+        axes[1, 1].plot(t, lg["sp_p_h_act"], color=color, lw=1.2,
+                        label=label)
+        axes[1, 2].plot(t, lg["sp_e_h"], color=color, lw=1.2, label=label)
+    axes[0, 1].axhline(float(any_log["meta_v_slide"]), color=ORANGE, lw=0.8,
+                       ls="--")
+    axes[0, 2].axhline(float(any_log["meta_f_desired"]), color=ORANGE,
+                       lw=0.8, ls="--")
+    axes[1, 1].axhline(-_P_H_MAX, color=TEXT_2, lw=0.8, ls=":")
+    axes[1, 2].axhline(_E_H_LINES[0], color=TEXT_2, lw=0.8, ls="--")
+    for (name, unit, ax) in panels:
+        _style(ax, name, unit)
+        _shade_human(ax, any_log["time"], any_log["f_h"])
+        ax.set_xlabel("time [s]", fontsize=8, color=TEXT_2)
+        ax.legend(fontsize=7)
+    path = os.path.join(output_dir, f"{stem}.png")
+    fig.savefig(path, dpi=130)
+    plt.close(fig)
+    return path
+
+
+def plot_stress_certificate(log: dict, output_dir: str,
+                            stem: str = "stress_certificate") -> str:
+    """Long-duration certificate evidence: ledgers, cumulative extraction,
+    bound utilization."""
+    os.makedirs(output_dir, exist_ok=True)
+    t = log["time"]
+    dt = float(log["meta_timestep"])
+    fig, axes = plt.subplots(2, 2, figsize=(13, 7), constrained_layout=True)
+    fig.patch.set_facecolor(SURFACE)
+    fig.suptitle("Long-duration certificate stress (C3, governor on)",
+                 fontsize=12, color=TEXT)
+
+    ax = axes[0, 0]
+    ax.plot(t, log["sp_e_h"], color=MAGENTA, lw=1.2, label="E_H")
+    for y in _E_H_LINES:
+        ax.axhline(y, color=TEXT_2, lw=0.8, ls="--")
+    _style(ax, "Human ledger (floor/cap dashed)", "J")
+    ax.legend(fontsize=7)
+
+    ax = axes[0, 1]
+    ax.plot(t, log["sp_e_r"], color=VIOLET, lw=1.2, label="E_R")
+    for y in _E_R_LINES:
+        ax.axhline(y, color=TEXT_2, lw=0.8, ls="--")
+    _style(ax, "Residual ledger (floor/cap dashed)", "J")
+    ax.legend(fontsize=7)
+
+    ax = axes[1, 0]
+    w_h = -np.cumsum(log["sp_p_h_act"]) * dt
+    w_r = -np.cumsum(log["sp_p_r_act"]) * dt
+    ax.plot(t, w_h, color=MAGENTA, lw=1.2, label="W_H (signed)")
+    ax.plot(t, w_r, color=VIOLET, lw=1.2, label="W_R (signed)")
+    ax.axhline(0.05 - 0.005, color=MAGENTA, lw=0.8, ls="--")
+    ax.axhline(0.30 - 0.02, color=VIOLET, lw=0.8, ls="--")
+    _style(ax, "Cumulative extraction vs budgets (dashed)", "J")
+    ax.legend(fontsize=7)
+
+    ax = axes[1, 1]
+    ax.plot(t, log["sp_bound_util"], color=BLUE, lw=0.8,
+            label="||e_v|| / bound")
+    ax.axhline(1.0, color=ORANGE, lw=0.8, ls="--", label="bound")
+    ax.set_ylim(0, 1.1)
+    _style(ax, "Prediction-error bound utilization", "-")
+    ax.legend(fontsize=7)
+
+    for ax in axes.flat:
+        _shade_human(ax, t, log["f_h"])
+        ax.set_xlabel("time [s]", fontsize=8, color=TEXT_2)
     path = os.path.join(output_dir, f"{stem}.png")
     fig.savefig(path, dpi=130)
     plt.close(fig)

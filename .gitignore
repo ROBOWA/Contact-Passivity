@@ -3,4 +3,4 @@ __pycache__/
 results/
 results_human/
 MUJOCO_LOG.TXT
-results_passivation/
+results_passivation*/

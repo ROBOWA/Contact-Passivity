@@ -79,7 +79,8 @@ def run_simulation(cfg: SimulationConfig | None = None) -> dict:
         contact = extract_task_contact(model, data, handles)
         f_h = human.force(data.time)
         if runtime is None:
-            out = controller.update(data, contact)
+            out = controller.update(data, contact,
+                                    f_h_norm=float(np.linalg.norm(f_h)))
             tau_applied = out.tau
         else:
             out, tau_applied = runtime.control_step(model, data, contact,

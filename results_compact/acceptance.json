@@ -1,0 +1,882 @@
+[
+  {
+    "criterion": "A/C1_whole_port_qp: zero infeasible steps",
+    "pass": false,
+    "value": 7658,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C1_whole_port_qp: zero emergency steps",
+    "pass": false,
+    "value": 7658,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C1_whole_port_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C1_whole_port_qp: zero certified-floor violations",
+    "pass": false,
+    "value": 7162,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C1_whole_port_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C2_residual_qp: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C2_residual_qp: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C2_residual_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C2_residual_qp: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C2_residual_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C3_dual_ledger_qp: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C3_dual_ledger_qp: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C3_dual_ledger_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C3_dual_ledger_qp: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C3_dual_ledger_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C4_dual_ledger_safe_scalar: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C4_dual_ledger_safe_scalar: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C4_dual_ledger_safe_scalar: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C4_dual_ledger_safe_scalar: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C4_dual_ledger_safe_scalar: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C1_whole_port_qp: zero infeasible steps",
+    "pass": false,
+    "value": 8658,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C1_whole_port_qp: zero emergency steps",
+    "pass": false,
+    "value": 8658,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C1_whole_port_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C1_whole_port_qp: zero certified-floor violations",
+    "pass": false,
+    "value": 8162,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C1_whole_port_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C2_residual_qp: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C2_residual_qp: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C2_residual_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C2_residual_qp: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C2_residual_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C3_dual_ledger_qp: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C3_dual_ledger_qp: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C3_dual_ledger_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C3_dual_ledger_qp: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "B/C3_dual_ledger_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C2_residual_qp: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C2_residual_qp: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C2_residual_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C2_residual_qp: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C2_residual_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C3_dual_ledger_qp: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C3_dual_ledger_qp: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C3_dual_ledger_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C3_dual_ledger_qp: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C3_dual_ledger_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C4_dual_ledger_safe_scalar: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C4_dual_ledger_safe_scalar: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C4_dual_ledger_safe_scalar: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C4_dual_ledger_safe_scalar: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "C/C4_dual_ledger_safe_scalar: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C2_residual_qp: zero infeasible steps",
+    "pass": false,
+    "value": 1192,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C2_residual_qp: zero emergency steps",
+    "pass": false,
+    "value": 1192,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C2_residual_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C2_residual_qp: zero certified-floor violations",
+    "pass": false,
+    "value": 26,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C2_residual_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C3_dual_ledger_qp: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C3_dual_ledger_qp: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C3_dual_ledger_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C3_dual_ledger_qp: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C3_dual_ledger_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C4_dual_ledger_safe_scalar: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C4_dual_ledger_safe_scalar: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C4_dual_ledger_safe_scalar: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C4_dual_ledger_safe_scalar: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "D/C4_dual_ledger_safe_scalar: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "E/C3_dual_ledger_qp: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "E/C3_dual_ledger_qp: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "E/C3_dual_ledger_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "E/C3_dual_ledger_qp: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "E/C3_dual_ledger_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "E/C4_dual_ledger_safe_scalar: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "E/C4_dual_ledger_safe_scalar: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "E/C4_dual_ledger_safe_scalar: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "E/C4_dual_ledger_safe_scalar: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "E/C4_dual_ledger_safe_scalar: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "F/C3_dual_ledger_qp: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "F/C3_dual_ledger_qp: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "F/C3_dual_ledger_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "F/C3_dual_ledger_qp: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "F/C3_dual_ledger_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "S/C3_dual_ledger_qp: zero infeasible steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "S/C3_dual_ledger_qp: zero emergency steps",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "S/C3_dual_ledger_qp: zero prediction-bound violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "S/C3_dual_ledger_qp: zero certified-floor violations",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "S/C3_dual_ledger_qp: no post-QP clipping of feasible solutions",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "A/C3: exact cumulative human inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.045000000000000005,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "A/C3: exact cumulative residual inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.27999999999999997,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "A/C3: exact E_H floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.05,
+    "threshold": 0.005
+  },
+  {
+    "criterion": "A/C3: exact E_R floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.3,
+    "threshold": 0.02
+  },
+  {
+    "criterion": "A/C3: peak -p_H <= P_H_max + 1e-6",
+    "pass": true,
+    "value": -0.0,
+    "threshold": 0.1
+  },
+  {
+    "criterion": "B/C3: exact cumulative human inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.045000000000000005,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "B/C3: exact cumulative residual inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.0028137832711435107,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "B/C3: exact E_H floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.05,
+    "threshold": 0.005
+  },
+  {
+    "criterion": "B/C3: exact E_R floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.022813783271143504,
+    "threshold": 0.02
+  },
+  {
+    "criterion": "B/C3: peak -p_H <= P_H_max + 1e-6",
+    "pass": true,
+    "value": -0.0,
+    "threshold": 0.1
+  },
+  {
+    "criterion": "C/C3: exact cumulative human inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.0013857539722940543,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "C/C3: exact cumulative residual inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.23638575397229403,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "C/C3: exact E_H floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.00638575397229401,
+    "threshold": 0.005
+  },
+  {
+    "criterion": "C/C3: exact E_R floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.2563857539722941,
+    "threshold": 0.02
+  },
+  {
+    "criterion": "C/C3: peak -p_H <= P_H_max + 1e-6",
+    "pass": true,
+    "value": 0.09973569743526327,
+    "threshold": 0.1
+  },
+  {
+    "criterion": "D/C3: exact cumulative human inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.0013857539722941237,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "D/C3: exact cumulative residual inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.02125046088612975,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "D/C3: exact E_H floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.0063857539722941385,
+    "threshold": 0.005
+  },
+  {
+    "criterion": "D/C3: exact E_R floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.04125046088612805,
+    "threshold": 0.02
+  },
+  {
+    "criterion": "D/C3: peak -p_H <= P_H_max + 1e-6",
+    "pass": true,
+    "value": 0.09973569743515386,
+    "threshold": 0.1
+  },
+  {
+    "criterion": "E/C3: exact cumulative human inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.0014173077523343888,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "E/C3: exact cumulative residual inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.23641730775233435,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "E/C3: exact E_H floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.006417307752334354,
+    "threshold": 0.005
+  },
+  {
+    "criterion": "E/C3: exact E_R floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.2564173077523347,
+    "threshold": 0.02
+  },
+  {
+    "criterion": "E/C3: peak -p_H <= P_H_max + 1e-6",
+    "pass": true,
+    "value": 0.09223267285281014,
+    "threshold": 0.1
+  },
+  {
+    "criterion": "F/C3: exact cumulative human inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.045000000000000005,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "F/C3: exact cumulative residual inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.27999999999999997,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "F/C3: exact E_H floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.006395236568866303,
+    "threshold": 0.005
+  },
+  {
+    "criterion": "F/C3: exact E_R floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.3,
+    "threshold": 0.02
+  },
+  {
+    "criterion": "F/C3: peak -p_H <= P_H_max + 1e-6",
+    "pass": true,
+    "value": 0.09972076372168147,
+    "threshold": 0.1
+  },
+  {
+    "criterion": "S/C3: exact cumulative human inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.045000000000000005,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "S/C3: exact cumulative residual inequality (>= -1e-7 J)",
+    "pass": true,
+    "value": 0.27999999999999997,
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "S/C3: exact E_H floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.05,
+    "threshold": 0.005
+  },
+  {
+    "criterion": "S/C3: exact E_R floor (>= E_min - 1e-9)",
+    "pass": true,
+    "value": 0.3,
+    "threshold": 0.02
+  },
+  {
+    "criterion": "S/C3: peak -p_H <= P_H_max + 1e-6",
+    "pass": true,
+    "value": 0.010381820246775671,
+    "threshold": 0.1
+  },
+  {
+    "criterion": "A: E_H exactly constant (drift <= 1e-9 J)",
+    "pass": true,
+    "value": 0.0,
+    "threshold": 1e-09
+  },
+  {
+    "criterion": "A: E_R exactly constant (drift <= 1e-9 J)",
+    "pass": true,
+    "value": 0.0,
+    "threshold": 1e-09
+  },
+  {
+    "criterion": "A: QP active fraction < 0.1%",
+    "pass": true,
+    "value": 7.553440592189743e-05,
+    "threshold": 0.001
+  },
+  {
+    "criterion": "A: rmse_fn within 5% of C0",
+    "pass": true,
+    "value": 1.0001754795050966,
+    "threshold": 1.05
+  },
+  {
+    "criterion": "A: rmse_vt within 5% of C0",
+    "pass": true,
+    "value": 0.9999550645623465,
+    "threshold": 1.05
+  },
+  {
+    "criterion": "B: E_H unchanged (drift <= 1e-9 J)",
+    "pass": true,
+    "value": 0.0,
+    "threshold": 1e-09
+  },
+  {
+    "criterion": "B: E_R responds (final < initial - 0.01 J)",
+    "pass": true,
+    "value": 0.023232440133597154,
+    "threshold": 0.29
+  },
+  {
+    "criterion": "B: residual intervenes later than whole-port",
+    "pass": true,
+    "value": {
+      "C3": 14.588999999997354,
+      "C1qp": 5.947000000000321
+    },
+    "threshold": null
+  },
+  {
+    "criterion": "C: recovery after release",
+    "pass": true,
+    "value": 0.6630000000000837,
+    "threshold": null
+  },
+  {
+    "criterion": "C: C3 preserves F_n better than C4 (human window)",
+    "pass": true,
+    "value": {
+      "C3": 1.4856803345295817,
+      "C4": 3.755421748858218
+    },
+    "threshold": null
+  },
+  {
+    "criterion": "D: recovery after release",
+    "pass": true,
+    "value": 0.6630000000000837,
+    "threshold": null
+  },
+  {
+    "criterion": "D: C3 preserves F_n better than C4 (human window)",
+    "pass": true,
+    "value": {
+      "C3": 1.4856803345326128,
+      "C4": 3.755421748858218
+    },
+    "threshold": null
+  },
+  {
+    "criterion": "E: recovery after release",
+    "pass": true,
+    "value": 0.6550000000000882,
+    "threshold": null
+  },
+  {
+    "criterion": "E: C3 preserves F_n better than C4 (human window)",
+    "pass": true,
+    "value": {
+      "C3": 1.3940758746101949,
+      "C4": 2.3729610523286007
+    },
+    "threshold": null
+  },
+  {
+    "criterion": "F: recovery after release",
+    "pass": true,
+    "value": 0.9539999999985369,
+    "threshold": null
+  },
+  {
+    "criterion": "S: no floor violation over 32 s",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "S: no bound violation over 32 s",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "S: no infeasible step over 32 s",
+    "pass": true,
+    "value": 0,
+    "threshold": 0
+  },
+  {
+    "criterion": "S: exact cumulative inequalities entire run",
+    "pass": true,
+    "value": {
+      "w_h": 0.045000000000000005,
+      "w_r": 0.27999999999999997
+    },
+    "threshold": -1e-07
+  },
+  {
+    "criterion": "S: no progressive leak (E_H recharges to cap)",
+    "pass": true,
+    "value": 0.07999951256818967,
+    "threshold": 0.08
+  },
+  {
+    "criterion": "governor: >= 50% reduction of post-release F_n overshoot",
+    "pass": true,
+    "value": {
+      "off": 11.637246922078983,
+      "on": 5.095484520728145,
+      "reduction": 0.9856138363015374
+    },
+    "threshold": 0.5
+  },
+  {
+    "criterion": "governor: catch-up burst removed (peak v_t <= 1.5 v_d)",
+    "pass": true,
+    "value": 0.05009172627688922,
+    "threshold": 0.075
+  },
+  {
+    "criterion": "governor: same certificate (E_H floor, peak power)",
+    "pass": true,
+    "value": {
+      "e_h_min": 0.048617801653761096,
+      "p_h_peak": 0.010414147784176585
+    },
+    "threshold": null
+  }
+]

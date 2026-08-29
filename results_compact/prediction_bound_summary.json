@@ -1,0 +1,307 @@
+{
+  "configured_e_v_bound": 0.025,
+  "measured_max": 0.011515909483739874,
+  "measured_p99_max": 0.00433777817717523,
+  "measured_med_max": 0.00014802286118983254,
+  "utilization_max": 0.46063637934959495,
+  "total_bound_violations": 0,
+  "per_run": [
+    {
+      "scenario": "A",
+      "mode": "C0_nominal",
+      "pred_err_med": 0.00014765587047967625,
+      "pred_err_p99": 0.00017593439612273697,
+      "pred_err_max": 0.0021652995639759955,
+      "bound_util_max": 0.08661198255903982,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "A",
+      "mode": "C1_whole_port_qp",
+      "pred_err_med": 1.9931137618897807e-07,
+      "pred_err_p99": 0.004307138657874516,
+      "pred_err_max": 0.005381274938639756,
+      "bound_util_max": 0.21525099754559024,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "A",
+      "mode": "C2_residual_qp",
+      "pred_err_med": 0.0001476556659717174,
+      "pred_err_p99": 0.0001759343890999416,
+      "pred_err_max": 0.0021652139141424684,
+      "bound_util_max": 0.08660855656569873,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "A",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.0001476556659717174,
+      "pred_err_p99": 0.0001759343890999416,
+      "pred_err_max": 0.0021652139141424684,
+      "bound_util_max": 0.08660855656569873,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "A",
+      "mode": "C4_dual_ledger_safe_scalar",
+      "pred_err_med": 0.000147656878359355,
+      "pred_err_p99": 0.00017593439596508306,
+      "pred_err_max": 0.002165464564814225,
+      "bound_util_max": 0.086618582592569,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "B",
+      "mode": "C0_nominal",
+      "pred_err_med": 0.00014802286118983254,
+      "pred_err_p99": 0.0001897793537741313,
+      "pred_err_max": 0.00412545972264814,
+      "bound_util_max": 0.16501838890592557,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "B",
+      "mode": "C1_whole_port_qp",
+      "pred_err_med": 1.2463331435923528e-07,
+      "pred_err_p99": 0.004215349656309654,
+      "pred_err_max": 0.005381274938639756,
+      "bound_util_max": 0.21525099754559024,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "B",
+      "mode": "C2_residual_qp",
+      "pred_err_med": 0.0001479763743650347,
+      "pred_err_p99": 0.0020269270484101366,
+      "pred_err_max": 0.008762890723488525,
+      "bound_util_max": 0.35051562893954097,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "B",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.0001479763743650347,
+      "pred_err_p99": 0.0020269270484101366,
+      "pred_err_max": 0.008762890723488525,
+      "bound_util_max": 0.35051562893954097,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "C",
+      "mode": "C0_nominal",
+      "pred_err_med": 0.00014700412563880842,
+      "pred_err_p99": 0.00016063005251644127,
+      "pred_err_max": 0.0032588289858072627,
+      "bound_util_max": 0.1303531594322905,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "C",
+      "mode": "C2_residual_qp",
+      "pred_err_med": 0.0001467319112850562,
+      "pred_err_p99": 0.00022168177768044965,
+      "pred_err_max": 0.004188914369015203,
+      "bound_util_max": 0.16755657476060812,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "C",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.0001465431754923818,
+      "pred_err_p99": 0.0006194688412982426,
+      "pred_err_max": 0.0113684425567176,
+      "bound_util_max": 0.45473770226870397,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "C",
+      "mode": "C4_dual_ledger_safe_scalar",
+      "pred_err_med": 0.00014651902217027743,
+      "pred_err_p99": 0.0006553921624844589,
+      "pred_err_max": 0.011515909483739874,
+      "bound_util_max": 0.46063637934959495,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "D",
+      "mode": "C0_nominal",
+      "pred_err_med": 0.00014700412563880842,
+      "pred_err_p99": 0.00016063005251644127,
+      "pred_err_max": 0.0032588289858072627,
+      "bound_util_max": 0.1303531594322905,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "D",
+      "mode": "C2_residual_qp",
+      "pred_err_med": 0.00014695151592069517,
+      "pred_err_p99": 0.00433777817717523,
+      "pred_err_max": 0.009657930304927094,
+      "bound_util_max": 0.38631721219708376,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "D",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.00014654317549240997,
+      "pred_err_p99": 0.0006194688412177789,
+      "pred_err_max": 0.011368442556704945,
+      "bound_util_max": 0.4547377022681978,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "D",
+      "mode": "C4_dual_ledger_safe_scalar",
+      "pred_err_med": 0.00014651902217027743,
+      "pred_err_p99": 0.0006553921624844589,
+      "pred_err_max": 0.011515909483739874,
+      "bound_util_max": 0.46063637934959495,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "E",
+      "mode": "C0_nominal",
+      "pred_err_med": 0.00014693291728120142,
+      "pred_err_p99": 0.0001591607810124235,
+      "pred_err_max": 0.002912709363832372,
+      "bound_util_max": 0.11650837455329488,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "E",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.00014654856382513413,
+      "pred_err_p99": 0.0005187849343673236,
+      "pred_err_max": 0.01002765911502502,
+      "bound_util_max": 0.4011063646010008,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "E",
+      "mode": "C4_dual_ledger_safe_scalar",
+      "pred_err_med": 0.00014651996885168796,
+      "pred_err_p99": 0.0005961815730288232,
+      "pred_err_max": 0.007711898930612505,
+      "bound_util_max": 0.30847595722450016,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "F",
+      "mode": "C0_nominal",
+      "pred_err_med": 0.00014739691872741592,
+      "pred_err_p99": 0.0001776953409210061,
+      "pred_err_max": 0.0043951238089908065,
+      "bound_util_max": 0.17580495235963225,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "F",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.00014681852492738563,
+      "pred_err_p99": 0.0006006977145078512,
+      "pred_err_max": 0.006795862111707834,
+      "bound_util_max": 0.2718344844683133,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "S",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 9.147223553980556e-05,
+      "pred_err_p99": 0.00015586594414323773,
+      "pred_err_max": 0.00015748171820389835,
+      "bound_util_max": 0.006299268728155933,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "B",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.0001479763743650347,
+      "pred_err_p99": 0.0020269270484101366,
+      "pred_err_max": 0.008762890723488525,
+      "bound_util_max": 0.35051562893954097,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "B",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.00014802146574738692,
+      "pred_err_p99": 0.00018977933327554556,
+      "pred_err_max": 0.004125459498985054,
+      "bound_util_max": 0.16501837995940216,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "B",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.0001480214657474043,
+      "pred_err_p99": 0.00018977933327560004,
+      "pred_err_max": 0.004125459498985054,
+      "bound_util_max": 0.16501837995940216,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "B",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.00014802146574739383,
+      "pred_err_p99": 0.00018977933327552962,
+      "pred_err_max": 0.004125459498984941,
+      "bound_util_max": 0.1650183799593976,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "D",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.00014654317549240997,
+      "pred_err_p99": 0.0006194688412177789,
+      "pred_err_max": 0.011368442556704945,
+      "bound_util_max": 0.4547377022681978,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "D",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.00014654317549241697,
+      "pred_err_p99": 0.0006194688412178912,
+      "pred_err_max": 0.01136844255671221,
+      "bound_util_max": 0.4547377022684884,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "D",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.00014654317549241325,
+      "pred_err_p99": 0.0006194688412177079,
+      "pred_err_max": 0.011368442556787114,
+      "bound_util_max": 0.4547377022714845,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "D",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.00014654317549241705,
+      "pred_err_p99": 0.000619468841274216,
+      "pred_err_max": 0.011368442556669892,
+      "bound_util_max": 0.45473770226679566,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "C",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 0.0001465431754923818,
+      "pred_err_p99": 0.0006194688412982426,
+      "pred_err_max": 0.0113684425567176,
+      "bound_util_max": 0.45473770226870397,
+      "n_bound_violations": 0
+    },
+    {
+      "scenario": "C",
+      "mode": "C3_dual_ledger_qp",
+      "pred_err_med": 9.999883460439677e-05,
+      "pred_err_p99": 0.00015112967647254758,
+      "pred_err_max": 0.00015186309090532094,
+      "bound_util_max": 0.006074523636212838,
+      "n_bound_violations": 0
+    }
+  ]
+}

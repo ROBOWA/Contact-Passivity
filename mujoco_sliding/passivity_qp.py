@@ -43,18 +43,27 @@ nominal task-contact power F_task_hat^T v_ee is deliberately excluded from
 the residual ledger — the actively controlled robot is NOT claimed to be
 globally passive.
 
-Constraints (all hard; no hidden slack):
-  * human ledger      E_H + dt p_H+(u)  >= E_H_min + eps_H
-  * residual ledger   E_R + dt p_R+(u)  >= E_R_min + eps_R
-  * CBF smoothing     -p_H+(u) <= k_cbf (E_H - E_H_min)   (and residual /
-    whole-port analogue). Documented extra hard rows that make depletion
-    approach the floor exponentially so the mandated one-step rows never
-    collide with the hard torque-rate limit; for k_cbf < 1/dt they are the
-    tighter constraint near the floor, and the mandated rows remain in the
-    QP as the certificate.
-  * human power       -p_H+(u) <= P_H_max
+Constraints (all hard; no hidden slack, no constant power relaxation):
+with the configured one-step prediction-error bound ||e_v|| <= e_v_bound
+and ep_i = ||F_i|| e_v_bound, the robust lower power estimate is
+p_lower,i+(u) = p_pred,i+(u) - ep_i, and the rows are
+  * human ledger      E_H + dt p_lower,H+(u)  >= E_safe,H = E_H_min + eps_H
+  * residual ledger   E_R + dt p_lower,R+(u)  >= E_safe,R = E_R_min + eps_R
+  * CBF smoothing     p_lower,i+(u) >= -k_cbf (E_i - E_safe,i)
+    (0 < k_cbf dt <= 1 asserted). Extra hard rows that make depletion
+    approach E_safe exponentially so the one-step rows never collide with
+    the hard torque-rate limit; the one-step rows remain the certificate.
+  * human power       -p_pred,H+(u) <= P_H_max   (prediction-based; measured
+    compliance is within ||F_H|| times the realized error)
   * torque            -tau_max <= tau(u) <= tau_max
   * torque rate       |tau(u) - tau_prev| <= taudot_max dt
+
+Given the bound holds at step k, the energy rows imply EXACTLY
+E_{i,k+1} = E_{i,k} + dt p_i_actual >= E_{i,k} + dt p_lower,i+ >= E_safe,i
+>= E_i_min: the certificate is conditional on the measured bound, which is
+checked every step; violations are logged, counted, and fail acceptance —
+never absorbed. The whole-port mode C1_whole_port_qp applies the same
+treatment to the single ledger on F_meas^T v.
 
 If the QP is infeasible the runtime logs the full state and constraint
 margins, applies a bounded emergency damping command, and counts the event.
@@ -104,12 +113,24 @@ class AffinePrediction:
     G: np.ndarray             # (nv, 2) = J^T B
     tau0: np.ndarray          # (nv,)  = qfrc_bias - D_q qdot
     v_tn: np.ndarray          # (2,) current EE velocity in the t-n frame
+    # Snapshot needed to predict from an arbitrary applied torque (used for
+    # the prediction-error bound check on the ACTUALLY applied command).
+    j_tn: np.ndarray = None   # (2, nv)
+    minv: np.ndarray = None   # (nv, nv)
+    qvel: np.ndarray = None   # (nv,)
+    qfrc_rest: np.ndarray = None  # (nv,) J^T f_meas + qfrc_passive - qfrc_bias
+    dt: float = 0.0
 
     def v_next(self, u: np.ndarray) -> np.ndarray:
         return self.A @ u + self.b
 
     def tau(self, u: np.ndarray) -> np.ndarray:
         return self.tau0 + self.G @ u
+
+    def v_next_from_tau(self, tau: np.ndarray) -> np.ndarray:
+        """Predicted v_tn+ for an arbitrary applied torque (no u needed)."""
+        qacc = self.minv @ (tau + self.qfrc_rest)
+        return self.j_tn @ (self.qvel + self.dt * qacc)
 
 
 def mass_matrix(model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
@@ -144,6 +165,12 @@ def compute_affine_prediction(
         G=g,
         tau0=tau0.copy(),
         v_tn=j_tn @ data.qvel,
+        j_tn=j_tn,
+        minv=minv,
+        qvel=data.qvel.copy(),
+        qfrc_rest=(jp.T @ f_meas + data.qfrc_passive
+                   - data.qfrc_bias).copy(),
+        dt=dt,
     )
 
 
@@ -245,6 +272,12 @@ class ConstraintRows:
         return np.minimum(m_lo, m_hi)
 
 
+MODES_HUMAN_ROWS = ("C3_dual_ledger_qp", "C4_dual_ledger_safe_scalar",
+                    "C4_legacy_origin_scalar")
+MODES_RESIDUAL_ROWS = ("C2_residual_qp",) + MODES_HUMAN_ROWS
+MODES_WHOLE_ROWS = ("C1_whole_port_qp", "C1_legacy_whole_port_origin_scalar")
+
+
 def build_constraint_rows(
     cfg: PassivationConfig,
     ctl_cfg: ControllerConfig,
@@ -258,12 +291,31 @@ def build_constraint_rows(
     e_w: float,
     tau_prev: np.ndarray | None,
     mode: str,
+    ep_h: float = 0.0,
+    ep_r: float = 0.0,
+    ep_w: float = 0.0,
 ) -> ConstraintRows:
     """Build the 7 hard constraint rows for the given mode.
 
-    Energy rows are expressed in POWER units (the one-step inequality
+    Robust formulation: with the configured one-step velocity prediction-
+    error bound ||e_v|| <= e_v_bound and a held port force F_i, the actual
+    power satisfies p_actual >= p_pred - ||F_i|| e_v_bound. Each ledger row
+    therefore constrains the ROBUST LOWER power estimate
+
+        p_lower+(u) = p_pred+(u) - ep_i,      ep_i = ||F_i|| e_v_bound:
+
+        energy:  E + dt p_lower+(u) >= E_safe        (E_safe = E_min + eps)
+        CBF:     p_lower+(u) >= -k_cbf (E - E_safe)
+
+    which, provided the bound holds, implies E_{k+1} >= E_safe >= E_min
+    EXACTLY — there is no clamped right-hand side and no constant power
+    slack. Rows are expressed in power units (the one-step inequality
     divided by dt) for uniform scaling:
-        p+(u) >= (E_min + eps - E) / dt.
+        p_pred+(u) >= (E_safe - E) / dt + ep_i.
+
+    The human instantaneous-power row stays on the predicted power (its
+    measured compliance is within ||F_H|| times the realized error, reported
+    in the logs).
     """
     a = np.zeros((N_ROWS, 2))
     lo = np.full(N_ROWS, -_INF)
@@ -276,47 +328,31 @@ def build_constraint_rows(
     aw = f_meas_tn @ pred.A
     bw = float(f_meas_tn @ pred.b)
 
-    use_human = mode in ("C3_dual_ledger_qp", "C4_dual_ledger_scalar")
-    use_residual = mode in ("C2_residual_qp", "C3_dual_ledger_qp",
-                            "C4_dual_ledger_scalar")
-    use_whole = mode == "C1_whole_port_scalar"
+    use_human = mode in MODES_HUMAN_ROWS
+    use_residual = mode in MODES_RESIDUAL_ROWS
+    use_whole = mode in MODES_WHOLE_ROWS
 
-    # Required-power right-hand sides are clamped at 0: whenever the ledger
-    # sits AT or marginally BELOW its floor (which can happen by accumulated
-    # one-step prediction error, since the certified update uses the actual
-    # next velocity), the constraint demands "no further extraction"
-    # (p+ >= 0) rather than an instantaneous recharge, which would be
-    # physically unsatisfiable through the port's own force (e.g. F_H -> 0
-    # during release would make ANY u infeasible forever). For E >= E_min +
-    # eps the clamp is inactive and the mandated one-step certificate is
-    # unchanged. Raw ledger violations remain logged and counted.
-    dp = cfg.delta_p
     if use_human:
         a[ROW_E_H] = ah
-        lo[ROW_E_H] = min(0.0, (cfg.human.e_min + cfg.eps_h - e_h) / dt) - dp - bh
+        lo[ROW_E_H] = (cfg.e_safe_h - e_h) / dt + ep_h - bh
         a[ROW_P_H] = ah
         lo[ROW_P_H] = -cfg.p_h_max - bh
         if cfg.k_cbf > 0.0:
             a[ROW_CBF_H] = ah
-            lo[ROW_CBF_H] = (min(0.0, -cfg.k_cbf * (e_h - cfg.human.e_min))
-                             - dp - bh)
+            lo[ROW_CBF_H] = -cfg.k_cbf * (e_h - cfg.e_safe_h) + ep_h - bh
     if use_residual:
         a[ROW_E_R] = ar
-        lo[ROW_E_R] = (min(0.0, (cfg.residual.e_min + cfg.eps_r - e_r) / dt)
-                       - dp - br)
+        lo[ROW_E_R] = (cfg.e_safe_r - e_r) / dt + ep_r - br
         if cfg.k_cbf > 0.0:
             a[ROW_CBF_R] = ar
-            lo[ROW_CBF_R] = (min(0.0, -cfg.k_cbf * (e_r - cfg.residual.e_min))
-                             - dp - br)
+            lo[ROW_CBF_R] = -cfg.k_cbf * (e_r - cfg.e_safe_r) + ep_r - br
     if use_whole:
         # C1 reuses the E_H / CBF_H slots for its single whole-port ledger.
         a[ROW_E_H] = aw
-        lo[ROW_E_H] = (min(0.0, (cfg.whole.e_min + cfg.eps_r - e_w) / dt)
-                       - dp - bw)
+        lo[ROW_E_H] = (cfg.e_safe_w - e_w) / dt + ep_w - bw
         if cfg.k_cbf > 0.0:
             a[ROW_CBF_H] = aw
-            lo[ROW_CBF_H] = (min(0.0, -cfg.k_cbf * (e_w - cfg.whole.e_min))
-                             - dp - bw)
+            lo[ROW_CBF_H] = -cfg.k_cbf * (e_w - cfg.e_safe_w) + ep_w - bw
 
     # Torque magnitude + rate, merged into one box per joint:
     #   max(-tau_max, tau_prev - dmax) <= tau0 + G u <= min(tau_max, ...).
@@ -352,13 +388,24 @@ class SolveResult:
 
 
 class PassivityQP:
-    """Warm-started sparse OSQP problem with the fixed 7 x 2 row layout."""
+    """Warm-started sparse OSQP problem with the fixed 7 x 2 row layout.
 
-    def __init__(self, cfg: PassivationConfig):
+    objective="track":    min 1/2 (u - u_nom)^T W (u - u_nom) + eps ||u||^2
+    objective="min_norm": min 1/2 ||u||^2   (the C4 safety anchor)
+    """
+
+    def __init__(self, cfg: PassivationConfig, objective: str = "track"):
         self.cfg = cfg
-        w = np.array([cfg.w_t, cfg.w_n])
+        self.objective = objective
+        if objective == "track":
+            w = np.array([cfg.w_t, cfg.w_n])
+        elif objective == "min_norm":
+            w = np.zeros(2)
+        else:
+            raise ValueError(f"unknown objective {objective!r}")
         self._w = w
-        p_mat = sparse.csc_matrix(np.diag(w + 2.0 * cfg.eps_reg))
+        diag = w + 2.0 * cfg.eps_reg if objective == "track" else np.ones(2)
+        p_mat = sparse.csc_matrix(np.diag(diag))
         self._a_pattern = sparse.csc_matrix(np.ones((N_ROWS, 2)))
         self._prob = osqp.OSQP()
         self._prob.setup(
@@ -432,37 +479,52 @@ class PassivityQP:
 # Scalar (gamma) solver (modes C1, C4)
 # ---------------------------------------------------------------------------
 
-def solve_scalar_gamma(u_nom: np.ndarray, rows: ConstraintRows) -> SolveResult:
-    """Solve min (gamma - 1)^2 s.t. the same rows at u = gamma u_nom,
-    gamma in [0, 1].
+def _gamma_interval(anchor: np.ndarray, direction: np.ndarray,
+                    rows: ConstraintRows, tol: float = 1e-9):
+    """Feasible gamma interval for u = anchor + gamma * direction.
 
-    Each row lo_i <= (a_i . u_nom) gamma <= hi_i is an interval in gamma;
-    the feasible set is the intersection. The objective
-    (gamma-1)^2 u_nom^T W u_nom is minimized by the feasible gamma closest
-    to 1. Uses the same one-step power prediction as the QP.
+    Returns (g_lo, g_hi) intersected with [0, 1]; g_lo > g_hi means empty.
+    ``tol`` absorbs solver-level constraint residuals at the anchor.
     """
-    t0 = time.perf_counter()
     g_lo, g_hi = 0.0, 1.0
-    coeff = rows.a @ u_nom            # (7,)
+    coeff = rows.a @ direction        # (7,)
+    offset = rows.a @ anchor
     for i in range(N_ROWS):
         c = coeff[i]
-        lo_i, hi_i = rows.lo[i], rows.hi[i]
-        if lo_i <= -_INF and hi_i >= _INF:
+        lo_i = rows.lo[i] - offset[i] - tol
+        hi_i = rows.hi[i] - offset[i] + tol
+        if rows.lo[i] <= -_INF and rows.hi[i] >= _INF:
             continue
+        if rows.lo[i] <= -_INF:
+            lo_i = -np.inf
+        if rows.hi[i] >= _INF:
+            hi_i = np.inf
         if abs(c) < 1e-14:
             if lo_i > 0.0 or hi_i < 0.0:
-                g_lo, g_hi = 1.0, 0.0   # infeasible: 0 outside [lo, hi]
-                break
+                return 1.0, 0.0       # infeasible: 0 outside [lo, hi]
             continue
         if c > 0.0:
-            i_lo = -np.inf if lo_i <= -_INF else lo_i / c
-            i_hi = np.inf if hi_i >= _INF else hi_i / c
+            i_lo = lo_i / c if np.isfinite(lo_i) else -np.inf
+            i_hi = hi_i / c if np.isfinite(hi_i) else np.inf
         else:
-            i_lo = -np.inf if hi_i >= _INF else hi_i / c
-            i_hi = np.inf if lo_i <= -_INF else lo_i / c
+            i_lo = hi_i / c if np.isfinite(hi_i) else -np.inf
+            i_hi = lo_i / c if np.isfinite(lo_i) else np.inf
         g_lo = max(g_lo, i_lo)
         g_hi = min(g_hi, i_hi)
+    return g_lo, g_hi
 
+
+def solve_scalar_gamma(u_nom: np.ndarray, rows: ConstraintRows) -> SolveResult:
+    """LEGACY origin-ray scaling: min (gamma - 1)^2 s.t. rows at
+    u = gamma u_nom, gamma in [0, 1].
+
+    The ray through the origin need not intersect the feasible set (e.g.
+    under torque-rate or oblique human constraints), so this can be
+    infeasible; it is kept only as a diagnostic baseline. Uses the same
+    one-step power prediction as the QP.
+    """
+    t0 = time.perf_counter()
+    g_lo, g_hi = _gamma_interval(np.zeros(2), u_nom, rows, tol=0.0)
     wall = time.perf_counter() - t0
     if g_lo > g_hi + 1e-12:
         margins = rows.margins(np.zeros(2))
@@ -481,6 +543,39 @@ def solve_scalar_gamma(u_nom: np.ndarray, rows: ConstraintRows) -> SolveResult:
     )
 
 
+def solve_safe_anchor_scalar(u_nom: np.ndarray, rows: ConstraintRows,
+                             anchor_qp: PassivityQP) -> SolveResult:
+    """C4 safe-anchor scalar: 1-D movement from a feasible anchor to nominal.
+
+    1. u_safe = argmin 1/2 ||u||^2 s.t. the same robust rows (OSQP).
+    2. u(gamma) = u_safe + gamma (u_nom - u_safe), gamma in [0, 1].
+    3. Pick the largest feasible gamma (the point on the line closest to
+       nominal). gamma = 0 returns the anchor itself, so the mode is
+       feasible whenever the safety-anchor QP is feasible.
+    """
+    t0 = time.perf_counter()
+    sol_a = anchor_qp.solve(np.zeros(2), rows)
+    if not sol_a.ok:
+        wall = time.perf_counter() - t0
+        return SolveResult(
+            u=np.zeros(2), ok=False, status=f"anchor {sol_a.status}",
+            solve_time=wall, iters=sol_a.iters,
+            active=np.zeros(N_ROWS, bool), margins=rows.margins(np.zeros(2)),
+            gamma=np.nan, infeasible=True,
+        )
+    u_safe = sol_a.u
+    g_lo, g_hi = _gamma_interval(u_safe, u_nom - u_safe, rows, tol=1e-9)
+    gamma = float(np.clip(g_hi, 0.0, 1.0))   # 0 is feasible by construction
+    u = u_safe + gamma * (u_nom - u_safe)
+    wall = time.perf_counter() - t0
+    margins = rows.margins(u)
+    active = margins < 1e-6
+    return SolveResult(
+        u=u, ok=True, status="solved", solve_time=wall,
+        iters=sol_a.iters, active=active, margins=margins, gamma=gamma,
+    )
+
+
 # ---------------------------------------------------------------------------
 # Per-step runtime for modes C0-C4
 # ---------------------------------------------------------------------------
@@ -492,12 +587,33 @@ _SP_SCALAR_KEYS = [
     "sp_e_r_raw", "sp_e_w_raw", "sp_e_h_below", "sp_e_r_below",
     "sp_e_w_below", "sp_solve_time", "sp_iters", "sp_status_ok",
     "sp_infeasible", "sp_emergency", "sp_active_any", "sp_pred_err",
+    # Robust prediction-error-bound bookkeeping.
+    "sp_bound_util",          # ||e_v|| / e_v_bound
+    "sp_bound_violation",     # bool: measured error exceeded the bound
+    "sp_ep_h", "sp_ep_r", "sp_ep_w",          # ||F_i|| e_v_bound [W]
+    "sp_p_h_rlb", "sp_p_r_rlb", "sp_p_w_rlb",  # robust lower power at u
+    "sp_margin_eh_rob", "sp_margin_er_rob", "sp_margin_ew_rob",
+    "sp_safety_clipped",      # post-QP safety clip changed tau (emergency
+                              # path only; must never fire on feasible sols)
+    # Reference-governor bookkeeping.
+    "sp_gov_active", "sp_gov_mode", "sp_x_ref_original",
 ]
 _SP_VEC_KEYS = {
     "sp_u_nom": 2, "sp_u": 2, "sp_tau_nom": 2, "sp_tau": 2,
     "sp_f_hat": 3, "sp_f_r": 3, "sp_f_delta": 3,
     "sp_margins": N_ROWS, "sp_active": N_ROWS,
-    "sp_v_pred": 2, "sp_v_act": 2,
+    "sp_v_pred": 2, "sp_v_act": 2, "sp_v_pred_err": 2,
+}
+
+#: Ledgers whose floor each mode certifies (used for acceptance counting).
+CERTIFIED_LEDGERS = {
+    "C0_nominal": (),
+    "C1_whole_port_qp": ("w",),
+    "C1_legacy_whole_port_origin_scalar": ("w",),
+    "C2_residual_qp": ("r",),
+    "C3_dual_ledger_qp": ("h", "r"),
+    "C4_dual_ledger_safe_scalar": ("h", "r"),
+    "C4_legacy_origin_scalar": ("h", "r"),
 }
 
 
@@ -511,6 +627,12 @@ class PassivationRuntime:
 
     def __init__(self, cfg: PassivationConfig, ctl_cfg: ControllerConfig,
                  handles: ModelHandles, dt: float):
+        if cfg.mode not in CERTIFIED_LEDGERS:
+            raise ValueError(f"unknown passivation mode {cfg.mode!r}")
+        if cfg.k_cbf > 0.0:
+            assert 0.0 < cfg.k_cbf * dt <= 1.0, (
+                f"k_cbf * dt = {cfg.k_cbf * dt} must lie in (0, 1] for the "
+                "discrete CBF guarantee")
         self.cfg = cfg
         self.ctl_cfg = ctl_cfg
         self.handles = handles
@@ -520,12 +642,20 @@ class PassivationRuntime:
         self.ledger_h = EnergyLedger(cfg.human, "human")
         self.ledger_r = EnergyLedger(cfg.residual, "residual")
         self.ledger_w = EnergyLedger(cfg.whole, "whole")
-        self.qp = (PassivityQP(cfg)
-                   if cfg.mode in ("C2_residual_qp", "C3_dual_ledger_qp")
+        self.qp = (PassivityQP(cfg, objective="track")
+                   if cfg.mode in ("C1_whole_port_qp", "C2_residual_qp",
+                                   "C3_dual_ledger_qp")
                    else None)
+        self.anchor_qp = (PassivityQP(cfg, objective="min_norm")
+                          if cfg.mode == "C4_dual_ledger_safe_scalar"
+                          else None)
         self.tau_prev: np.ndarray | None = None
         self.n_infeasible = 0
         self.n_emergency = 0
+        self.n_bound_violations = 0
+        self.n_floor_violations = 0     # certified ledgers only
+        self.n_safety_clipped = 0
+        self._prev_human_row_active = False
         self.log: dict[str, list] = {k: [] for k in
                                      list(_SP_SCALAR_KEYS) + list(_SP_VEC_KEYS)}
         self._pending: dict | None = None
@@ -543,7 +673,11 @@ class PassivationRuntime:
         jp = site_jacobian(model, data, self.handles.ee_site)
         v_ee = jp @ data.qvel
 
-        out = controller.update(data, contact, integrate=False)
+        out = controller.update(
+            data, contact, integrate=False,
+            f_h_norm=float(np.linalg.norm(f_h)),
+            human_constraint_active=self._prev_human_row_active,
+        )
         u_nom = B_TN.T @ out.f_cmd
 
         f_hat = self.predictor.predict(contact.f_task, v_ee)
@@ -554,13 +688,19 @@ class PassivationRuntime:
         f_r_tn = B_TN.T @ dec.f_r
         f_meas_tn = B_TN.T @ dec.f_meas
 
+        # Robust power error bounds ep_i = ||F_i|| * e_v_bound.
+        ep_h = float(np.linalg.norm(f_h_tn)) * cfg.e_v_bound
+        ep_r = float(np.linalg.norm(f_r_tn)) * cfg.e_v_bound
+        ep_w = float(np.linalg.norm(f_meas_tn)) * cfg.e_v_bound
+
         rows = build_constraint_rows(
             cfg, self.ctl_cfg, self.dt, pred, f_h_tn, f_r_tn, f_meas_tn,
             self.ledger_h.e, self.ledger_r.e, self.ledger_w.e,
-            self.tau_prev, cfg.mode,
+            self.tau_prev, cfg.mode, ep_h=ep_h, ep_r=ep_r, ep_w=ep_w,
         )
 
         emergency = False
+        safety_clipped = False
         if cfg.mode == "C0_nominal":
             u = u_nom.copy()
             sol = SolveResult(
@@ -571,6 +711,8 @@ class PassivationRuntime:
         else:
             if self.qp is not None:
                 sol = self.qp.solve(u_nom, rows)
+            elif self.anchor_qp is not None:
+                sol = solve_safe_anchor_scalar(u_nom, rows, self.anchor_qp)
             else:
                 sol = solve_scalar_gamma(u_nom, rows)
             if sol.infeasible:
@@ -578,22 +720,31 @@ class PassivationRuntime:
                 self.n_emergency += 1
                 emergency = True
                 self._report_infeasible(data, rows, u_nom, sol)
-                u = self._emergency_command(pred)
+                u = self._emergency_command(pred, u_nom)
             else:
                 u = sol.u
             tau = pred.tau(u)
             # Non-certified safety clip: must be inactive for feasible QP
             # solutions (bounds are inside the QP); protects only the
-            # emergency path and numerical corner cases.
+            # emergency path and numerical corner cases. Any activation on
+            # a feasible solution is counted and fails acceptance.
             tau_box = np.clip(tau, -self.ctl_cfg.tau_limit,
                               self.ctl_cfg.tau_limit)
             if self.tau_prev is not None:
                 dmax = self.ctl_cfg.tau_rate_limit * self.dt
                 tau_box = np.clip(tau_box, self.tau_prev - dmax,
                                   self.tau_prev + dmax)
+            # 1e-7 N·m: solutions ON a binding torque/rate boundary get
+            # trimmed by fp dust (~1e-15); only material clips count.
+            safety_clipped = bool(np.any(np.abs(tau_box - tau) > 1e-7))
+            if safety_clipped and not emergency:
+                self.n_safety_clipped += 1
             tau = tau_box
 
         self.tau_prev = tau.copy()
+        self._prev_human_row_active = bool(
+            sol.active[ROW_E_H] or sol.active[ROW_CBF_H]
+            or sol.active[ROW_P_H]) if cfg.mode in MODES_HUMAN_ROWS else False
 
         # PI anti-windup by integrator freezing: skip the force-error
         # integration whenever the filtered normal command deviates from
@@ -601,14 +752,19 @@ class PassivationRuntime:
         normal_modified = abs(u[1] - u_nom[1]) > cfg.activation_tol
         controller.finish_step(out, frozen=normal_modified, tau_applied=tau)
 
+        # The bound check compares against the prediction for the torque
+        # ACTUALLY applied (identical to A u + b on unclipped solutions).
+        v_pred = pred.v_next_from_tau(tau)
         self._pending = {
             "dec": dec, "pred": pred, "u": u, "u_nom": u_nom, "sol": sol,
             "tau": tau.copy(), "tau_nom": pred.tau(u_nom),
-            "emergency": emergency,
-            "p_h_pred": float(f_h_tn @ pred.v_next(u)),
-            "p_r_pred": float(f_r_tn @ pred.v_next(u)),
-            "p_meas_pred": float(f_meas_tn @ pred.v_next(u)),
-            "v_pred": pred.v_next(u),
+            "emergency": emergency, "safety_clipped": safety_clipped,
+            "ep_h": ep_h, "ep_r": ep_r, "ep_w": ep_w,
+            "p_h_pred": float(f_h_tn @ v_pred),
+            "p_r_pred": float(f_r_tn @ v_pred),
+            "p_meas_pred": float(f_meas_tn @ v_pred),
+            "v_pred": v_pred,
+            "out": out,
         }
         return out, tau
 
@@ -674,14 +830,68 @@ class PassivationRuntime:
             > self.cfg.activation_tol)
         log["sp_v_pred"].append(pend["v_pred"].copy())
         log["sp_v_act"].append(v_act_tn.copy())
-        log["sp_pred_err"].append(
-            float(np.linalg.norm(pend["v_pred"] - v_act_tn)))
+        err_vec = v_act_tn - pend["v_pred"]
+        err = float(np.linalg.norm(err_vec))
+        log["sp_v_pred_err"].append(err_vec.copy())
+        log["sp_pred_err"].append(err)
+
+        # --- robust certificate bookkeeping ---
+        cfg = self.cfg
+        bound_violation = err > cfg.e_v_bound + 1e-12
+        if bound_violation:
+            self.n_bound_violations += 1
+        log["sp_bound_util"].append(err / cfg.e_v_bound)
+        log["sp_bound_violation"].append(bound_violation)
+        log["sp_ep_h"].append(pend["ep_h"])
+        log["sp_ep_r"].append(pend["ep_r"])
+        log["sp_ep_w"].append(pend["ep_w"])
+        p_h_rlb = pend["p_h_pred"] - pend["ep_h"]
+        p_r_rlb = pend["p_r_pred"] - pend["ep_r"]
+        p_w_rlb = pend["p_meas_pred"] - pend["ep_w"]
+        log["sp_p_h_rlb"].append(p_h_rlb)
+        log["sp_p_r_rlb"].append(p_r_rlb)
+        log["sp_p_w_rlb"].append(p_w_rlb)
+        # Robust energy margins E + dt p_lower - E_safe (pre-update ledgers).
+        log["sp_margin_eh_rob"].append(
+            upd_h.e_prev + self.dt * p_h_rlb - cfg.e_safe_h)
+        log["sp_margin_er_rob"].append(
+            upd_r.e_prev + self.dt * p_r_rlb - cfg.e_safe_r)
+        log["sp_margin_ew_rob"].append(
+            upd_w.e_prev + self.dt * p_w_rlb - cfg.e_safe_w)
+        log["sp_safety_clipped"].append(pend["safety_clipped"])
+
+        # Certified-ledger floor violations (exact, fp tolerance only).
+        certified = CERTIFIED_LEDGERS[cfg.mode]
+        for name, upd in (("h", upd_h), ("r", upd_r), ("w", upd_w)):
+            if name in certified and upd.e_raw < {
+                    "h": cfg.human, "r": cfg.residual,
+                    "w": cfg.whole}[name].e_min - 1e-9:
+                self.n_floor_violations += 1
+
+        out = pend["out"]
+        log["sp_gov_active"].append(out.governor_active)
+        log["sp_gov_mode"].append(out.governor_mode)
+        log["sp_x_ref_original"].append(out.x_ref_original)
 
     # ------------------------------------------------------------------
-    def _emergency_command(self, pred: AffinePrediction) -> np.ndarray:
-        """Bounded damping command in the t-n plane (infeasibility fallback)."""
-        u = -self.cfg.emergency_damping * pred.v_tn
-        return np.clip(u, -self.cfg.emergency_u_max, self.cfg.emergency_u_max)
+    def _emergency_command(self, pred: AffinePrediction,
+                           u_nom: np.ndarray) -> np.ndarray:
+        """Bounded infeasibility fallback: damp the tangential motion while
+        PRESERVING the (bounded) nominal normal command.
+
+        Dropping the normal push (the iteration-1 pure-damping fallback)
+        unloaded the contact, which bounced the pad and made every
+        subsequent constraint set infeasible; keeping the normal channel on
+        the nominal command holds the contact so a failed controller
+        degrades into 'stop sliding, keep pressing' instead of a bounce
+        cascade. Still bounded, still counted, still not certified.
+        """
+        u_max = self.cfg.emergency_u_max
+        return np.array([
+            float(np.clip(-self.cfg.emergency_damping * pred.v_tn[0],
+                          -u_max, u_max)),
+            float(np.clip(u_nom[1], -u_max, u_max)),
+        ])
 
     _MAX_INFEASIBLE_PRINTS = 10
 
@@ -706,4 +916,9 @@ class PassivationRuntime:
 
     # ------------------------------------------------------------------
     def arrays(self) -> dict[str, np.ndarray]:
-        return {k: np.asarray(v) for k, v in self.log.items()}
+        out = {k: np.asarray(v) for k, v in self.log.items()}
+        out["meta_e_v_bound"] = np.array(self.cfg.e_v_bound)
+        out["meta_n_bound_violations"] = np.array(self.n_bound_violations)
+        out["meta_n_floor_violations"] = np.array(self.n_floor_violations)
+        out["meta_n_safety_clipped"] = np.array(self.n_safety_clipped)
+        return out
