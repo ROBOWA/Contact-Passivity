@@ -1,0 +1,42 @@
+\begin{table*}[t]
+\centering
+\caption{Summary metrics for all controller modes and tests. RMSE values are over the sliding phase; $-p_H^{\max}$ is the peak instantaneous power delivered to the human port; $W_H^{\mathrm{out}}$ is the maximum cumulative human-directed output energy; $\min E_H$, $\min E_R$ are raw ledger minima (discharge is never clamped); ``act.'' is the fraction of in-contact steps on which the filter modified the command; $t_{\mathrm{act}}$ is the first ledger-driven intervention; ``fail'' counts QP solve failures handled by the bounded emergency fallback.}
+\label{tab:summary}
+\small
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{llrrrrrrrrr}
+\toprule
+Test & Mode & RMSE $F_n$ & RMSE $v_t$ & $-p_H^{\max}$ & $W_H^{\mathrm{out}}$ & $\min E_H$ & $\min E_R$ & act. & $t_{\mathrm{act}}$ & fail \\
+ & & [N] & [m/s] & [W] & [J] & [J] & [J] & [\%] & [s] & \\
+\midrule
+A & C0 & 0.035 & 0.0027 & 0.000 & 0.000 & 0.050 & 0.300 & 0.00 & -- & 0 \\
+A & C1 & 5.237 & 0.0049 & 0.000 & 0.000 & 0.050 & 0.300 & 40.25 & 6.21 & 2889 \\
+A & C2 & 0.035 & 0.0027 & 0.000 & 0.000 & 0.050 & 0.300 & 0.01 & -- & 0 \\
+A & C3 & 0.035 & 0.0027 & 0.000 & 0.000 & 0.050 & 0.300 & 0.01 & -- & 0 \\
+\addlinespace[2pt]
+B & C0 & 2.335 & 0.0152 & 0.000 & 0.000 & 0.050 & 0.004 & 0.00 & -- & 0 \\
+B & C1 & 4.900 & 0.0175 & 0.000 & 0.000 & 0.050 & 0.128 & 43.98 & 6.21 & 5733 \\
+B & C2 & 2.392 & 0.0149 & 0.000 & 0.000 & 0.050 & 0.020 & 5.16 & 14.73 & 0 \\
+B & C3 & 2.392 & 0.0149 & 0.000 & 0.000 & 0.050 & 0.020 & 5.16 & 14.73 & 0 \\
+\addlinespace[2pt]
+C & C0 & 0.219 & 0.0051 & 0.150 & 0.361 & -0.311 & -0.061 & 0.00 & -- & 0 \\
+C & C1 & 3.854 & 0.0637 & 0.038 & 0.004 & 0.046 & 0.296 & 48.96 & 6.18 & 1538 \\
+C & C2 & 0.638 & 0.0296 & 0.150 & 0.280 & -0.230 & 0.020 & 6.90 & 8.22 & 0 \\
+C & C3 & 1.443 & 0.0758 & 0.100 & 0.045 & 0.005 & 0.255 & 22.69 & 6.45 & 0 \\
+C & C4 & 2.346 & 0.0760 & 0.100 & 0.045 & 0.005 & 0.255 & 22.69 & 6.45 & 0 \\
+\addlinespace[2pt]
+D & C0 & 0.219 & 0.0051 & 0.150 & 0.361 & -0.311 & -0.276 & 0.00 & -- & 0 \\
+D & C1 & 3.854 & 0.0637 & 0.038 & 0.004 & 0.046 & 0.192 & 48.96 & 6.18 & 1538 \\
+D & C2 & 3.217 & 0.0376 & 0.150 & 0.174 & -0.124 & -0.041 & 38.03 & 7.50 & 1496 \\
+D & C3 & 1.443 & 0.0758 & 0.100 & 0.045 & 0.005 & 0.043 & 22.69 & 6.45 & 0 \\
+D & C4 & 2.346 & 0.0760 & 0.100 & 0.045 & 0.005 & 0.049 & 22.69 & 6.45 & 0 \\
+\addlinespace[2pt]
+E & C0 & 0.254 & 0.0042 & 0.107 & 0.259 & -0.209 & 0.041 & 0.00 & -- & 0 \\
+E & C3 & 1.367 & 0.0701 & 0.100 & 0.045 & 0.005 & 0.255 & 20.37 & 6.71 & 0 \\
+E & C4 & 1.813 & 0.0716 & 0.100 & 0.045 & 0.005 & 0.255 & 20.37 & 6.71 & 4 \\
+\addlinespace[2pt]
+F & C0 & 0.286 & 0.0061 & 0.150 & 0.000 & -0.281 & 0.139 & 0.00 & -- & 0 \\
+F & C3 & 1.103 & 0.0628 & 0.100 & 0.000 & 0.005 & 0.300 & 19.25 & 8.95 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table*}

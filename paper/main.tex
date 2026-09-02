@@ -1,0 +1,45 @@
+% ---------------------------------------------------------------------------
+% Standalone wrapper: compiles the Results section on its own.
+% Set this file as the "Main document" in Overleaf (Menu -> Settings).
+%
+% For the full paper, ignore this file and \input{results_section} from your
+% own main file instead (it defines a \label{sec:task} stub below only so
+% the standalone build has no unresolved references).
+% ---------------------------------------------------------------------------
+\documentclass[10pt]{article}             % single column; swap class as needed
+
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
+
+% The narrow figures were designed at 3.4 in (two-column width). In this
+% single-column layout, render them near design size instead of stretching
+% to the full text width; wide figures still use the full width.
+\newcommand{\figwidth}{0.55\textwidth}
+
+\title{Contact-Model-Aware Selective Passivation:\\Results}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% Stub setup section so \ref{sec:task} in the results text resolves when
+% compiling standalone; replace with (or remove in favor of) the real task
+% section of the full paper.
+\section{Experimental setup (stub)}
+\label{sec:task}
+Planar two-link MuJoCo robot pressing a spherical pad on a horizontal
+surface: desired normal force $F_n^d = 5$~N, desired tangential sliding
+speed $v_t^d = 0.05$~m/s, control rate 1~kHz, surface friction
+$\mu \approx 0.30$. A scripted human wrench $\mathbf{w}_H$ acts at the
+end-effector. Controller modes C0--C4, the energy-ledger parameters, and
+the QP rows are those of the PoC implementation document; this stub exists
+only so the standalone build compiles with resolved references.
+
+\input{results_section}
+
+\end{document}

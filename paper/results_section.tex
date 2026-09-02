@@ -1,0 +1,278 @@
+% ---------------------------------------------------------------------------
+% Results section for the contact-model-aware selective-passivation PoC.
+% Requires: \usepackage{graphicx}, \usepackage{booktabs}, \usepackage{amsmath}
+% Figures live in figs/ (vector PDF); the summary table is table_summary.tex.
+% All quantitative values are produced by paper/make_figures.py from the
+% experiment logs; regenerate with `python paper/make_figures.py`.
+% ---------------------------------------------------------------------------
+
+% Narrow-figure width: defaults to \columnwidth (two-column layouts); a
+% single-column wrapper may predefine \figwidth (see main.tex).
+\providecommand{\figwidth}{\columnwidth}
+
+\section{Results}
+\label{sec:results}
+
+Fig.~\ref{fig:overview} summarizes the experimental system and the
+implemented pipeline. All experiments share the task of
+Sec.~\ref{sec:task}\footnote{Adjust this reference to your setup section.}
+($F_n^d = 5$~N, $v_t^d = 0.05$~m/s), the ledger parameters of
+Eqs.~(15)--(17), and the QP of Sec.~5; only the task-contact predictor, the
+scripted human wrench, and the controller mode vary between tests.
+Table~\ref{tab:summary} collects the summary metrics of every mode--test
+combination; the following subsections discuss one implementation claim at
+a time. Across all runs the QP solves in $26\text{--}48~\mu$s (median) with
+sub-millisecond worst cases, i.e.\ well within the 1~kHz control budget.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figs/fig1_overview.pdf}
+  \caption{System and signal overview. (a)~Planar two-link robot with the
+  spherical contact pad sliding on a horizontal surface; the task-contact
+  wrench $\mathbf{w}_T$ and the scripted human wrench $\mathbf{w}_H$ act at
+  the end-effector, and $(\mathbf{t},\mathbf{n})$ span the command plane.
+  (b)~Implemented pipeline: the task-contact predictor
+  $\widehat{\mathbf{w}}_T$ removes model-consistent contact wrench from the
+  measurement, the residual $\mathbf{w}_R$ and human $\mathbf{w}_H$ ports
+  feed the nested energy ledgers, and the task-weighted QP filters the
+  nominal command subject to the ledger, human-power, torque, and
+  torque-rate rows. The optional reference governor shapes only the nominal
+  tangential reference and does not enter the certificate.}
+  \label{fig:overview}
+\end{figure*}
+
+\subsection{False depletion under nominal sliding (Test A)}
+\label{sec:res-a}
+
+Fig.~\ref{fig:false-depletion} shows Test~A (oracle predictor, no human).
+C0, C2, and C3 are indistinguishable: $\mathrm{RMSE}(F_n)\approx0.035$~N,
+$\mathrm{RMSE}(v_t)\approx0.0027$~m/s, and the C3 filter modifies the
+command on only $0.009\,\%$ of in-contact steps, with both of its ledgers
+exactly constant. The whole-port baseline C1, in contrast, charges the
+ordinary sliding-friction dissipation ($\approx0.075$~W) to its protected
+ledger: $E_W$ drains linearly and crosses its floor at $t\approx6.2$~s,
+after which the scalar attenuation collapses normal-force regulation
+(Fig.~\ref{fig:false-depletion}b). This is the false-passivation failure
+mode that motivates contact-model subtraction: under an accurate task
+model, selective passivation leaves the nominal task untouched
+(claims~1--2).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\figwidth]{figs/fig2_false_depletion.pdf}
+  \caption{Test~A (oracle model, no human): false depletion under nominal
+  sliding. (a)~The whole-port ledger $E_W$ of C1 drains on ordinary task
+  friction and triggers intervention at $6.21$~s (vertical line), while the
+  C3 residual and human ledgers remain exactly at their initial values.
+  (b)~Normal-force and (c)~tangential-velocity tracking: C0 and C3 overlap;
+  C1's post-depletion attenuation destroys force regulation.}
+  \label{fig:false-depletion}
+\end{figure}
+
+\subsection{Model mismatch stays in the residual port (Test B)}
+\label{sec:res-b}
+
+With the regularized friction predictor at $\widehat{\mu}=0.20$ (true
+$\mu\approx0.30$) and no human, the mismatch power
+$p_\Delta\approx-(\mu-\widehat{\mu})F_n v_t\approx-25$~mW discharges only
+the residual ledger (Fig.~\ref{fig:mismatch}): $E_H$ stays exactly at
+$0.05$~J while $E_R$ bleeds from $0.30$~J to its floor region
+($\approx0.021$~J). The first ledger-driven intervention consequently moves
+from $6.21$~s (whole-port C1) to $14.73$~s (residual, C3): the predictor
+postpones passivation until \emph{unexplained} contact power has consumed
+the residual budget, rather than total task friction (claim~3). The
+attribution identities of Sec.~3 hold to machine precision throughout
+($\mathbf{w}_R=\mathbf{w}_\Delta$ here; $p_R = p_H + p_\Delta$ in every
+test).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\figwidth]{figs/fig3_mismatch_residual.pdf}
+  \caption{Test~B (friction mismatch $\widehat{\mu}=0.20$, no human).
+  (a)~The human ledger is exactly constant while the residual ledger
+  depletes; first ledger-driven interventions of C1 ($6.21$~s) and C3
+  ($14.73$~s) are marked. (b)~Port powers: the depletion is carried
+  entirely by the mismatch power $p_\Delta$ while $p_H\equiv0$.}
+  \label{fig:mismatch}
+\end{figure}
+
+\subsection{Human-directed power and energy limiting (Test C)}
+\label{sec:res-c}
+
+Fig.~\ref{fig:human-limiting} is the central quantitative comparison. The
+nominal controller (C0) works against the $3$-N blocking human at
+$-p_H\approx0.15$~W for the entire hold and delivers $0.361$~J. C2
+(residual ledger only) behaves almost identically until its large residual
+budget is exhausted: the peak human-directed power is unchanged
+($0.1499$~W) and $0.280$~J are extracted, because nothing in C2
+distinguishes the human from generic unexplained contact. C3 clips the
+instantaneous power at the $P_H^{\max}=0.10$~W row (measured peak
+$0.0997$~W), discharges $E_H$ to its floor, and saturates the cumulative
+output at $0.045$~J~$=E_H(0)-E_{H,\min}$ --- an $8\times$ reduction over C0
+enforced by the small dedicated budget rather than by tuning (claim~4).
+After release the robot recovers nominal sliding in $\approx0.8$~s.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\figwidth]{figs/fig4_human_limiting.pdf}
+  \caption{Test~C (oracle model, $3$-N blocking human, shaded window):
+  human-port limiting across C0/C2/C3. (a)~Instantaneous extracted power
+  $-p_H$ with the $0.10$-W row; (b)~cumulative human-directed energy
+  $W_H^{\mathrm{out}}$ against the $0.045$-J budget; (c)~the human ledger:
+  C3 stops at $E_{H,\min}$, while the (unconstrained, observed) ledgers of
+  C0 and C2 run far below it.}
+  \label{fig:human-limiting}
+\end{figure}
+
+\subsection{Combined mismatch and human interaction (Test D)}
+\label{sec:res-d}
+
+Test~D repeats the blocking profile under $\widehat{\mu}=0.20$
+(Fig.~\ref{fig:combined}). The human ledger reproduces Test~C exactly
+($E_H\to0.005$~J, peak $0.0997$~W), while the residual ledger now pays for
+both channels and ends near $0.043$~J: the stacked decomposition in
+Fig.~\ref{fig:combined}b shows $-p_R$ separating into the human share
+$-p_H$ (bounded by the human rows) and the persistent mismatch share
+$-p_\Delta$. The nested ledgers therefore attribute energy to the correct
+ports simultaneously, rather than double-counting or masking either
+channel.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\figwidth]{figs/fig5_combined_decomposition.pdf}
+  \caption{Test~D (mismatch $\widehat{\mu}=0.20$ plus blocking human).
+  (a)~Both ledgers respond: $E_H$ tracks only human power, $E_R$ tracks
+  human plus mismatch. (b)~Extracted-power decomposition
+  $-p_R=-p_H-p_\Delta$ (50-ms means; stacked areas sum to the black
+  $-p_R$ trace).}
+  \label{fig:combined}
+\end{figure}
+
+\subsection{QP authority versus scalar attenuation (Test E)}
+\label{sec:res-e}
+
+Under the oblique human force
+$\mathbf{w}_H=\tfrac{3}{\sqrt2}(-\mathbf{t}-\mathbf{n})$~N, C3 and C4
+enforce the same human rows, yet differ sharply in task preservation
+(Fig.~\ref{fig:qp-vs-scalar}): within the interaction window
+$\mathrm{RMSE}(F_n)=0.859$~N for C3 versus $2.522$~N for C4. The command
+trajectories explain the gap. C3 satisfies the human rows almost entirely
+with its tangential channel while holding $u_n$ on the nominal
+normal-force command; C4's single scaling factor must attenuate both
+channels together, so every joule of human protection is paid for with
+normal-force error. This isolates the value of two-dimensional,
+task-weighted projection over uniform attenuation (claim~5).
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figs/fig6_qp_vs_scalar.pdf}
+  \caption{Test~E (oblique human force, shaded window): task-weighted QP
+  (C3) versus scalar attenuation (C4). (a)~Normal-force regulation during
+  the window ($\mathrm{RMSE}$ annotated). (b)~C3 commands: the tangential
+  command is cut while the normal command follows its nominal.
+  (c)~C4 commands: the scalar factor attenuates both channels, dropping
+  the normal push and hence $F_n$.}
+  \label{fig:qp-vs-scalar}
+\end{figure*}
+
+\subsection{Ledger charging, capping, and discharge (Test F)}
+\label{sec:res-f}
+
+Fig.~\ref{fig:charge} traces the human ledger through a helping
+($+3$~N$\,\mathbf{t}$) followed by a blocking ($-3$~N$\,\mathbf{t}$)
+pulse. During helping, $p_H>0$ charges $E_H$ from $0.05$~J to the
+$0.08$-J cap, where charging saturates (discharge is never clamped, so the
+cap is the only nonlinearity). The later blocking pulse first spends the
+stored credit --- the robot resists longer than in Test~C --- and then
+settles at the floor with the extraction again power-limited at
+$0.10$~W. Energy received from the human genuinely extends the budget for
+later interaction, while the cap bounds how much history may accumulate.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\figwidth]{figs/fig7_charge_discharge.pdf}
+  \caption{Test~F (helping then blocking; green/pink windows).
+  (a)~$E_H$ charges to the $0.08$-J cap, plateaus, and later discharges to
+  the floor. (b)~The human-port power showing the charge ($p_H>0$) and
+  bounded discharge ($p_H\geq-0.10$~W) phases.}
+  \label{fig:charge}
+\end{figure}
+
+\subsection{Reference-governor ablation}
+\label{sec:res-governor}
+
+The time-indexed reference of Eq.~(2) keeps advancing while the human
+blocks the robot; on release, the accumulated $\approx0.13$~m error
+produces a catch-up burst. Fig.~\ref{fig:governor} compares C3 with the
+governor disabled and enabled on the blocking scenario: the burst reaches
+$0.68$~m/s and a $24$-N normal-force transient without the governor,
+versus $0.050$~m/s and $5.1$~N with it --- the post-release overshoot of
+$F_n$ is reduced by $\approx99\,\%$ and the velocity never exceeds
+$v_t^d$. Panel~(c) shows the mechanism: the governed reference freezes and
+continuously rebases onto the end-effector during the interaction (even
+following the human's back-push), then resumes with a cosine ramp from the
+rebased position. Both position and velocity references remain continuous
+throughout. The certificate quantities are unaffected by construction
+(the governed run keeps $E_H\geq E_{H,\min}$ with a peak extraction of
+only $0.010$~W, since yielding removes the incentive to fight the human);
+the governor is purely a task/recovery policy (claim~6).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\figwidth]{figs/fig8_governor.pdf}
+  \caption{Reference-governor ablation (blocking scenario, C3; release
+  marked at $9$~s). (a)~Tangential velocity: the $0.68$-m/s catch-up burst
+  is replaced by a ramp bounded by $v_t^d$. (b)~Normal force: the $24$-N
+  release transient is suppressed to $5.1$~N peak. (c)~References: the
+  governed $x_g$ freezes and rebases onto the end-effector during the
+  interaction instead of tracking the time-indexed $x_d$.}
+  \label{fig:governor}
+\end{figure}
+
+\subsection{Friction-model sweep}
+\label{sec:res-sweep}
+
+Fig.~\ref{fig:sweep} sweeps the predictor coefficient
+$\widehat{\mu}\in\{0.20,0.25,0.30,0.35\}$ for C3. Residual depletion
+scales monotonically with the model error: $\widehat{\mu}=0.20$ reaches
+the floor, $0.25$ consumes roughly half the budget, and
+$\widehat{\mu}\geq0.30$ leaves $E_R$ untouched (an over-estimated
+$\widehat{\mu}=0.35$ produces $p_\Delta>0$ and charges the ledger). With a
+blocking human the first intervention is dominated by the human rows and
+is therefore independent of $\widehat{\mu}$, while without a human it
+occurs only for the largest mismatch --- and task tracking is flat across
+the sweep, confirming that moderate model error costs residual budget, not
+task performance. The human-ledger floor is respected at every
+$\widehat{\mu}$.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figs/fig9_sweep.pdf}
+  \caption{Friction-predictor sweep for C3 with and without the blocking
+  human. (a)~Minimum residual-ledger level: depletion scales with
+  $|\mu-\widehat{\mu}|$ and vanishes for $\widehat{\mu}\geq0.30$.
+  (b)~First ledger-driven intervention: human-driven ($6.45$~s) when
+  present, mismatch-driven ($14.73$~s at $\widehat{\mu}=0.20$) or absent
+  otherwise. (c)~Sliding-phase $\mathrm{RMSE}(F_n)$ is insensitive to
+  $\widehat{\mu}$ (the no-human family runs 20~s, whose final seconds
+  approach the workspace boundary and raise the absolute level equally for
+  all $\widehat{\mu}$).}
+  \label{fig:sweep}
+\end{figure*}
+
+% Table I (double-column float; input kept separate for editing)
+\input{table_summary}
+
+\subsection{Summary}
+\label{sec:res-summary}
+
+Table~\ref{tab:summary} condenses the comparison. Whole-port accounting
+(C1) falsely consumes its budget on predictable friction and destroys the
+task it was meant to protect; contact-model subtraction (C2/C3) postpones
+intervention until the interaction is unexplained by the task model; the
+dedicated human ledger and power row (C3) reduce peak and cumulative
+human-directed output by factors of $1.5$ and $8$ relative to C0 while the
+residual ledger absorbs model error; two-dimensional task weighting
+preserves normal-force regulation $2.9\times$ better than scalar
+attenuation under oblique interaction; and the reference governor removes
+the post-release burst without touching any certificate quantity.
