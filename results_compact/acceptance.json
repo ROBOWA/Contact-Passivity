@@ -801,24 +801,72 @@
     "threshold": null
   },
   {
-    "criterion": "E: recovery after release",
+    "criterion": "F: recovery after release",
     "pass": true,
-    "value": 0.6550000000000882,
+    "value": 0.9539999999985369,
     "threshold": null
   },
   {
-    "criterion": "E: C3 preserves F_n better than C4 (human window)",
+    "criterion": "E1: governor-off nominal policy for both controllers",
     "pass": true,
     "value": {
-      "C3": 1.3940758746101949,
-      "C4": 2.3729610523286007
+      "C3_gov": false,
+      "C4_gov": false
+    },
+    "threshold": false
+  },
+  {
+    "criterion": "E1: both satisfy the same certificate rows (E_H/E_R floors, peak power; full run)",
+    "pass": true,
+    "value": {
+      "C3": [
+        0.006417307752334354,
+        0.2564173077523347,
+        0.09223267285281014
+      ],
+      "C4": [
+        0.006424247207164626,
+        0.25642424720716456,
+        0.09223283882881605
+      ]
     },
     "threshold": null
   },
   {
-    "criterion": "F: recovery after release",
+    "criterion": "E1: zero infeasible/emergency/bound/floor violations (both, full run)",
     "pass": true,
-    "value": 0.9539999999985369,
+    "value": {
+      "C3": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "C4": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "threshold": 0
+  },
+  {
+    "criterion": "E1: C3 lower normal-force RMSE over the plateau window",
+    "pass": true,
+    "value": {
+      "C3": 0.5119293574479646,
+      "C4": 2.263965975774448
+    },
+    "threshold": null
+  },
+  {
+    "criterion": "E1: tangential commands similar (rms diff < 0.5 N), normal allocation differs (> 2x tangential diff)",
+    "pass": true,
+    "value": {
+      "rmse_ut_c3_c4_e1": 0.07652232819813272,
+      "rmse_un_c3_c4_e1": 2.76060005242786
+    },
     "threshold": null
   },
   {

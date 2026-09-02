@@ -2,13 +2,17 @@
 
 Data sources
 ------------
-* Figs 2-7, 9 and Table I: the iteration-1 result logs in results_passivation/
-  (these are the runs whose numbers are quoted in the paper text:
-  RMSE(F_n) = 0.0348 N, first activations 6.21 s vs 14.73 s, peak powers
-  0.1499 / 0.0997 W, E-window RMSE 0.859 vs 2.522 N, ...).
-* Fig 8 (reference-governor ablation): results_passivation_iter2/governor_compare/
-  (the governor exists only in the iteration-2 code path; it is a task-layer
-  policy independent of the ledger rows, so the ablation is self-contained).
+* ALL result figures and Table I use the current robust (iteration-2)
+  result logs in results_passivation_iter2/ — the dataset produced by
+  `python -m mujoco_sliding.experiments --all --sweep --governor-compare`
+  with the robust prediction-error-bounded rows, the whole-port QP baseline
+  C1_whole_port_qp, and the safe-anchor scalar C4_dual_ledger_safe_scalar.
+  No iteration-1 data is mixed in.
+* Fig 6 is the E1 filter-allocation ablation: evaluation and plotting are
+  clipped to [t_start + t_rise, t_start + t_rise + t_hold] (the full-force
+  plateau, derived programmatically from the scenario's HumanForceConfig —
+  never hard-coded); the underlying simulations and logs are complete and
+  unclipped.
 * Fig 1 is a drawn schematic (no simulation data).
 
 All figures are vector PDFs sized for a two-column paper (single column
@@ -22,6 +26,7 @@ from __future__ import annotations
 import csv
 import json
 import os
+import sys
 
 import matplotlib
 
@@ -32,10 +37,23 @@ import numpy as np
 from matplotlib.patches import Circle, FancyArrow, FancyArrowPatch, Rectangle
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-R1 = os.path.join(ROOT, "results_passivation")          # iteration-1 logs
-GOV = os.path.join(ROOT, "results_passivation_iter2", "governor_compare")
+sys.path.insert(0, ROOT)                                # for mujoco_sliding
+R1 = os.path.join(ROOT, "results_passivation_iter2")    # current robust logs
+GOV = os.path.join(R1, "governor_compare")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figs")
 os.makedirs(OUT, exist_ok=True)
+
+MODE_C1 = "C1_whole_port_qp"
+MODE_C4 = "C4_dual_ledger_safe_scalar"
+
+
+def e1_bounds():
+    """E1 plateau limits derived from the scenario config (single source)."""
+    from mujoco_sliding.experiments import SCENARIOS
+
+    hp = SCENARIOS["E"].human
+    return (hp.t_start, hp.t_start + hp.t_rise,
+            hp.t_start + hp.t_rise + hp.t_hold)
 
 # ---------------------------------------------------------------------------
 # Style
@@ -188,14 +206,14 @@ def fig1():
 
     # ---- (b) pipeline block diagram ----
     b.set_xlim(0, 10)
-    b.set_ylim(0, 6.2)
+    b.set_ylim(0, 6.9)      # headroom so the panel letter clears the boxes
     b.axis("off")
     letter(b, "(b)")
 
-    def box(x, y, w, h, text, fc="#f4f3f0", ec="#8a8985"):
+    def box(x, y, w, h, text, fc="#f4f3f0", ec="#8a8985", fs=6.0):
         b.add_patch(Rectangle((x, y), w, h, fc=fc, ec=ec, lw=0.8, zorder=3))
         b.text(x + w / 2, y + h / 2, text, ha="center", va="center",
-               fontsize=6.6, zorder=4)
+               fontsize=fs, zorder=4)
 
     def arrow(x0, y0, x1, y1, text="", tx=0.0, ty=0.12, color="#3a3a38"):
         b.add_patch(FancyArrowPatch((x0, y0), (x1, y1),
@@ -203,39 +221,39 @@ def fig1():
                                     color=color, lw=0.9, zorder=2))
         if text:
             b.text((x0 + x1) / 2 + tx, (y0 + y1) / 2 + ty, text,
-                   fontsize=6.4, ha="center", color=color)
+                   fontsize=6.2, ha="center", color=color)
 
-    box(0.1, 4.6, 2.3, 1.2, "nominal controller\n(PI force + PD track)")
-    box(3.6, 4.6, 2.4, 1.2, "task-weighted QP\n(7 hard rows, OSQP)")
-    box(6.9, 4.6, 2.3, 1.2,
+    box(0.1, 4.6, 2.7, 1.2, "nominal controller\nPI force + PD track")
+    box(3.8, 4.6, 2.4, 1.2, "task-weighted QP\nOSQP, 7 rows")
+    box(7.0, 4.6, 2.6, 1.2,
         r"$\tau=\tau_0+J_P^{\top}B_{tn}u$" + "\nMuJoCo plant")
-    box(6.9, 2.2, 2.3, 1.1, "task-contact predictor\n" + r"$\widehat{w}_T$")
-    box(3.6, 2.2, 2.4, 1.1,
+    box(7.0, 2.2, 2.6, 1.1, "task-contact\npredictor " + r"$\widehat{w}_T$")
+    box(3.8, 2.2, 2.4, 1.1,
         "residual\n" + r"$w_R=w_{\mathrm{meas}}-\widehat{w}_T$")
-    box(0.1, 2.2, 2.3, 1.1, "energy ledgers\n" + r"$E_H,\;E_R$")
+    box(0.1, 2.2, 2.7, 1.1, "energy ledgers\n" + r"$E_H,\;E_R$")
     box(0.1, 0.2, 4.6, 1.1,
         "reference governor (optional)\nfreeze / rebase / resume "
         + r"$x_g,v_g$")
 
-    arrow(2.4, 5.2, 3.6, 5.2, r"$u_{\mathrm{nom}}$")
-    arrow(6.0, 5.2, 6.9, 5.2, r"$u$")
-    arrow(8.05, 4.6, 8.05, 3.3, r"$w_T,\,v_P$", tx=0.82, ty=0.0)
-    arrow(6.9, 2.75, 6.0, 2.75, "")
-    b.text(6.45, 3.02, r"$+\,w_H$", fontsize=6.4, color=C_C4, ha="center")
-    arrow(3.6, 2.75, 2.4, 2.75, r"$p_H,\,p_R$", ty=0.18)
+    arrow(2.8, 5.2, 3.8, 5.2, r"$u_{\mathrm{nom}}$")
+    arrow(6.2, 5.2, 7.0, 5.2, r"$u$")
+    arrow(8.3, 4.6, 8.3, 3.3, r"$w_T,\,v_P$", tx=0.78, ty=0.0)
+    arrow(7.0, 2.75, 6.2, 2.75, "")
+    b.text(6.6, 3.05, r"$+\,w_H$", fontsize=6.2, color=C_C4, ha="center")
+    arrow(3.8, 2.75, 2.8, 2.75, r"$p_H,\,p_R$", ty=0.18)
     arrow(1.25, 3.3, 1.25, 4.6, "constraints\n" + r"$E_i\geq E_{i,\min}$",
-          tx=1.08, ty=0.0)
+          tx=0.92, ty=0.0)
     # governor -> nominal controller (reference shaping, task layer)
-    b.add_patch(FancyArrowPatch((3.0, 1.3), (3.0, 4.85),
+    b.add_patch(FancyArrowPatch((3.3, 1.3), (3.3, 4.85),
                                 arrowstyle="-", color="#3a3a38", lw=0.9))
-    arrow(3.0, 4.85, 2.4, 4.85, "")
-    b.text(3.12, 3.9, r"$x_g,\,v_g$", fontsize=6.4)
+    arrow(3.3, 4.85, 2.8, 4.85, "")
+    b.text(3.42, 3.9, r"$x_g,\,v_g$", fontsize=6.2)
     # plant -> governor human-detection feedback (gray, task layer only)
-    b.add_patch(FancyArrowPatch((9.6, 4.55), (9.6, 0.75),
+    b.add_patch(FancyArrowPatch((9.8, 4.55), (9.8, 0.75),
                                 arrowstyle="-", color="#b5b4b0", lw=0.9))
-    arrow(9.6, 0.75, 4.7, 0.75, "", color="#b5b4b0")
-    b.text(7.15, 0.9, r"detected $\|w_H\|$ (task layer only)",
-           fontsize=6.2, color="#8a8985", ha="center")
+    arrow(9.8, 0.75, 4.7, 0.75, "", color="#b5b4b0")
+    b.text(7.25, 0.92, r"detected $\|w_H\|$ (task layer only)",
+           fontsize=6.0, color="#8a8985", ha="center")
 
     save(fig, "fig1_overview.pdf")
 
@@ -246,7 +264,7 @@ def fig1():
 
 def fig2():
     c0 = load("A_exact_no_human", "C0_nominal")
-    c1 = load("A_exact_no_human", "C1_whole_port_scalar")
+    c1 = load("A_exact_no_human", MODE_C1)
     c3 = load("A_exact_no_human", "C3_dual_ledger_qp")
     t = c3["time"]
 
@@ -262,11 +280,11 @@ def fig2():
     ax.plot(t, c3["sp_e_h"], color=C_AUX, label=r"$E_H$ (C3)")
     ax.axhline(0.02, color=C_LIM, lw=0.7, ls="--")
     ax.axhline(0.005, color=C_LIM, lw=0.7, ls=":")
-    ax.text(11.8, 0.033, r"$E_{R,\min}$", fontsize=6.2, color=C_LIM,
-            ha="right")
-    ax.set_ylim(-0.34, 0.36)
+    ax.text(0.35, 0.0265, r"$E_{R,\min}$", fontsize=6.2, color=C_LIM,
+            va="bottom")
+    ax.set_ylim(-0.02, 0.36)
     style(ax, "ledger energy [J]")
-    ax.legend(frameon=False, loc="lower left", ncol=1)
+    ax.legend(frameon=False, loc="center left", ncol=1)
     letter(ax, "(a)")
 
     ax = axes[1]
@@ -276,7 +294,8 @@ def fig2():
     ax.plot(t, c3["f_n_desired"], color=C_REF, lw=0.8, ls="--",
             label=r"$F_n^d$")
     style(ax, r"$F_n$ [N]")
-    ax.set_ylim(-0.5, 16)
+    f_hi = max(c0["f_n"].max(), c1["f_n"].max(), c3["f_n"].max())
+    ax.set_ylim(-0.4, f_hi * 1.35)
     ax.legend(frameon=False, loc="upper left", ncol=4, columnspacing=1.0,
               bbox_to_anchor=(0.03, 1.0))
     letter(ax, "(b)")
@@ -293,7 +312,7 @@ def fig2():
     for ax in axes:
         ax.axvline(t_act, color=C_C1, lw=0.7, ls=":")
     axes[0].annotate(f"C1 intervenes\n({t_act:.1f} s)",
-                     xy=(t_act, 0.1), xytext=(t_act - 4.6, 0.16),
+                     xy=(t_act + 0.05, 0.07), xytext=(t_act + 2.4, 0.15),
                      fontsize=6.4, color=C_C1,
                      arrowprops=dict(arrowstyle="->", color=C_C1, lw=0.7))
     fig.align_ylabels(axes)
@@ -307,7 +326,7 @@ def fig2():
 
 def fig3():
     c3 = load("B_mismatch_no_human", "C3_dual_ledger_qp")
-    c1 = load("B_mismatch_no_human", "C1_whole_port_scalar")
+    c1 = load("B_mismatch_no_human", MODE_C1)
     t = c3["time"]
 
     def t_first(lg):
@@ -324,7 +343,8 @@ def fig3():
     ax.plot(t, c3["sp_e_h"], color=C_AUX, label=r"$E_H$")
     ax.plot(t, c3["sp_e_r"], color=C_C3, label=r"$E_R$")
     ax.axhline(0.02, color=C_LIM, lw=0.7, ls="--")
-    ax.text(0.4, 0.035, r"$E_{R,\min}$", fontsize=6.2, color=C_LIM)
+    ax.text(0.35, 0.0265, r"$E_{R,\min}$", fontsize=6.2, color=C_LIM,
+            va="bottom")
     ax.axvline(ta_c1, color=C_C1, lw=0.7, ls=":")
     ax.axvline(ta_c3, color=C_C3, lw=0.7, ls=":")
     ax.annotate(f"C1 whole-port\nactivates ({ta_c1:.2f} s)",
@@ -332,7 +352,7 @@ def fig3():
                 color=C_C1,
                 arrowprops=dict(arrowstyle="->", color=C_C1, lw=0.7))
     ax.annotate(f"C3 residual\nactivates ({ta_c3:.2f} s)",
-                xy=(ta_c3, 0.05), xytext=(ta_c3 - 6.6, 0.12), fontsize=6.4,
+                xy=(ta_c3, 0.05), xytext=(ta_c3 - 7.4, 0.068), fontsize=6.4,
                 color=C_C3,
                 arrowprops=dict(arrowstyle="->", color=C_C3, lw=0.7))
     ax.set_ylim(0, 0.4)
@@ -350,7 +370,7 @@ def fig3():
     ax.plot(t, c3["sp_p_h_act"], color=C_AUX, lw=0.9, label=r"$p_H$")
     ax.axhline(0.0, color=C_LIM, lw=0.5)
     style(ax, "port power [W]", "time [s]")
-    ax.set_ylim(-0.09, 0.05)
+    ax.margins(y=0.10)
     ax.legend(frameon=False, loc="lower left", ncol=2)
     letter(ax, "(b)")
 
@@ -378,7 +398,7 @@ def fig4():
     ax.text(0.4, 0.107, r"$P_H^{\max}=0.10$ W", fontsize=6.2, color=C_LIM)
     style(ax, r"$-p_H$ [W]")
     ax.set_ylim(-0.12, 0.19)
-    ax.legend(frameon=False, loc="upper right", ncol=3)
+    ax.legend(frameon=False, loc="lower right", ncol=3)
     letter(ax, "(a)")
 
     ax = axes[1]
@@ -398,7 +418,7 @@ def fig4():
     for k, (_, c) in runs.items():
         ax.plot(t, logs[k]["sp_e_h"], color=c, lw=0.9)
     ax.axhline(0.005, color=C_LIM, lw=0.8, ls="--")
-    ax.text(0.4, 0.02, r"$E_{H,\min}$", fontsize=6.2, color=C_LIM)
+    ax.text(11.8, 0.03, r"$E_{H,\min}$", fontsize=6.2, color=C_LIM, ha="right")
     style(ax, r"$E_H$ [J]", "time [s]")
     letter(ax, "(c)")
 
@@ -429,7 +449,8 @@ def fig5():
     ax.plot(t, lg["sp_e_h"], color=C_AUX, label=r"$E_H$")
     ax.axhline(0.02, color=C_LIM, lw=0.7, ls="--")
     ax.axhline(0.005, color=C_LIM, lw=0.7, ls=":")
-    ax.text(0.4, 0.035, r"$E_{R,\min}$", fontsize=6.2, color=C_LIM)
+    ax.text(0.35, 0.0265, r"$E_{R,\min}$", fontsize=6.2, color=C_LIM,
+            va="bottom")
     style(ax, "ledger energy [J]")
     ax.legend(frameon=False, loc="upper right")
     letter(ax, "(a)")
@@ -453,60 +474,103 @@ def fig5():
 
 
 # ---------------------------------------------------------------------------
-# Fig. 6 — Test E: QP authority vs scalar attenuation (C3 vs C4)
+# Fig. 6 — Test E1: filter-level task allocation (C3 QP vs C4 safe-anchor
+# scalar), evaluated on the full-force plateau only
 # ---------------------------------------------------------------------------
 
 def fig6():
     c3 = load("E_oracle_oblique", "C3_dual_ledger_qp")
-    c4 = load("E_oracle_oblique", "C4_dual_ledger_scalar")
+    c4 = load("E_oracle_oblique", MODE_C4)
     t = c3["time"]
+    t_rise0, t0, t1 = e1_bounds()   # rise start, plateau start, plateau end
 
-    # human-window F_n RMSE (matches the summary metric); phase 2 = SLIDE
-    slide3 = c3["phase"] == 2
-    hum = np.linalg.norm(c3["f_h"], axis=1) > 1e-12
+    # Both runs must be governor-off (E1 precondition).
+    assert not c3["sp_gov_active"].any() and not c4["sp_gov_active"].any(), \
+        "E1 requires the reference governor disabled for both controllers"
+
+    # E1 metric window: SLIDE phase during the full-force plateau. The
+    # figure additionally shows the force-rise interval for context, but
+    # NOTHING at or after force removal (t > t1) is plotted or used for
+    # metrics/axis limits.
+    e1 = (c3["phase"] == 2) & (t >= t0) & (t <= t1)
+    view = (t >= t_rise0 - 0.5) & (t <= t1)
+
     def rmse(lg):
-        m = slide3 & hum
-        return float(np.sqrt(np.mean((lg["f_n"][m] - lg["f_n_desired"][m]) ** 2)))
+        return float(np.sqrt(np.mean(
+            (lg["f_n"][e1] - lg["f_n_desired"][e1]) ** 2)))
     r3, r4 = rmse(c3), rmse(c4)
+    dut = c3["sp_u"][e1, 0] - c4["sp_u"][e1, 0]
+    rms_dut = float(np.sqrt(np.mean(dut ** 2)))
 
-    fig = plt.figure(figsize=(DOUBLE, 2.3))
+    def mark_windows(ax):
+        ax.axvspan(t_rise0, t0, color="#f3eef1", zorder=0)     # rise context
+        ax.axvspan(t0, t1, color=SHADE_HUMAN, zorder=0)        # E1 window
+        ax.axvline(t0, color=C_LIM, lw=0.5, ls=":")
+
+    fig = plt.figure(figsize=(DOUBLE, 2.35))
     gs = fig.add_gridspec(1, 3, width_ratios=[1.25, 1, 1], wspace=0.32)
+
+    # (a) normal-force regulation, clipped to t <= t1
     ax = fig.add_subplot(gs[0])
-    ax.plot(t, c3["f_n"], color=C_C3, lw=0.9, label="C3")
-    ax.plot(t, c4["f_n"], color=C_C4, lw=0.9, label="C4")
-    ax.plot(t, c3["f_n_desired"], color=C_REF, lw=0.8, ls="--",
+    ax.plot(t[view], c3["f_n"][view], color=C_C3, lw=0.9, label="C3")
+    ax.plot(t[view], c4["f_n"][view], color=C_C4, lw=0.9, label="C4")
+    ax.plot(t[view], c3["f_n_desired"][view], color=C_REF, lw=0.8, ls="--",
             label=r"$F_n^d$")
-    shade_human(ax, t, c3["f_h"])
-    ax.set_xlim(5.0, 10.5)
-    ax.set_ylim(-0.3, 8.2)
+    mark_windows(ax)
+    lo = min(c3["f_n"][view].min(), c4["f_n"][view].min())
+    hi = max(c3["f_n"][view].max(), c4["f_n"][view].max())
+    pad = 0.08 * (hi - lo)
+    ax.set_xlim(t_rise0 - 0.5, t1)
+    ax.set_ylim(lo - pad, hi + 3.2 * pad)   # headroom for the annotation
     style(ax, r"$F_n$ [N]", "time [s]")
-    ax.legend(frameon=False, loc="lower left", ncol=3, columnspacing=0.9)
+    ax.legend(frameon=False, loc="center left", ncol=1,
+              handlelength=1.4)
     ax.text(0.98, 0.96,
-            f"window RMSE:\nC3 {r3:.3f} N\nC4 {r4:.3f} N",
+            f"E1-window RMSE:\nC3 {r3:.3f} N\nC4 {r4:.3f} N",
             transform=ax.transAxes, fontsize=6.4, va="top", ha="right")
+    # Window labels above the axes (blended transform: data-x, axes-y).
+    ax.text(0.5 * (t0 + t1), 1.03, "E1 metric window", fontsize=6.2,
+            color="#a0577e", ha="center", transform=ax.get_xaxis_transform())
+    ax.text(0.5 * (t_rise0 + t0), 1.03, "rise", fontsize=6.2,
+            color=C_LIM, ha="center", transform=ax.get_xaxis_transform())
     letter(ax, "(a)")
 
+    # (b)/(c) command allocation, axis limits from the clipped data only
+    u_all = np.concatenate([
+        c3["sp_u"][view].ravel(), c3["sp_u_nom"][view].ravel(),
+        c4["sp_u"][view].ravel(), c4["sp_u_nom"][view].ravel()])
+    ylo, yhi = u_all.min(), u_all.max()
+    upad = 0.08 * (yhi - ylo)
     for j, (lg, name, cc) in enumerate(
             [(c3, "C3", C_C3), (c4, "C4", C_C4)]):
         ax = fig.add_subplot(gs[j + 1])
-        ax.plot(t, lg["sp_u_nom"][:, 0], color=C_C3, lw=0.7, ls="--",
-                label=r"$u_{t,\mathrm{nom}}$")
-        ax.plot(t, lg["sp_u"][:, 0], color=C_C3, lw=1.1, label=r"$u_t$")
-        ax.plot(t, lg["sp_u_nom"][:, 1], color=C_C2, lw=0.7, ls="--",
-                label=r"$u_{n,\mathrm{nom}}$")
-        ax.plot(t, lg["sp_u"][:, 1], color=C_C2, lw=1.1, label=r"$u_n$")
-        shade_human(ax, t, lg["f_h"])
-        ax.set_xlim(5.0, 10.5)
-        ax.set_ylim(-42, 62)
+        ax.plot(t[view], lg["sp_u_nom"][view, 0], color=C_C3, lw=0.7,
+                ls="--", label=r"$u_{t,\mathrm{nom}}$")
+        ax.plot(t[view], lg["sp_u"][view, 0], color=C_C3, lw=1.1,
+                label=r"$u_t$")
+        ax.plot(t[view], lg["sp_u_nom"][view, 1], color=C_C2, lw=0.7,
+                ls="--", label=r"$u_{n,\mathrm{nom}}$")
+        ax.plot(t[view], lg["sp_u"][view, 1], color=C_C2, lw=1.1,
+                label=r"$u_n$")
+        mark_windows(ax)
+        ax.set_xlim(t_rise0 - 0.5, t1)
+        ax.set_ylim(ylo - upad, yhi + upad)
         style(ax, "command [N]" if j == 0 else "", "time [s]")
         ax.set_title(f"{name} commands", fontsize=7.5, color=cc, pad=2)
         if j == 0:
             ax.legend(frameon=False, loc="upper left", ncol=2,
                       columnspacing=0.8, handlelength=1.6)
         letter(ax, "(b)" if j == 0 else "(c)")
+        if j == 0:
+            ax.text(0.04, 0.52,
+                    f"$u_t$ C3$-$C4 RMS\ndiff {rms_dut:.2f} N",
+                    transform=ax.transAxes, fontsize=6.2, ha="left",
+                    va="top", color=C_LIM)
 
     save(fig, "fig6_qp_vs_scalar.pdf")
-    print(f"  fig6: window RMSE C3 = {r3:.3f} N, C4 = {r4:.3f} N")
+    print(f"  fig6 (E1 window [{t0:.1f}, {t1:.1f}] s): "
+          f"rmse_fn_e1 C3 = {r3:.3f} N, C4 = {r4:.3f} N, "
+          f"u_t C3-C4 rms = {rms_dut:.3f} N")
 
 
 # ---------------------------------------------------------------------------
@@ -523,7 +587,7 @@ def fig7():
     ax.plot(t, lg["sp_e_h"], color=C_AUX, label=r"$E_H$")
     ax.axhline(0.08, color=C_LIM, lw=0.8, ls="--")
     ax.axhline(0.005, color=C_LIM, lw=0.8, ls="--")
-    ax.text(0.3, 0.0855, r"$E_{H,\max}=0.08$ J", fontsize=6.2, color=C_LIM)
+    ax.text(1.6, 0.0855, r"$E_{H,\max}=0.08$ J", fontsize=6.2, color=C_LIM)
     ax.text(0.3, 0.010, r"$E_{H,\min}=0.005$ J", fontsize=6.2, color=C_LIM)
     ax.text(6.15, 0.062, "helping", fontsize=6.4, ha="center",
             color="#3f7a63")
@@ -537,7 +601,7 @@ def fig7():
     ax.plot(t, lg["sp_p_h_act"], color=C_AUX)
     ax.axhline(0.0, color=C_LIM, lw=0.5)
     ax.axhline(-0.10, color=C_LIM, lw=0.7, ls="--")
-    ax.text(0.3, -0.093, r"$-P_H^{\max}$", fontsize=6.2, color=C_LIM,
+    ax.text(0.3, -0.107, r"$-P_H^{\max}$", fontsize=6.2, color=C_LIM,
             va="top")
     style(ax, r"$p_H$ [W]", "time [s]")
     letter(ax, "(b)")
@@ -596,9 +660,12 @@ def fig8():
     fig.align_ylabels(axes)
     save(fig, "fig8_governor.pdf")
     r = (t >= t_rel)
+    rt = (t >= t_rel - 0.5)   # release transient incl. the force ramp-out
     print(f"  fig8: peak v_t post-release off = {off['ee_vel'][r,0].max():.3f}"
           f" on = {on['ee_vel'][r,0].max():.3f}; "
-          f"peak F_n off = {off['f_n'][r].max():.2f} on = {on['f_n'][r].max():.2f}")
+          f"release-transient peak F_n (t>=8.5) off = {off['f_n'][rt].max():.2f} "
+          f"on = {on['f_n'][rt].max():.2f} "
+          f"(post-vanish t>=9: off {off['f_n'][r].max():.2f})")
 
 
 # ---------------------------------------------------------------------------
@@ -617,7 +684,8 @@ def fig9():
         rfn = [float(r["rmse_fn"]) for r in sel]
         return mu, emin, tact, rfn
 
-    fig, axes = plt.subplots(1, 3, figsize=(DOUBLE, 1.9))
+    fig, axes = plt.subplots(1, 3, figsize=(DOUBLE, 1.9),
+                             gridspec_kw={"wspace": 0.38})
     fams = [(False, "no human", C_C3, "o"), (True, "blocking human",
                                              C_C4, "s")]
     for wh, lab, c, m in fams:
@@ -626,7 +694,7 @@ def fig9():
         axes[1].plot(mu, tact, marker=m, ms=3.5, color=c, label=lab)
         axes[2].plot(mu, rfn, marker=m, ms=3.5, color=c, label=lab)
     axes[0].axhline(0.02, color=C_LIM, lw=0.7, ls="--")
-    axes[0].text(0.302, 0.045, r"$E_{R,\min}$", fontsize=6.2, color=C_LIM)
+    axes[0].text(0.201, 0.033, r"$E_{R,\min}$", fontsize=6.2, color=C_LIM)
     style(axes[0], r"$\min E_R$ [J]", r"$\widehat{\mu}$")
     style(axes[1], "first ledger activation [s]", r"$\widehat{\mu}$")
     style(axes[2], r"RMSE $F_n$ [N]", r"$\widehat{\mu}$")
@@ -647,9 +715,9 @@ def fig9():
 def table1():
     rows = json.load(open(os.path.join(R1, "summary.json")))
     mode_short = {
-        "C0_nominal": "C0", "C1_whole_port_scalar": "C1",
+        "C0_nominal": "C0", MODE_C1: "C1",
         "C2_residual_qp": "C2", "C3_dual_ledger_qp": "C3",
-        "C4_dual_ledger_scalar": "C4",
+        MODE_C4: "C4",
     }
 
     def f(x, nd=3, none="--"):
@@ -660,16 +728,28 @@ def table1():
     lines = [
         r"\begin{table*}[t]",
         r"\centering",
-        r"\caption{Summary metrics for all controller modes and tests. "
-        r"RMSE values are over the sliding phase; $-p_H^{\max}$ is the peak "
+        r"\caption{Summary metrics for all controller modes and tests "
+        r"(current robust implementation). RMSE values are over the sliding "
+        r"phase, EXCEPT the Test E1 rows (marked $^{\dagger}$), which report "
+        r"$\mathrm{rmse}_{F_n}^{\mathrm{E1}}$ and "
+        r"$\mathrm{rmse}_{v_t}^{\mathrm{E1}}$ over the full-force plateau "
+        r"$[t_{\mathrm{start}}+t_{\mathrm{rise}},\,t_{\mathrm{start}}+"
+        r"t_{\mathrm{rise}}+t_{\mathrm{hold}}]$ only, because E1 is a "
+        r"filter-allocation ablation that excludes the release transient by "
+        r"design; all other columns (peak power, energies, counts) always "
+        r"use the complete unclipped run. $-p_H^{\max}$ is the peak "
         r"instantaneous power delivered to the human port; "
-        r"$W_H^{\mathrm{out}}$ is the maximum cumulative human-directed "
-        r"output energy; $\min E_H$, $\min E_R$ are raw ledger minima "
+        r"$W_H^{\mathrm{out}}$ is the maximum of the SIGNED cumulative "
+        r"human-directed output energy (net; in Test F the helping phase "
+        r"offsets the later extraction, so it stays at zero); "
+        r"$\min E_H$, $\min E_R$ are raw ledger minima "
         r"(discharge is never clamped); ``act.'' is the fraction of "
         r"in-contact steps on which the filter modified the command; "
         r"$t_{\mathrm{act}}$ is the first ledger-driven intervention; "
         r"``fail'' counts QP solve failures handled by the bounded "
-        r"emergency fallback.}",
+        r"emergency fallback. Test S is the 32-s alternating "
+        r"helping/blocking certificate stress run (reference governor "
+        r"enabled).}",
         r"\label{tab:summary}",
         r"\small",
         r"\setlength{\tabcolsep}{4.5pt}",
@@ -687,11 +767,16 @@ def table1():
         if last_scen is not None and scen != last_scen:
             lines.append(r"\addlinespace[2pt]")
         last_scen = scen
+        # Test E1 rows report plateau-window task RMSE (see caption); all
+        # certificate columns remain full-run quantities.
+        is_e1 = scen == "E" and r.get("rmse_fn_e1") is not None
+        rmse_fn = r["rmse_fn_e1"] if is_e1 else r["rmse_fn"]
+        rmse_vt = r["rmse_vt_e1"] if is_e1 else r["rmse_vt"]
         lines.append(" & ".join([
-            scen,
+            scen + (r"$^{\dagger}$" if is_e1 else ""),
             mode_short.get(r["mode"], r["mode"]),
-            f(r["rmse_fn"], 3),
-            f(r["rmse_vt"], 4),
+            f(rmse_fn, 3),
+            f(rmse_vt, 4),
             f(max(0.0, r["p_h_peak"]), 3),
             f(max(0.0, r["w_h_max"]), 3),
             f(r["e_h_min_raw"], 3),

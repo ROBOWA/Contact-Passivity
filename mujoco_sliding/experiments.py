@@ -16,8 +16,16 @@ no randomness anywhere in the pipeline):
   C oracle_blocking    oracle predictor; blocking human F_h = -3 N t during
                        6.5-8.5 s (0.5 s cosine ramps).
   D mismatch_blocking  mu_hat = 0.20 plus the same blocking human.
-  E oracle_oblique     oblique human F_h = 3/sqrt(2) (-t - n): QP task
-                       prioritization vs the safe-anchor scalar (C3 vs C4).
+  E oracle_oblique     E1 filter-allocation ablation: oblique human
+                       F_h = 3/sqrt(2) (-t - n), governor off for both C3
+                       and C4, identical nominal controller and certificate
+                       rows; only the command-selection mechanism differs
+                       (2-D task-weighted QP vs safe-anchor scalar line).
+                       Evaluated over the full-force plateau
+                       [t_start+t_rise, t_start+t_rise+t_hold] only
+                       (metrics/plots clipped; simulation and logs never
+                       clipped). Release/recovery is out of scope here —
+                       that question belongs to the governor comparison.
   F helping_blocking   +3 N t pulse (5-8 s), then -3 N t pulse (8.5-11.5 s):
                        ledger charging, cap, and later discharge.
   S stress             32 s, alternating helping/blocking pulses, reference
@@ -167,6 +175,26 @@ def _human_release_end(spec: ScenarioSpec) -> float | None:
     return max(ends) if ends else None
 
 
+def e1_window(log: dict, spec: ScenarioSpec) -> np.ndarray | None:
+    """Reusable E1 evaluation mask: SLIDE phase during the full-magnitude
+    plateau of the (first enabled) human pulse.
+
+    [t_start + t_rise, t_start + t_rise + t_hold], derived from the
+    scenario's HumanForceConfig. Returns None when no human pulse is
+    enabled. Used ONLY for evaluation/presentation clipping — the raw
+    simulation and logs are never clipped.
+    """
+    from .controller import Phase
+
+    hp = spec.human
+    if not hp.enabled:
+        return None
+    t = log["time"]
+    t0 = hp.t_start + hp.t_rise
+    t1 = hp.t_start + hp.t_rise + hp.t_hold
+    return ((log["phase"] == int(Phase.SLIDE)) & (t >= t0) & (t <= t1))
+
+
 def compute_metrics(log: dict, spec: ScenarioSpec, mode: str) -> dict:
     """All per-run metrics, JSON-serializable.
 
@@ -200,6 +228,21 @@ def compute_metrics(log: dict, spec: ScenarioSpec, mode: str) -> dict:
         "rmse_vt_human": rmse(log["ee_vel"][:, 0] - log["vx_desired"],
                               slide & human_on),
     }
+
+    # E1 plateau window: the full-magnitude hold of the (first enabled)
+    # human pulse, EXCLUDING the force rise and the removal transient.
+    # Derived programmatically from HumanForceConfig — never hard-coded.
+    # This clips METRICS ONLY: the simulation, control commands, ledger
+    # updates, and the saved log always cover the full duration.
+    m["t_e1_start"] = m["t_e1_end"] = None
+    m["rmse_fn_e1"] = m["rmse_vt_e1"] = None
+    e1 = e1_window(log, spec)
+    if e1 is not None and e1.any():
+        hp = spec.human
+        m["t_e1_start"] = hp.t_start + hp.t_rise
+        m["t_e1_end"] = hp.t_start + hp.t_rise + hp.t_hold
+        m["rmse_fn_e1"] = rmse(log["f_n"] - log["f_n_desired"], e1)
+        m["rmse_vt_e1"] = rmse(log["ee_vel"][:, 0] - log["vx_desired"], e1)
 
     ph = log["sp_p_h_act"]
     pr = log["sp_p_r_act"]
@@ -335,6 +378,32 @@ def run_scenario(key: str, output_root: str, modes: tuple | None = None,
     if plots and key == "S":
         plotting.plot_stress_certificate(
             logs["C3_dual_ledger_qp"], scen_dir)
+
+    # E1 filter-allocation cross-controller metrics: C3 vs C4 filtered
+    # command differences over the E1 plateau window (metrics only; the
+    # underlying logs are complete and unclipped).
+    c3l = logs.get("C3_dual_ledger_qp")
+    c4l = logs.get("C4_dual_ledger_safe_scalar")
+    if c3l is not None and c4l is not None and spec.human.enabled:
+        e1 = e1_window(c3l, spec)
+        if e1 is not None and e1.any():
+            dut = c3l["sp_u"][e1, 0] - c4l["sp_u"][e1, 0]
+            dun = c3l["sp_u"][e1, 1] - c4l["sp_u"][e1, 1]
+            cross = {
+                "rmse_ut_c3_c4_e1": float(np.sqrt(np.mean(dut ** 2))),
+                "max_ut_c3_c4_e1": float(np.abs(dut).max()),
+                "rmse_un_c3_c4_e1": float(np.sqrt(np.mean(dun ** 2))),
+                "max_un_c3_c4_e1": float(np.abs(dun).max()),
+            }
+            for m in metrics:
+                if m["mode"] in ("C3_dual_ledger_qp",
+                                 "C4_dual_ledger_safe_scalar"):
+                    m.update(cross)
+            print(f"    E1 C3-vs-C4 command diffs: "
+                  f"u_t rms={cross['rmse_ut_c3_c4_e1']:.4f} "
+                  f"max={cross['max_ut_c3_c4_e1']:.4f} N | "
+                  f"u_n rms={cross['rmse_un_c3_c4_e1']:.4f} "
+                  f"max={cross['max_un_c3_c4_e1']:.4f} N")
     return metrics
 
 
@@ -497,7 +566,12 @@ def check_acceptance(metrics: list[dict],
             {"C3": b3["t_first_ledger_active"],
              "C1qp": b1["t_first_ledger_active"]}, None)
 
-    for key in ("C", "D", "E", "F"):
+    # Recovery-after-release is a full-run behavioral criterion for the
+    # blocking/helping scenarios. Scenario E is deliberately excluded: E1 is
+    # a filter-level allocation ablation evaluated on the full-force plateau
+    # only, and release/recovery behavior is handled by the reference-
+    # governor comparison, not by E1.
+    for key in ("C", "D", "F"):
         c3 = by.get((key, "C3_dual_ledger_qp"))
         if not c3:
             continue
@@ -508,6 +582,45 @@ def check_acceptance(metrics: list[dict],
             add(f"{key}: C3 preserves F_n better than C4 (human window)",
                 c3["rmse_fn_human"] < c4["rmse_fn_human"],
                 {"C3": c3["rmse_fn_human"], "C4": c4["rmse_fn_human"]}, None)
+
+    # --- E1 filter-allocation ablation (plateau-window evaluation only;
+    # certificate quantities always use the complete run) ---
+    e3 = by.get(("E", "C3_dual_ledger_qp"))
+    e4 = by.get(("E", "C4_dual_ledger_safe_scalar"))
+    if e3 and e4:
+        add("E1: governor-off nominal policy for both controllers",
+            (not e3["governor"]) and (not e4["governor"]),
+            {"C3_gov": e3["governor"], "C4_gov": e4["governor"]}, False)
+        both_cert = all(
+            m["e_h_min_raw"] >= 0.005 - 1e-9
+            and m["e_r_min_raw"] >= 0.02 - 1e-9
+            and m["p_h_peak"] <= 0.10 + 1e-6
+            for m in (e3, e4))
+        add("E1: both satisfy the same certificate rows "
+            "(E_H/E_R floors, peak power; full run)", both_cert,
+            {"C3": [e3["e_h_min_raw"], e3["e_r_min_raw"], e3["p_h_peak"]],
+             "C4": [e4["e_h_min_raw"], e4["e_r_min_raw"], e4["p_h_peak"]]},
+            None)
+        clean = all(m["n_infeasible"] == 0 and m["n_emergency"] == 0
+                    and m["n_bound_violations"] == 0
+                    and m["n_floor_violations"] == 0 for m in (e3, e4))
+        add("E1: zero infeasible/emergency/bound/floor violations (both, "
+            "full run)", clean,
+            {"C3": [e3["n_infeasible"], e3["n_emergency"],
+                    e3["n_bound_violations"], e3["n_floor_violations"]],
+             "C4": [e4["n_infeasible"], e4["n_emergency"],
+                    e4["n_bound_violations"], e4["n_floor_violations"]]}, 0)
+        add("E1: C3 lower normal-force RMSE over the plateau window",
+            e3["rmse_fn_e1"] is not None
+            and e3["rmse_fn_e1"] < e4["rmse_fn_e1"],
+            {"C3": e3["rmse_fn_e1"], "C4": e4["rmse_fn_e1"]}, None)
+        rut = e3.get("rmse_ut_c3_c4_e1")
+        run_ = e3.get("rmse_un_c3_c4_e1")
+        add("E1: tangential commands similar (rms diff < 0.5 N), normal "
+            "allocation differs (> 2x tangential diff)",
+            rut is not None and run_ is not None
+            and rut < 0.5 and run_ > 2.0 * rut,
+            {"rmse_ut_c3_c4_e1": rut, "rmse_un_c3_c4_e1": run_}, None)
 
     # --- long-duration stress ---
     s3 = by.get(("S", "C3_dual_ledger_qp"))
