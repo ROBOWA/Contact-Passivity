@@ -704,7 +704,7 @@
   {
     "criterion": "S/C3: exact E_H floor (>= E_min - 1e-9)",
     "pass": true,
-    "value": 0.05,
+    "value": 0.012964346408221273,
     "threshold": 0.005
   },
   {
@@ -716,7 +716,7 @@
   {
     "criterion": "S/C3: peak -p_H <= P_H_max + 1e-6",
     "pass": true,
-    "value": 0.010381820246775671,
+    "value": 0.09972477696929184,
     "threshold": 0.1
   },
   {
@@ -870,6 +870,15 @@
     "threshold": null
   },
   {
+    "criterion": "E1: C3 has lower task-weighted command deviation than C4",
+    "pass": true,
+    "value": {
+      "C3": 22.76216439601658,
+      "C4": 29.07581336461602
+    },
+    "threshold": null
+  },
+  {
     "criterion": "S: no floor violation over 32 s",
     "pass": true,
     "value": 0,
@@ -899,32 +908,94 @@
   {
     "criterion": "S: no progressive leak (E_H recharges to cap)",
     "pass": true,
-    "value": 0.07999951256818967,
+    "value": 0.08,
     "threshold": 0.08
   },
   {
-    "criterion": "governor: >= 50% reduction of post-release F_n overshoot",
+    "criterion": "governor/C3: zero infeasible/emergency/bound/floor violations",
     "pass": true,
     "value": {
-      "off": 11.637246922078983,
-      "on": 5.095484520728145,
-      "reduction": 0.9856138363015374
+      "n_infeasible": 0,
+      "n_emergency": 0,
+      "n_bound_violations": 0,
+      "n_floor_violations": 0
+    },
+    "threshold": 0
+  },
+  {
+    "criterion": "governor/C3: QP-only period precedes trigger (ROW_P_H active before governor)",
+    "pass": true,
+    "value": {
+      "trigger": 6.509000000000508,
+      "p_h_pre": 58
+    },
+    "threshold": null
+  },
+  {
+    "criterion": "governor/C3: visible human-energy depletion before trigger (>= 0.01 J)",
+    "pass": true,
+    "value": 0.02760946393669468,
+    "threshold": 0.01
+  },
+  {
+    "criterion": "governor/C3: E_H stays above certified floor",
+    "pass": true,
+    "value": 0.013089778747588186,
+    "threshold": 0.005
+  },
+  {
+    "criterion": "governor/C3: exactly one CBF-triggered interaction",
+    "pass": true,
+    "value": 1,
+    "threshold": 1
+  },
+  {
+    "criterion": "governor/C3: one-step tangential-command jump clearly reduced",
+    "pass": true,
+    "value": {
+      "off": 1.6983894600713505,
+      "on": 0.00754544679619662,
+      "ratio": 0.004442707031330512
     },
     "threshold": 0.5
   },
   {
-    "criterion": "governor: catch-up burst removed (peak v_t <= 1.5 v_d)",
-    "pass": true,
-    "value": 0.05009172627688922,
-    "threshold": 0.075
-  },
-  {
-    "criterion": "governor: same certificate (E_H floor, peak power)",
+    "criterion": "governor/C3: post-release |u_t| peak clearly reduced",
     "pass": true,
     "value": {
-      "e_h_min": 0.048617801653761096,
-      "p_h_peak": 0.010414147784176585
+      "off": 24.926204606656512,
+      "on": 2.9956237927189284,
+      "ratio": 0.12017970003820601
     },
-    "threshold": null
+    "threshold": 0.8
+  },
+  {
+    "criterion": "governor/C3: post-release |v_t| peak clearly reduced",
+    "pass": true,
+    "value": {
+      "off": 0.6812988645320022,
+      "on": 0.028631760883465314,
+      "ratio": 0.04202525847908618
+    },
+    "threshold": 0.5
+  },
+  {
+    "criterion": "governor/C3: post-release |F_n-F_n^d| peak clearly reduced",
+    "pass": true,
+    "value": {
+      "off": 19.17575518102024,
+      "on": 0.07723145729898206,
+      "ratio": 0.0040275575365826604
+    },
+    "threshold": 0.5
+  },
+  {
+    "criterion": "governor/C3: governed reference debt at release reduced by at least 90%",
+    "pass": true,
+    "value": {
+      "off": 0.1054718916122962,
+      "on": 0.0074775357504748285
+    },
+    "threshold": 0.1
   }
 ]

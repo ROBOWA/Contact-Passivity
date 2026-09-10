@@ -30,6 +30,7 @@ from .contact_extraction import ModelHandles, extract_task_contact
 from .controller import SlidingForceController
 from .human_interaction import HumanForce, HumanForceSequence
 from .simulation import load_model, reset_to_keyframe
+from .visualization import add_human_force_arrow
 
 
 def main(argv=None) -> None:
@@ -97,6 +98,17 @@ def main(argv=None) -> None:
             mujoco.mj_step(model, data)
             if runtime is not None:
                 runtime.post_step(model, data)
+            # The scripted wrench has no MuJoCo geom. Draw it as a magenta
+            # arrow ending above the end effector so the interaction is
+            # visible rather than only reported in stdout.
+            with viewer.lock():
+                viewer.user_scn.ngeom = 0
+                add_human_force_arrow(
+                    viewer.user_scn,
+                    data.site_xpos[handles.ee_site],
+                    f_h,
+                    nominal_force=cfg.human.magnitude,
+                )
             viewer.sync()
 
             status = (

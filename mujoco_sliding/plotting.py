@@ -371,50 +371,75 @@ def plot_sweep(rows: list[dict], output_dir: str, stem: str = "sweep") -> str:
 
 def plot_governor_comparison(logs: dict[str, dict], output_dir: str,
                              stem: str = "governor_comparison") -> str:
-    """Reference-governor off vs on, scenario C release behavior."""
+    """CBF-triggered reference-governor ablation on C3 (off vs on).
+
+    ``logs`` maps {"governor_off": log, "governor_on": log}. The governor-on
+    panels mark the three periods: QP-only (before the CBF trigger),
+    governor INTERACT, and post-release resume.
+    """
     os.makedirs(output_dir, exist_ok=True)
     fig, axes = plt.subplots(2, 3, figsize=(15, 7), constrained_layout=True)
     fig.patch.set_facecolor(SURFACE)
-    fig.suptitle("Reference governor: off vs on (scenario C, C3)",
+    fig.suptitle("CBF-triggered reference governor: off vs on (C3, scenario C)",
                  fontsize=12, color=TEXT)
-    variants = {"governor_off": (TEXT_2, "governor off"),
-                "governor_on": (BLUE, "governor on")}
+    variant_style = {"governor_off": ("--", "off", TEXT_2),
+                     "governor_on": ("-", "on", BLUE)}
 
-    any_log = next(iter(logs.values()))
-    dt = float(any_log["meta_timestep"])
+    any_log = logs["governor_on"]
+    t = any_log["time"]
+    gmode = any_log["sp_gov_mode"]
+    interact = np.flatnonzero(gmode == 1)
+    t_trig = t[interact[0]] if interact.size else None
+
     panels = [
-        ("Tangential position vs governed reference", "m", axes[0, 0]),
-        ("Tangential velocity", "m/s", axes[0, 1]),
-        ("Normal force", "N", axes[0, 2]),
-        ("Commanded torque (max |joint|)", "N·m", axes[1, 0]),
-        ("Human power p_H", "W", axes[1, 1]),
-        ("Human ledger E_H", "J", axes[1, 2]),
+        ("Human-force magnitude", "N", axes[0, 0]),
+        ("Position: x, governed x_g, original x_ref", "m", axes[0, 1]),
+        ("Velocity: v_t and governed v_g", "m/s", axes[0, 2]),
+        ("Tangential command u_t", "N", axes[1, 0]),
+        ("Normal-force error F_n - F_n,d", "N", axes[1, 1]),
+        ("Human / residual tank energies", "J", axes[1, 2]),
     ]
+    axes[0, 0].plot(t, np.linalg.norm(any_log["f_h"], axis=1),
+                    color=TEXT, lw=1.2, label="||F_H||")
+    axes[0, 0].axhline(0.1, color=TEXT_2, lw=0.8, ls=":",
+                       label="detection threshold")
+    axes[0, 1].plot(t, any_log["sp_x_ref_original"], color=ORANGE,
+                    lw=1.0, ls=":", label="original x_ref")
     for tag, lg in logs.items():
-        color, label = variants[tag]
-        t = lg["time"]
-        axes[0, 0].plot(t, lg["ee_pos"][:, 0], color=color, lw=1.2,
-                        label=label)
-        axes[0, 0].plot(t, lg["x_desired"], color=color, lw=0.8, ls="--")
-        axes[0, 1].plot(t, lg["ee_vel"][:, 0], color=color, lw=1.2,
-                        label=label)
-        axes[0, 2].plot(t, lg["f_n"], color=color, lw=1.2, label=label)
-        axes[1, 0].plot(t, np.abs(lg["ctrl"]).max(axis=1), color=color,
-                        lw=1.2, label=label)
-        axes[1, 1].plot(t, lg["sp_p_h_act"], color=color, lw=1.2,
-                        label=label)
-        axes[1, 2].plot(t, lg["sp_e_h"], color=color, lw=1.2, label=label)
-    axes[0, 1].axhline(float(any_log["meta_v_slide"]), color=ORANGE, lw=0.8,
-                       ls="--")
-    axes[0, 2].axhline(float(any_log["meta_f_desired"]), color=ORANGE,
-                       lw=0.8, ls="--")
-    axes[1, 1].axhline(-_P_H_MAX, color=TEXT_2, lw=0.8, ls=":")
-    axes[1, 2].axhline(_E_H_LINES[0], color=TEXT_2, lw=0.8, ls="--")
+        ls, vlabel, color = variant_style[tag]
+        axes[0, 1].plot(t, lg["ee_pos"][:, 0], color=color, ls=ls,
+                        lw=1.1, label=f"x {vlabel}")
+        axes[0, 2].plot(t, lg["ee_vel"][:, 0], color=color, ls=ls,
+                        lw=1.1, label=f"v_t {vlabel}")
+        axes[1, 0].plot(t, lg["sp_u"][:, 0], color=color, ls=ls,
+                        lw=1.1, label=f"u_t {vlabel}")
+        axes[1, 1].plot(t, lg["f_n"] - lg["f_n_desired"], color=color,
+                        ls=ls, lw=1.1, label=vlabel)
+        axes[1, 2].plot(t, lg["sp_e_h"], color=color, ls=ls, lw=1.0,
+                        label=f"E_H {vlabel}")
+        axes[1, 2].plot(t, lg["sp_e_r"], color=color, ls=ls, lw=0.8,
+                        alpha=0.55, label=f"E_R {vlabel}")
+    on = logs["governor_on"]
+    axes[0, 1].plot(t, on["x_desired"], color=BLUE, lw=0.8, ls=":",
+                    label="x_g on")
+    axes[0, 2].plot(t, on["vx_desired"], color=BLUE, lw=0.8, ls=":",
+                    label="v_g on")
+    axes[0, 2].axhline(float(any_log["meta_v_slide"]), color=ORANGE, lw=0.8,
+                       ls=":")
+    axes[1, 1].axhline(0.0, color=TEXT_2, lw=0.8, ls=":")
+    axes[1, 2].axhline(_E_H_LINES[0], color=TEXT_2, lw=0.8, ls=":")
+    axes[1, 2].axhline(_E_R_LINES[0], color=TEXT_2, lw=0.8, ls=":")
     for (name, unit, ax) in panels:
         _style(ax, name, unit)
-        _shade_human(ax, any_log["time"], any_log["f_h"])
+        _shade_human(ax, t, any_log["f_h"])
+        if t_trig is not None:
+            ax.axvline(t_trig, color=VIOLET, lw=0.9, ls="-.")
         ax.set_xlabel("time [s]", fontsize=8, color=TEXT_2)
-        ax.legend(fontsize=7)
+        ax.legend(fontsize=6, ncol=2)
+    if t_trig is not None:
+        axes[0, 0].text(t_trig + 0.05, 0.5,
+                        f"CBF trigger\n{t_trig:.2f} s", fontsize=7,
+                        color=VIOLET)
     path = os.path.join(output_dir, f"{stem}.png")
     fig.savefig(path, dpi=130)
     plt.close(fig)

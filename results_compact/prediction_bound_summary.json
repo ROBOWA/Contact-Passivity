@@ -1,9 +1,9 @@
 {
   "configured_e_v_bound": 0.025,
-  "measured_max": 0.011515909483739874,
-  "measured_p99_max": 0.00433777817717523,
-  "measured_med_max": 0.00014802286118983254,
-  "utilization_max": 0.46063637934959495,
+  "measured_max": 0.018529365365035796,
+  "measured_p99_max": 0.009087359186308862,
+  "measured_med_max": 0.00015231831838311,
+  "utilization_max": 0.7411746146014317,
   "total_bound_violations": 0,
   "per_run": [
     {
@@ -207,10 +207,10 @@
     {
       "scenario": "S",
       "mode": "C3_dual_ledger_qp",
-      "pred_err_med": 9.147223553980556e-05,
-      "pred_err_p99": 0.00015586594414323773,
-      "pred_err_max": 0.00015748171820389835,
-      "bound_util_max": 0.006299268728155933,
+      "pred_err_med": 0.00015231831838311,
+      "pred_err_p99": 0.009087359186308862,
+      "pred_err_max": 0.018529365365035796,
+      "bound_util_max": 0.7411746146014317,
       "n_bound_violations": 0
     },
     {
@@ -297,10 +297,10 @@
     {
       "scenario": "C",
       "mode": "C3_dual_ledger_qp",
-      "pred_err_med": 9.999883460439677e-05,
-      "pred_err_p99": 0.00015112967647254758,
-      "pred_err_max": 0.00015186309090532094,
-      "bound_util_max": 0.006074523636212838,
+      "pred_err_med": 0.00012052786008903921,
+      "pred_err_p99": 0.00015111555393863317,
+      "pred_err_max": 0.0001518060589099862,
+      "bound_util_max": 0.0060722423563994475,
       "n_bound_violations": 0
     }
   ]

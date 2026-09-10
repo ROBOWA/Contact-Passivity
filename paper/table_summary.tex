@@ -1,43 +1,36 @@
 \begin{table*}[t]
 \centering
-\caption{Summary metrics for all controller modes and tests (current robust implementation). RMSE values are over the sliding phase, EXCEPT the Test E1 rows (marked $^{\dagger}$), which report $\mathrm{rmse}_{F_n}^{\mathrm{E1}}$ and $\mathrm{rmse}_{v_t}^{\mathrm{E1}}$ over the full-force plateau $[t_{\mathrm{start}}+t_{\mathrm{rise}},\,t_{\mathrm{start}}+t_{\mathrm{rise}}+t_{\mathrm{hold}}]$ only, because E1 is a filter-allocation ablation that excludes the release transient by design; all other columns (peak power, energies, counts) always use the complete unclipped run. $-p_H^{\max}$ is the peak instantaneous power delivered to the human port; $W_H^{\mathrm{out}}$ is the maximum of the SIGNED cumulative human-directed output energy (net; in Test F the helping phase offsets the later extraction, so it stays at zero); $\min E_H$, $\min E_R$ are raw ledger minima (discharge is never clamped); ``act.'' is the fraction of in-contact steps on which the filter modified the command; $t_{\mathrm{act}}$ is the first ledger-driven intervention; ``fail'' counts QP solve failures handled by the bounded emergency fallback. Test S is the 32-s alternating helping/blocking certificate stress run (reference governor enabled).}
+\caption{Complete-run summary. RMSE is evaluated during sliding; ``act.'' is the fraction of contact steps modified by the filter, and ``fail'' counts solver failures requiring the bounded fallback.}
 \label{tab:summary}
 \small
 \setlength{\tabcolsep}{4.5pt}
 \begin{tabular}{llrrrrrrrrr}
 \toprule
-Test & Mode & RMSE $F_n$ & RMSE $v_t$ & $-p_H^{\max}$ & $W_H^{\mathrm{out}}$ & $\min E_H$ & $\min E_R$ & act. & $t_{\mathrm{act}}$ & fail \\
+Scenario & Mode & RMSE $F_n$ & RMSE $v_t$ & $-p_H^{\max}$ & $W_H^{\mathrm{out}}$ & $\min E_H$ & $\min E_R$ & act. & $t_{\mathrm{act}}$ & fail \\
  & & [N] & [m/s] & [W] & [J] & [J] & [J] & [\%] & [s] & \\
 \midrule
-A & C0 & 0.033 & 0.0025 & 0.000 & 0.000 & 0.050 & 0.300 & 0.00 & -- & 0 \\
-A & C1 & 0.424 & 0.0400 & 0.000 & 0.000 & 0.050 & 0.300 & 58.94 & 5.95 & 7658 \\
-A & C2 & 0.033 & 0.0025 & 0.000 & 0.000 & 0.050 & 0.300 & 0.01 & -- & 0 \\
-A & C3 & 0.033 & 0.0025 & 0.000 & 0.000 & 0.050 & 0.300 & 0.01 & -- & 0 \\
-A & C4 & 0.033 & 0.0025 & 0.000 & 0.000 & 0.050 & 0.300 & 0.01 & -- & 0 \\
+exact & C0 & 0.033 & 0.0025 & 0.000 & 0.000 & 0.050 & 0.300 & 0.00 & -- & 0 \\
+exact & C1 & 0.424 & 0.0400 & 0.000 & 0.000 & 0.050 & 0.300 & 58.94 & 5.95 & 7658 \\
+exact & C2 & 0.033 & 0.0025 & 0.000 & 0.000 & 0.050 & 0.300 & 0.01 & -- & 0 \\
+exact & C3 & 0.033 & 0.0025 & 0.000 & 0.000 & 0.050 & 0.300 & 0.01 & -- & 0 \\
 \addlinespace[2pt]
-B & C0 & 0.117 & 0.0025 & 0.000 & 0.000 & 0.050 & 0.014 & 0.00 & -- & 0 \\
-B & C1 & 0.407 & 0.0409 & 0.000 & 0.000 & 0.050 & 0.218 & 61.82 & 5.95 & 8658 \\
-B & C2 & 0.341 & 0.0030 & 0.000 & 0.000 & 0.050 & 0.023 & 1.13 & 14.59 & 0 \\
-B & C3 & 0.341 & 0.0030 & 0.000 & 0.000 & 0.050 & 0.023 & 1.13 & 14.59 & 0 \\
+mismatch & C0 & 0.117 & 0.0025 & 0.000 & 0.000 & 0.050 & 0.014 & 0.00 & -- & 0 \\
+mismatch & C1 & 0.407 & 0.0409 & 0.000 & 0.000 & 0.050 & 0.218 & 61.82 & 5.95 & 8658 \\
+mismatch & C2 & 0.341 & 0.0030 & 0.000 & 0.000 & 0.050 & 0.023 & 1.13 & 14.59 & 0 \\
+mismatch & C3 & 0.341 & 0.0030 & 0.000 & 0.000 & 0.050 & 0.023 & 1.13 & 14.59 & 0 \\
 \addlinespace[2pt]
-C & C0 & 0.219 & 0.0051 & 0.150 & 0.361 & -0.311 & -0.061 & 0.00 & -- & 0 \\
-C & C2 & 0.543 & 0.0242 & 0.150 & 0.278 & -0.228 & 0.022 & 7.63 & 8.09 & 0 \\
-C & C3 & 1.108 & 0.0694 & 0.100 & 0.044 & 0.006 & 0.256 & 22.40 & 6.45 & 0 \\
-C & C4 & 2.215 & 0.0690 & 0.100 & 0.044 & 0.006 & 0.256 & 22.42 & 6.45 & 0 \\
+block & C0 & 0.219 & 0.0051 & 0.150 & 0.361 & -0.311 & -0.061 & 0.00 & -- & 0 \\
+block & C2 & 0.543 & 0.0242 & 0.150 & 0.278 & -0.228 & 0.022 & 7.63 & 8.09 & 0 \\
+block & C3 & 1.108 & 0.0694 & 0.100 & 0.044 & 0.006 & 0.256 & 22.40 & 6.45 & 0 \\
 \addlinespace[2pt]
-D & C0 & 0.219 & 0.0051 & 0.150 & 0.361 & -0.311 & -0.276 & 0.00 & -- & 0 \\
-D & C2 & 1.421 & 0.0445 & 0.150 & 0.189 & -0.139 & 0.019 & 28.75 & 7.37 & 1192 \\
-D & C3 & 1.108 & 0.0694 & 0.100 & 0.044 & 0.006 & 0.041 & 22.40 & 6.45 & 0 \\
-D & C4 & 2.215 & 0.0690 & 0.100 & 0.044 & 0.006 & 0.049 & 22.42 & 6.45 & 0 \\
+mis+block & C0 & 0.219 & 0.0051 & 0.150 & 0.361 & -0.311 & -0.276 & 0.00 & -- & 0 \\
+mis+block & C2 & 1.421 & 0.0445 & 0.150 & 0.189 & -0.139 & 0.019 & 28.75 & 7.37 & 1192 \\
+mis+block & C3 & 1.108 & 0.0694 & 0.100 & 0.044 & 0.006 & 0.041 & 22.40 & 6.45 & 0 \\
 \addlinespace[2pt]
-E$^{\dagger}$ & C0 & 0.112 & 0.0021 & 0.107 & 0.259 & -0.209 & 0.041 & 0.00 & -- & 0 \\
-E$^{\dagger}$ & C3 & 0.512 & 0.0457 & 0.092 & 0.044 & 0.006 & 0.256 & 21.12 & 6.59 & 0 \\
-E$^{\dagger}$ & C4 & 2.264 & 0.0465 & 0.092 & 0.044 & 0.006 & 0.256 & 21.11 & 6.59 & 0 \\
+help+block & C0 & 0.286 & 0.0061 & 0.150 & 0.000 & -0.281 & 0.139 & 0.00 & -- & 0 \\
+help+block & C3 & 0.938 & 0.0571 & 0.100 & 0.000 & 0.006 & 0.300 & 19.01 & 8.95 & 0 \\
 \addlinespace[2pt]
-F & C0 & 0.286 & 0.0061 & 0.150 & 0.000 & -0.281 & 0.139 & 0.00 & -- & 0 \\
-F & C3 & 0.938 & 0.0571 & 0.100 & 0.000 & 0.006 & 0.300 & 19.01 & 8.95 & 0 \\
-\addlinespace[2pt]
-S & C3 & 0.044 & 0.0139 & 0.010 & 0.000 & 0.050 & 0.300 & 0.00 & -- & 0 \\
+stress & C3 & 2.914 & 0.0182 & 0.100 & 0.000 & 0.013 & 0.300 & 12.82 & 9.45 & 0 \\
 \bottomrule
 \end{tabular}
 \end{table*}

@@ -145,10 +145,16 @@ SCENARIOS: dict[str, ScenarioSpec] = {s.key: s for s in [
 #: prediction-bound violations, and zero certified-floor violations.
 ACCEPTANCE_MODES = set(PRIMARY_QP_MODES)
 
+# Fixed window used for release-jump metrics, beginning when the human-force
+# profile leaves its full-force hold. It captures the ramp-out and immediate
+# recovery without letting ordinary steady sliding dominate |u_t|.
+POST_RELEASE_WINDOW = 1.0
+
 
 def build_config(spec: ScenarioSpec, mode: str,
                  mu_hat: float | None = None,
-                 governor: bool | None = None) -> SimulationConfig:
+                 governor: bool | None = None,
+                 governor_mode: str = "stop_time_anchor") -> SimulationConfig:
     pas = PassivationConfig(mode=mode, predictor=spec.predictor,
                             mu_hat=mu_hat if mu_hat is not None else spec.mu_hat)
     cfg = SimulationConfig(
@@ -160,7 +166,8 @@ def build_config(spec: ScenarioSpec, mode: str,
     gov_on = spec.governor if governor is None else governor
     if gov_on:
         cfg = replace(cfg, controller=replace(
-            cfg.controller, governor=GovernorConfig(enabled=True)))
+            cfg.controller,
+            governor=GovernorConfig(enabled=True, mode=governor_mode)))
     return cfg
 
 
@@ -173,6 +180,14 @@ def _human_release_end(spec: ScenarioSpec) -> float | None:
     ends = [p.t_start + p.t_rise + p.t_hold + p.t_fall
             for p in pulses if p.enabled]
     return max(ends) if ends else None
+
+
+def _human_release_start(spec: ScenarioSpec) -> float | None:
+    """Start of force ramp-out for the last enabled human pulse."""
+    pulses = [spec.human, *spec.human_pulses]
+    starts = [p.t_start + p.t_rise + p.t_hold
+              for p in pulses if p.enabled]
+    return max(starts) if starts else None
 
 
 def e1_window(log: dict, spec: ScenarioSpec) -> np.ndarray | None:
@@ -236,6 +251,10 @@ def compute_metrics(log: dict, spec: ScenarioSpec, mode: str) -> dict:
     # updates, and the saved log always cover the full duration.
     m["t_e1_start"] = m["t_e1_end"] = None
     m["rmse_fn_e1"] = m["rmse_vt_e1"] = None
+    for key in ("rms_delta_ut_e1", "peak_abs_delta_ut_e1",
+                "rms_delta_un_e1", "peak_abs_delta_un_e1",
+                "rms_u_dev_w_e1", "peak_u_dev_w_e1"):
+        m[key] = None
     e1 = e1_window(log, spec)
     if e1 is not None and e1.any():
         hp = spec.human
@@ -243,6 +262,17 @@ def compute_metrics(log: dict, spec: ScenarioSpec, mode: str) -> dict:
         m["t_e1_end"] = hp.t_start + hp.t_rise + hp.t_hold
         m["rmse_fn_e1"] = rmse(log["f_n"] - log["f_n_desired"], e1)
         m["rmse_vt_e1"] = rmse(log["ee_vel"][:, 0] - log["vx_desired"], e1)
+        du = log["sp_u"] - log["sp_u_nom"]
+        du_t, du_n = du[e1, 0], du[e1, 1]
+        dev_w = np.sqrt(pas.w_t * du_t ** 2 + pas.w_n * du_n ** 2)
+        m.update({
+            "rms_delta_ut_e1": float(np.sqrt(np.mean(du_t ** 2))),
+            "peak_abs_delta_ut_e1": float(np.abs(du_t).max()),
+            "rms_delta_un_e1": float(np.sqrt(np.mean(du_n ** 2))),
+            "peak_abs_delta_un_e1": float(np.abs(du_n).max()),
+            "rms_u_dev_w_e1": float(np.sqrt(np.mean(dev_w ** 2))),
+            "peak_u_dev_w_e1": float(dev_w.max()),
+        })
 
     ph = log["sp_p_h_act"]
     pr = log["sp_p_r_act"]
@@ -302,10 +332,16 @@ def compute_metrics(log: dict, spec: ScenarioSpec, mode: str) -> dict:
     else:
         m["solve_ms_med"] = m["solve_ms_p99"] = m["solve_ms_max"] = None
 
-    # Governor bookkeeping.
+    # Governor bookkeeping. One "freeze event" = one entry into an engaged
+    # mode (legacy INTERACT, or DECEL for the stop-time-anchor variant);
+    # DECEL -> HOLD -> RELEASE_DWELL within one interaction is NOT a new
+    # event, so entries are counted from a NON-engaged predecessor.
+    from .controller import GOV_ENGAGED_MODES
+
     gov_mode = log["sp_gov_mode"]
-    m["gov_freeze_events"] = int(np.sum(np.diff(gov_mode) > 0)) \
-        if len(gov_mode) else 0
+    eng = np.isin(gov_mode, [int(x) for x in GOV_ENGAGED_MODES])
+    m["gov_freeze_events"] = int(
+        eng[0] + np.sum(eng[1:] & ~eng[:-1])) if len(gov_mode) else 0
     m["max_ref_err_governed"] = float(
         np.abs(log["x_desired"] - log["ee_pos"][:, 0])[slide].max()) \
         if slide.any() else np.nan
@@ -314,24 +350,44 @@ def compute_metrics(log: dict, spec: ScenarioSpec, mode: str) -> dict:
         if slide.any() else np.nan
 
     # Post-release peaks + recovery (human scenarios).
-    t_rel = _human_release_end(spec)
-    m["t_release_end"] = t_rel
+    t_rel = _human_release_start(spec)
+    t_rel_end = _human_release_end(spec)
+    m["t_release_start"] = t_rel
+    m["t_release_end"] = t_rel_end
     m["recovery_time"] = None
-    m["peak_fn_post"] = m["peak_vt_post"] = m["peak_tau_post"] = None
+    for key in ("peak_fn_post", "peak_vt_post", "peak_tau_post",
+                "max_step_delta_ut_post", "peak_abs_ut_post",
+                "peak_abs_vt_post", "peak_abs_fn_error_post",
+                "reference_debt_release", "original_reference_debt_release"):
+        m[key] = None
     if t_rel is not None and t_rel < t[-1]:
-        post = (t >= t_rel) & (t <= t_rel + 2.0)
+        post = (t >= t_rel) & (t <= t_rel + POST_RELEASE_WINDOW)
         m["peak_fn_post"] = float(log["f_n"][post].max())
         m["peak_vt_post"] = float(log["ee_vel"][post, 0].max())
         m["peak_tau_post"] = float(np.abs(log["ctrl"][post]).max())
+        m["peak_abs_ut_post"] = float(np.abs(log["sp_u"][post, 0]).max())
+        m["peak_abs_vt_post"] = float(np.abs(log["ee_vel"][post, 0]).max())
+        m["peak_abs_fn_error_post"] = float(
+            np.abs(log["f_n"][post] - log["f_n_desired"][post]).max())
+        post_pairs = ((t[:-1] >= t_rel)
+                      & (t[1:] <= t_rel + POST_RELEASE_WINDOW))
+        m["max_step_delta_ut_post"] = float(
+            np.abs(np.diff(log["sp_u"][:, 0]))[post_pairs].max())
+        i_rel = int(np.searchsorted(t, t_rel, side="left"))
+        x_rel = log["ee_pos"][i_rel, 0]
+        m["reference_debt_release"] = float(
+            abs(log["x_desired"][i_rel] - x_rel))
+        m["original_reference_debt_release"] = float(
+            abs(log["sp_x_ref_original"][i_rel] - x_rel))
         good = ((np.abs(log["f_n"] - f_d) < 0.25)
                 & (np.abs(log["ee_vel"][:, 0] - v_d) < 0.01)
-                & (t >= t_rel))
+                & (t >= t_rel_end))
         need = int(round(0.5 / dt))
         run = 0
         for i in range(len(good)):
             run = run + 1 if good[i] else 0
             if run >= need:
-                m["recovery_time"] = float(t[i - need + 1] - t_rel)
+                m["recovery_time"] = float(t[i - need + 1] - t_rel_end)
                 break
 
     return m
@@ -408,35 +464,200 @@ def run_scenario(key: str, output_root: str, modes: tuple | None = None,
 
 
 def run_governor_compare(output_root: str, plots: bool = True) -> list[dict]:
-    """Scenario C, C3, reference governor off vs on."""
+    """Governor ablation on the proposed C3 controller (Scenario C).
+
+    Runs C3 with the CBF-triggered reference governor disabled and enabled.
+    The governor-on run is also the final end-to-end C3 demonstration; the
+    governor-off run is the component ablation showing the moving-reference
+    catch-up jump. C4 is excluded (diagnostic only).
+    """
     from . import plotting
 
     spec = SCENARIOS["C"]
     out_dir = os.path.join(output_root, "governor_compare")
-    logs, metrics = {}, []
+    mode = "C3_dual_ledger_qp"
+    logs: dict[str, dict] = {}
+    metrics = []
     for gov in (False, True):
         tag = "governor_on" if gov else "governor_off"
-        cfg = build_config(spec, "C3_dual_ledger_qp", governor=gov)
-        cfg = replace(cfg, output_dir=os.path.join(out_dir, tag))
-        print(f"--- governor comparison | {tag} ---")
+        cfg = build_config(spec, mode, governor=gov)
+        cfg = replace(cfg, output_dir=os.path.join(out_dir, mode, tag))
+        print(f"--- governor ablation | C3 | {tag} ---")
         log = run_simulation(cfg)
         save_log(log, cfg.output_dir)
         logs[tag] = log
-        m = compute_metrics(log, spec, "C3_dual_ledger_qp")
+        m = compute_metrics(log, spec, mode)
         m["variant"] = tag
+        m.update(governor_period_metrics(log, spec))
         metrics.append(m)
-        print(f"    peak_fn_post={m['peak_fn_post']:.2f} N "
-              f"peak_vt_post={m['peak_vt_post']:.3f} m/s "
-              f"peak_tau_post={m['peak_tau_post']:.2f} Nm "
-              f"E_H_min={m['e_h_min_raw']:.5f} "
-              f"peak(-p_H)={m['p_h_peak']:.4f} W "
-              f"infeas={m['n_infeasible']} bound_viol={m['n_bound_violations']}")
+        print(
+            f"    trigger={m['gov_trigger_time']} "
+            f"P_H_pre={m['n_p_h_before_trigger']} "
+            f"CBF={m['n_cbf_h_active']} "
+            f"dEH_trig={m['e_h_drop_at_trigger']:.4f} J "
+            f"minEH={m['e_h_min_raw']:.4f} "
+            f"max|Δu_t|={m['max_step_delta_ut_post']:.3f} N "
+            f"peak|u_t|={m['peak_abs_ut_post']:.2f} N "
+            f"peak|v_t|={m['peak_abs_vt_post']:.3f} m/s "
+            f"debt={m['reference_debt_release']:.4f} m "
+            f"infeas={m['n_infeasible']} emerg={m['n_emergency']} "
+            f"bound={m['n_bound_violations']} floor={m['n_floor_violations']}")
     if plots:
         plotting.plot_governor_comparison(logs, out_dir)
     _write_table(metrics, os.path.join(out_dir, "governor_compare.csv"))
     with open(os.path.join(out_dir, "governor_compare.json"), "w") as fh:
         json.dump(metrics, fh, indent=2)
     return metrics
+
+
+def governor_variant_metrics(log: dict, spec: ScenarioSpec) -> dict:
+    """Diagnostics for the stop-time-anchor governor comparison.
+
+    Adds anchor/displacement/command-jump quantities on top of
+    ``governor_period_metrics``. All from the complete unclipped run.
+    """
+    from .controller import GOV_ENGAGED_MODES
+
+    t = log["time"]
+    dt = float(log["meta_timestep"])
+    gm = log["sp_gov_mode"]
+    engaged = np.isin(gm, [int(m) for m in GOV_ENGAGED_MODES])
+    m: dict = {}
+
+    idx = np.flatnonzero(engaged)
+    t_trig = float(t[idx[0]]) if idx.size else None
+    m["t_trigger"] = t_trig
+    # DECEL end / anchor capture: first step with a finite logged anchor.
+    anchor = log.get("sp_gov_anchor")
+    if anchor is not None and np.isfinite(anchor).any():
+        j = int(np.flatnonzero(np.isfinite(anchor))[0])
+        m["t_anchor"] = float(t[j])
+        m["x_a"] = float(anchor[j])
+        m["x_stop"] = float(log["ee_pos"][j, 0])
+        m["x_a_minus_x_stop"] = m["x_a"] - m["x_stop"]
+        m["decel_duration"] = (m["t_anchor"] - t_trig) if t_trig else None
+    else:
+        m["t_anchor"] = m["x_a"] = m["x_stop"] = None
+        m["x_a_minus_x_stop"] = m["decel_duration"] = None
+
+    # Displacement over the full-force hold window of the first pulse.
+    hp = spec.human
+    if hp.enabled:
+        t0 = hp.t_start + hp.t_rise
+        t1 = hp.t_start + hp.t_rise + hp.t_hold
+        i0 = int(np.argmin(np.abs(t - t0)))
+        i1 = int(np.argmin(np.abs(t - t1)))
+        x = log["ee_pos"][:, 0]
+        m["net_disp_hold_mm"] = 1e3 * float(x[i1] - x[i0])
+        if t_trig is not None:
+            k = int(np.argmin(np.abs(t - t_trig)))
+            seg = x[k:i1 + 1]
+            m["max_backward_disp_mm"] = 1e3 * float(seg.min() - x[k])
+        else:
+            m["max_backward_disp_mm"] = 1e3 * float(x[i0:i1 + 1].min() - x[i0])
+        w = (t >= t0) & (t <= t1)
+        m["mean_vt_hold"] = float(log["ee_vel"][w, 0].mean())
+        m["mean_p_h_hold"] = float(log["sp_p_h_act"][w].mean())
+    # DECEL-window power, and HOLD-window power (post anchor, pre release)
+    if m.get("t_anchor") is not None and t_trig is not None:
+        wd = (t >= t_trig) & (t <= m["t_anchor"])
+        m["mean_p_h_decel"] = float(log["sp_p_h_act"][wd].mean())
+        m["peak_p_h_decel"] = float(np.max(np.abs(log["sp_p_h_act"][wd])))
+        t_rel = _human_release_start(spec)
+        wh = (t > m["t_anchor"]) & (t <= (t_rel if t_rel else t[-1]))
+        if wh.any():
+            m["mean_p_h_hold_phase"] = float(log["sp_p_h_act"][wh].mean())
+            m["e_h_at_anchor"] = float(log["sp_e_h"][
+                int(np.argmin(np.abs(t - m["t_anchor"])))])
+    # Ledger summary
+    m["e_h_min"] = float(log["sp_e_h_raw"].min())
+    m["e_h_max"] = float(log["sp_e_h"].max())
+    m["e_h_final"] = float(log["sp_e_h"][-1])
+    m["e_h_reaches_cap"] = bool(log["sp_e_h"].max() >= 0.08 - 1e-9)
+    if t_trig is not None:
+        m["e_h_at_trigger"] = float(log["sp_e_h"][
+            int(np.argmin(np.abs(t - t_trig)))])
+
+    # Command jumps around the three events.
+    du = np.abs(np.diff(log["sp_u"][:, 0]))
+
+    def jump(t_c, half=0.05):
+        if t_c is None:
+            return None
+        w = (t[:-1] >= t_c - half) & (t[:-1] <= t_c + half)
+        return float(du[w].max()) if w.any() else None
+
+    m["max_step_du_trigger"] = jump(t_trig)
+    m["max_step_du_anchor"] = jump(m.get("t_anchor"))
+    m["max_step_du_release"] = jump(_human_release_start(spec))
+    # Recovery: first time |v_t - v_d| < 5% of v_d sustained 0.2 s post-release
+    v_d = float(log["meta_v_slide"])
+    t_rel = _human_release_start(spec)
+    m["t_recover_vd"] = None
+    if t_rel is not None:
+        good = (np.abs(log["ee_vel"][:, 0] - v_d) < 0.05 * v_d) & (t >= t_rel)
+        need = int(round(0.2 / dt))
+        run = 0
+        for i in range(len(good)):
+            run = run + 1 if good[i] else 0
+            if run >= need:
+                m["t_recover_vd"] = float(t[i - need + 1] - t_rel)
+                break
+    return m
+
+
+def governor_period_metrics(log: dict, spec: ScenarioSpec) -> dict:
+    """Three-period diagnostics for the CBF-triggered governor.
+
+    Period A (QP-only): ROW_P_H regulation before the governor triggers.
+    Period B: the ROW_CBF_H trigger and the resulting E_H stabilization.
+    Period C: smooth post-release resume. All quantities come from the
+    complete unclipped run; row indices match passivity_qp (P_H=4,
+    CBF_H=2, E_H=0).
+    """
+    t = log["time"]
+    dt = float(log["meta_timestep"])
+    p_h_row = log["sp_active"][:, 4].astype(bool)
+    cbf_row = log["sp_active"][:, 2].astype(bool)
+    e_h_row = log["sp_active"][:, 0].astype(bool)
+    gmode = log["sp_gov_mode"]
+    human = np.linalg.norm(log["f_h"], axis=1) > 1e-9
+
+    from .controller import GOV_ENGAGED_MODES
+
+    m: dict = {}
+    interact = np.flatnonzero(np.isin(gmode, [int(x) for x in GOV_ENGAGED_MODES]))
+    trig = float(t[interact[0]]) if interact.size else None
+    m["gov_trigger_time"] = trig
+    resume = np.flatnonzero(gmode == 2)
+    # first RESUME entry after the trigger (post-release)
+    m["gov_resume_time"] = (
+        float(t[resume[resume > (interact[0] if interact.size else 0)][0]])
+        if interact.size and (resume > interact[0]).any() else None)
+
+    before = human & (t < trig) if trig is not None else human
+    m["n_p_h_before_trigger"] = int(np.sum(p_h_row & before))
+    m["dur_p_h_before_trigger"] = float(np.sum(p_h_row & before) * dt)
+    m["n_cbf_h_active"] = int(np.sum(cbf_row))
+    m["dur_cbf_h_active"] = float(np.sum(cbf_row) * dt)
+    m["n_e_h_floor_active"] = int(np.sum(e_h_row))
+    if trig is not None:
+        i = interact[0]
+        m["e_h_at_trigger"] = float(log["sp_e_h"][i])
+        m["e_h_drop_at_trigger"] = float(log["sp_e_h"][0] - log["sp_e_h"][i])
+    else:
+        m["e_h_at_trigger"] = None
+        m["e_h_drop_at_trigger"] = 0.0
+
+    # QP command correction magnitude before the trigger (Period A).
+    if trig is not None:
+        du = (log["sp_u"][before, 0] - log["sp_u_nom"][before, 0])
+        m["rms_qp_corr_ut_pre"] = float(np.sqrt(np.mean(du ** 2))) \
+            if du.size else 0.0
+        m["max_qp_corr_ut_pre"] = float(np.abs(du).max()) if du.size else 0.0
+    else:
+        m["rms_qp_corr_ut_pre"] = m["max_qp_corr_ut_pre"] = 0.0
+    return m
 
 
 def run_sweep(output_root: str, plots: bool = True) -> list[dict]:
@@ -621,6 +842,10 @@ def check_acceptance(metrics: list[dict],
             rut is not None and run_ is not None
             and rut < 0.5 and run_ > 2.0 * rut,
             {"rmse_ut_c3_c4_e1": rut, "rmse_un_c3_c4_e1": run_}, None)
+        add("E1: C3 has lower task-weighted command deviation than C4",
+            e3["rms_u_dev_w_e1"] < e4["rms_u_dev_w_e1"],
+            {"C3": e3["rms_u_dev_w_e1"],
+             "C4": e4["rms_u_dev_w_e1"]}, None)
 
     # --- long-duration stress ---
     s3 = by.get(("S", "C3_dual_ledger_qp"))
@@ -638,25 +863,53 @@ def check_acceptance(metrics: list[dict],
             s3["e_h_final"] >= 0.08 - 1e-6 or s3["e_h_final"] >= 0.0799,
             s3["e_h_final"], 0.08)
 
-    # --- governor on/off release comparison ---
+    # --- governor ablation on C3 (CBF-triggered) ---
     if governor_metrics:
         gov = {m["variant"]: m for m in governor_metrics}
         off, on = gov.get("governor_off"), gov.get("governor_on")
         if off and on:
-            f_d = 5.0
-            red = ((off["peak_fn_post"] - f_d) - (on["peak_fn_post"] - f_d)) \
-                / max(off["peak_fn_post"] - f_d, 1e-9)
-            add("governor: >= 50% reduction of post-release F_n overshoot",
-                red >= 0.50, {"off": off["peak_fn_post"],
-                              "on": on["peak_fn_post"],
-                              "reduction": red}, 0.50)
-            add("governor: catch-up burst removed (peak v_t <= 1.5 v_d)",
-                on["peak_vt_post"] <= 1.5 * 0.05, on["peak_vt_post"], 0.075)
-            add("governor: same certificate (E_H floor, peak power)",
-                on["e_h_min_raw"] >= 0.005 - 1e-9
-                and on["p_h_peak"] <= 0.10 + 1e-6,
-                {"e_h_min": on["e_h_min_raw"], "p_h_peak": on["p_h_peak"]},
-                None)
+            clean = all(on[k] == 0 for k in
+                        ("n_infeasible", "n_emergency", "n_bound_violations",
+                         "n_floor_violations"))
+            add("governor/C3: zero infeasible/emergency/bound/floor "
+                "violations", clean,
+                {k: on[k] for k in ("n_infeasible", "n_emergency",
+                                     "n_bound_violations",
+                                     "n_floor_violations")}, 0)
+            # The CBF-triggered governor must NOT fire on force alone: there
+            # must be a QP-only period (ROW_P_H active before the trigger)
+            # and a genuine, visible E_H depletion before it latches.
+            add("governor/C3: QP-only period precedes trigger "
+                "(ROW_P_H active before governor)",
+                on["gov_trigger_time"] is not None
+                and on["n_p_h_before_trigger"] > 0,
+                {"trigger": on["gov_trigger_time"],
+                 "p_h_pre": on["n_p_h_before_trigger"]}, None)
+            add("governor/C3: visible human-energy depletion before trigger "
+                "(>= 0.01 J)",
+                on["e_h_drop_at_trigger"] >= 0.01,
+                on["e_h_drop_at_trigger"], 0.01)
+            add("governor/C3: E_H stays above certified floor",
+                on["e_h_min_raw"] >= 0.005 - 1e-9, on["e_h_min_raw"], 0.005)
+            add("governor/C3: exactly one CBF-triggered interaction",
+                on["gov_freeze_events"] == 1, on["gov_freeze_events"], 1)
+            for key, label, threshold in (
+                    ("max_step_delta_ut_post",
+                     "one-step tangential-command jump", 0.50),
+                    ("peak_abs_ut_post", "post-release |u_t| peak", 0.80),
+                    ("peak_abs_vt_post", "post-release |v_t| peak", 0.50),
+                    ("peak_abs_fn_error_post",
+                     "post-release |F_n-F_n^d| peak", 0.50)):
+                ratio = on[key] / max(off[key], 1e-12)
+                add(f"governor/C3: {label} clearly reduced",
+                    ratio <= threshold, {"off": off[key], "on": on[key],
+                                         "ratio": ratio}, threshold)
+            add("governor/C3: governed reference debt at release "
+                "reduced by at least 90%",
+                on["reference_debt_release"]
+                <= 0.10 * off["reference_debt_release"],
+                {"off": off["reference_debt_release"],
+                 "on": on["reference_debt_release"]}, 0.10)
     return checks
 
 

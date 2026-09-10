@@ -236,8 +236,8 @@ are unchanged; per step the layer wraps the nominal controller:
    filter modified the normal command.
 8. **Reference governor** (optional, `GovernorConfig`): freezes and
    continuously rebases the tangential reference onto the end-effector
-   while the human interacts (perfect sensing, `|F_H| > 0.1 N` or an
-   active human row), then ramps back to `v_d` over 0.75 s — removing the
+   while the human interacts (perfect sensing, `|F_H| > 0.1 N`), then
+   waits for the clear dwell and ramps back to `v_d` over 0.75 s — removing the
    accumulated-error catch-up burst after release. A task/recovery policy
    only; it never enters the passivity certificate (port powers keep the
    physical `v_ee`).
@@ -260,7 +260,8 @@ kept inside the arm's ~1.0 m reachable workspace), C oracle + blocking
 human (−3 N·t, 6.5–8.5 s, cosine ramps), D mismatch + blocking, E oblique
 human (3/√2·(−t−n), C3 vs C4), F helping-then-blocking (charging → cap →
 discharge), S 32 s alternating-pulse certificate stress (governor on),
-plus a `μ̂` sweep and a governor on/off release comparison. Artifacts:
+plus a `μ̂` sweep and a shared C3/C4 governor on/off release comparison.
+Artifacts:
 per-run `log.npz/csv` + 9-panel `run.png`, per-scenario `comparison.png`,
 `summary.{json,csv}`, `acceptance.json`,
 `prediction_bound_summary.json`, and a compact headline set in

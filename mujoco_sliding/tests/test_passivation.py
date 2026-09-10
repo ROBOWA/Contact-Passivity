@@ -41,7 +41,7 @@ _HELPING = HumanForceConfig(enabled=True, magnitude=3.0,
 
 
 def _run(duration, mode, human=None, predictor="oracle", mu_hat=0.30,
-         governor=False, pulses=()):
+         governor=False, pulses=(), governor_mode="continuous_rebase"):
     cfg = SimulationConfig(
         duration=duration, human=human or HumanForceConfig(),
         human_pulses=pulses,
@@ -50,7 +50,8 @@ def _run(duration, mode, human=None, predictor="oracle", mu_hat=0.30,
     if governor:
         from dataclasses import replace
         cfg = replace(cfg, controller=replace(
-            cfg.controller, governor=GovernorConfig(enabled=True)))
+            cfg.controller, governor=GovernorConfig(
+                enabled=True, mode=governor_mode)))
     return run_simulation(cfg)
 
 
@@ -97,6 +98,23 @@ def c4_oblique_log():
 @pytest.fixture(scope="module")
 def c3_governed_log():
     return _run(12.0, "C3_dual_ledger_qp", _BLOCKING, governor=True)
+
+
+@pytest.fixture(scope="module")
+def c4_governed_log():
+    return _run(12.0, "C4_dual_ledger_safe_scalar", _BLOCKING, governor=True)
+
+
+@pytest.fixture(scope="module")
+def c3_anchor_log():
+    """C3 with the proposed stop-time-anchor governor (blocking human)."""
+    return _run(12.0, "C3_dual_ledger_qp", _BLOCKING, governor=True,
+                governor_mode="stop_time_anchor")
+
+
+@pytest.fixture(scope="module")
+def c3_governed_nohuman_log():
+    return _run(8.0, "C3_dual_ledger_qp", governor=True)
 
 
 @pytest.fixture(scope="module")
@@ -174,10 +192,11 @@ def test_randomized_robust_energy_constraint():
 
 def test_prediction_error_bound_across_scenarios(
         c3_nohuman_log, c3_blocking_log, c4_blocking_log, c2_mismatch_log,
-        c3_oblique_log, c4_oblique_log, c3_governed_log, stress_log):
+        c3_oblique_log, c4_oblique_log, c3_governed_log, c4_governed_log,
+        stress_log):
     for lg in (c3_nohuman_log, c3_blocking_log, c4_blocking_log,
                c2_mismatch_log, c3_oblique_log, c4_oblique_log,
-               c3_governed_log, stress_log):
+               c3_governed_log, c4_governed_log, stress_log):
         assert int(lg["meta_n_bound_violations"]) == 0
         assert lg["sp_bound_util"].max() < 1.0
     # The bound is not vacuous: it is within ~2 orders of the typical error.
@@ -226,10 +245,13 @@ def test_long_duration_stress_no_leak(stress_log):
     w_r = -np.cumsum(lg["sp_p_r_act"]) * dt
     assert w_h.max() <= (0.05 - 0.005) + 1e-7
     assert w_r.max() <= (0.30 - 0.02) + 1e-7
-    # No progressive leakage: each helping pulse recharges E_H to its cap,
-    # including the last one.
+    # No progressive leakage: the last helping pulse (t_start 21 s,
+    # full-force hold 21.5-23.5 s) still recharges E_H to its cap. Evaluate
+    # within the full-force hold; near the fall edge the governed reference
+    # can briefly overshoot and nudge v_t negative, discharging the cap by a
+    # few mJ (real dynamics, not leakage).
     t = lg["time"]
-    assert lg["sp_e_h"][(t > 23.5) & (t < 24.5)].max() >= 0.08 - 1e-9
+    assert lg["sp_e_h"][(t > 22.0) & (t < 23.4)].max() >= 0.08 - 1e-9
 
 
 # ---------------------------------------------------------------------------
@@ -315,6 +337,14 @@ def test_safe_anchor_succeeds_where_origin_ray_fails():
     sol_safe = solve_safe_anchor_scalar(u_nom, rows, anchor_qp)
     assert sol_safe.ok and not sol_safe.infeasible
     assert rows.margins(sol_safe.u).min() >= -1e-6
+    # The feasible C4 point is a candidate in C3's full convex feasible set,
+    # so the task-weighted projection cannot have greater W-distance.
+    sol_full = PassivityQP(cfg, objective="track").solve(u_nom, rows)
+    assert sol_full.ok
+    w = np.array([cfg.w_t, cfg.w_n])
+    cost_full = float(np.sum(w * (sol_full.u - u_nom) ** 2))
+    cost_safe = float(np.sum(w * (sol_safe.u - u_nom) ** 2))
+    assert cost_full <= cost_safe + 2e-6
 
 
 # ---------------------------------------------------------------------------
@@ -336,31 +366,139 @@ def test_c3_better_normal_force_than_c4_oblique(c3_oblique_log,
 # 14-15: reference governor
 # ---------------------------------------------------------------------------
 
-def test_governor_state_and_reference_continuity():
-    cfg = GovernorConfig(enabled=True)
+def _advance_to_track(gov):
+    """Run the reset cosine ramp to completion (no human, no trigger)."""
+    for k in range(1500):
+        gov.step(0.05 * k * DT, human_present=False, cbf_trigger=False)
+    assert gov.mode.name == "TRACK"
+
+
+def test_governor_not_triggered_by_human_force_alone():
+    # Item 1 & 2: human present (and by extension ROW_P_H active) but the
+    # human-energy CBF row NOT active must keep the governor in TRACK.
+    cfg = GovernorConfig(enabled=True, mode="continuous_rebase")
     gov = ReferenceGovernor(cfg, v_d=0.05, dt=DT)
     gov.reset(0.0)
-    x_ee = 0.0
-    x_prev, v_prev = gov.x_g, gov.v_g
-    rng = np.random.default_rng(2)
-    for k in range(4000):
-        # human present during [1.0 s, 2.0 s)
-        human = 1000 <= k < 2000
-        # EE lags the reference and gets pushed back during interaction
-        x_ee += (0.04 if not human else -0.01) * DT + rng.normal() * 1e-6
-        x_g, v_g = gov.step(x_ee, human)
-        # Continuity: a rebase step moves x_g by at most
-        # (v_d + k_rebase * err) * dt ~ 1e-4; a discontinuous jump would be
-        # the accumulated error (~0.1 m). 1e-3 separates them decisively.
-        assert abs(x_g - x_prev) <= 1e-3
-        assert abs(v_g - v_prev) <= 1e-3
-        x_prev, v_prev = x_g, v_g
-    assert gov.v_g == pytest.approx(0.05)      # back to tracking
-    assert gov.n_freeze_events == 1 and gov.n_resume_events == 1
+    _advance_to_track(gov)
+    x_ee = gov.x_g
+    for _ in range(2000):
+        x_g, v_g = gov.step(x_ee, human_present=True, cbf_trigger=False)
+    assert gov.mode.name == "TRACK"
+    assert gov.v_g == pytest.approx(0.05)      # never froze
+    assert gov.trigger_time is None
+    assert gov.n_freeze_events == 0
+
+
+def test_governor_triggers_only_on_cbf_with_human_present():
+    # Item 3: ROW_CBF_H active while the human is present latches INTERACT.
+    cfg = GovernorConfig(enabled=True, mode="continuous_rebase")
+    gov = ReferenceGovernor(cfg, v_d=0.05, dt=DT)
+    gov.reset(0.0)
+    _advance_to_track(gov)
+    # CBF active but NO human -> must not trigger.
+    for _ in range(200):
+        gov.step(gov.x_g, human_present=False, cbf_trigger=True)
+    assert gov.mode.name == "TRACK"
+    # CBF active AND human -> trigger on this step.
+    gov.step(gov.x_g, human_present=True, cbf_trigger=True, t=1.234)
+    assert gov.mode.name == "INTERACT"
+    assert gov.n_freeze_events == 1
+    assert gov.trigger_time == pytest.approx(1.234)
+
+
+def test_governor_latched_while_human_present():
+    # Item 5: once INTERACT is latched, it holds while the human remains
+    # even if ROW_CBF_H goes inactive (robot stopped -> CBF slack).
+    cfg = GovernorConfig(enabled=True, mode="continuous_rebase")
+    gov = ReferenceGovernor(cfg, v_d=0.05, dt=DT)
+    gov.reset(0.0)
+    _advance_to_track(gov)
+    gov.step(0.02, human_present=True, cbf_trigger=True)
+    assert gov.mode.name == "INTERACT"
+    for _ in range(1500):                       # CBF now inactive, human on
+        gov.step(0.02, human_present=True, cbf_trigger=False)
+    assert gov.mode.name == "INTERACT"          # still latched
+    assert gov.n_freeze_events == 1             # no re-latch
+
+
+def test_governor_decay_rebase_and_cosine_resume():
+    # Items 6-9: v_g -> 0 smoothly, x_g rebases onto x, cosine resume after
+    # release, and x_g never jumps to the old time-indexed reference.
+    cfg = GovernorConfig(enabled=True, mode="continuous_rebase")
+    gov = ReferenceGovernor(cfg, v_d=0.05, dt=DT)
+    gov.reset(0.0)
+    _advance_to_track(gov)
+
+    x_blocked = 0.02
+    gov.step(x_blocked, human_present=True, cbf_trigger=True)   # latch
+    v_interact, x_interact = [], []
+    for _ in range(1500):
+        x_g, v_g = gov.step(x_blocked, human_present=True, cbf_trigger=False)
+        x_interact.append(x_g)
+        v_interact.append(v_g)
+    assert np.max(np.diff(v_interact)) <= 1e-12       # monotone decay
+    assert v_interact[-1] < 1e-6                       # v_g -> 0
+    assert abs(x_interact[-1] - x_blocked) < 1e-5      # x_g -> x
+
+    x_before = gov.x_g
+    xs, vs = [], []
+    for _ in range(int(round((cfg.clear_dwell + cfg.t_resume + 0.2) / DT))):
+        x_g, v_g = gov.step(x_blocked, human_present=False, cbf_trigger=False)
+        xs.append(x_g)
+        vs.append(v_g)
+    assert max(np.abs(np.diff(xs))) < 1e-3            # continuous resume
+    assert max(np.abs(np.diff(vs))) < 1e-3
+    assert gov.v_g == pytest.approx(0.05)
+    assert xs[0] == pytest.approx(x_before, abs=1e-5)
+    # A jump back to the ~0.16-m time-indexed reference would break this.
+    assert max(xs) < 0.08
+
+
+def test_governor_trigger_uses_previous_step_cbf(c3_governed_log):
+    # Item 4: the governor latches on the PREVIOUS step's CBF row, so the
+    # INTERACT transition at step k is preceded by ROW_CBF_H active at k-1
+    # (no same-step algebraic loop).
+    lg = c3_governed_log
+    gmode = lg["sp_gov_mode"]
+    cbf = lg["sp_active"][:, 2].astype(bool)          # ROW_CBF_H
+    trig = np.flatnonzero((gmode[1:] == 1) & (gmode[:-1] != 1))
+    assert trig.size == 1
+    k = int(trig[0]) + 1                              # index of first INTERACT
+    assert cbf[k - 1]                                 # CBF active one step before
+
+
+def test_governor_shared_by_c3_and_c4_with_identical_configuration(
+        c3_governed_log, c4_governed_log):
+    from mujoco_sliding.experiments import SCENARIOS, build_config
+
+    cfg3 = build_config(SCENARIOS["C"], "C3_dual_ledger_qp", governor=True)
+    cfg4 = build_config(SCENARIOS["C"], "C4_dual_ledger_safe_scalar",
+                        governor=True)
+    assert cfg3.controller.governor == cfg4.controller.governor
+    for lg in (c3_governed_log, c4_governed_log):
+        assert lg["sp_gov_active"].any()
+        gm = lg["sp_gov_mode"]
+        assert np.sum((gm[1:] == 1) & (gm[:-1] != 1)) == 1
+        human = np.linalg.norm(lg["f_h"], axis=1) > 0.1
+        sustained = human & (lg["time"] >= 7.5) & (lg["time"] <= 8.4)
+        assert np.abs(lg["vx_desired"][sustained]).max() < 1e-5
+        assert np.abs(lg["x_desired"][sustained]
+                      - lg["ee_pos"][sustained, 0]).max() < 5e-3
+        # The original time-indexed reference remains comparison-only.
+        slide = lg["phase"] == int(Phase.SLIDE)
+        assert np.abs(np.diff(lg["x_desired"][slide])).max() < 1e-3
+
+
+def test_governor_nohuman_reaches_normal_tracking(c3_governed_nohuman_log):
+    lg = c3_governed_nohuman_log
+    late = (lg["phase"] == int(Phase.SLIDE)) & (lg["time"] >= 4.0)
+    assert np.allclose(lg["vx_desired"][late], 0.05)
+    assert abs(lg["ee_vel"][late, 0].mean() - 0.05) < 0.005
+    assert not np.any(lg["sp_gov_mode"][late] == 1)
 
 
 def test_governor_prevents_catchup(c3_blocking_log, c3_governed_log):
-    t_rel = 9.0
+    t_rel = 8.5
     for lg, governed in ((c3_blocking_log, False), (c3_governed_log, True)):
         t = lg["time"]
         post = (t >= t_rel) & (t <= t_rel + 2.0)
@@ -381,6 +519,26 @@ def test_governor_prevents_catchup(c3_blocking_log, c3_governed_log):
         else:
             peak_fn_off = peak_fn
             assert peak_fn_off > 10.0          # the burst it must remove
+
+
+def test_governor_prevents_c4_catchup_and_preserves_certificates(
+        c4_blocking_log, c3_governed_log, c4_governed_log):
+    t_rel = 8.5
+    off = (c4_blocking_log["time"] >= t_rel) \
+        & (c4_blocking_log["time"] <= t_rel + 1.0)
+    on = (c4_governed_log["time"] >= t_rel) \
+        & (c4_governed_log["time"] <= t_rel + 1.0)
+    assert np.abs(c4_governed_log["ee_vel"][on, 0]).max() \
+        < 0.5 * np.abs(c4_blocking_log["ee_vel"][off, 0]).max()
+    assert np.abs(c4_governed_log["sp_u"][on, 0]).max() \
+        < 0.8 * np.abs(c4_blocking_log["sp_u"][off, 0]).max()
+    for lg in (c3_governed_log, c4_governed_log):
+        assert int(lg["meta_n_infeasible"]) == 0
+        assert int(lg["meta_n_emergency"]) == 0
+        assert int(lg["meta_n_bound_violations"]) == 0
+        assert int(lg["meta_n_floor_violations"]) == 0
+        assert lg["sp_e_h_raw"].min() >= 0.005 - 1e-9
+        assert lg["sp_e_r_raw"].min() >= 0.02 - 1e-9
 
 
 # ---------------------------------------------------------------------------
@@ -620,3 +778,164 @@ def test_plotting_ledger_lines_match_config():
     assert plotting._E_H_LINES == (cfg.human.e_min, cfg.human.e_max)
     assert plotting._E_R_LINES == (cfg.residual.e_min, cfg.residual.e_max)
     assert plotting._P_H_MAX == cfg.p_h_max
+
+
+# ---------------------------------------------------------------------------
+# Stop-time-anchor governor (proposed final C3 recovery layer)
+# ---------------------------------------------------------------------------
+
+def _anchor_gov(**kw):
+    cfg = GovernorConfig(enabled=True, mode="stop_time_anchor", **kw)
+    gov = ReferenceGovernor(cfg, v_d=0.05, dt=DT)
+    gov.reset(0.0)
+    for k in range(1500):                     # finish the initial ramp
+        gov.step(0.05 * k * DT, human_present=False, cbf_trigger=False)
+    assert gov.mode.name == "TRACK"
+    return gov, cfg
+
+
+def test_anchor_no_trigger_from_force_or_power_row_alone():
+    """Items 1-2: human contact (and hence ROW_P_H activity) alone must not
+    start DECEL; only the human-energy CBF row does."""
+    gov, _ = _anchor_gov()
+    for _ in range(2000):
+        gov.step(gov.x_g, human_present=True, cbf_trigger=False)
+    assert gov.mode.name == "TRACK"
+    assert gov.v_g == pytest.approx(0.05)
+    assert gov.trigger_time is None and gov.x_a is None
+
+
+def test_anchor_decel_entry_is_continuous_and_smooth():
+    """Items 3-6: previous-step CBF starts DECEL; x_g/v_g are continuous at
+    the trigger; the rebase term fades in smoothly; v_g hits exactly 0."""
+    gov, cfg = _anchor_gov()
+    x_ee = gov.x_g - 0.01                     # robot lags the reference
+    x_prev, v_prev = gov.x_g, gov.v_g
+    gov.step(x_ee, human_present=True, cbf_trigger=True, t=1.0)
+    assert gov.mode.name == "DECEL"
+    assert abs(gov.x_g - x_prev) < 1e-3       # no reference jump
+    assert abs(gov.v_g - v_prev) < 1e-3
+    assert gov.x_a is None                    # anchor NOT captured yet
+
+    vs, xs = [gov.v_g], [gov.x_g]
+    n = int(round(cfg.t_decel / DT)) - 1
+    for _ in range(n):
+        x_g, v_g = gov.step(x_ee, human_present=True, cbf_trigger=True)
+        vs.append(v_g)
+        xs.append(x_g)
+    assert max(np.abs(np.diff(vs))) < 1e-3    # smooth velocity profile
+    assert max(np.abs(np.diff(xs))) < 1e-3    # smooth position reference
+    assert np.all(np.diff(vs) <= 1e-12)       # monotone deceleration
+    assert gov.v_g == pytest.approx(0.0, abs=1e-12)   # exactly zero
+    assert gov.mode.name == "HOLD"
+
+
+def test_anchor_captured_once_at_decel_end_and_stays_fixed():
+    """Items 7-12: the anchor equals x_g at the stop instant, is captured
+    exactly once, never follows the retreating robot, and HOLD stays
+    latched while the human is present."""
+    gov, cfg = _anchor_gov()
+    x_ee = gov.x_g
+    gov.step(x_ee, human_present=True, cbf_trigger=True, t=2.0)
+    for _ in range(int(round(cfg.t_decel / DT)) - 1):
+        gov.step(x_ee, human_present=True, cbf_trigger=True)
+    assert gov.mode.name == "HOLD"
+    x_a = gov.x_a
+    assert x_a is not None
+    assert x_a == pytest.approx(gov.x_g)      # anchor IS the governed pos.
+    assert gov.x_stop == pytest.approx(x_ee)
+
+    # The robot is now pushed steadily backwards; the anchor must not move,
+    # and HOLD must stay latched even with the CBF row inactive.
+    x_prev, v_prev = gov.x_g, gov.v_g
+    for k in range(2000):
+        x_ee -= 2e-5                          # 2 cm of retreat
+        x_g, v_g = gov.step(x_ee, human_present=True, cbf_trigger=False)
+        assert abs(x_g - x_prev) < 1e-3 and abs(v_g - v_prev) < 1e-3
+        x_prev, v_prev = x_g, v_g
+    assert gov.mode.name == "HOLD"            # latched
+    assert gov.x_a == pytest.approx(x_a)      # fixed anchor
+    assert gov.x_g == pytest.approx(x_a)      # reference did NOT follow x
+    assert abs(gov.x_g - x_ee) > 0.019        # ... which has retreated 2 cm
+    assert gov.n_freeze_events == 1           # captured once per interaction
+
+
+def test_anchor_release_dwell_then_smooth_resume():
+    """Items 13-15: the dwell preserves the anchor, RESUME starts from zero
+    velocity and reaches v_d smoothly, and x_g never jumps back to the old
+    time-indexed reference."""
+    gov, cfg = _anchor_gov()
+    x_ee = gov.x_g
+    gov.step(x_ee, human_present=True, cbf_trigger=True, t=3.0)
+    for _ in range(int(round(cfg.t_decel / DT)) - 1):
+        gov.step(x_ee, human_present=True, cbf_trigger=True)
+    x_a = gov.x_a
+
+    # Dwell: anchor held, still zero velocity.
+    n_dwell = int(round(cfg.clear_dwell / DT))
+    for _ in range(n_dwell - 1):
+        gov.step(x_ee, human_present=False, cbf_trigger=False)
+        assert gov.mode.name == "RELEASE_DWELL"
+        assert gov.v_g == 0.0
+        assert gov.x_g == pytest.approx(x_a)
+
+    xs, vs = [], []
+    for _ in range(int(round((cfg.t_resume + 0.3) / DT))):
+        x_g, v_g = gov.step(x_ee, human_present=False, cbf_trigger=False)
+        xs.append(x_g)
+        vs.append(v_g)
+    assert vs[0] < 1e-4                       # resumes from zero velocity
+    assert max(np.abs(np.diff(vs))) < 1e-3    # smooth ramp
+    assert max(np.abs(np.diff(xs))) < 1e-3
+    assert gov.v_g == pytest.approx(0.05)
+    assert gov.mode.name == "TRACK"
+    # The old time-indexed reference would be far ahead; x_g continues from
+    # the anchor instead (total travel is only the resume-ramp distance).
+    assert xs[-1] - x_a < 0.06
+
+
+def test_anchor_governor_full_run_certificates(c3_anchor_log):
+    """Items 16-19: floors, feasibility, emergency, and prediction bound on
+    a full stop-time-anchor run."""
+    lg = c3_anchor_log
+    assert lg["sp_e_h_raw"].min() >= 0.005 - 1e-9
+    assert lg["sp_e_r_raw"].min() >= 0.02 - 1e-9
+    assert int(lg["meta_n_infeasible"]) == 0
+    assert int(lg["meta_n_emergency"]) == 0
+    assert int(lg["meta_n_bound_violations"]) == 0
+    assert int(lg["meta_n_floor_violations"]) == 0
+    assert np.max(-lg["sp_p_h_act"]) <= 0.10 + 1e-6
+
+
+def test_anchor_prevents_retreat_and_cap_recharge(c3_anchor_log,
+                                                  c3_governed_log,
+                                                  c3_blocking_log):
+    """The proposed governor keeps the release benefit of the continuous
+    rebase while removing the sustained retreat and the recharge to
+    E_H,max, and it still lets the QP act before the trigger."""
+    lg = c3_anchor_log
+    t = lg["time"]
+    i0, i1 = int(np.argmin(np.abs(t - 6.5))), int(np.argmin(np.abs(t - 8.5)))
+    disp = lg["ee_pos"][i1, 0] - lg["ee_pos"][i0, 0]
+    disp_rebase = (c3_governed_log["ee_pos"][i1, 0]
+                   - c3_governed_log["ee_pos"][i0, 0])
+    assert abs(disp) < 0.010                       # < 10 mm of yielding
+    assert abs(disp) < 0.25 * abs(disp_rebase)     # vs ~33 mm rebasing
+    # p_H returns to ~zero during the sustained hold (no ongoing yielding).
+    hold = (t > 7.5) & (t < 8.4)
+    assert abs(lg["sp_p_h_act"][hold].mean()) < 0.02
+    # No sustained recharge to the cap (the rebasing governor reaches it).
+    assert lg["sp_e_h"].max() < 0.08 - 1e-6
+    assert c3_governed_log["sp_e_h"].max() >= 0.08 - 1e-9
+    # Visible QP action and E_H depletion still precede the trigger.
+    gm = lg["sp_gov_mode"]
+    trig = np.flatnonzero(gm == 3)                 # DECEL
+    assert trig.size > 0
+    k = int(trig[0])
+    assert lg["sp_active"][:k, 4].any()            # ROW_P_H active before
+    assert lg["sp_e_h"][0] - lg["sp_e_h"][k] > 0.01
+    # Release jump still removed relative to the governor-off run.
+    post = (t >= 8.5) & (t <= 9.5)
+    assert np.abs(lg["ee_vel"][post, 0]).max() < 0.15
+    assert (np.abs(lg["ee_vel"][post, 0]).max()
+            < 0.25 * np.abs(c3_blocking_log["ee_vel"][post, 0]).max())

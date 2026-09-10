@@ -1,25 +1,35 @@
 % ---------------------------------------------------------------------------
-% Standalone wrapper: compiles the Results section on its own.
-% Set this file as the "Main document" in Overleaf (Menu -> Settings).
-%
-% For the full paper, ignore this file and \input{results_section} from your
-% own main file instead (it defines a \label{sec:task} stub below only so
-% the standalone build has no unresolved references).
+% Standalone PoC report. The setup and its two figures are defined here;
+% the results are imported from results_section.tex. Set this file as the
+% "Main document" in Overleaf (Menu -> Settings).
 % ---------------------------------------------------------------------------
-\documentclass[10pt]{article}             % single column; swap class as needed
+\documentclass[11pt]{article}
 
-\usepackage[margin=2.2cm]{geometry}
+\usepackage[margin=2.4cm]{geometry}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath}
+\usepackage{microtype}
+\usepackage{placeins}   % \FloatBarrier: keep figures in their section
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
 
 % The narrow figures were designed at 3.4 in (two-column width). In this
 % single-column layout, render them near design size instead of stretching
 % to the full text width; wide figures still use the full width.
-\newcommand{\figwidth}{0.55\textwidth}
+\newcommand{\figwidth}{0.72\textwidth}
+% Wide figures behave as ordinary floats in this one-column standalone file.
+% results_section.tex falls back to figure* when imported into a paper.
+\newenvironment{widefigure}[1][!htbp]
+  {\begin{figure}[#1]}
+  {\end{figure}}
+\newenvironment{widetable}[1][!htbp]
+  {\begin{table}[#1]}
+  {\end{table}}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\textfraction}{0.05}
 
-\title{Contact-Model-Aware Selective Passivation:\\Results}
+\title{Contact-Model-Aware Selective Passivation\\
+\large A Proof-of-Concept Study}
 \author{}
 \date{}
 
@@ -27,19 +37,42 @@
 
 \maketitle
 
-% Stub setup section so \ref{sec:task} in the results text resolves when
-% compiling standalone; replace with (or remove in favor of) the real task
-% section of the full paper.
-\section{Experimental setup (stub)}
+\section{Proof-of-concept setup}
 \label{sec:task}
-Planar two-link MuJoCo robot pressing a spherical pad on a horizontal
-surface: desired normal force $F_n^d = 5$~N, desired tangential sliding
-speed $v_t^d = 0.05$~m/s, control rate 1~kHz, surface friction
-$\mu \approx 0.30$. A scripted human wrench $\mathbf{w}_H$ acts at the
-end-effector. Controller modes C0--C4, the energy-ledger parameters, and
-the QP rows are those of the PoC implementation document; this stub exists
-only so the standalone build compiles with resolved references.
+A planar two-link robot presses a spherical pad against a horizontal surface
+while tracking a normal force of $F_n^d=5$~N and a tangential velocity of
+$v_t^d=0.05$~m/s. Control runs at 1~kHz, and the nominal surface friction is
+$\mu\approx0.30$. Scripted helping and blocking forces act at the end
+effector.
 
+The measured interaction is separated into a predicted task-contact wrench,
+a model-error residual, and the known human wrench. The controller maintains
+separate residual and human energy ledgers and filters the two-dimensional
+tangential--normal command when a power or energy bound becomes active. The
+human force is assumed known in this study; the objective is to evaluate the
+control architecture independently of sensing uncertainty.
+
+\begin{widefigure}[!htbp]
+  \centering
+  \includegraphics[width=\textwidth]{figs/fig1_setup.pdf}
+  \caption{Proof-of-concept task. (a) Planar abstraction with the task-contact
+  and human wrenches. (b) MuJoCo visualization at $t=7.0$~s during the
+  3-N blocking interaction.}
+  \label{fig:setup}
+\end{widefigure}
+
+\begin{widefigure}[!htbp]
+  \centering
+  \includegraphics[width=\textwidth]{figs/fig2_architecture.pdf}
+  \caption{Controller architecture. The contact model removes predictable
+  task wrench from the measured interaction. Residual and human power feed
+  separate energy ledgers, whose limits constrain the task-weighted command
+  filter. The reference governor, enabled only in C4, changes the nominal
+  tangential reference but not the passivity certificate.}
+  \label{fig:overview}
+\end{widefigure}
+
+\FloatBarrier
 \input{results_section}
 
 \end{document}

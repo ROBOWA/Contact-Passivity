@@ -43,22 +43,43 @@ EE_SITE = "ee_site"
 EE_BODY = "link2"  # body carrying the pad geom and the ee site
 
 
+#: Reference-governor variants (see ReferenceGovernor).
+GOVERNOR_MODES = ("continuous_rebase", "stop_time_anchor")
+
+
 @dataclass
 class GovernorConfig:
     """Tangential moving-reference governor (task/recovery policy).
 
-    Freezes the governed reference while the human interacts (perfect
-    sensing: |F_H| > f_detect, or a human safety row active on the previous
-    step), continuously rebases it onto the end-effector, and ramps back to
-    v_d after release. It shapes the NOMINAL task reference only — physical
-    port powers p_H = F_H^T v_ee etc. are untouched, and the governor is NOT
-    part of the passivity certificate.
+    Engaged by the human-energy CBF row (never by force detection alone),
+    it shapes the NOMINAL task reference only — physical port powers
+    p_H = F_H^T v_ee etc. are untouched, and the governor is NOT part of
+    the passivity certificate.
+
+    Two variants:
+
+    ``continuous_rebase`` (original): v_g decays exponentially toward zero
+        while x_g is continuously pulled onto the MOVING end-effector,
+        x_g+ = x_g + dt (v_g + k_rebase (x - x_g)). This removes tangential
+        position stiffness, so a sustained blocking force makes the robot
+        retreat continuously (measured -33 mm over a 2-s block) and the
+        human port does net positive work, recharging E_H to its cap.
+
+    ``stop_time_anchor`` (proposed): on trigger the governed velocity
+        follows a finite cosine deceleration to EXACTLY zero over
+        ``t_decel`` while the rebase term is faded in with a smoothstep;
+        the governed position at that stopping instant is captured once as
+        a FIXED anchor x_a, held for the rest of the interaction. Keeping a
+        fixed anchor retains position stiffness K_p (x_a - x), so the
+        interaction settles at a bounded displacement instead of retreating.
     """
 
     enabled: bool = False
+    mode: str = "stop_time_anchor"      # final C3; see GOVERNOR_MODES
     f_detect: float = 0.1               # human-force detection threshold [N]
-    v_decay_tau: float = 0.1            # v_g -> 0 time constant on entry [s]
-    k_rebase: float = 10.0              # x_g -> x_ee rebase rate [1/s]
+    v_decay_tau: float = 0.1            # continuous_rebase: v_g decay time [s]
+    k_rebase: float = 10.0              # x_g rebase rate [1/s]
+    t_decel: float = 0.4                # stop_time_anchor: DECEL duration [s]
     t_resume: float = 0.75              # cosine ramp 0 -> v_d after release [s]
     clear_dwell: float = 0.1            # human-absent dwell before resuming [s]
 

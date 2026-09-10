@@ -596,7 +596,8 @@ _SP_SCALAR_KEYS = [
     "sp_safety_clipped",      # post-QP safety clip changed tau (emergency
                               # path only; must never fire on feasible sols)
     # Reference-governor bookkeeping.
-    "sp_gov_active", "sp_gov_mode", "sp_x_ref_original",
+    "sp_gov_active", "sp_gov_mode", "sp_gov_anchor",
+    "sp_x_ref_original",
 ]
 _SP_VEC_KEYS = {
     "sp_u_nom": 2, "sp_u": 2, "sp_tau_nom": 2, "sp_tau": 2,
@@ -655,7 +656,11 @@ class PassivationRuntime:
         self.n_bound_violations = 0
         self.n_floor_violations = 0     # certified ledgers only
         self.n_safety_clipped = 0
-        self._prev_human_row_active = False
+        # Human-energy CBF row (ROW_CBF_H) active status from the PREVIOUS QP
+        # step, fed to the reference governor's latch. Using the previous
+        # step avoids an algebraic loop: the governor shapes u_nom, which the
+        # QP then filters, so its own CBF status is only known afterwards.
+        self._prev_cbf_h_active = False
         self.log: dict[str, list] = {k: [] for k in
                                      list(_SP_SCALAR_KEYS) + list(_SP_VEC_KEYS)}
         self._pending: dict | None = None
@@ -676,7 +681,7 @@ class PassivationRuntime:
         out = controller.update(
             data, contact, integrate=False,
             f_h_norm=float(np.linalg.norm(f_h)),
-            human_constraint_active=self._prev_human_row_active,
+            cbf_h_active_prev=self._prev_cbf_h_active,
         )
         u_nom = B_TN.T @ out.f_cmd
 
@@ -742,10 +747,11 @@ class PassivationRuntime:
             tau = tau_box
 
         self.tau_prev = tau.copy()
-        self._prev_human_row_active = bool(
-            sol.active[ROW_E_H] or sol.active[ROW_CBF_H]
-            or sol.active[ROW_P_H]) if cfg.mode in MODES_HUMAN_ROWS else False
-
+        # Latch the human-energy CBF row's active status for the NEXT step's
+        # governor decision (previous-step feedback, no algebraic loop).
+        # Only meaningful for modes that carry the human rows.
+        self._prev_cbf_h_active = bool(
+            cfg.mode in MODES_HUMAN_ROWS and sol.active[ROW_CBF_H])
         # PI anti-windup by integrator freezing: skip the force-error
         # integration whenever the filtered normal command deviates from
         # the nominal one.
@@ -871,6 +877,7 @@ class PassivationRuntime:
         out = pend["out"]
         log["sp_gov_active"].append(out.governor_active)
         log["sp_gov_mode"].append(out.governor_mode)
+        log["sp_gov_anchor"].append(out.governor_anchor)
         log["sp_x_ref_original"].append(out.x_ref_original)
 
     # ------------------------------------------------------------------
