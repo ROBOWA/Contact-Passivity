@@ -1,0 +1,125 @@
+{
+  "duration": 5.2,
+  "seed": 7,
+  "plant": {
+    "timestep": 0.001,
+    "contact_layout": "multipoint",
+    "contact_time_constant": 0.1,
+    "contact_damping_ratio": 1.0,
+    "contact_impedance": [
+      0.05,
+      0.95,
+      0.005
+    ],
+    "contact_margin": 0.001
+  },
+  "controller": {
+    "f_desired": 5.0,
+    "approach_speed": 0.035,
+    "contact_gap": 0.003,
+    "ramp_duration": 0.8,
+    "settle_duration": 0.4,
+    "slide_speed": 0.03,
+    "slide_ramp_duration": 0.6,
+    "trajectory": "straight",
+    "straight_length": 0.12,
+    "wipe_radii": [
+      0.055,
+      0.035
+    ],
+    "wipe_period": 8.0,
+    "kp_approach": 350.0,
+    "kd_translation": 35.0,
+    "kp_tangent": 1200.0,
+    "kd_tangent": 70.0,
+    "k_force": 0.3,
+    "ki_force": 3.0,
+    "d_force": 24.0,
+    "force_filter_time": 0.07,
+    "integral_limit": 10.0,
+    "kp_orientation": 55.0,
+    "kd_orientation": 9.0,
+    "kp_posture": 4.0,
+    "kd_joint": 1.5,
+    "torque_rate": [
+      1000,
+      1000,
+      1000,
+      1000,
+      500,
+      500,
+      500
+    ],
+    "qvel_limit": [
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.4,
+      2.4,
+      2.4
+    ],
+    "joint_margin": 0.03,
+    "governor": {
+      "enabled": false,
+      "decel_time": 0.35,
+      "resume_time": 0.75,
+      "release_dwell": 0.15
+    }
+  },
+  "human": {
+    "enabled": false,
+    "location": "tool",
+    "magnitude": 7.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "start": 3.8,
+    "rise": 0.3,
+    "hold": 1.2,
+    "fall": 0.3
+  },
+  "passivation": {
+    "mode": "C0_nominal",
+    "predictor": "oracle",
+    "mu_hat": 0.35,
+    "normal_scale": 1.0,
+    "dynamics_mass_scale": 1.0,
+    "friction_v_s": 0.006,
+    "residual": {
+      "e_init": 0.3,
+      "e_min": 0.02,
+      "e_max": 0.5
+    },
+    "human": {
+      "e_init": 0.055,
+      "e_min": 0.005,
+      "e_max": 0.1
+    },
+    "whole": {
+      "e_init": 0.3,
+      "e_min": 0.02,
+      "e_max": 0.5
+    },
+    "eps_energy": 0.0002,
+    "p_h_max": 0.18,
+    "k_cbf": 8.0,
+    "qvel_prediction_bound": 0.003,
+    "w_tau": [
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2
+    ],
+    "w_task_tangent": 10000.0,
+    "w_task_normal": 50000.0,
+    "w_task_orientation": 10000.0,
+    "activation_tol": 0.001,
+    "emergency_damping": 12.0
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "nominal_straight_targets": true,
+  "nominal_wipe_targets": true,
+  "c3_zero_protected_floor_violations": true,
+  "c3_zero_fallbacks": true,
+  "c3_evaluation_prediction_bound_violations": 0,
+  "all_mode_evaluation_prediction_bound_violations": 228,
+  "whole_port_small_budget_acceptance": false,
+  "whole_port_failure_is_reported": true
+}

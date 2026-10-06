@@ -1,0 +1,34 @@
+{
+  "original": {
+    "force_rmse_N": 0.26719452938729443,
+    "planar_rmse_mm": 3.657376966207153,
+    "onset_acceleration_p99_m_s2": 1.4217838304745916,
+    "steady_acceleration_p99_m_s2": 1.4001588181985154,
+    "steady_jerk_p99_m_s3": 2414.726629855221,
+    "torque_rate_norm_p99_Nm_s": 58.456192258331285,
+    "normal_velocity_std_mm_s": 1.4946175753247704,
+    "raw_contact_occupancy": 0.48340154615734426,
+    "mean_contact_points": 0.48340154615734426,
+    "multi_contact_fraction": 0.0,
+    "raw_force_std_N": 5.3138082416465275,
+    "raw_force_peak_N": 12.639259834363619,
+    "raw_force_step_rms_N": 5.263253707706991,
+    "filtered_force_std_N": 0.16213195194285349
+  },
+  "revised": {
+    "force_rmse_N": 0.2626651964251122,
+    "planar_rmse_mm": 3.4024366305844564,
+    "onset_acceleration_p99_m_s2": 0.10812763003765279,
+    "steady_acceleration_p99_m_s2": 0.00549114479528413,
+    "steady_jerk_p99_m_s3": 0.10797457860102742,
+    "torque_rate_norm_p99_Nm_s": 3.9009381128199165,
+    "normal_velocity_std_mm_s": 0.1745173712350431,
+    "raw_contact_occupancy": 1.0,
+    "mean_contact_points": 2.0,
+    "multi_contact_fraction": 1.0,
+    "raw_force_std_N": 0.10109339888530294,
+    "raw_force_peak_N": 5.544574543800787,
+    "raw_force_step_rms_N": 0.0003443115737282457,
+    "filtered_force_std_N": 0.11566587055041444
+  }
+}

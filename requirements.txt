@@ -2,6 +2,7 @@
 mujoco>=3.3.0
 numpy
 matplotlib
+imageio
 imageio-ffmpeg
 
 # Selective-passivation QP layer

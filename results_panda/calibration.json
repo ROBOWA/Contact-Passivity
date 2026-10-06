@@ -1,0 +1,7 @@
+{
+  "calibration_scenarios": 4,
+  "observed_max_rad_s": 0.0021801658743178898,
+  "frozen_bound_rad_s": 0.003,
+  "covered": true,
+  "note": "Evidence for these tested conditions only; not a universal bound."
+}
