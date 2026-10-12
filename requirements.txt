@@ -1,13 +1,3 @@
-# Planar contact-sliding simulation (mujoco_sliding)
-mujoco>=3.3.0
-numpy
-matplotlib
-imageio
-imageio-ffmpeg
-
-# Selective-passivation QP layer
-scipy
-osqp>=1.0
-
-# Tests
-pytest
+# Versions actually tested for the KUKA table scene (macOS 26.2 arm64, Python 3.13.5).
+mujoco==3.15.0
+numpy==2.5.4

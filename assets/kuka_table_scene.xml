@@ -1,0 +1,60 @@
+<!--
+  KUKA iiwa14 above a stationary table.
+
+  World frame: right-handed, z up, origin at the centre of the robot mounting
+  plate (the base of the iiwa14 "base" link). +x points from the robot toward
+  the table. SI units (m, kg, s, N, rad).
+
+  Layout (all static, see README for the table of numbers):
+    floor      plane at z = -0.55
+    pedestal   box 0.30 x 0.30 x 0.55, top face at z = 0, carrying the robot
+    tabletop   box 0.60 (x) x 0.80 (y) x 0.04, top surface at z = +0.15,
+               centred at x = 0.65, y = 0  (spans x in [0.35, 0.95])
+    table legs four 0.04 x 0.04 boxes from the floor to the tabletop underside
+-->
+<mujoco model="kuka_table_scene">
+  <include file="iiwa14_torque.xml"/>
+
+  <!-- timestep is also set from Python (TimingConfig); the value here is the documented default. -->
+  <option integrator="implicitfast" timestep="0.00025" gravity="0 0 -9.81"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="140" elevation="-20" offwidth="1280" offheight="720"/>
+  </visual>
+
+  <!-- Free-camera framing used by the viewer when no fixed camera is selected. -->
+  <statistic center="0.35 0 0.05" extent="1.6"/>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
+      markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+    <material name="table_top" rgba="0.72 0.58 0.40 1"/>
+    <material name="table_leg" rgba="0.35 0.35 0.38 1"/>
+    <material name="pedestal" rgba="0.25 0.25 0.28 1"/>
+  </asset>
+
+  <worldbody>
+    <light name="top" pos="0 0 2" dir="0 0 -1" directional="true"/>
+    <light name="fill" pos="1.5 -1.5 1.5" dir="-0.6 0.6 -0.5" directional="true" diffuse="0.3 0.3 0.3"/>
+
+    <geom name="floor" type="plane" pos="0 0 -0.55" size="0 0 0.05" material="groundplane"/>
+
+    <geom name="pedestal" type="box" pos="0 0 -0.275" size="0.15 0.15 0.275" material="pedestal"/>
+
+    <body name="table" pos="0.65 0 0">
+      <geom name="tabletop" type="box" pos="0 0 0.13" size="0.30 0.40 0.02" material="table_top"/>
+      <geom name="table_leg_1" type="box" pos=" 0.27  0.37 -0.22" size="0.02 0.02 0.33" material="table_leg"/>
+      <geom name="table_leg_2" type="box" pos=" 0.27 -0.37 -0.22" size="0.02 0.02 0.33" material="table_leg"/>
+      <geom name="table_leg_3" type="box" pos="-0.27  0.37 -0.22" size="0.02 0.02 0.33" material="table_leg"/>
+      <geom name="table_leg_4" type="box" pos="-0.27 -0.37 -0.22" size="0.02 0.02 0.33" material="table_leg"/>
+    </body>
+
+    <!-- Default camera: whole robot plus usable tabletop. xyaxes computed offline from
+         pos and the look-at point (0.35, 0, 0.05) with world z as up. -->
+    <camera name="overview" pos="1.75 -1.65 0.8" xyaxes="0.7550 0.6557 0 -0.2098 0.2416 0.9474" fovy="45"/>
+  </worldbody>
+</mujoco>

@@ -5,3 +5,6 @@ results_human/
 MUJOCO_LOG.TXT
 results_passivation*/
 .DS_Store
+.venv/
+*.egg-info/
+.pytest_cache/
