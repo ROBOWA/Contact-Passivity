@@ -1,0 +1,40 @@
+<!--
+  Spherical polishing tool with FT-sensor housing, mounted on the iiwa14 flange.
+  Included from iiwa14_torque.xml inside the `link7` body; the mesh assets are
+  declared there. Geometry copied from the MEAM 6230 Panda demo
+  (assets/polishing_tool/SOURCE.md). Offsets along the flange z-axis:
+
+      flange face           z = 0        (body `tool_mount`)
+      FT-sensor top face    z = 0.035    (body `ft_sensor`, site `ft_site`)
+      tip sphere centre     z = 0.172    (site `tcp`, geom `tool_tip`, radius 0.009)
+
+  Changes relative to the Panda demo:
+    * the intermediate `attachment` body (45 deg z-rotation, Panda hand
+      convention) is flattened into a plain z-offset; a sphere tip has no
+      orientation, so nothing is lost;
+    * the tool bodies get plausible masses instead of 0 (assumed values,
+      not measured: 0.30 kg sensor, 0.20 kg shaft) so gravity compensation
+      and the mass matrix see the tool;
+    * the FT-sensor collision cylinder is enabled (it is welded to link7, so
+      it cannot self-collide with link7) and the tip sphere uses the default
+      collision mask so it collides with the table like every other geom;
+    * the shaft mesh stays visual-only, as in the original.
+-->
+<mujoco>
+  <body name="tool_mount" pos="0 0 0.045">
+    <body name="ft_sensor" pos="0 0 0.035">
+      <inertial mass="0.30" pos="0 0 -0.0175" diaginertia="1.5e-4 1.5e-4 2.1e-4"/>
+      <geom class="visual" mesh="ft_sensor" material="tool_black"/>
+      <geom name="ft_sensor_collision" class="collision" type="cylinder" pos="0 0 -0.0175" size="0.0375 0.0175"/>
+      <site name="ft_site" pos="0 0 0" size="0.004" rgba="1 0 0 1" group="1"/>
+      <body name="sphere_tool" pos="0 0 0">
+        <inertial mass="0.20" pos="0 0 0.07" diaginertia="4e-4 4e-4 1e-4"/>
+        <geom class="visual" mesh="sphere_tool" material="tool_steel"/>
+        <!-- Tool centre point: tip sphere centre, 0.137 m above the sensor top face. -->
+        <site name="tcp" pos="0 0 0.137" size="0.004" rgba="0 1 0 1" group="1"/>
+        <geom name="tool_tip" class="collision" type="sphere" pos="0 0 0.137" size="0.009"
+              friction="0.8 0.005 0.0001" rgba="0.9 0.2 0.2 1" group="0"/>
+      </body>
+    </body>
+  </body>
+</mujoco>

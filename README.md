@@ -2,8 +2,9 @@
 
 Milestone 1 of the contact-passivity simulation rebuild: a KUKA LBR iiwa 14
 standing above a stationary table in MuJoCo, driven by seven joint-torque
-actuators and held in place by a gravity-compensated joint PD controller.
-Nothing else is implemented yet (no gripper, object, contact task, Cartesian
+actuators and held in place by a gravity-compensated joint PD controller. The
+spherical polishing tool from the MEAM 6230 Panda project is mounted on the
+flange. Nothing else is implemented yet (no object, contact task, Cartesian
 impedance, force control, or hardware interface).
 
 ![KUKA iiwa14 above the table](docs/kuka_table_scene.png)
@@ -31,6 +32,8 @@ pip install -r requirements.txt        # pinned, tested versions
 Robot meshes and the MJCF are vendored under `assets/kuka_iiwa_14/`, so no
 download happens at launch. The pinned upstream commit and the re-vendoring
 recipe are in [assets/kuka_iiwa_14/SOURCE.md](assets/kuka_iiwa_14/SOURCE.md).
+The tool meshes are under `assets/polishing_tool/` with their own
+[SOURCE.md](assets/polishing_tool/SOURCE.md).
 
 ## Running
 
@@ -75,16 +78,38 @@ imports `mujoco.viewer`.
 | Tabletop | box 0.60 (x) x 0.80 (y) x 0.04 m, centred at (0.65, 0, 0.13) m, **top surface z = +0.15 m**, spans x in [0.35, 0.95] m, y in [-0.40, 0.40] m |
 | Table legs | four 0.04 x 0.04 m boxes from the floor to the tabletop underside, at (0.65 +/- 0.27, +/- 0.37) m |
 | Collision | floor, pedestal and all table geoms collide with the robot's collision spheres; the seven upstream adjacent-link `<exclude>` pairs are kept, nothing else is disabled |
-| Initial pose `q_home` (rad) | `[0, 0.6, 0, -1.6, 0, 0.942, 0]` (keyframe `home`) |
-| TCP at `q_home` | position (0.5605, 0, 0.3452) m, z-axis (0, 0, -1) within 5e-4, i.e. flange pointing straight down, 0.195 m above the tabletop, 0.21 m inside the near table edge |
-| Joint-limit margin at `q_home` | min 0.494 rad (joint 4) |
+| Initial pose `q_home` (rad) | `[0, 0.43, 0, -1.51, 0, 1.2, 0]` (keyframe `home`) |
+| Flange at `q_home` | position (0.5483, 0, 0.4714) m, z-axis (0, 0, -1) within 2e-3, i.e. tool pointing straight down |
+| TCP (tool tip centre) at `q_home` | (0.5486, 0, 0.2994) m; tip surface 0.140 m above the tabletop, 0.20 m inside the near table edge |
+| Joint-limit margin at `q_home` | min 0.584 rad (joint 4) |
 | Contacts at `q_home` | none |
-| `tcp` site | on `link7` at (0, 0, 0.045) m, same frame as the upstream `attachment_site`: origin at the flange face centre, z-axis along the joint-7 axis pointing out of the flange, x/y parallel to the `link7` frame |
+| `flange` site | on `link7` at (0, 0, 0.045) m, same frame as the upstream `attachment_site`: origin at the flange face centre, z-axis along the joint-7 axis pointing out of the flange, x/y parallel to the `link7` frame |
+| `tcp` site | centre of the 9 mm tip sphere, 0.172 m from the flange along its z-axis (see Tool below); contact point with a flat surface is 0.009 m further along the surface normal |
 | Cameras | free camera framed by `<statistic center="0.35 0 0.05" extent="1.6">` and `<visual><global azimuth="140" elevation="-20">` (viewer default); fixed `overview` camera at (1.75, -1.65, 0.80) m looking at (0.35, 0, 0.05) m (used for offscreen renders and `--camera overview`) |
 
 Files: `assets/kuka_table_scene.xml` (world, table, lights, camera),
 `assets/iiwa14_torque.xml` (robot, derived from upstream, changes listed in its
-header comment), `assets/kuka_iiwa_14/` (verbatim upstream copy plus license).
+header comment), `assets/polishing_tool.xml` (tool stack, included inside
+`link7`), `assets/kuka_iiwa_14/` (verbatim upstream copy plus license).
+
+## Tool
+
+The end-effector is the spherical polishing tool from the MEAM 6230 Panda
+polishing project, re-mounted on the iiwa14 flange with the same offsets it had
+beyond the Panda flange ([assets/polishing_tool/SOURCE.md](assets/polishing_tool/SOURCE.md)):
+
+| Body / element | Position along flange z | Notes |
+| --- | --- | --- |
+| `tool_mount` | 0 | flange frame |
+| `ft_sensor`, site `ft_site` | +0.035 m (sensor top face) | housing mesh (visual), collision cylinder r = 0.0375 m, h = 0.035 m below the top face; welded to `link7`, so it never self-collides with it |
+| `sphere_tool` | +0.035 m | shaft mesh, visual only (as in the original) |
+| `tool_tip` geom, site `tcp` | +0.172 m | sphere r = 0.009 m, friction `0.8 0.005 0.0001` from the original, collides with the table like every other geom |
+
+Masses are assumed (0.30 kg sensor, 0.20 kg shaft; the original used 0) so
+gravity compensation and the mass matrix include the tool. The Panda demo's
+intermediate `attachment` body with its 45 degree z-rotation was flattened into
+a plain offset; a sphere tip has no orientation. No force sensor element is
+defined yet; `ft_site` is there so one can be added later.
 
 ## Model source
 
@@ -163,8 +188,8 @@ timestep. Headless runs do not sleep at all.
 
 * model structure: 7 hinge joints, 7 unit-gear torque motors mapped one-to-one,
   torque limits present;
-* initial pose: no contacts, >= 0.1 rad from every joint limit, TCP above the
-  tabletop and inside its footprint;
+* initial pose: no contacts, >= 0.1 rad from every joint limit, tool tip at
+  least 0.05 m above the tabletop and inside its footprint;
 * 10 s unperturbed hold with gravity on: finite state, no new MuJoCo warnings,
   no joint-limit hits, no robot contacts with anything, no sustained torque
   saturation, max `|q - q_home| < 0.01 rad`;
@@ -179,10 +204,10 @@ Results on the tested platform (2026-10-12):
 | Check | Result |
 | --- | --- |
 | 10 s hold, max `|q - q_home|` | 0.0 rad (exact compensation from the same state gives zero acceleration) |
-| 10 s hold, max `|tau|` | 50.4 N m on joint 2 (gravity), no saturation |
+| 10 s hold, max `|tau|` | 47.6 N m on joint 2 (gravity), no saturation |
 | Contacts / warnings / limit hits | none |
-| Controller off, 0.5 s | max deviation 2.13 rad (arm falls) |
-| Start +0.05 rad on all joints | within 0.01 rad after 0.339 s, final deviation 3e-9 rad, no contacts |
+| Controller off, 0.5 s | max deviation 1.68 rad (arm falls) |
+| Start +0.05 rad on all joints | within 0.01 rad after 0.330 s, final deviation 9e-9 rad, no contacts |
 | Reset | `t = 0`, `q == q_home`, replay identical |
 | Wall-clock | 10 s simulated in ~0.7 s |
 | Viewer | launches under `mjpython` (mujoco 3.15.0 and 3.3.7), free camera, Ctrl-C exits cleanly |
@@ -191,8 +216,10 @@ Results on the tested platform (2026-10-12):
 
 ```
 assets/kuka_table_scene.xml   world: floor, pedestal, table, lights, camera (includes the robot)
-assets/iiwa14_torque.xml      iiwa14 with torque motors, tcp site, home keyframe
+assets/iiwa14_torque.xml      iiwa14 with torque motors, flange site, home keyframe, tool include
+assets/polishing_tool.xml     FT-sensor housing + shaft + 9 mm tip sphere (tcp site)
 assets/kuka_iiwa_14/          vendored Menagerie model + LICENSE + SOURCE.md
+assets/polishing_tool/        tool meshes + SOURCE.md
 kuka_table_sim/scene.py       paths, TimingConfig, ArmIndex (joint/actuator mapping checks)
 kuka_table_sim/holding.py     HoldingController, Simulation (reset, mj_step1/step2 scheduling)
 kuka_table_sim/run.py         CLI: headless validation / render, interactive viewer

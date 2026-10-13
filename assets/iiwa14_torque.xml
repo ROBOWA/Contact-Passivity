@@ -7,7 +7,7 @@
   spheres and the adjacent-link <contact><exclude> list are copied verbatim.
 
   Changes relative to upstream:
-    * meshdir points at the vendored upstream assets directory.
+    * meshdir is the assets directory; mesh paths are prefixed with kuka_iiwa_14/assets/.
     * <option> and the tracking light are removed; the scene file owns those.
     * The position-servo actuator defaults (<general gaintype="fixed"
       biastype="affine" gainprm="2000" biasprm="0 -2000 -200">) and the
@@ -16,7 +16,8 @@
       actuators with gear="1", one per joint in order, so ctrl[i] is the torque
       on joint (i+1) in N*m. ctrlrange sets the simulation torque limit.
     * The keyframe carries only qpos (no position-command ctrl values).
-    * A site named "tcp" is added at the flange centre of link7.
+    * A site named "flange" is added at the flange centre of link7 and the
+      polishing tool (polishing_tool.xml) is included there; it defines "tcp".
 
   Torque limits (N*m): 320 320 176 176 110 40 40. Source: KUKA LBR iiwa 14 R820
   technical data (joint torque limits A1..A7), the same spec sheet cited by the
@@ -24,7 +25,7 @@
   nothing in this project certifies them against hardware.
 -->
 <mujoco model="iiwa14_torque">
-  <compiler angle="radian" meshdir="kuka_iiwa_14/assets" autolimits="true"/>
+  <compiler angle="radian" meshdir="." autolimits="true"/>
 
   <default>
     <default class="iiwa">
@@ -55,19 +56,25 @@
     <material class="iiwa" name="black" rgba="0 0 0 1"/>
     <material class="iiwa" name="orange" rgba="1 0.423529 0.0392157 1"/>
 
-    <mesh file="link_0.obj"/>
-    <mesh file="link_1.obj"/>
-    <mesh file="link_2_orange.obj"/>
-    <mesh file="link_2_grey.obj"/>
-    <mesh file="link_3.obj"/>
-    <mesh file="band.obj"/>
-    <mesh file="kuka.obj"/>
-    <mesh file="link_4_orange.obj"/>
-    <mesh file="link_4_grey.obj"/>
-    <mesh file="link_5.obj"/>
-    <mesh file="link_6_orange.obj"/>
-    <mesh file="link_6_grey.obj"/>
-    <mesh file="link_7.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_0.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_1.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_2_orange.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_2_grey.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_3.obj"/>
+    <mesh file="kuka_iiwa_14/assets/band.obj"/>
+    <mesh file="kuka_iiwa_14/assets/kuka.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_4_orange.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_4_grey.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_5.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_6_orange.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_6_grey.obj"/>
+    <mesh file="kuka_iiwa_14/assets/link_7.obj"/>
+
+    <!-- Polishing tool (assets/polishing_tool/SOURCE.md) -->
+    <material name="tool_black" rgba="0.12 0.12 0.12 1" specular="0.3" shininess="0.3"/>
+    <material name="tool_steel" rgba="0.70 0.70 0.72 1" specular="0.6" shininess="0.5"/>
+    <mesh name="ft_sensor" file="polishing_tool/ft_sensor.stl"/>
+    <mesh name="sphere_tool" file="polishing_tool/sphere_tool.stl"/>
   </asset>
 
   <worldbody>
@@ -158,11 +165,12 @@
                     <geom class="collision" size="0.06" pos="0 0 0.001"/>
                     <!-- Upstream flange site, kept for compatibility with Menagerie tooling. -->
                     <site pos="0 0 0.045" name="attachment_site"/>
-                    <!-- Tool centre point used by this project. It coincides with the
-                         flange: origin at the centre of the mounting face, 0.045 m along
-                         the joint-7 axis from the link7 origin, z-axis pointing out of
-                         the flange, x/y axes aligned with the link7 frame. -->
-                    <site name="tcp" pos="0 0 0.045" size="0.004" rgba="0 1 0 1" group="1"/>
+                    <!-- Flange frame: origin at the centre of the mounting face, 0.045 m along
+                         the joint-7 axis from the link7 origin, z-axis pointing out of the
+                         flange, x/y axes aligned with the link7 frame. -->
+                    <site name="flange" pos="0 0 0.045" size="0.004" rgba="1 1 0 1" group="1"/>
+                    <!-- Polishing tool stack; defines the `tcp` site at the tip sphere centre. -->
+                    <include file="polishing_tool.xml"/>
                   </body>
                 </body>
               </body>
@@ -198,6 +206,6 @@
   <!-- Initial configuration (rad), joints 1..7. ctrl is intentionally omitted:
        the holding controller writes torques, so the keyframe stores no commands. -->
   <keyframe>
-    <key name="home" qpos="0 0.6 0 -1.6 0 0.942 0"/>
+    <key name="home" qpos="0 0.43 0 -1.51 0 1.2 0"/>
   </keyframe>
 </mujoco>

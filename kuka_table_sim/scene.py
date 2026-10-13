@@ -13,9 +13,12 @@ SCENE_XML = ASSETS_DIR / "kuka_table_scene.xml"
 
 ARM_JOINTS = tuple(f"joint{i}" for i in range(1, 8))
 ARM_ACTUATORS = tuple(f"joint{i}_torque" for i in range(1, 8))
-ROBOT_BODIES = ("base", "link1", "link2", "link3", "link4", "link5", "link6", "link7")
+ROBOT_BODIES = ("base", "link1", "link2", "link3", "link4", "link5", "link6", "link7",
+                "tool_mount", "ft_sensor", "sphere_tool")
 HOME_KEYFRAME = "home"
-TCP_SITE = "tcp"
+FLANGE_SITE = "flange"   # centre of the iiwa14 mounting face, z out of the flange
+TCP_SITE = "tcp"         # centre of the polishing tool's tip sphere
+TOOL_TIP_GEOM = "tool_tip"
 OVERVIEW_CAMERA = "overview"
 
 

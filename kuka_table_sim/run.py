@@ -24,7 +24,8 @@ import mujoco
 import numpy as np
 
 from .holding import DEFAULT_HOLD_FREQ_HZ, DEFAULT_HOLD_ZETA, HoldingController, Simulation, inertia_scaled_gains
-from .scene import OVERVIEW_CAMERA, ROBOT_BODIES, SCENE_XML, TCP_SITE, ArmIndex, TimingConfig, home_qpos, load_model
+from .scene import (FLANGE_SITE, OVERVIEW_CAMERA, ROBOT_BODIES, SCENE_XML, TCP_SITE, TOOL_TIP_GEOM, ArmIndex,
+                    TimingConfig, home_qpos, load_model)
 
 
 # --------------------------------------------------------------------------- helpers
@@ -107,9 +108,13 @@ def run_headless(sim: Simulation, duration: float, render: Path | None, verbose:
     check(np.all(margin > 0.1), f"initial pose is within 0.1 rad of a joint limit: margins {margin}")
     tcp_pos0 = d.site_xpos[tcp].copy()
     tcp_z0 = d.site_xmat[tcp].reshape(3, 3)[:, 2].copy()
+    flange = m.site(FLANGE_SITE).id
+    flange_pos0 = d.site_xpos[flange].copy()
+    tip_radius = float(m.geom_size[m.geom(TOOL_TIP_GEOM).id][0])
     tabletop = m.geom("tabletop").id
     top_z = d.geom_xpos[tabletop][2] + m.geom_size[tabletop][2]
-    check(tcp_pos0[2] > top_z, "TCP is not above the tabletop surface")
+    tip_clearance = tcp_pos0[2] - tip_radius - top_z
+    check(tip_clearance > 0.05, f"tool tip is only {tip_clearance:.3f} m above the tabletop")
     half = m.geom_size[tabletop]
     centre = d.geom_xpos[tabletop]
     check(abs(tcp_pos0[0] - centre[0]) < half[0] and abs(tcp_pos0[1] - centre[1]) < half[1],
@@ -127,9 +132,10 @@ def run_headless(sim: Simulation, duration: float, render: Path | None, verbose:
               f"{mujoco.mjtIntegrator(m.opt.integrator).name}, gravity {m.opt.gravity}")
         print(f"q_home (rad)        : {np.array2string(sim.q_home, precision=3)}")
         print(f"joint-limit margin  : min {margin.min():.3f} rad")
-        print(f"TCP position (m)    : {np.array2string(tcp_pos0, precision=4)}  z-axis "
+        print(f"flange position (m) : {np.array2string(flange_pos0, precision=4)}  z-axis "
               f"{np.array2string(tcp_z0, precision=3)}")
-        print(f"tabletop top z (m)  : {top_z:.3f}  -> TCP clearance {tcp_pos0[2] - top_z:.3f} m")
+        print(f"TCP (tip centre, m) : {np.array2string(tcp_pos0, precision=4)}  tip radius {tip_radius:.3f}")
+        print(f"tabletop top z (m)  : {top_z:.3f}  -> tip surface clearance {tip_clearance:.3f} m")
         print(f"initial contacts    : {d.ncon}")
         print(f"gravity torque (N*m): {np.array2string(d.qfrc_bias[arm.dof_adr], precision=2)}")
         print(f"Kp (N*m/rad)        : {np.array2string(sim.controller.kp, precision=3)}")
