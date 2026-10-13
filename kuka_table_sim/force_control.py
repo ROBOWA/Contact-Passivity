@@ -35,6 +35,7 @@ import mujoco
 import numpy as np
 
 from .holding import full_mass_matrix
+from .ik import orientation_error
 from .scene import ArmIndex, TCP_SITE, TOOL_TIP_GEOM
 
 FT_FORCE_SENSOR = "ft_force"
@@ -121,15 +122,7 @@ class ForceApproachController:
 
     def orientation_error(self, rot: np.ndarray) -> np.ndarray:
         """Rotation vector (world frame) taking the current tool orientation to the desired one."""
-        quat = np.zeros(4)
-        mujoco.mju_mat2Quat(quat, rot.reshape(9))
-        quat_conj = np.zeros(4)
-        mujoco.mju_negQuat(quat_conj, quat)
-        quat_err = np.zeros(4)
-        mujoco.mju_mulQuat(quat_err, self.quat_d, quat_conj)
-        err = np.zeros(3)
-        mujoco.mju_quat2Vel(err, quat_err, 1.0)
-        return err
+        return orientation_error(self.quat_d, rot)
 
     def status(self) -> str:
         return (f"{self.phase:8s} f_n={self.f_n:6.2f} N  f_d={self.f_d:5.2f} N  "

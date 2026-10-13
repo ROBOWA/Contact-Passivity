@@ -3,6 +3,11 @@
     python   -m kuka_table_sim.run headless --duration 10 [--render out.png]
     python   -m kuka_table_sim.run --controller force headless --duration 12 [--log run.npz]
     mjpython -m kuka_table_sim.run [--controller force] viewer   # macOS; plain python elsewhere
+    python   -m kuka_table_sim.run ik --site tcp --pos 0.6 0.15 0.3 --rpy 0 180 0 [--render pose.png]
+    python   -m kuka_table_sim.run --init-site tcp --init-pos 0.6 0.15 0.3 --init-rpy 0 180 0 headless
+
+Any command accepts --init-site/--init-pos with --init-quat or --init-rpy: the
+initial state is then the IK solution for that site pose instead of the keyframe.
 
 `headless` runs the scene without any GUI, prints a validation report and exits
 non-zero if a check fails. `viewer` opens the passive MuJoCo viewer on the free camera (mouse orbits,
@@ -25,7 +30,8 @@ import mujoco
 import numpy as np
 
 from .force_control import APPROACH, CONTACT, ForceApproachController, ForceControlConfig
-from .holding import DEFAULT_HOLD_FREQ_HZ, DEFAULT_HOLD_ZETA, HoldingController, Simulation, inertia_scaled_gains
+from .holding import DEFAULT_HOLD_FREQ_HZ, DEFAULT_HOLD_ZETA, HoldingController, Simulation
+from .ik import quat_from_rpy, site_pose, solve_site_ik
 from .scene import (FLANGE_SITE, OVERVIEW_CAMERA, ROBOT_BODIES, SCENE_XML, TCP_SITE, TOOL_TIP_GEOM, ArmIndex,
                     TimingConfig, home_qpos, load_model)
 
@@ -496,9 +502,103 @@ def build_simulation(args: argparse.Namespace) -> Simulation:
                                  kp_force=args.kp_force, ki_force=args.ki_force)
         controller = ForceApproachController(model, arm, timing.control_period, cfg)
     else:
-        kp, kd = inertia_scaled_gains(model, arm, home_qpos(model, arm), args.hold_freq_hz, args.hold_zeta)
-        controller = HoldingController(arm, kp, kd)
-    return Simulation(model, timing, controller)
+        controller = HoldingController.inertia_scaled(model, arm, home_qpos(model, arm), args.hold_freq_hz, args.hold_zeta)
+    sim = Simulation(model, timing, controller)
+    if args.init_pos is not None:
+        rpy = args.init_rpy
+        quat = args.init_quat
+        result = sim.set_initial_pose(args.init_site, args.init_pos, quat, rpy_deg=rpy)
+        print(f"initial state from IK ({args.init_site} at {args.init_pos}): {result.summary()}", flush=True)
+    return sim
+
+
+def run_ik(args: argparse.Namespace) -> int:
+    model = load_model()
+    sim = Simulation(model)
+    if args.self_test:
+        return 0 if ik_self_test(sim) else 1
+    if args.pos is None:
+        print("ik: --pos is required (or --self-test)")
+        return 2
+    quat = quat_from_rpy(*args.rpy) if args.rpy is not None else args.quat
+    result = solve_site_ik(model, args.site, args.pos, quat, arm=sim.arm, q_seed=sim.q_home, q_pref=sim.q_home)
+    print(result.summary())
+    if not result.converged:
+        return 1
+    sim.set_home(result.q)
+    pos, q_now = site_pose(model, sim.data, args.site)
+    print(f"{args.site}: pos {np.array2string(pos, precision=4)} quat(wxyz) {np.array2string(q_now, precision=4)}; "
+          f"contacts at this pose: {sim.data.ncon}")
+    for pair in [(model.geom(c.geom1).name, model.geom(c.geom2).name) for c in sim.data.contact[:sim.data.ncon]]:
+        print("  contact:", pair)
+    print(f"keyframe line: <key name=\"home\" qpos=\"{' '.join(f'{v:.6g}' for v in result.q)}\"/>")
+    if args.render is not None:
+        render_overview(sim, args.render)
+        print(f"wrote {args.render}")
+    return 0 if sim.data.ncon == 0 else 1
+
+
+def ik_self_test(sim: Simulation, n_random: int = 50) -> bool:
+    """Round-trip, random reachable targets, position-only, unreachable target, joint limits."""
+    model, arm = sim.model, sim.arm
+    lo, hi = model.jnt_range[arm.joint_ids].T
+    ok = True
+    rng = np.random.default_rng(1)
+    data = mujoco.MjData(model)
+
+    def fk(q, site):
+        data.qpos[arm.qpos_adr] = q
+        mujoco.mj_kinematics(model, data)
+        mujoco.mj_comPos(model, data)
+        return site_pose(model, data, site)
+
+    # 1. round trip: home pose recovered from a seed perturbed by up to 0.3 rad per joint
+    pos, quat = fk(sim.q_home, TCP_SITE)
+    res = solve_site_ik(model, TCP_SITE, pos, quat, arm=arm, q_seed=sim.q_home + rng.uniform(-0.3, 0.3, 7), q_pref=sim.q_home)
+    p2, _ = fk(res.q, TCP_SITE)
+    print(f"round trip          : {res.summary()}\n                      |q - q_home| max {np.abs(res.q - sim.q_home).max():.2e} rad, "
+          f"FK pos err {np.linalg.norm(p2 - pos):.2e} m")
+    ok &= res.converged and np.abs(res.q - sim.q_home).max() < 1e-3
+    # 2. random reachable 6-DoF targets for several sites, seeded from home
+    for site in (TCP_SITE, FLANGE_SITE):
+        n_ok, worst_p, worst_o, iters = 0, 0.0, 0.0, []
+        for _ in range(n_random):
+            q_rand = lo + 0.1 * (hi - lo) + rng.random(7) * 0.8 * (hi - lo)
+            pos, quat = fk(q_rand, site)
+            res = solve_site_ik(model, site, pos, quat, arm=arm, q_seed=sim.q_home, q_pref=sim.q_home)
+            n_ok += res.converged
+            worst_p, worst_o = max(worst_p, res.pos_err), max(worst_o, res.ori_err)
+            iters.append(res.iterations)
+            ok &= np.all(res.q >= lo) and np.all(res.q <= hi)
+        print(f"random targets      : site {site:7s} {n_ok}/{n_random} converged, worst residual {worst_p:.1e} m / {worst_o:.1e} rad, "
+              f"iterations median {int(np.median(iters))} max {max(iters)}")
+        ok &= n_ok >= 0.95 * n_random
+    # 3. position-only
+    res = solve_site_ik(model, TCP_SITE, [0.45, 0.2, 0.35], None, arm=arm, q_seed=sim.q_home)
+    print(f"position only       : {res.summary()}")
+    ok &= res.converged
+    # 4. unreachable
+    res = solve_site_ik(model, TCP_SITE, [1.6, 0.0, 0.3], quat_from_rpy(0, 180, 0), arm=arm, q_seed=sim.q_home)
+    print(f"unreachable (1.6 m) : {res.summary()}")
+    ok &= not res.converged
+    # 5. set_initial_pose end to end, then restore
+    q_before = sim.q_home.copy()
+    res = sim.set_initial_pose(TCP_SITE, [0.60, 0.15, 0.30], rpy_deg=(0, 180, 0))
+    pos, quat = site_pose(model, sim.data, TCP_SITE)
+    print(f"set_initial_pose    : {res.summary()}\n                      tcp now at {np.array2string(pos, precision=4)}, "
+          f"contacts {sim.data.ncon}, t={sim.data.time}, keyframe updated: "
+          f"{np.allclose(model.key_qpos[model.key('home').id, arm.qpos_adr], res.q)}")
+    ok &= bool(np.linalg.norm(pos - [0.60, 0.15, 0.30]) < 1e-4 and sim.data.ncon == 0)
+    try:
+        sim.set_initial_pose(TCP_SITE, [0.60, 0.15, 0.145], rpy_deg=(0, 180, 0))  # tip 5 mm into the tabletop
+        print("contact rejection   : FAILED (pose below the table was accepted)")
+        ok = False
+    except ValueError as exc:
+        print(f"contact rejection   : OK ({str(exc)[:80]}...)")
+        ok &= bool(np.allclose(sim.q_home, res.q))   # restored to the previous valid home
+    sim.set_home(q_before)
+    print("== result ==\n" + ("PASS" if ok else "FAIL"))
+    return bool(ok)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -517,6 +617,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--approach-speed", type=float, default=fc.approach_speed, help="[force] descent speed, m/s")
     p.add_argument("--kp-force", type=float, default=fc.kp_force, help="[force] proportional force gain")
     p.add_argument("--ki-force", type=float, default=fc.ki_force, help="[force] integral force gain, 1/s")
+    p.add_argument("--init-site", default=TCP_SITE, help="site whose pose defines the initial state (with --init-pos)")
+    p.add_argument("--init-pos", type=float, nargs=3, metavar=("X", "Y", "Z"), default=None,
+                   help="initial state: solve IK so --init-site is at this world position (m)")
+    p.add_argument("--init-quat", type=float, nargs=4, metavar=("W", "X", "Y", "Z"), default=None,
+                   help="orientation for --init-pos as a quaternion (wxyz); omit both --init-quat/--init-rpy to leave it free")
+    p.add_argument("--init-rpy", type=float, nargs=3, metavar=("ROLL", "PITCH", "YAW"), default=None,
+                   help="orientation for --init-pos as roll/pitch/yaw in degrees, R = Rz(yaw) Ry(pitch) Rx(roll)")
     sub = p.add_subparsers(dest="cmd", required=True)
     h = sub.add_parser("headless", help="run without GUI and print the validation report")
     h.add_argument("--duration", type=float, default=10.0, help="simulated seconds")
@@ -527,7 +634,18 @@ def main(argv: list[str] | None = None) -> int:
     v.add_argument("--no-realtime", action="store_true", help="do not pace frames to wall-clock time")
     v.add_argument("--camera", choices=("free", "overview"), default="free",
                    help="start on the mouse-controllable free camera (default) or the fixed overview camera")
+    k = sub.add_parser("ik", help="solve IK for a site pose and print the joint configuration")
+    k.add_argument("--site", default=TCP_SITE)
+    k.add_argument("--pos", type=float, nargs=3, metavar=("X", "Y", "Z"), default=None)
+    k.add_argument("--quat", type=float, nargs=4, metavar=("W", "X", "Y", "Z"), default=None)
+    k.add_argument("--rpy", type=float, nargs=3, metavar=("ROLL", "PITCH", "YAW"), default=None, help="degrees")
+    k.add_argument("--render", type=Path, default=None, help="render the solved pose to a PNG")
+    k.add_argument("--self-test", action="store_true", help="run the IK consistency checks")
     args = p.parse_args(argv)
+    if args.init_pos is not None and args.init_quat is not None and args.init_rpy is not None:
+        p.error("use either --init-quat or --init-rpy")
+    if args.cmd == "ik":
+        return run_ik(args)
 
     sim = build_simulation(args)
     if args.cmd == "headless":

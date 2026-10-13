@@ -55,6 +55,12 @@ python -m kuka_table_sim.run viewer
 python   -m kuka_table_sim.run --controller force headless --duration 12 --log run.npz --render docs/kuka_force_hold.png
 mjpython -m kuka_table_sim.run --controller force viewer
 python   -m kuka_table_sim.run --controller force --force 15 --approach-speed 0.02 headless
+
+# Initial state from a site pose (IK): any command accepts --init-site/--init-pos + --init-rpy or --init-quat
+mjpython -m kuka_table_sim.run --init-site tcp --init-pos 0.6 0.15 0.3 --init-rpy 0 180 0 viewer
+python   -m kuka_table_sim.run --controller force --init-pos 0.6 0.15 0.3 --init-rpy 0 180 0 headless
+python   -m kuka_table_sim.run ik --site flange --pos 0.5 -0.1 0.45 --quat 0 0 1 0 --render pose.png
+python   -m kuka_table_sim.run ik --self-test
 ```
 
 Viewer controls: the viewer starts on MuJoCo's free camera, so the mouse
@@ -112,6 +118,7 @@ beyond the Panda flange ([assets/polishing_tool/SOURCE.md](assets/polishing_tool
 | `ft_sensor`, site `ft_site` | +0.035 m (sensor top face) | housing mesh (visual), collision cylinder r = 0.0375 m, h = 0.035 m below the top face; welded to `link7`, so it never self-collides with it |
 | `sphere_tool` | +0.035 m | shaft mesh, visual only (as in the original) |
 | `tool_tip` geom, site `tcp` | +0.172 m | sphere r = 0.009 m, friction `0.8 0.005 0.0001` from the original, collides with the table like every other geom |
+| shaft collision | +0.035 to +0.160 m | holder cylinder r = 0.028 m (20 mm) and capsule r = 0.008 m ending 13 mm before the tip sphere; inside the visual mesh |
 
 Masses are assumed (0.30 kg sensor, 0.20 kg shaft; the original used 0) so
 gravity compensation and the mass matrix include the tool. The Panda demo's
@@ -241,6 +248,60 @@ zero steady-state error is a property of the integral term; the commanded force
 settles about 0.4 N above the measured one, which is the coupling the integral
 absorbs.
 
+## Initial state from a site pose (IK API)
+
+`kuka_table_sim/ik.py` solves joint angles for a 6-DoF (or position-only) pose
+of any site (`tcp`, `flange`, `ft_site`, `attachment_site`), and
+`Simulation.set_initial_pose` makes that solution the initial state:
+
+```python
+from kuka_table_sim import Simulation, load_model
+from kuka_table_sim.ik import solve_site_ik, quat_from_rpy
+
+sim = Simulation(load_model())
+res = sim.set_initial_pose("tcp", [0.60, 0.15, 0.30], rpy_deg=(0, 180, 0))   # or quat=(w, x, y, z)
+print(res.summary())      # q, residuals, iterations, joint-limit margin
+sim.set_initial_pose("flange", [0.50, -0.10, 0.45], quat=[0, 0, 1, 0])
+sim.set_initial_pose("tcp", [0.45, 0.20, 0.35])                                 # orientation free
+
+res = solve_site_ik(sim.model, "tcp", [0.6, 0.0, 0.3], quat_from_rpy(0, 180, 0), q_seed=sim.q_home)  # solve only
+sim.set_home(res.q)                                                             # or set joints directly
+```
+
+* **Conventions.** Positions in m, world frame (origin at the robot base
+  plate, z up, +x toward the table). Quaternions are MuJoCo order (w, x, y, z).
+  `rpy_deg = (roll, pitch, yaw)` in degrees builds `R = Rz(yaw) Ry(pitch) Rx(roll)`
+  (fixed-axis x-y-z). The tool-down orientation of the default home is
+  `quat = (0, 0, 1, 0)`, i.e. `rpy = (0, 180, 0)`: tool z-axis along world -z,
+  tool x-axis along world -x.
+* **Solver.** Damped least squares on the site Jacobian (`mj_jacSite`),
+  joint-limit clamping, step limit 0.3 rad, a null-space pull toward the seed
+  configuration through the exact kernel of the Jacobian (SVD), and up to 8
+  deterministic random restarts if the seed does not converge. Tolerances
+  1e-5 m / 1e-4 rad; after the task is met the redundant degree of freedom keeps
+  settling toward the seed until its pull is below 1e-4 rad, so results are
+  repeatable and close to the previous posture. Only kinematics are evaluated on
+  a scratch `MjData`; the simulation state is untouched until `set_home`.
+* **What `set_initial_pose` does.** Solves IK seeded at the current home,
+  rejects non-converged solutions, writes the result into the `home` keyframe
+  (so `reset()` and the viewer's `R` key return to it), re-tunes the
+  inertia-scaled holding gains for the new configuration, resets, and rejects
+  poses that start in contact (restoring the previous home). The force
+  controller takes its tangential/orientation reference from the new pose at
+  reset, so both controllers run unchanged from any valid initial pose.
+* **CLI.** `--init-site`, `--init-pos`, `--init-quat`/`--init-rpy` on any
+  command; `ik` prints the solution, the site pose it reaches, contacts, a
+  ready-to-paste keyframe line, and can render the pose. `ik --self-test`
+  checks a round trip to the home pose, 50 random reachable targets per site
+  (100 % converged, residuals ~1e-6 m), a position-only solve, an unreachable
+  target (reported as not converged), joint limits, `set_initial_pose`, and the
+  contact rejection (a tip 5 mm into the tabletop is refused).
+
+The tool shaft now carries a thin collision capsule and a holder cylinder, so a
+pose that drives the shaft through the table is detected as a contact (the
+Panda demo had a visual-only shaft). The capsule ends 13 mm short of the tip
+sphere, so only the tip touches in normal operation.
+
 ## Timing
 
 | Setting | Default | Note |
@@ -295,7 +356,8 @@ assets/polishing_tool/        tool meshes + SOURCE.md
 kuka_table_sim/scene.py       paths, TimingConfig, ArmIndex (joint/actuator mapping checks)
 kuka_table_sim/holding.py     HoldingController, Simulation (reset, mj_step1/step2 scheduling)
 kuka_table_sim/force_control.py  ForceApproachController: approach + FT-sensor force hold
-kuka_table_sim/run.py         CLI: headless validation / render / log, interactive viewer
+kuka_table_sim/ik.py          solve_site_ik, quat_from_rpy, orientation helpers
+kuka_table_sim/run.py         CLI: headless validation / render / log, interactive viewer, ik
 docs/kuka_table_scene.png     render from the holding validation
 docs/kuka_force_hold.png      render at the end of the force-hold validation
 pyproject.toml, requirements.txt

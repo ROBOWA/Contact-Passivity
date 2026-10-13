@@ -18,7 +18,7 @@
     * the FT-sensor collision cylinder is enabled (it is welded to link7, so
       it cannot self-collide with link7) and the tip sphere uses the default
       collision mask so it collides with the table like every other geom;
-    * the shaft mesh stays visual-only, as in the original.
+    * the shaft gets a conservative collision cylinder + capsule (the original had none).
 -->
 <mujoco>
   <body name="tool_mount" pos="0 0 0.045">
@@ -30,6 +30,12 @@
       <body name="sphere_tool" pos="0 0 0">
         <inertial mass="0.20" pos="0 0 0.07" diaginertia="4e-4 4e-4 1e-4"/>
         <geom class="visual" mesh="sphere_tool" material="tool_steel"/>
+        <!-- Shaft collision, inside the visual mesh (holder r 0.0305 -> 0.0283 over the first 20 mm,
+             then tapering to r 0.0104 at z 0.12): a holder cylinder and a thin capsule that ends
+             13 mm short of the tip sphere, so only the tip touches in normal operation but a shaft
+             driven through the table is detected (the original Panda demo had no shaft collision). -->
+        <geom name="tool_holder_collision" class="collision" type="cylinder" pos="0 0 0.01" size="0.028 0.01"/>
+        <geom name="tool_shaft_collision" class="collision" type="capsule" fromto="0 0 0.02 0 0 0.125" size="0.008"/>
         <!-- Tool centre point: tip sphere centre, 0.137 m above the sensor top face. -->
         <site name="tcp" pos="0 0 0.137" size="0.004" rgba="0 1 0 1" group="1"/>
         <geom name="tool_tip" class="collision" type="sphere" pos="0 0 0.137" size="0.009"

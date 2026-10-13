@@ -59,9 +59,23 @@ class HoldingController:
         self.arm = arm
         self.kp = np.asarray(kp, dtype=float).reshape(7)
         self.kd = np.asarray(kd, dtype=float).reshape(7)
+        self.freq_hz: float | None = None   # set by inertia_scaled(); enables retune()
+        self.zeta: float | None = None
         self.torque_limit = arm.torque_limit if torque_limit is None else np.asarray(torque_limit, float).reshape(7)
         self.q_target = np.zeros(7)
         self.saturated = np.zeros(7, dtype=bool)  # per-joint flag from the last compute()
+
+    @classmethod
+    def inertia_scaled(cls, model: mujoco.MjModel, arm: ArmIndex, q: np.ndarray,
+                       freq_hz: float = DEFAULT_HOLD_FREQ_HZ, zeta: float = DEFAULT_HOLD_ZETA) -> "HoldingController":
+        ctl = cls(arm, *inertia_scaled_gains(model, arm, q, freq_hz, zeta))
+        ctl.freq_hz, ctl.zeta = freq_hz, zeta
+        return ctl
+
+    def retune(self, model: mujoco.MjModel, q_home: np.ndarray) -> None:
+        """Recompute the inertia-scaled gains for a new home configuration (no-op for explicit gains)."""
+        if self.freq_hz is not None:
+            self.kp, self.kd = inertia_scaled_gains(model, self.arm, q_home, self.freq_hz, self.zeta)
 
     def reset(self, model: mujoco.MjModel, data: mujoco.MjData, q_home: np.ndarray) -> None:
         self.q_target = q_home.copy()
@@ -113,6 +127,42 @@ class Simulation:
         self.controller.reset(self.model, self.data, self.q_home)
         self.data.ctrl[self.arm.actuator_ids] = self.controller.compute(self.data)
         mujoco.mj_forward(self.model, self.data)
+
+    def set_home(self, q: np.ndarray) -> None:
+        """Make `q` the initial configuration: update the `home` keyframe, the controller, and reset."""
+        q = np.asarray(q, dtype=float).reshape(7)
+        lo, hi = self.model.jnt_range[self.arm.joint_ids].T
+        if np.any(q < lo) or np.any(q > hi):
+            raise ValueError(f"q is outside the joint limits: {q}")
+        self.model.key_qpos[self.model.key(HOME_KEYFRAME).id, self.arm.qpos_adr] = q
+        self.q_home = q.copy()
+        if hasattr(self.controller, "retune"):
+            self.controller.retune(self.model, self.q_home)
+        self.reset()
+
+    def set_initial_pose(self, site: str, pos, quat=None, *, rpy_deg=None, q_seed=None,
+                         require_contact_free: bool = True, **ik_kwargs):
+        """Set the initial state so that `site` is at `pos` (m, world) with orientation `quat`
+        (wxyz) or `rpy_deg` (roll, pitch, yaw in degrees, R = Rz Ry Rx); None leaves the
+        orientation free. Solves IK seeded at the current home, writes the solution as the new
+        home (keyframe + controller target) and resets. Raises ValueError if IK fails or, with
+        require_contact_free, if the pose is in contact. Returns the IKResult."""
+        from .ik import quat_from_rpy, solve_site_ik
+        if rpy_deg is not None:
+            if quat is not None:
+                raise ValueError("give either quat or rpy_deg, not both")
+            quat = quat_from_rpy(*rpy_deg)
+        seed = self.q_home if q_seed is None else np.asarray(q_seed, float)
+        result = solve_site_ik(self.model, site, pos, quat, arm=self.arm, q_seed=seed, q_pref=seed, **ik_kwargs)
+        if not result.converged:
+            raise ValueError(f"no IK solution for site '{site}' at {np.round(pos, 4)}: {result.summary()}")
+        previous = self.q_home.copy()
+        self.set_home(result.q)
+        if require_contact_free and self.data.ncon > 0:
+            pairs = [(self.model.geom(c.geom1).name, self.model.geom(c.geom2).name) for c in self.data.contact[:self.data.ncon]]
+            self.set_home(previous)
+            raise ValueError(f"pose is in contact ({pairs}); initial state restored")
+        return result
 
     def step(self) -> None:
         """Advance exactly one physics step; recompute torque every control_interval steps."""
