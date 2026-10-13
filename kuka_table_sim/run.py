@@ -4,9 +4,10 @@
     mjpython -m kuka_table_sim.run viewer          # macOS; plain python elsewhere
 
 `headless` runs the scene without any GUI, prints a validation report and exits
-non-zero if a check fails. `viewer` opens the passive MuJoCo viewer; press R (or
-Backspace) to reset, Esc or close the window to quit, Ctrl-C in the terminal also
-exits cleanly.
+non-zero if a check fails. `viewer` opens the passive MuJoCo viewer on the free camera (mouse orbits,
+pans and zooms); press R (or Backspace) to reset, Ctrl-Q or close the window
+to quit, Ctrl-C in the terminal also exits cleanly. `--camera overview` starts
+on the fixed scene camera instead (Esc returns to the free camera).
 """
 
 from __future__ import annotations
@@ -262,7 +263,7 @@ def run_headless(sim: Simulation, duration: float, render: Path | None, verbose:
 
 # --------------------------------------------------------------------------- viewer
 
-def run_viewer(sim: Simulation, realtime: bool = True) -> None:
+def run_viewer(sim: Simulation, realtime: bool = True, camera: str = "free") -> None:
     import mujoco.viewer  # imported lazily so headless runs never touch GUI code
 
     reset_requested = False
@@ -288,13 +289,17 @@ def run_viewer(sim: Simulation, realtime: bool = True) -> None:
     m, d = sim.model, sim.data
     ri = sim.timing.render_interval
     frame_dt = ri * sim.timing.timestep
-    print(f"viewer: R / Backspace = reset, Esc or window close = quit, Ctrl-C in the terminal = quit. "
+    print(f"viewer: R / Backspace = reset; Ctrl-Q, window close or Ctrl-C in the terminal = quit; "
+          f"mouse drag = orbit/pan/zoom (free camera), Esc = back to the free camera, [ ] = cycle cameras. "
           f"{sim.timing.control_interval} physics steps per control update, "
           f"{ri} per frame ({1 / frame_dt:.1f} Hz of simulated time).", flush=True)
     try:
         with mujoco.viewer.launch_passive(m, d, key_callback=on_key) as viewer:
-            viewer.cam.type = mujoco.mjtCamera.mjCAMERA_FIXED
-            viewer.cam.fixedcamid = m.camera(OVERVIEW_CAMERA).id
+            if camera == "overview":
+                # Fixed camera: framing is locked and the mouse does not orbit until Esc.
+                viewer.cam.type = mujoco.mjtCamera.mjCAMERA_FIXED
+                viewer.cam.fixedcamid = m.camera(OVERVIEW_CAMERA).id
+            # Otherwise keep the default free camera, framed by <statistic> and <visual><global>.
             while viewer.is_running() and not stop_requested:
                 frame_start = time.perf_counter()
                 with viewer.lock():
@@ -344,12 +349,14 @@ def main(argv: list[str] | None = None) -> int:
     h.add_argument("--quiet", action="store_true")
     v = sub.add_parser("viewer", help="interactive passive viewer (mjpython on macOS)")
     v.add_argument("--no-realtime", action="store_true", help="do not pace frames to wall-clock time")
+    v.add_argument("--camera", choices=("free", "overview"), default="free",
+                   help="start on the mouse-controllable free camera (default) or the fixed overview camera")
     args = p.parse_args(argv)
 
     sim = build_simulation(args)
     if args.cmd == "headless":
         return 0 if run_headless(sim, args.duration, args.render, verbose=not args.quiet) else 1
-    run_viewer(sim, realtime=not args.no_realtime)
+    run_viewer(sim, realtime=not args.no_realtime, camera=args.camera)
     return 0
 
 

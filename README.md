@@ -47,10 +47,13 @@ mjpython -m kuka_table_sim.run viewer
 python -m kuka_table_sim.run viewer
 ```
 
-Viewer keys: `R` or `Backspace` resets the scene (home pose, zero velocity,
-`t = 0`, holding target re-armed); `Esc` or closing the window quits; `Ctrl-C`
-in the terminal also quits cleanly. The viewer starts on the fixed `overview`
-camera; the usual MuJoCo mouse controls switch to the free camera.
+Viewer controls: the viewer starts on MuJoCo's free camera, so the mouse
+works immediately (left drag orbits, right drag pans, scroll zooms, double
+click selects a body). `R` or `Backspace` resets the scene (home pose, zero
+velocity, `t = 0`, holding target re-armed). `Ctrl-Q` or closing the window
+quits, and `Ctrl-C` in the terminal also quits cleanly. `--camera overview`
+starts on the fixed scene camera instead; a fixed camera ignores mouse orbiting
+until `Esc` switches back to the free camera (`[` and `]` cycle cameras).
 
 All timing parameters are command-line options (`--timestep`,
 `--control-period`, `--render-hz`, `--hold-freq-hz`, `--hold-zeta`); see
@@ -77,7 +80,7 @@ imports `mujoco.viewer`.
 | Joint-limit margin at `q_home` | min 0.494 rad (joint 4) |
 | Contacts at `q_home` | none |
 | `tcp` site | on `link7` at (0, 0, 0.045) m, same frame as the upstream `attachment_site`: origin at the flange face centre, z-axis along the joint-7 axis pointing out of the flange, x/y parallel to the `link7` frame |
-| Default camera | `overview`, fixed at (1.75, -1.65, 0.80) m looking at (0.35, 0, 0.05) m; free-camera framing set by `<statistic>` |
+| Cameras | free camera framed by `<statistic center="0.35 0 0.05" extent="1.6">` and `<visual><global azimuth="140" elevation="-20">` (viewer default); fixed `overview` camera at (1.75, -1.65, 0.80) m looking at (0.35, 0, 0.05) m (used for offscreen renders and `--camera overview`) |
 
 Files: `assets/kuka_table_scene.xml` (world, table, lights, camera),
 `assets/iiwa14_torque.xml` (robot, derived from upstream, changes listed in its
@@ -182,7 +185,7 @@ Results on the tested platform (2026-10-12):
 | Start +0.05 rad on all joints | within 0.01 rad after 0.339 s, final deviation 3e-9 rad, no contacts |
 | Reset | `t = 0`, `q == q_home`, replay identical |
 | Wall-clock | 10 s simulated in ~0.7 s |
-| Viewer | launches under `mjpython`, fixed camera, Ctrl-C exits cleanly |
+| Viewer | launches under `mjpython` (mujoco 3.15.0 and 3.3.7), free camera, Ctrl-C exits cleanly |
 
 ## Layout
 
