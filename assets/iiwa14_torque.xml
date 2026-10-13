@@ -203,6 +203,16 @@
     <motor name="joint7_torque" joint="joint7" gear="1" ctrlrange="-40 40"/>
   </actuator>
 
+  <!-- Force/torque sensor at the FT-sensor top face. MuJoCo reports the interaction
+       wrench between the `ft_sensor` body (plus everything below it: shaft and tip)
+       and its parent, expressed in the ft_site frame. The reading therefore includes
+       the tool's own weight (0.50 kg) and must be bias-compensated to obtain the
+       contact force; see kuka_table_sim/force_control.py. -->
+  <sensor>
+    <force name="ft_force" site="ft_site"/>
+    <torque name="ft_torque" site="ft_site"/>
+  </sensor>
+
   <!-- Initial configuration (rad), joints 1..7. ctrl is intentionally omitted:
        the holding controller writes torques, so the keyframe stores no commands. -->
   <keyframe>

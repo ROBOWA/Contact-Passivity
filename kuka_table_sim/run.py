@@ -1,7 +1,8 @@
 """Command-line entry point.
 
     python   -m kuka_table_sim.run headless --duration 10 [--render out.png]
-    mjpython -m kuka_table_sim.run viewer          # macOS; plain python elsewhere
+    python   -m kuka_table_sim.run --controller force headless --duration 12 [--log run.npz]
+    mjpython -m kuka_table_sim.run [--controller force] viewer   # macOS; plain python elsewhere
 
 `headless` runs the scene without any GUI, prints a validation report and exits
 non-zero if a check fails. `viewer` opens the passive MuJoCo viewer on the free camera (mouse orbits,
@@ -23,6 +24,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
+from .force_control import APPROACH, CONTACT, ForceApproachController, ForceControlConfig
 from .holding import DEFAULT_HOLD_FREQ_HZ, DEFAULT_HOLD_ZETA, HoldingController, Simulation, inertia_scaled_gains
 from .scene import (FLANGE_SITE, OVERVIEW_CAMERA, ROBOT_BODIES, SCENE_XML, TCP_SITE, TOOL_TIP_GEOM, ArmIndex,
                     TimingConfig, home_qpos, load_model)
@@ -267,6 +269,155 @@ def run_headless(sim: Simulation, duration: float, render: Path | None, verbose:
     return ok
 
 
+def _tip_contact_force_world(sim: Simulation) -> np.ndarray:
+    """Ground truth: total force on the tool tip from its contacts, world frame (for validation only)."""
+    m, d = sim.model, sim.data
+    tip = m.geom(TOOL_TIP_GEOM).id
+    total = np.zeros(3)
+    wrench = np.zeros(6)
+    for i in range(d.ncon):
+        c = d.contact[i]
+        if tip not in (c.geom1, c.geom2):
+            continue
+        mujoco.mj_contactForce(m, d, i, wrench)
+        frame = c.frame.reshape(3, 3)           # rows: normal (geom1 -> geom2), tangent1, tangent2
+        f_on_geom2 = frame.T @ wrench[:3]       # mj_contactForce: force applied by geom1 on geom2
+        total += -f_on_geom2 if c.geom1 == tip else f_on_geom2
+    return total
+
+
+def run_force_headless(sim: Simulation, duration: float, render: Path | None, log: Path | None,
+                       verbose: bool = True) -> bool:
+    m, d, arm = sim.model, sim.data, sim.arm
+    ctl: ForceApproachController = sim.controller
+    cfg = ctl.cfg
+    ok = True
+    failures: list[str] = []
+
+    def check(cond: bool, msg: str) -> None:
+        nonlocal ok
+        if not cond:
+            ok = False
+            failures.append(msg)
+
+    # --- static sensor check at the held initial state -------------------------------------
+    f0 = ctl.contact_force_world(d)
+    check(np.linalg.norm(f0) < 0.05, f"bias-compensated force at rest is {np.linalg.norm(f0):.3f} N, expected ~0")
+    tcp = m.site(TCP_SITE).id
+    x0 = d.site_xpos[tcp].copy()
+    tabletop = m.geom("tabletop").id
+    top_z = d.geom_xpos[tabletop][2] + m.geom_size[tabletop][2]
+    t_contact_expected = (x0[2] - top_z - ctl.tip_radius) / cfg.approach_speed
+    if verbose:
+        print("== force control ==")
+        print(f"target / approach   : {cfg.force_desired} N, {cfg.approach_speed} m/s, contact threshold {cfg.contact_threshold} N, "
+              f"ramp {cfg.force_ramp_time} s")
+        print(f"gains               : kp_f {cfg.kp_force}, ki_f {cfg.ki_force} 1/s, normal damping {cfg.normal_damping} N*s/m, "
+              f"motion {cfg.motion_freq_hz} Hz (zeta {cfg.motion_zeta}), posture {cfg.posture_freq_hz} Hz")
+        print(f"sensor at rest      : raw {np.array2string(d.sensordata[ctl.ft_adr:ctl.ft_adr + 3], precision=3)} N (site frame), "
+              f"tool mass {ctl.tool_mass} kg, compensated {np.array2string(f0, precision=4)} N")
+        print(f"start / surface     : tip centre z {x0[2]:.4f} m, surface {top_z:.3f} m, expected contact at ~{t_contact_expected:.2f} s")
+
+    # --- run ----------------------------------------------------------------------------------
+    n = sim.steps_for(duration)
+    ci = sim.timing.control_interval
+    rows = []  # per control update
+    warn_before = _warning_counts(d)
+    other_contacts: dict[tuple[str, str], int] = {}
+    sat_updates = 0
+    t_contact = None
+    t0 = time.perf_counter()
+    for _ in range(n):
+        sim.step()
+        if sim.n_steps % ci:
+            continue
+        f_true = _tip_contact_force_world(sim)
+        f_est = ctl.contact_force_world(d)
+        rot = d.site_xmat[tcp].reshape(3, 3)
+        rows.append((d.time, 1.0 if ctl.phase == CONTACT else 0.0, ctl.f_n, float(f_true @ ctl.normal), ctl.f_d, ctl.f_cmd,
+                     *d.site_xpos[tcp], *f_est, *f_true, float(np.linalg.norm(ctl.orientation_error(rot))),
+                     *sim.q, *sim.qvel, *sim.tau))
+        if t_contact is None and ctl.phase == CONTACT:
+            t_contact = ctl.t_contact
+        if ctl.saturated.any():
+            sat_updates += 1
+        for a, b, _ in _robot_contact_pairs(sim):
+            if not ({a.split("/")[1], b.split("/")[1]} == {TOOL_TIP_GEOM, "tabletop"}):
+                other_contacts[(a, b)] = other_contacts.get((a, b), 0) + 1
+        if not (np.all(np.isfinite(d.qpos)) and np.all(np.isfinite(d.qvel))):
+            check(False, f"non-finite state at t={d.time:.4f}")
+            break
+    wall = time.perf_counter() - t0
+    log_arr = np.array(rows)
+    t, in_contact, f_n, f_true_n, f_d = log_arr[:, 0], log_arr[:, 1], log_arr[:, 2], log_arr[:, 3], log_arr[:, 4]
+    pos = log_arr[:, 6:9]
+    ori_err = log_arr[:, 15]
+    new_warnings = {_warning_names()[i]: int(c) for i, c in enumerate(_warning_counts(d) - warn_before) if c}
+
+    check(t_contact is not None, "contact was never detected")
+    check(not new_warnings, f"MuJoCo warnings raised: {new_warnings}")
+    check(not other_contacts, f"contacts other than tip/tabletop: {other_contacts}")
+    check(sat_updates == 0, f"torque saturated in {sat_updates} control updates")
+    check(ctl.n_releases == 0, f"contact was lost and re-approached {ctl.n_releases} time(s)")
+    if t_contact is not None:
+        settle_from = t_contact + cfg.force_ramp_time + 1.0
+        win = t >= max(settle_from, t[-1] - 3.0)
+        check(win.sum() > 100, f"run too short to assess the hold (contact at {t_contact:.2f} s, duration {duration} s)")
+        if win.sum() > 100:
+            err = f_d[win] - f_n[win]
+            mean_err, max_err = float(np.mean(np.abs(err))), float(np.max(np.abs(err)))
+            sensor_vs_truth = float(np.max(np.abs(f_n[win] - f_true_n[win])))
+            xy_drift = float(np.max(np.linalg.norm(pos[win, :2] - x0[:2], axis=1)))
+            ori_max = float(np.degrees(np.max(ori_err[win])))
+            f_std = float(np.std(f_n[win]))
+            check(mean_err < 0.2, f"mean |f_d - f_n| in the hold window is {mean_err:.3f} N")
+            check(max_err < 0.5, f"max |f_d - f_n| in the hold window is {max_err:.3f} N")
+            check(sensor_vs_truth < 0.3, f"sensor estimate deviates from the true contact force by up to {sensor_vs_truth:.3f} N")
+            check(xy_drift < 0.003, f"tangential drift of the tip is {xy_drift * 1000:.1f} mm")
+            check(ori_max < 1.0, f"orientation error reaches {ori_max:.2f} deg")
+            check(np.all(in_contact[win] > 0), "contact flag dropped inside the hold window")
+    if verbose:
+        print("== run ==")
+        print(f"simulated / wall    : {d.time:.3f} s in {sim.n_steps} steps; wall {wall:.2f} s ({d.time / wall:.1f}x)")
+        print(f"contact detected    : {'t = %.3f s' % t_contact if t_contact is not None else 'never'} "
+              f"(sensor f_n > {cfg.contact_threshold} N); tip z at contact {pos[np.argmax(in_contact > 0), 2] if t_contact else float('nan'):.4f} m")
+        if t_contact is not None and win.sum() > 100:
+            print(f"hold window         : t in [{t[win][0]:.2f}, {t[win][-1]:.2f}] s")
+            print(f"  f_n mean / std    : {np.mean(f_n[win]):.3f} / {f_std:.3f} N   (target {cfg.force_desired} N)")
+            print(f"  |f_d - f_n|       : mean {mean_err:.3f} N, max {max_err:.3f} N")
+            print(f"  sensor vs truth   : max |f_n - f_true| {sensor_vs_truth:.3f} N")
+            print(f"  tip xy drift      : {xy_drift * 1000:.2f} mm, orientation error max {ori_max:.3f} deg")
+            print(f"  tip z (mean)      : {np.mean(pos[win, 2]):.4f} m  (surface + radius = {top_z + ctl.tip_radius:.4f} m)")
+        peak = float(np.max(f_n)) if len(f_n) else 0.0
+        print(f"peak f_n            : {peak:.2f} N")
+        print(f"max |tau| (N*m)     : {np.array2string(np.max(np.abs(log_arr[:, 30:37]), axis=0), precision=1)} of limits {arm.torque_limit}")
+        print(f"saturated updates   : {sat_updates};  releases: {ctl.n_releases};  other contacts: {dict(other_contacts) or 'none'}")
+        print(f"MuJoCo warnings     : {new_warnings or 'none'}")
+        # coarse time series
+        print("  t[s]   phase    f_n[N]  f_true[N]  f_d[N]   tip_z[m]")
+        for tt in np.arange(0.0, t[-1] + 1e-9, max(0.5, round(t[-1] / 16, 1))):
+            k = int(np.argmin(np.abs(t - tt)))
+            print(f"  {t[k]:5.2f}  {'contact' if in_contact[k] else 'approach':8s} {f_n[k]:7.3f} {f_true_n[k]:9.3f} {f_d[k]:7.3f}   {pos[k, 2]:.4f}")
+
+    if log is not None:
+        np.savez(log, t=t, in_contact=in_contact, f_n=f_n, f_true_n=f_true_n, f_d=f_d, f_cmd=log_arr[:, 5],
+                 tcp_pos=pos, f_est_world=log_arr[:, 9:12], f_true_world=log_arr[:, 12:15], ori_err=ori_err,
+                 q=log_arr[:, 16:23], qvel=log_arr[:, 23:30], tau=log_arr[:, 30:37], force_desired=cfg.force_desired)
+        if verbose:
+            print(f"== log ==\nwrote {log}")
+    if render is not None:
+        try:
+            render_overview(sim, render)
+            if verbose:
+                print(f"== render ==\nwrote {render} (final state, {OVERVIEW_CAMERA} camera)")
+        except Exception as exc:
+            check(False, f"offscreen render failed: {exc!r}")
+    if verbose:
+        print("== result ==")
+        print("PASS" if ok else "FAIL:\n  - " + "\n  - ".join(failures))
+    return ok
+
+
 # --------------------------------------------------------------------------- viewer
 
 def run_viewer(sim: Simulation, realtime: bool = True, camera: str = "free") -> None:
@@ -295,6 +446,7 @@ def run_viewer(sim: Simulation, realtime: bool = True, camera: str = "free") -> 
     m, d = sim.model, sim.data
     ri = sim.timing.render_interval
     frame_dt = ri * sim.timing.timestep
+    last_status_second = -1
     print(f"viewer: R / Backspace = reset; Ctrl-Q, window close or Ctrl-C in the terminal = quit; "
           f"mouse drag = orbit/pan/zoom (free camera), Esc = back to the free camera, [ ] = cycle cameras. "
           f"{sim.timing.control_interval} physics steps per control update, "
@@ -312,8 +464,12 @@ def run_viewer(sim: Simulation, realtime: bool = True, camera: str = "free") -> 
                     if reset_requested:
                         sim.reset()
                         reset_requested = False
+                        last_status_second = -1
                         print("reset -> t=0, q=q_home", flush=True)
                     sim.advance(ri)
+                    if int(d.time) != last_status_second:
+                        last_status_second = int(d.time)
+                        print(f"t={d.time:6.2f} s  {sim.controller.status()}", flush=True)
                 viewer.sync()
                 if realtime:
                     # Wall-clock pacing only; never changes how many physics steps are taken.
@@ -335,8 +491,14 @@ def build_simulation(args: argparse.Namespace) -> Simulation:
     timing = TimingConfig(timestep=args.timestep, control_period=args.control_period, render_hz=args.render_hz)
     model = load_model(timing)
     arm = ArmIndex.from_model(model)
-    kp, kd = inertia_scaled_gains(model, arm, home_qpos(model, arm), args.hold_freq_hz, args.hold_zeta)
-    return Simulation(model, timing, HoldingController(arm, kp, kd))
+    if args.controller == "force":
+        cfg = ForceControlConfig(force_desired=args.force, approach_speed=args.approach_speed,
+                                 kp_force=args.kp_force, ki_force=args.ki_force)
+        controller = ForceApproachController(model, arm, timing.control_period, cfg)
+    else:
+        kp, kd = inertia_scaled_gains(model, arm, home_qpos(model, arm), args.hold_freq_hz, args.hold_zeta)
+        controller = HoldingController(arm, kp, kd)
+    return Simulation(model, timing, controller)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -348,10 +510,18 @@ def main(argv: list[str] | None = None) -> int:
                    help="holding-loop natural frequency per joint (Kp_i = M_ii wn^2)")
     p.add_argument("--hold-zeta", type=float, default=DEFAULT_HOLD_ZETA,
                    help="holding-loop damping ratio per joint (Kd_i = 2 zeta M_ii wn)")
+    p.add_argument("--controller", choices=("hold", "force"), default="hold",
+                   help="hold: joint-space posture hold; force: approach the table and hold a normal force")
+    fc = ForceControlConfig()
+    p.add_argument("--force", type=float, default=fc.force_desired, help="[force] desired normal force, N")
+    p.add_argument("--approach-speed", type=float, default=fc.approach_speed, help="[force] descent speed, m/s")
+    p.add_argument("--kp-force", type=float, default=fc.kp_force, help="[force] proportional force gain")
+    p.add_argument("--ki-force", type=float, default=fc.ki_force, help="[force] integral force gain, 1/s")
     sub = p.add_subparsers(dest="cmd", required=True)
     h = sub.add_parser("headless", help="run without GUI and print the validation report")
     h.add_argument("--duration", type=float, default=10.0, help="simulated seconds")
     h.add_argument("--render", type=Path, default=None, help="write an offscreen PNG of the final state")
+    h.add_argument("--log", type=Path, default=None, help="[force] write the per-control-step time series to .npz")
     h.add_argument("--quiet", action="store_true")
     v = sub.add_parser("viewer", help="interactive passive viewer (mjpython on macOS)")
     v.add_argument("--no-realtime", action="store_true", help="do not pace frames to wall-clock time")
@@ -361,6 +531,8 @@ def main(argv: list[str] | None = None) -> int:
 
     sim = build_simulation(args)
     if args.cmd == "headless":
+        if args.controller == "force":
+            return 0 if run_force_headless(sim, args.duration, args.render, args.log, verbose=not args.quiet) else 1
         return 0 if run_headless(sim, args.duration, args.render, verbose=not args.quiet) else 1
     run_viewer(sim, realtime=not args.no_realtime, camera=args.camera)
     return 0

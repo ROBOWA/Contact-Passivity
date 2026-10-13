@@ -4,8 +4,10 @@ Milestone 1 of the contact-passivity simulation rebuild: a KUKA LBR iiwa 14
 standing above a stationary table in MuJoCo, driven by seven joint-torque
 actuators and held in place by a gravity-compensated joint PD controller. The
 spherical polishing tool from the MEAM 6230 Panda project is mounted on the
-flange. Nothing else is implemented yet (no object, contact task, Cartesian
-impedance, force control, or hardware interface).
+flange, with a force/torque sensor at its base. A second controller approaches
+the table along its normal and holds a constant contact force from the FT
+sensor reading. There is no tangential motion, object, energy tank, QP, or
+hardware interface yet.
 
 ![KUKA iiwa14 above the table](docs/kuka_table_scene.png)
 
@@ -48,6 +50,11 @@ python -m kuka_table_sim.run headless --duration 10 --render docs/kuka_table_sce
 mjpython -m kuka_table_sim.run viewer
 # Linux / Windows:
 python -m kuka_table_sim.run viewer
+
+# Approach the table and hold 10 N (headless validation with a time-series log, or live):
+python   -m kuka_table_sim.run --controller force headless --duration 12 --log run.npz --render docs/kuka_force_hold.png
+mjpython -m kuka_table_sim.run --controller force viewer
+python   -m kuka_table_sim.run --controller force --force 15 --approach-speed 0.02 headless
 ```
 
 Viewer controls: the viewer starts on MuJoCo's free camera, so the mouse
@@ -58,8 +65,9 @@ quits, and `Ctrl-C` in the terminal also quits cleanly. `--camera overview`
 starts on the fixed scene camera instead; a fixed camera ignores mouse orbiting
 until `Esc` switches back to the free camera (`[` and `]` cycle cameras).
 
-All timing parameters are command-line options (`--timestep`,
-`--control-period`, `--render-hz`, `--hold-freq-hz`, `--hold-zeta`); see
+All timing and controller parameters are command-line options (`--timestep`,
+`--control-period`, `--render-hz`, `--hold-freq-hz`, `--hold-zeta`,
+`--controller`, `--force`, `--approach-speed`, `--kp-force`, `--ki-force`); see
 `python -m kuka_table_sim.run --help`. Run the commands from the repository
 root so that `kuka_table_sim` is importable; the package locates `assets/`
 relative to its own files.
@@ -108,8 +116,17 @@ beyond the Panda flange ([assets/polishing_tool/SOURCE.md](assets/polishing_tool
 Masses are assumed (0.30 kg sensor, 0.20 kg shaft; the original used 0) so
 gravity compensation and the mass matrix include the tool. The Panda demo's
 intermediate `attachment` body with its 45 degree z-rotation was flattened into
-a plain offset; a sphere tip has no orientation. No force sensor element is
-defined yet; `ft_site` is there so one can be added later.
+a plain offset; a sphere tip has no orientation.
+
+**FT sensor.** `<force name="ft_force">` and `<torque name="ft_torque">` are
+attached to `ft_site`. MuJoCo reports the wrench the parent applies to the
+`ft_sensor` subtree (housing + shaft + tip, 0.50 kg) in the site frame, so at
+rest the force reads +4.905 N along world z and the environment force on the
+tool is `F_ext = -R S - m_tool g` (quasi-static; the tool's own acceleration is
+not compensated). The reading available to the controller is the one computed
+at the end of the previous physics step (0.25 ms of latency). The tabletop's
+contact parameters (`solref="0.02 1"`, MuJoCo defaults) are written out in the
+scene file because they set the stiffness the force loop works against.
 
 ## Model source
 
@@ -169,6 +186,61 @@ tau = qfrc_bias + Kp * (q_home - q) - Kd * qvel
 This is only there to keep the arm still while the scene is checked. It is not
 the hybrid controller of the later milestones.
 
+## Approach and constant-force hold (`--controller force`)
+
+![Tool holding 10 N on the table](docs/kuka_force_hold.png)
+
+`kuka_table_sim/force_control.py` is an operational-space controller at the
+`tcp` site, written against the FT-sensor reading only (the true contact force
+from `mj_contactForce` is used for validation, never for control):
+
+* **Tangential translation and orientation** (and the normal direction during
+  the approach): inertia-weighted PD with unit-mass gains,
+  `F = Lambda (Kp e - Kd v)`, `Lambda = (J M^-1 J^T)^-1`, `Kp = wn^2`,
+  `Kd = 2 zeta wn`, `wn = 2 pi * 2 Hz`. Weighting by `Lambda` is what makes the
+  light wrist joints (joint 7 has 0.001 kg m^2) and the heavy shoulder close
+  their loops at the same bandwidth.
+* **Phase APPROACH:** the normal set-point descends at `--approach-speed`
+  (0.05 m/s) from the home height, clamped at most 10 mm below the surface.
+  Contact is declared when the sensor-based normal force exceeds 1 N for three
+  consecutive control updates.
+* **Phase CONTACT:** the normal direction switches to force control,
+  `f_cmd = f_d + kp_f (f_d - f_n) + ki_f * integral(f_d - f_n) - d_n v_n`, with
+  `f_d` ramped linearly to `--force` over 1 s, `kp_f = 0.5`, `ki_f = 5 /s`,
+  the integral contribution clamped to +/- 10 N, and `d_n = 40 N s/m`. If the
+  measured force stays below 0.2 N for 0.3 s the controller goes back to
+  APPROACH from the current height.
+* **Null space:** posture spring/damper toward `q_home` (1 Hz, unit-mass gains
+  scaled by `M`) through the dynamically consistent projector `I - J^T Jbar^T`.
+* `qfrc_bias` compensation once, torque clipping to the actuator limits.
+
+`headless` in this mode prints a report and writes a `.npz` log with `--log`
+(time, phase, sensor and true normal force, desired and commanded force, tip
+position, orientation error, `q`, `qvel`, `tau`). Checks: static sensor bias
+compensates to < 0.05 N; contact is detected; in the hold window (from
+contact + ramp + 1 s, last 3 s) mean |f_d - f_n| < 0.2 N and max < 0.5 N;
+sensor vs true contact force < 0.3 N; tangential tip drift < 3 mm; orientation
+error < 1 deg; no contact loss; no contacts other than tip/tabletop; no
+saturation or MuJoCo warnings.
+
+Results on the tested platform (12 s, 10 N):
+
+| Quantity | Value |
+| --- | --- |
+| Contact detected | t = 2.97 s (expected 2.81 s from geometry plus set-point lag) |
+| Touchdown transient | peak 22.8 N for one control step at impact (0.05 m/s), one brief bounce, then the ramp; within 0.2 N of `f_d` from t = 3.02 s |
+| Hold window (9 to 12 s) | f_n mean 10.000 N, std 0.000 N, max error 0.005 N |
+| Sensor vs true force | max difference 0.000 N in the hold window |
+| Tip drift / orientation | 0.12 mm, 0.046 deg |
+| Tip penetration | 0.2 mm at 10 N (`solref 0.02 1`) |
+| Torques | max 59 N m (joint 2), no saturation |
+| Also verified | mujoco 3.3.7 (conda base) headless PASS; live viewer under `mjpython` with per-second status lines |
+
+A slower approach (`--approach-speed 0.02`) reduces the touchdown peak. The
+zero steady-state error is a property of the integral term; the commanded force
+settles about 0.4 N above the measured one, which is the coupling the integral
+absorbs.
+
 ## Timing
 
 | Setting | Default | Note |
@@ -222,7 +294,9 @@ assets/kuka_iiwa_14/          vendored Menagerie model + LICENSE + SOURCE.md
 assets/polishing_tool/        tool meshes + SOURCE.md
 kuka_table_sim/scene.py       paths, TimingConfig, ArmIndex (joint/actuator mapping checks)
 kuka_table_sim/holding.py     HoldingController, Simulation (reset, mj_step1/step2 scheduling)
-kuka_table_sim/run.py         CLI: headless validation / render, interactive viewer
-docs/kuka_table_scene.png     render from the headless validation
+kuka_table_sim/force_control.py  ForceApproachController: approach + FT-sensor force hold
+kuka_table_sim/run.py         CLI: headless validation / render / log, interactive viewer
+docs/kuka_table_scene.png     render from the holding validation
+docs/kuka_force_hold.png      render at the end of the force-hold validation
 pyproject.toml, requirements.txt
 ```

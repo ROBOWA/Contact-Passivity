@@ -1,5 +1,8 @@
 """Joint-space holding controller and the stepping loop that schedules it.
 
+Any controller used by `Simulation` provides reset(model, data, q_home),
+compute(data) -> 7 torques, a `saturated` flag array and status() -> str.
+
     tau = qfrc_bias + Kp * (q_home - q) - Kd * qvel
 
 qfrc_bias is MuJoCo's C(q, qvel) * qvel + g(q) for the state the step is about
@@ -60,6 +63,13 @@ class HoldingController:
         self.q_target = np.zeros(7)
         self.saturated = np.zeros(7, dtype=bool)  # per-joint flag from the last compute()
 
+    def reset(self, model: mujoco.MjModel, data: mujoco.MjData, q_home: np.ndarray) -> None:
+        self.q_target = q_home.copy()
+        self.saturated[:] = False
+
+    def status(self) -> str:
+        return "holding q_home"
+
     def compute(self, data: mujoco.MjData) -> np.ndarray:
         """Torque for the arm given consistent (q, qvel, qfrc_bias) in `data`."""
         q = data.qpos[self.arm.qpos_adr]
@@ -89,14 +99,20 @@ class Simulation:
         self.reset()
 
     def reset(self) -> None:
-        """Restore the home keyframe, zero velocities/time, and re-arm the holding target."""
+        """Restore the home keyframe, zero velocities/time, and re-arm the controller."""
         mujoco.mj_resetDataKeyframe(self.model, self.data, self.model.key(HOME_KEYFRAME).id)
         self.data.time = 0.0
         self.n_steps = 0
         self.n_control_updates = 0
-        self.controller.q_target = self.q_home.copy()
+        # Prime the state with pure gravity/Coriolis compensation so that the derived
+        # quantities the controller sees at reset (accelerations, force sensors) describe
+        # a held, static arm rather than a free-falling one (ctrl is 0 after mj_resetData).
         mujoco.mj_forward(self.model, self.data)
+        self.data.ctrl[self.arm.actuator_ids] = self.data.qfrc_bias[self.arm.dof_adr]
+        mujoco.mj_forward(self.model, self.data)
+        self.controller.reset(self.model, self.data, self.q_home)
         self.data.ctrl[self.arm.actuator_ids] = self.controller.compute(self.data)
+        mujoco.mj_forward(self.model, self.data)
 
     def step(self) -> None:
         """Advance exactly one physics step; recompute torque every control_interval steps."""
