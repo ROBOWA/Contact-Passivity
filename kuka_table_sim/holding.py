@@ -24,6 +24,20 @@ DEFAULT_HOLD_FREQ_HZ = 2.0
 DEFAULT_HOLD_ZETA = 1.0
 
 
+def full_mass_matrix(model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
+    """Dense joint-space mass matrix for the state in `data` (after mj_forward).
+
+    The mj_fullM binding changed between MuJoCo releases: >= 3.4 takes (model, data, dst),
+    older 3.x takes (model, dst, data.qM). Both are supported so the conda env and the venv work.
+    """
+    full_m = np.zeros((model.nv, model.nv))
+    try:
+        mujoco.mj_fullM(model, data, full_m)
+    except TypeError:
+        mujoco.mj_fullM(model, full_m, data.qM)
+    return full_m
+
+
 def inertia_scaled_gains(model: mujoco.MjModel, arm: ArmIndex, q: np.ndarray,
                          freq_hz: float = DEFAULT_HOLD_FREQ_HZ,
                          zeta: float = DEFAULT_HOLD_ZETA) -> tuple[np.ndarray, np.ndarray]:
@@ -31,9 +45,7 @@ def inertia_scaled_gains(model: mujoco.MjModel, arm: ArmIndex, q: np.ndarray,
     data = mujoco.MjData(model)
     data.qpos[arm.qpos_adr] = q
     mujoco.mj_forward(model, data)
-    full_m = np.zeros((model.nv, model.nv))
-    mujoco.mj_fullM(model, data, full_m)
-    inertia = np.diag(full_m)[arm.dof_adr]
+    inertia = np.diag(full_mass_matrix(model, data))[arm.dof_adr]
     wn = 2.0 * np.pi * freq_hz
     return inertia * wn ** 2, 2.0 * zeta * inertia * wn
 

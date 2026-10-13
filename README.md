@@ -17,7 +17,10 @@ present in this branch's history and tree (`mujoco_sliding/`, `mujoco_panda/`,
 ## Installation
 
 Tested on macOS 26.2 (arm64) with Python 3.13.5, `mujoco==3.15.0`,
-`numpy==2.5.4`. Any Python >= 3.10 with `mujoco>=3.3` should work.
+`numpy==2.5.4` (project `.venv`), and also with Python 3.12.2,
+`mujoco==3.3.7`, `numpy==2.3.4` (conda base: headless validation passes,
+viewer launches and exits cleanly). `mj_fullM` changed signature between
+those releases; `holding.full_mass_matrix` handles both.
 
 ```bash
 git clone git@github.com:ROBOWA/Contact-Passivity.git && cd Contact-Passivity
