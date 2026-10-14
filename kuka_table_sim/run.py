@@ -328,6 +328,7 @@ def run_force_headless(sim: Simulation, duration: float, render: Path | None, lo
     n = sim.steps_for(duration)
     ci = sim.timing.control_interval
     rows = []  # per control update
+    jacp_log = np.zeros((3, m.nv))
     warn_before = _warning_counts(d)
     other_contacts: dict[tuple[str, str], int] = {}
     sat_updates = 0
@@ -340,9 +341,11 @@ def run_force_headless(sim: Simulation, duration: float, render: Path | None, lo
         f_true = _tip_contact_force_world(sim)
         f_est = ctl.contact_force_world(d)
         rot = d.site_xmat[tcp].reshape(3, 3)
+        mujoco.mj_jacSite(m, d, jacp_log, None, tcp)
+        v_tip = jacp_log @ d.qvel
         rows.append((d.time, 1.0 if ctl.phase == CONTACT else 0.0, ctl.f_n, float(f_true @ ctl.normal), ctl.f_d, ctl.f_cmd,
                      *d.site_xpos[tcp], *f_est, *f_true, float(np.linalg.norm(ctl.orientation_error(rot))),
-                     *sim.q, *sim.qvel, *sim.tau))
+                     *sim.q, *sim.qvel, *sim.tau, ctl.z_d, ctl.zd_dot, ctl.zd_ddot, *v_tip))
         if t_contact is None and ctl.phase == CONTACT:
             t_contact = ctl.t_contact
         if ctl.saturated.any():
@@ -358,9 +361,21 @@ def run_force_headless(sim: Simulation, duration: float, render: Path | None, lo
     t, in_contact, f_n, f_true_n, f_d = log_arr[:, 0], log_arr[:, 1], log_arr[:, 2], log_arr[:, 3], log_arr[:, 4]
     pos = log_arr[:, 6:9]
     ori_err = log_arr[:, 15]
+    z_d, zd_dot, zd_ddot, v_tip = log_arr[:, 37], log_arr[:, 38], log_arr[:, 39], log_arr[:, 40:43]
+    dt_c = sim.timing.control_period
+    approach = in_contact == 0
+    acc_jumps = np.abs(np.diff(zd_ddot[approach])) if approach.sum() > 2 else np.zeros(1)
+    jerk_num = acc_jumps / dt_c
     new_warnings = {_warning_names()[i]: int(c) for i, c in enumerate(_warning_counts(d) - warn_before) if c}
 
     check(t_contact is not None, "contact was never detected")
+    check(float(np.max(acc_jumps)) < 1e-3, f"set-point acceleration jumps by {np.max(acc_jumps):.2e} m/s^2 between control updates")
+    if t_contact is not None:
+        k_c = int(np.argmax(in_contact > 0))
+        contact_speed = float(-v_tip[max(k_c - 3, 0), 2])
+        touchdown_peak = float(np.max(f_n[k_c:k_c + int(cfg.force_ramp_time / dt_c)]))
+        check(contact_speed < 2.0 * cfg.creep_speed, f"tip reached the table at {contact_speed:.4f} m/s (creep speed {cfg.creep_speed})")
+        check(touchdown_peak < cfg.force_desired + 2.0, f"touchdown/ramp peak force {touchdown_peak:.2f} N")
     check(not new_warnings, f"MuJoCo warnings raised: {new_warnings}")
     check(not other_contacts, f"contacts other than tip/tabletop: {other_contacts}")
     check(sat_updates == 0, f"torque saturated in {sat_updates} control updates")
@@ -385,8 +400,15 @@ def run_force_headless(sim: Simulation, duration: float, render: Path | None, lo
     if verbose:
         print("== run ==")
         print(f"simulated / wall    : {d.time:.3f} s in {sim.n_steps} steps; wall {wall:.2f} s ({d.time / wall:.1f}x)")
+        print(f"approach profile    : quintic {ctl.profile.T:.2f} s from z {ctl.profile.z0:.4f} to creep point {ctl.profile.z_creep:.4f} m, "
+              f"peak speed {np.max(-zd_dot):.4f} m/s, peak |accel| {np.max(np.abs(zd_ddot)):.4f} m/s^2, "
+              f"max |jerk| {np.max(jerk_num):.3f} m/s^3, then creep {cfg.creep_speed} m/s")
         print(f"contact detected    : {'t = %.3f s' % t_contact if t_contact is not None else 'never'} "
-              f"(sensor f_n > {cfg.contact_threshold} N); tip z at contact {pos[np.argmax(in_contact > 0), 2] if t_contact else float('nan'):.4f} m")
+              f"(sensor f_n > {cfg.contact_threshold} N); tip z at contact {pos[np.argmax(in_contact > 0), 2] if t_contact else float('nan'):.4f} m"
+              + (f", tip speed {contact_speed:.4f} m/s, touchdown/ramp peak {touchdown_peak:.2f} N" if t_contact is not None else ""))
+        if t_contact is not None:
+            lag = (z_d - pos[:, 2])[approach]
+            print(f"tracking (approach) : max |z - z_d| {np.max(np.abs(lag)) * 1000:.2f} mm")
         if t_contact is not None and win.sum() > 100:
             print(f"hold window         : t in [{t[win][0]:.2f}, {t[win][-1]:.2f}] s")
             print(f"  f_n mean / std    : {np.mean(f_n[win]):.3f} / {f_std:.3f} N   (target {cfg.force_desired} N)")
@@ -400,15 +422,17 @@ def run_force_headless(sim: Simulation, duration: float, render: Path | None, lo
         print(f"saturated updates   : {sat_updates};  releases: {ctl.n_releases};  other contacts: {dict(other_contacts) or 'none'}")
         print(f"MuJoCo warnings     : {new_warnings or 'none'}")
         # coarse time series
-        print("  t[s]   phase    f_n[N]  f_true[N]  f_d[N]   tip_z[m]")
-        for tt in np.arange(0.0, t[-1] + 1e-9, max(0.5, round(t[-1] / 16, 1))):
+        print("  t[s]   phase    f_n[N]  f_true[N]  f_d[N]   tip_z[m]  z_d[m]   dz_d[m/s]  ddz_d[m/s2]")
+        for tt in np.arange(0.0, t[-1] + 1e-9, max(0.5, round(t[-1] / 20, 1))):
             k = int(np.argmin(np.abs(t - tt)))
-            print(f"  {t[k]:5.2f}  {'contact' if in_contact[k] else 'approach':8s} {f_n[k]:7.3f} {f_true_n[k]:9.3f} {f_d[k]:7.3f}   {pos[k, 2]:.4f}")
+            print(f"  {t[k]:5.2f}  {'contact' if in_contact[k] else 'approach':8s} {f_n[k]:7.3f} {f_true_n[k]:9.3f} {f_d[k]:7.3f}   "
+                  f"{pos[k, 2]:.4f}  {z_d[k]:.4f}  {zd_dot[k]:+.4f}   {zd_ddot[k]:+.4f}")
 
     if log is not None:
         np.savez(log, t=t, in_contact=in_contact, f_n=f_n, f_true_n=f_true_n, f_d=f_d, f_cmd=log_arr[:, 5],
                  tcp_pos=pos, f_est_world=log_arr[:, 9:12], f_true_world=log_arr[:, 12:15], ori_err=ori_err,
-                 q=log_arr[:, 16:23], qvel=log_arr[:, 23:30], tau=log_arr[:, 30:37], force_desired=cfg.force_desired)
+                 q=log_arr[:, 16:23], qvel=log_arr[:, 23:30], tau=log_arr[:, 30:37], z_d=z_d, zd_dot=zd_dot,
+                 zd_ddot=zd_ddot, tcp_vel=v_tip, force_desired=cfg.force_desired)
         if verbose:
             print(f"== log ==\nwrote {log}")
     if render is not None:
@@ -499,6 +523,7 @@ def build_simulation(args: argparse.Namespace) -> Simulation:
     arm = ArmIndex.from_model(model)
     if args.controller == "force":
         cfg = ForceControlConfig(force_desired=args.force, approach_speed=args.approach_speed,
+                                 creep_speed=args.creep_speed, creep_distance=args.creep_distance,
                                  kp_force=args.kp_force, ki_force=args.ki_force)
         controller = ForceApproachController(model, arm, timing.control_period, cfg)
     else:
@@ -614,7 +639,10 @@ def main(argv: list[str] | None = None) -> int:
                    help="hold: joint-space posture hold; force: approach the table and hold a normal force")
     fc = ForceControlConfig()
     p.add_argument("--force", type=float, default=fc.force_desired, help="[force] desired normal force, N")
-    p.add_argument("--approach-speed", type=float, default=fc.approach_speed, help="[force] descent speed, m/s")
+    p.add_argument("--approach-speed", type=float, default=fc.approach_speed, help="[force] peak descent speed, m/s")
+    p.add_argument("--creep-speed", type=float, default=fc.creep_speed, help="[force] final approach speed until contact, m/s")
+    p.add_argument("--creep-distance", type=float, default=fc.creep_distance,
+                   help="[force] height above the expected surface where the creep starts, m")
     p.add_argument("--kp-force", type=float, default=fc.kp_force, help="[force] proportional force gain")
     p.add_argument("--ki-force", type=float, default=fc.ki_force, help="[force] integral force gain, 1/s")
     p.add_argument("--init-site", default=TCP_SITE, help="site whose pose defines the initial state (with --init-pos)")

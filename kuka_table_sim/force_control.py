@@ -4,8 +4,12 @@ The controller works in operational space at the `tcp` site (tool tip centre):
 
 * tangential translation (table plane) and orientation: inertia-weighted PD
   with unit-mass gains,  F = Lambda * (Kp e - Kd v),  Lambda = (J M^-1 J^T)^-1;
-* normal direction, phase APPROACH: the z set-point descends at a constant
-  speed and the same PD tracks it;
+* normal direction, phase APPROACH: the set-point follows an acceleration-
+  continuous profile (ApproachProfile): a quintic (minimum-jerk) segment from
+  rest down to a creep point just above the expected surface, arriving there
+  at the creep speed with zero acceleration, then constant creep speed until
+  the sensor detects contact; the PD tracks it with velocity and acceleration
+  feedforward;
 * normal direction, phase CONTACT (entered when the sensor-based normal force
   exceeds a threshold): force command along -n,
       f_cmd = f_d(t) + kp_f (f_d - f_n) + ki_f * integral(f_d - f_n)  -  d_n * v_n,
@@ -50,7 +54,9 @@ CONTACT = "contact"
 @dataclass(frozen=True)
 class ForceControlConfig:
     force_desired: float = 10.0       # N, normal force to hold (positive = pressing into the table)
-    approach_speed: float = 0.05      # m/s, descent speed of the normal set-point before contact
+    approach_speed: float = 0.05      # m/s, peak descent speed of the smooth approach segment
+    creep_speed: float = 0.005        # m/s, constant speed of the final approach until contact
+    creep_distance: float = 0.01      # m, height above the expected surface where the creep begins
     contact_threshold: float = 1.0    # N, sensor-based normal force that ends the approach
     contact_samples: int = 3          # consecutive control updates above the threshold required
     release_threshold: float = 0.2    # N, below this for release_time the controller re-approaches
@@ -66,6 +72,58 @@ class ForceControlConfig:
     posture_zeta: float = 1.0
     lambda_reg: float = 1e-3          # regularisation added to J M^-1 J^T before inversion
     max_penetration: float = 0.01     # m, the approach set-point never goes deeper than this below the surface
+
+
+class ApproachProfile:
+    """1-D set-point z(t) with continuous acceleration.
+
+    Segment 1 (0 <= t < T): quintic polynomial from (z0, 0, 0) to (z_creep, -v_creep, 0);
+    T is chosen so that the peak speed equals v_peak. Segment 2 (t >= T): constant
+    speed -v_creep, clamped at z_floor (where it stops with zero velocity).
+    """
+
+    def __init__(self, z0: float, z_creep: float, z_floor: float, v_peak: float, v_creep: float) -> None:
+        self.z0, self.z_creep, self.z_floor, self.v_creep = float(z0), float(z_creep), float(z_floor), float(v_creep)
+        dz = self.z_creep - self.z0
+        if dz >= 0.0 or v_peak <= 0.0:
+            self.T, self.coef = 0.0, None
+            self.z_creep = self.z0
+            return
+        lo, hi = abs(dz) / v_peak, 2.0 * abs(dz) / max(v_peak, 1e-9)    # bracket: quintic peak speed <= 1.875 x mean
+        for _ in range(60):                                              # bisection on the duration
+            mid = 0.5 * (lo + hi)
+            if self._peak_speed(self._coefficients(mid), mid) > v_peak:
+                lo = mid
+            else:
+                hi = mid
+        self.T = hi
+        self.coef = self._coefficients(self.T)
+
+    def _coefficients(self, T: float) -> np.ndarray:
+        p0, v0, a0, p1, v1, a1 = self.z0, 0.0, 0.0, self.z_creep, -self.v_creep, 0.0
+        c3 = (20 * (p1 - p0) - (8 * v1 + 12 * v0) * T - (3 * a0 - a1) * T ** 2) / (2 * T ** 3)
+        c4 = (30 * (p0 - p1) + (14 * v1 + 16 * v0) * T + (3 * a0 - 2 * a1) * T ** 2) / (2 * T ** 4)
+        c5 = (12 * (p1 - p0) - 6 * (v1 + v0) * T - (a0 - a1) * T ** 2) / (2 * T ** 5)
+        return np.array([p0, v0, a0 / 2, c3, c4, c5])
+
+    @staticmethod
+    def _peak_speed(c: np.ndarray, T: float) -> float:
+        t = np.linspace(0.0, T, 400)
+        v = c[1] + 2 * c[2] * t + 3 * c[3] * t ** 2 + 4 * c[4] * t ** 3 + 5 * c[5] * t ** 4
+        return float(np.max(np.abs(v)))
+
+    def __call__(self, t: float) -> tuple[float, float, float]:
+        """(z, dz/dt, d2z/dt2) at time t since the start of the approach."""
+        if self.coef is not None and t < self.T:
+            c = self.coef
+            z = c[0] + c[1] * t + c[2] * t ** 2 + c[3] * t ** 3 + c[4] * t ** 4 + c[5] * t ** 5
+            v = c[1] + 2 * c[2] * t + 3 * c[3] * t ** 2 + 4 * c[4] * t ** 3 + 5 * c[5] * t ** 4
+            a = 2 * c[2] + 6 * c[3] * t + 12 * c[4] * t ** 2 + 20 * c[5] * t ** 3
+            return float(z), float(v), float(a)
+        z = self.z_creep - self.v_creep * max(0.0, t - self.T)
+        if z <= self.z_floor:
+            return self.z_floor, 0.0, 0.0
+        return float(z), -self.v_creep, 0.0
 
 
 class ForceApproachController:
@@ -98,7 +156,12 @@ class ForceApproachController:
         self.x_ref = np.zeros(3)
         self.quat_d = np.array([1.0, 0, 0, 0])
         self.z_d = 0.0
+        self.zd_dot = 0.0
+        self.zd_ddot = 0.0
         self.z_floor = 0.0
+        self.z_surface = 0.0            # expected tip-centre height at first contact (surface + tip radius)
+        self.profile: ApproachProfile | None = None
+        self.t_approach = 0.0
         self.phase = APPROACH
         self.t_contact: float | None = None
         self.t_last_contact = 0.0
@@ -126,7 +189,15 @@ class ForceApproachController:
 
     def status(self) -> str:
         return (f"{self.phase:8s} f_n={self.f_n:6.2f} N  f_d={self.f_d:5.2f} N  "
-                f"f_cmd={self.f_cmd:6.2f} N  z_d={self.z_d:.4f} m")
+                f"f_cmd={self.f_cmd:6.2f} N  z_d={self.z_d:.4f} m  dz_d={self.zd_dot:+.4f} m/s")
+
+    def start_approach(self, z0: float, t: float) -> None:
+        """Begin a new smooth descent from height z0 at time t."""
+        cfg = self.cfg
+        self.profile = ApproachProfile(z0, self.z_surface + cfg.creep_distance, self.z_floor,
+                                       cfg.approach_speed, cfg.creep_speed)
+        self.t_approach = t
+        self.z_d, self.zd_dot, self.zd_ddot = self.profile(0.0)
 
     # ------------------------------------------------------------------ interface
     def reset(self, model: mujoco.MjModel, data: mujoco.MjData, q_home: np.ndarray) -> None:
@@ -137,7 +208,9 @@ class ForceApproachController:
         mujoco.mju_mat2Quat(self.quat_d, data.site_xmat[self.tcp])
         tabletop = model.geom(TABLETOP_GEOM).id
         top_z = float(data.geom_xpos[tabletop][2] + model.geom_size[tabletop][2])
-        self.z_floor = top_z + self.tip_radius - self.cfg.max_penetration
+        self.z_surface = top_z + self.tip_radius
+        self.z_floor = self.z_surface - self.cfg.max_penetration
+        self.start_approach(self.z_d, float(data.time))
         self.phase = APPROACH
         self.t_contact = None
         self.t_last_contact = 0.0
@@ -159,10 +232,11 @@ class ForceApproachController:
         self.f_n = f_n = self.normal_force(data)
         x = data.site_xpos[self.tcp]
         if self.phase == APPROACH:
-            self.z_d = max(self.z_d - cfg.approach_speed * self.dt, self.z_floor)
+            self.z_d, self.zd_dot, self.zd_ddot = self.profile(t - self.t_approach)
             self.contact_count = self.contact_count + 1 if f_n > cfg.contact_threshold else 0
             if self.contact_count >= cfg.contact_samples:
                 self.phase = CONTACT
+                self.zd_dot = self.zd_ddot = 0.0    # the set-point stops where contact was found
                 self.t_contact = t
                 self.t_last_contact = t
                 self.f_int = 0.0
@@ -171,7 +245,7 @@ class ForceApproachController:
                 self.t_last_contact = t
             elif t - self.t_last_contact > cfg.release_time:
                 self.phase = APPROACH          # contact lost: re-approach from the current height
-                self.z_d = float(x[2])
+                self.start_approach(float(x[2]), t)
                 self.n_releases += 1
 
         # --- kinematics and dynamics at the current state -----------------------------------
@@ -191,6 +265,8 @@ class ForceApproachController:
         a_o = self.kp_m * self.orientation_error(rot) - self.kd_m * w
         if self.phase == CONTACT:
             a_p = a_p - (a_p @ n) * n                 # the normal direction is force-controlled
+        else:
+            a_p = a_p + (self.zd_ddot + self.kd_m * self.zd_dot) * n   # profile feedforward along the normal
         force = lam @ np.concatenate((a_p, a_o))
 
         # --- normal force control ---------------------------------------------------------------

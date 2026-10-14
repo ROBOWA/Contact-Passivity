@@ -52,9 +52,9 @@ mjpython -m kuka_table_sim.run viewer
 python -m kuka_table_sim.run viewer
 
 # Approach the table and hold 10 N (headless validation with a time-series log, or live):
-python   -m kuka_table_sim.run --controller force headless --duration 12 --log run.npz --render docs/kuka_force_hold.png
+python   -m kuka_table_sim.run --controller force headless --duration 15 --log run.npz --render docs/kuka_force_hold.png
 mjpython -m kuka_table_sim.run --controller force viewer
-python   -m kuka_table_sim.run --controller force --force 15 --approach-speed 0.02 headless
+python   -m kuka_table_sim.run --controller force --force 15 --approach-speed 0.03 --creep-speed 0.003 headless --duration 20
 
 # Initial state from a site pose (IK): any command accepts --init-site/--init-pos + --init-rpy or --init-quat
 mjpython -m kuka_table_sim.run --init-site tcp --init-pos 0.6 0.15 0.3 --init-rpy 0 180 0 viewer
@@ -73,7 +73,8 @@ until `Esc` switches back to the free camera (`[` and `]` cycle cameras).
 
 All timing and controller parameters are command-line options (`--timestep`,
 `--control-period`, `--render-hz`, `--hold-freq-hz`, `--hold-zeta`,
-`--controller`, `--force`, `--approach-speed`, `--kp-force`, `--ki-force`); see
+`--controller`, `--force`, `--approach-speed`, `--creep-speed`,
+`--creep-distance`, `--kp-force`, `--ki-force`); see
 `python -m kuka_table_sim.run --help`. Run the commands from the repository
 root so that `kuka_table_sim` is importable; the package locates `assets/`
 relative to its own files.
@@ -207,10 +208,20 @@ from `mj_contactForce` is used for validation, never for control):
   `Kd = 2 zeta wn`, `wn = 2 pi * 2 Hz`. Weighting by `Lambda` is what makes the
   light wrist joints (joint 7 has 0.001 kg m^2) and the heavy shoulder close
   their loops at the same bandwidth.
-* **Phase APPROACH:** the normal set-point descends at `--approach-speed`
-  (0.05 m/s) from the home height, clamped at most 10 mm below the surface.
-  Contact is declared when the sensor-based normal force exceeds 1 N for three
-  consecutive control updates.
+* **Phase APPROACH:** the normal set-point follows an acceleration-continuous
+  profile (`ApproachProfile`): a quintic (minimum-jerk) segment from rest at
+  the start height down to a *creep point* `--creep-distance` (10 mm) above
+  the expected contact height (tabletop + tip radius, from the model), arriving
+  there at `--creep-speed` (5 mm/s) with zero acceleration; the segment's
+  duration is chosen so that its peak speed equals `--approach-speed`
+  (0.05 m/s). From the creep point the set-point continues at the creep speed
+  until contact (clamped 10 mm below the expected surface). The PD tracks the
+  profile with velocity and acceleration feedforward along the normal, so the
+  tracking error stays below 0.3 mm. Contact is declared when the sensor-based
+  normal force exceeds 1 N for three consecutive control updates; the
+  set-point then freezes. If the surface is lower than expected the creep just
+  continues; if it is higher by more than the creep distance, contact happens
+  during the fast segment (the report prints the actual touchdown speed).
 * **Phase CONTACT:** the normal direction switches to force control,
   `f_cmd = f_d + kp_f (f_d - f_n) + ki_f * integral(f_d - f_n) - d_n v_n`, with
   `f_d` ramped linearly to `--force` over 1 s, `kp_f = 0.5`, `ki_f = 5 /s`,
@@ -223,30 +234,37 @@ from `mj_contactForce` is used for validation, never for control):
 
 `headless` in this mode prints a report and writes a `.npz` log with `--log`
 (time, phase, sensor and true normal force, desired and commanded force, tip
-position, orientation error, `q`, `qvel`, `tau`). Checks: static sensor bias
+position and velocity, set-point `z_d` with its first two derivatives,
+orientation error, `q`, `qvel`, `tau`). Checks: static sensor bias
 compensates to < 0.05 N; contact is detected; in the hold window (from
 contact + ramp + 1 s, last 3 s) mean |f_d - f_n| < 0.2 N and max < 0.5 N;
 sensor vs true contact force < 0.3 N; tangential tip drift < 3 mm; orientation
 error < 1 deg; no contact loss; no contacts other than tip/tabletop; no
 saturation or MuJoCo warnings.
 
-Results on the tested platform (12 s, 10 N):
+The validation also checks the profile itself: the logged set-point
+acceleration must not jump between control updates, the tip must reach the
+table at less than twice the creep speed, and the force during touchdown and
+ramp must stay below `f_d + 2 N`.
+
+Results on the tested platform (15 s, 10 N, defaults):
 
 | Quantity | Value |
 | --- | --- |
-| Contact detected | t = 2.97 s (expected 2.81 s from geometry plus set-point lag) |
-| Touchdown transient | peak 22.8 N for one control step at impact (0.05 m/s), one brief bounce, then the ramp; within 0.2 N of `f_d` from t = 3.02 s |
-| Hold window (9 to 12 s) | f_n mean 10.000 N, std 0.000 N, max error 0.005 N |
-| Sensor vs true force | max difference 0.000 N in the hold window |
-| Tip drift / orientation | 0.12 mm, 0.046 deg |
+| Approach profile | quintic 4.69 s from z = 0.2994 m to the creep point 0.1690 m: peak speed 0.050 m/s, peak acceleration 0.032 m/s^2, max jerk 0.07 m/s^3; then 10 mm of creep at 5 mm/s |
+| Tracking during approach | max 0.26 mm (velocity + acceleration feedforward) |
+| Contact detected | t = 6.74 s, tip speed 4.8 mm/s, no bounce |
+| Touchdown and ramp | peak 9.98 N (no overshoot); within 0.2 N of `f_d` throughout the ramp; max error 0.002 N after 8 s |
+| Hold window (12 to 15 s) | f_n mean 10.000 N, std 0.000 N, max error 0.000 N |
+| Sensor vs true force | max difference 0.000 N in the hold window; during the approach the sensor shows the uncompensated tool-inertia term, 0.016 N = 0.5 kg x 0.032 m/s^2 |
+| Tip drift / orientation | 0.08 mm, 0.031 deg |
 | Tip penetration | 0.2 mm at 10 N (`solref 0.02 1`) |
-| Torques | max 59 N m (joint 2), no saturation |
-| Also verified | mujoco 3.3.7 (conda base) headless PASS; live viewer under `mjpython` with per-second status lines |
+| Torques | max 53 N m (joint 2), no saturation |
+| Also verified | mujoco 3.3.7 (conda base) PASS; from a custom initial pose with `--creep-speed 0.003` PASS (touchdown 2.9 mm/s); live viewer under `mjpython` with per-second status lines |
 
-A slower approach (`--approach-speed 0.02`) reduces the touchdown peak. The
-zero steady-state error is a property of the integral term; the commanded force
-settles about 0.4 N above the measured one, which is the coupling the integral
-absorbs.
+The zero steady-state error is a property of the integral term; the commanded
+force settles about 0.4 N above the measured one, which is the coupling the
+integral absorbs.
 
 ## Initial state from a site pose (IK API)
 
