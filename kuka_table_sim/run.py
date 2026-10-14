@@ -29,7 +29,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from .force_control import APPROACH, CONTACT, ForceApproachController, ForceControlConfig
+from .force_control import APPROACH, CONTACT, SLIDE, ForceApproachController, ForceControlConfig
 from .holding import DEFAULT_HOLD_FREQ_HZ, DEFAULT_HOLD_ZETA, HoldingController, Simulation
 from .ik import quat_from_rpy, site_pose, solve_site_ik
 from .scene import (FLANGE_SITE, OVERVIEW_CAMERA, ROBOT_BODIES, SCENE_XML, TCP_SITE, TOOL_TIP_GEOM, ArmIndex,
@@ -299,6 +299,7 @@ def run_force_headless(sim: Simulation, duration: float, render: Path | None, lo
     cfg = ctl.cfg
     ok = True
     failures: list[str] = []
+    phase_code = {APPROACH: 0, CONTACT: 1, SLIDE: 2}
 
     def check(cond: bool, msg: str) -> None:
         nonlocal ok
@@ -313,26 +314,36 @@ def run_force_headless(sim: Simulation, duration: float, render: Path | None, lo
     x0 = d.site_xpos[tcp].copy()
     tabletop = m.geom("tabletop").id
     top_z = d.geom_xpos[tabletop][2] + m.geom_size[tabletop][2]
-    t_contact_expected = (x0[2] - top_z - ctl.tip_radius) / cfg.approach_speed
+    sliding = cfg.slide_distance > 0
     if verbose:
         print("== force control ==")
-        print(f"target / approach   : {cfg.force_desired} N, {cfg.approach_speed} m/s, contact threshold {cfg.contact_threshold} N, "
-              f"ramp {cfg.force_ramp_time} s")
+        print(f"target / approach   : {cfg.force_desired} N, peak {cfg.approach_speed} m/s, creep {cfg.creep_speed} m/s from "
+              f"{cfg.creep_distance} m above the surface, contact threshold {cfg.contact_threshold} N, ramp {cfg.force_ramp_time} s")
         print(f"gains               : kp_f {cfg.kp_force}, ki_f {cfg.ki_force} 1/s, normal damping {cfg.normal_damping} N*s/m, "
-              f"motion {cfg.motion_freq_hz} Hz (zeta {cfg.motion_zeta}), posture {cfg.posture_freq_hz} Hz")
+              f"translation {cfg.motion_freq_hz} Hz, rotation {cfg.rotation_freq_hz} Hz (zeta {cfg.motion_zeta}), "
+              f"tangential ki {cfg.ki_tangential} 1/s^3, rotation ki {cfg.ki_rotation} 1/s^3, friction ff mu_hat {cfg.friction_ff} / c_hat {cfg.friction_viscous_ff} N*s/m, "
+              f"posture {cfg.posture_freq_hz} Hz")
+        if sliding:
+            print(f"slide               : {cfg.slide_distance} m along {np.array2string(ctl.slide_dir, precision=3)}, peak {cfg.slide_speed} m/s "
+                  f"(stroke {ctl.slide.T:.2f} s), {'unlimited' if cfg.slide_cycles == 0 else cfg.slide_cycles} cycle(s), "
+                  f"dwell {cfg.slide_dwell} s, starts {cfg.slide_start_delay} s after the ramp")
         print(f"sensor at rest      : raw {np.array2string(d.sensordata[ctl.ft_adr:ctl.ft_adr + 3], precision=3)} N (site frame), "
               f"tool mass {ctl.tool_mass} kg, compensated {np.array2string(f0, precision=4)} N")
-        print(f"start / surface     : tip centre z {x0[2]:.4f} m, surface {top_z:.3f} m, expected contact at ~{t_contact_expected:.2f} s")
+        print(f"start / surface     : tip centre z {x0[2]:.4f} m, surface {top_z:.3f} m")
 
     # --- run ----------------------------------------------------------------------------------
     n = sim.steps_for(duration)
     ci = sim.timing.control_interval
-    rows = []  # per control update
+    names = (["t", "phase", "f_n", "f_true_n", "f_d", "f_cmd", "x", "y", "z", "fe_x", "fe_y", "fe_z", "ft_x", "ft_y", "ft_z",
+              "ori_err", "z_d", "zd_dot", "zd_ddot", "vx", "vy", "vz", "s_d", "sd_dot", "sd_ddot", "xd", "yd"]
+             + [f"q{i}" for i in range(1, 8)] + [f"qd{i}" for i in range(1, 8)] + [f"tau{i}" for i in range(1, 8)])
+    rows = []
     jacp_log = np.zeros((3, m.nv))
     warn_before = _warning_counts(d)
     other_contacts: dict[tuple[str, str], int] = {}
     sat_updates = 0
     t_contact = None
+    t_slide = None
     t0 = time.perf_counter()
     for _ in range(n):
         sim.step()
@@ -343,11 +354,15 @@ def run_force_headless(sim: Simulation, duration: float, render: Path | None, lo
         rot = d.site_xmat[tcp].reshape(3, 3)
         mujoco.mj_jacSite(m, d, jacp_log, None, tcp)
         v_tip = jacp_log @ d.qvel
-        rows.append((d.time, 1.0 if ctl.phase == CONTACT else 0.0, ctl.f_n, float(f_true @ ctl.normal), ctl.f_d, ctl.f_cmd,
+        x_d = ctl.x_ref + ctl.s_d * ctl.slide_dir
+        rows.append([d.time, phase_code[ctl.phase], ctl.f_n, float(f_true @ ctl.normal), ctl.f_d, ctl.f_cmd,
                      *d.site_xpos[tcp], *f_est, *f_true, float(np.linalg.norm(ctl.orientation_error(rot))),
-                     *sim.q, *sim.qvel, *sim.tau, ctl.z_d, ctl.zd_dot, ctl.zd_ddot, *v_tip))
-        if t_contact is None and ctl.phase == CONTACT:
+                     ctl.z_d, ctl.zd_dot, ctl.zd_ddot, *v_tip, ctl.s_d, ctl.sd_dot, ctl.sd_ddot, x_d[0], x_d[1],
+                     *sim.q, *sim.qvel, *sim.tau])
+        if t_contact is None and ctl.in_contact:
             t_contact = ctl.t_contact
+        if t_slide is None and ctl.phase == SLIDE:
+            t_slide = ctl.t_slide
         if ctl.saturated.any():
             sat_updates += 1
         for a, b, _ in _robot_contact_pairs(sim):
@@ -357,82 +372,113 @@ def run_force_headless(sim: Simulation, duration: float, render: Path | None, lo
             check(False, f"non-finite state at t={d.time:.4f}")
             break
     wall = time.perf_counter() - t0
-    log_arr = np.array(rows)
-    t, in_contact, f_n, f_true_n, f_d = log_arr[:, 0], log_arr[:, 1], log_arr[:, 2], log_arr[:, 3], log_arr[:, 4]
-    pos = log_arr[:, 6:9]
-    ori_err = log_arr[:, 15]
-    z_d, zd_dot, zd_ddot, v_tip = log_arr[:, 37], log_arr[:, 38], log_arr[:, 39], log_arr[:, 40:43]
+    arr = np.array(rows)
+    col = {name: arr[:, i] for i, name in enumerate(names)}
+    t, phase, f_n, f_true_n, f_d = col["t"], col["phase"], col["f_n"], col["f_true_n"], col["f_d"]
+    pos = arr[:, 6:9]
     dt_c = sim.timing.control_period
-    approach = in_contact == 0
-    acc_jumps = np.abs(np.diff(zd_ddot[approach])) if approach.sum() > 2 else np.zeros(1)
-    jerk_num = acc_jumps / dt_c
+    approach = phase == 0
+    in_contact = phase >= 1
+    acc_jumps = np.abs(np.diff(col["zd_ddot"][approach])) if approach.sum() > 2 else np.zeros(1)
     new_warnings = {_warning_names()[i]: int(c) for i, c in enumerate(_warning_counts(d) - warn_before) if c}
 
     check(t_contact is not None, "contact was never detected")
-    check(float(np.max(acc_jumps)) < 1e-3, f"set-point acceleration jumps by {np.max(acc_jumps):.2e} m/s^2 between control updates")
-    if t_contact is not None:
-        k_c = int(np.argmax(in_contact > 0))
-        contact_speed = float(-v_tip[max(k_c - 3, 0), 2])
-        touchdown_peak = float(np.max(f_n[k_c:k_c + int(cfg.force_ramp_time / dt_c)]))
-        check(contact_speed < 2.0 * cfg.creep_speed, f"tip reached the table at {contact_speed:.4f} m/s (creep speed {cfg.creep_speed})")
-        check(touchdown_peak < cfg.force_desired + 2.0, f"touchdown/ramp peak force {touchdown_peak:.2f} N")
+    check(float(np.max(acc_jumps)) < 1e-3, f"approach set-point acceleration jumps by {np.max(acc_jumps):.2e} m/s^2")
     check(not new_warnings, f"MuJoCo warnings raised: {new_warnings}")
     check(not other_contacts, f"contacts other than tip/tabletop: {other_contacts}")
     check(sat_updates == 0, f"torque saturated in {sat_updates} control updates")
     check(ctl.n_releases == 0, f"contact was lost and re-approached {ctl.n_releases} time(s)")
+    contact_speed = touchdown_peak = float("nan")
     if t_contact is not None:
+        k_c = int(np.argmax(in_contact))
+        contact_speed = float(-col["vz"][max(k_c - 3, 0)])
+        touchdown_peak = float(np.max(f_n[k_c:k_c + int(cfg.force_ramp_time / dt_c)]))
+        check(contact_speed < 2.0 * cfg.creep_speed, f"tip reached the table at {contact_speed:.4f} m/s (creep speed {cfg.creep_speed})")
+        check(touchdown_peak < cfg.force_desired + 2.0, f"touchdown/ramp peak force {touchdown_peak:.2f} N")
         settle_from = t_contact + cfg.force_ramp_time + 1.0
         win = t >= max(settle_from, t[-1] - 3.0)
         check(win.sum() > 100, f"run too short to assess the hold (contact at {t_contact:.2f} s, duration {duration} s)")
-        if win.sum() > 100:
-            err = f_d[win] - f_n[win]
-            mean_err, max_err = float(np.mean(np.abs(err))), float(np.max(np.abs(err)))
-            sensor_vs_truth = float(np.max(np.abs(f_n[win] - f_true_n[win])))
-            xy_drift = float(np.max(np.linalg.norm(pos[win, :2] - x0[:2], axis=1)))
-            ori_max = float(np.degrees(np.max(ori_err[win])))
-            f_std = float(np.std(f_n[win]))
-            check(mean_err < 0.2, f"mean |f_d - f_n| in the hold window is {mean_err:.3f} N")
-            check(max_err < 0.5, f"max |f_d - f_n| in the hold window is {max_err:.3f} N")
-            check(sensor_vs_truth < 0.3, f"sensor estimate deviates from the true contact force by up to {sensor_vs_truth:.3f} N")
-            check(xy_drift < 0.003, f"tangential drift of the tip is {xy_drift * 1000:.1f} mm")
-            check(ori_max < 1.0, f"orientation error reaches {ori_max:.2f} deg")
-            check(np.all(in_contact[win] > 0), "contact flag dropped inside the hold window")
+    hold_stats = None
+    if t_contact is not None and win.sum() > 100:
+        err = f_d[win] - f_n[win]
+        hold_stats = dict(mean_err=float(np.mean(np.abs(err))), max_err=float(np.max(np.abs(err))),
+                          truth=float(np.max(np.abs(f_n[win] - f_true_n[win]))), f_mean=float(np.mean(f_n[win])),
+                          f_std=float(np.std(f_n[win])), ori=float(np.degrees(np.max(col["ori_err"][win]))),
+                          drift=float(np.max(np.linalg.norm(pos[win, :2] - x0[:2], axis=1))))
+        check(hold_stats["mean_err"] < (0.5 if sliding else 0.2), f"mean |f_d - f_n| in the hold window is {hold_stats['mean_err']:.3f} N")
+        check(hold_stats["max_err"] < (3.0 if sliding else 0.5), f"max |f_d - f_n| in the hold window is {hold_stats['max_err']:.3f} N")
+        check(hold_stats["truth"] < 0.3, f"sensor estimate deviates from the true contact force by up to {hold_stats['truth']:.3f} N")
+        check(hold_stats["ori"] < (2.0 if sliding else 1.0), f"orientation error reaches {hold_stats['ori']:.2f} deg")
+        check(np.all(in_contact[win]), "contact flag dropped inside the hold window")
+        if not sliding:
+            check(hold_stats["drift"] < 0.003, f"tangential drift of the tip is {hold_stats['drift'] * 1000:.1f} mm")
+
+    slide_stats = None
+    if sliding:
+        check(t_slide is not None, "sliding never started (run too short?)")
+    if t_slide is not None:
+        sl = phase == 2
+        e_vec = np.stack([col["xd"] - pos[:, 0], col["yd"] - pos[:, 1]], axis=1)[sl]
+        along = e_vec @ ctl.slide_dir[:2]
+        cross = e_vec - np.outer(along, ctl.slide_dir[:2])
+        s_jumps = np.abs(np.diff(col["sd_ddot"][sl]))
+        strokes = ctl.strokes_completed(float(t[-1]))
+        f_err = f_d[sl] - f_n[sl]
+        slide_stats = dict(strokes=strokes, along_max=float(np.max(np.abs(along))), along_rms=float(np.sqrt(np.mean(along ** 2))),
+                           cross_max=float(np.max(np.linalg.norm(cross, axis=1))), f_mean_err=float(np.mean(np.abs(f_err))),
+                           f_max_err=float(np.max(np.abs(f_err))), f_std=float(np.std(f_n[sl])),
+                           ori=float(np.degrees(np.max(col["ori_err"][sl]))), acc_jump=float(np.max(s_jumps)) if len(s_jumps) else 0.0,
+                           v_peak=float(np.max(np.abs(col["sd_dot"][sl]))), a_peak=float(np.max(np.abs(col["sd_ddot"][sl]))),
+                           travel=float(np.max(col["s_d"][sl])))
+        check(strokes >= 1, f"only {strokes} stroke(s) completed")
+        check(slide_stats["acc_jump"] < 1e-3, f"slide set-point acceleration jumps by {slide_stats['acc_jump']:.2e} m/s^2")
+        along_tol = max(0.005, 0.1 * cfg.slide_speed)      # 5 mm at the default 0.05 m/s, scaled with speed
+        check(slide_stats["along_max"] < along_tol, f"tangential tracking error reaches {slide_stats['along_max'] * 1000:.2f} mm "
+                                                     f"(limit {along_tol * 1000:.1f} mm)")
+        check(slide_stats["cross_max"] < 0.003, f"cross-track error reaches {slide_stats['cross_max'] * 1000:.2f} mm")
+        check(slide_stats["f_mean_err"] < 0.5, f"mean |f_d - f_n| while sliding is {slide_stats['f_mean_err']:.3f} N")
+        check(slide_stats["f_max_err"] < 3.0, f"max |f_d - f_n| while sliding is {slide_stats['f_max_err']:.3f} N")
+
     if verbose:
         print("== run ==")
         print(f"simulated / wall    : {d.time:.3f} s in {sim.n_steps} steps; wall {wall:.2f} s ({d.time / wall:.1f}x)")
         print(f"approach profile    : quintic {ctl.profile.T:.2f} s from z {ctl.profile.z0:.4f} to creep point {ctl.profile.z_creep:.4f} m, "
-              f"peak speed {np.max(-zd_dot):.4f} m/s, peak |accel| {np.max(np.abs(zd_ddot)):.4f} m/s^2, "
-              f"max |jerk| {np.max(jerk_num):.3f} m/s^3, then creep {cfg.creep_speed} m/s")
-        print(f"contact detected    : {'t = %.3f s' % t_contact if t_contact is not None else 'never'} "
-              f"(sensor f_n > {cfg.contact_threshold} N); tip z at contact {pos[np.argmax(in_contact > 0), 2] if t_contact else float('nan'):.4f} m"
-              + (f", tip speed {contact_speed:.4f} m/s, touchdown/ramp peak {touchdown_peak:.2f} N" if t_contact is not None else ""))
+              f"peak speed {np.max(-col['zd_dot']):.4f} m/s, peak |accel| {np.max(np.abs(col['zd_ddot'])):.4f} m/s^2, "
+              f"max |jerk| {np.max(acc_jumps) / dt_c:.3f} m/s^3, then creep {cfg.creep_speed} m/s")
         if t_contact is not None:
-            lag = (z_d - pos[:, 2])[approach]
-            print(f"tracking (approach) : max |z - z_d| {np.max(np.abs(lag)) * 1000:.2f} mm")
-        if t_contact is not None and win.sum() > 100:
-            print(f"hold window         : t in [{t[win][0]:.2f}, {t[win][-1]:.2f}] s")
-            print(f"  f_n mean / std    : {np.mean(f_n[win]):.3f} / {f_std:.3f} N   (target {cfg.force_desired} N)")
-            print(f"  |f_d - f_n|       : mean {mean_err:.3f} N, max {max_err:.3f} N")
-            print(f"  sensor vs truth   : max |f_n - f_true| {sensor_vs_truth:.3f} N")
-            print(f"  tip xy drift      : {xy_drift * 1000:.2f} mm, orientation error max {ori_max:.3f} deg")
+            lag = (col["z_d"] - pos[:, 2])[approach]
+            print(f"contact detected    : t = {t_contact:.3f} s (sensor f_n > {cfg.contact_threshold} N); tip z {pos[k_c, 2]:.4f} m, "
+                  f"tip speed {contact_speed:.4f} m/s, touchdown/ramp peak {touchdown_peak:.2f} N; approach tracking max {np.max(np.abs(lag)) * 1000:.2f} mm")
+        else:
+            print("contact detected    : never")
+        if hold_stats:
+            print(f"hold window         : t in [{t[win][0]:.2f}, {t[win][-1]:.2f}] s" + (" (sliding)" if sliding else ""))
+            print(f"  f_n mean / std    : {hold_stats['f_mean']:.3f} / {hold_stats['f_std']:.3f} N   (target {cfg.force_desired} N)")
+            print(f"  |f_d - f_n|       : mean {hold_stats['mean_err']:.3f} N, max {hold_stats['max_err']:.3f} N")
+            print(f"  sensor vs truth   : max |f_n - f_true| {hold_stats['truth']:.3f} N")
+            print(f"  orientation error : max {hold_stats['ori']:.3f} deg" + ("" if sliding else f", tip xy drift {hold_stats['drift'] * 1000:.2f} mm"))
             print(f"  tip z (mean)      : {np.mean(pos[win, 2]):.4f} m  (surface + radius = {top_z + ctl.tip_radius:.4f} m)")
-        peak = float(np.max(f_n)) if len(f_n) else 0.0
-        print(f"peak f_n            : {peak:.2f} N")
-        print(f"max |tau| (N*m)     : {np.array2string(np.max(np.abs(log_arr[:, 30:37]), axis=0), precision=1)} of limits {arm.torque_limit}")
+        if slide_stats:
+            ss = slide_stats
+            print(f"slide               : started t = {t_slide:.2f} s, {ss['strokes']} stroke(s) completed, travel {ss['travel']:.4f} m, "
+                  f"peak |v_d| {ss['v_peak']:.4f} m/s, peak |a_d| {ss['a_peak']:.4f} m/s^2, max accel jump {ss['acc_jump']:.1e}")
+            print(f"  tracking          : along-track max {ss['along_max'] * 1000:.2f} mm, rms {ss['along_rms'] * 1000:.2f} mm; "
+                  f"cross-track max {ss['cross_max'] * 1000:.2f} mm; orientation max {ss['ori']:.3f} deg")
+            print(f"  normal force      : |f_d - f_n| mean {ss['f_mean_err']:.3f} N, max {ss['f_max_err']:.3f} N, std {ss['f_std']:.3f} N")
+        print(f"peak f_n            : {float(np.max(f_n)):.2f} N")
+        print(f"max |tau| (N*m)     : {np.array2string(np.max(np.abs(arr[:, -7:]), axis=0), precision=1)} of limits {arm.torque_limit}")
         print(f"saturated updates   : {sat_updates};  releases: {ctl.n_releases};  other contacts: {dict(other_contacts) or 'none'}")
         print(f"MuJoCo warnings     : {new_warnings or 'none'}")
-        # coarse time series
-        print("  t[s]   phase    f_n[N]  f_true[N]  f_d[N]   tip_z[m]  z_d[m]   dz_d[m/s]  ddz_d[m/s2]")
-        for tt in np.arange(0.0, t[-1] + 1e-9, max(0.5, round(t[-1] / 20, 1))):
+        print("  t[s]   phase     f_n[N]  f_true[N]  f_d[N]   tip_z[m]  z_d[m]   s_d[m]   ds_d[m/s]  dds_d[m/s2]  e_along[mm]")
+        pname = {0: "approach", 1: "contact", 2: "slide"}
+        for tt in np.arange(0.0, t[-1] + 1e-9, max(0.5, round(t[-1] / 24, 1))):
             k = int(np.argmin(np.abs(t - tt)))
-            print(f"  {t[k]:5.2f}  {'contact' if in_contact[k] else 'approach':8s} {f_n[k]:7.3f} {f_true_n[k]:9.3f} {f_d[k]:7.3f}   "
-                  f"{pos[k, 2]:.4f}  {z_d[k]:.4f}  {zd_dot[k]:+.4f}   {zd_ddot[k]:+.4f}")
+            e_al = ((col["xd"][k] - pos[k, 0]) * ctl.slide_dir[0] + (col["yd"][k] - pos[k, 1]) * ctl.slide_dir[1]) * 1000
+            print(f"  {t[k]:5.2f}  {pname[int(phase[k])]:8s} {f_n[k]:7.3f} {f_true_n[k]:9.3f} {f_d[k]:7.3f}   {pos[k, 2]:.4f}  "
+                  f"{col['z_d'][k]:.4f}  {col['s_d'][k]:.4f}  {col['sd_dot'][k]:+.4f}   {col['sd_ddot'][k]:+.4f}     {e_al:+6.2f}")
 
     if log is not None:
-        np.savez(log, t=t, in_contact=in_contact, f_n=f_n, f_true_n=f_true_n, f_d=f_d, f_cmd=log_arr[:, 5],
-                 tcp_pos=pos, f_est_world=log_arr[:, 9:12], f_true_world=log_arr[:, 12:15], ori_err=ori_err,
-                 q=log_arr[:, 16:23], qvel=log_arr[:, 23:30], tau=log_arr[:, 30:37], z_d=z_d, zd_dot=zd_dot,
-                 zd_ddot=zd_ddot, tcp_vel=v_tip, force_desired=cfg.force_desired)
+        np.savez(log, **col, tcp_pos=pos, force_desired=cfg.force_desired, slide_dir=ctl.slide_dir)
         if verbose:
             print(f"== log ==\nwrote {log}")
     if render is not None:
@@ -524,7 +570,12 @@ def build_simulation(args: argparse.Namespace) -> Simulation:
     if args.controller == "force":
         cfg = ForceControlConfig(force_desired=args.force, approach_speed=args.approach_speed,
                                  creep_speed=args.creep_speed, creep_distance=args.creep_distance,
-                                 kp_force=args.kp_force, ki_force=args.ki_force)
+                                 kp_force=args.kp_force, ki_force=args.ki_force,
+                                 slide_distance=args.slide_distance, slide_direction=tuple(args.slide_direction),
+                                 slide_speed=args.slide_speed, slide_cycles=args.slide_cycles, slide_dwell=args.slide_dwell,
+                                 motion_freq_hz=args.motion_freq, rotation_freq_hz=args.rotation_freq,
+                                 ki_tangential=args.ki_tangential, ki_rotation=args.ki_rotation,
+                                 friction_ff=args.friction_ff, friction_viscous_ff=args.friction_viscous_ff)
         controller = ForceApproachController(model, arm, timing.control_period, cfg)
     else:
         controller = HoldingController.inertia_scaled(model, arm, home_qpos(model, arm), args.hold_freq_hz, args.hold_zeta)
@@ -643,6 +694,19 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--creep-speed", type=float, default=fc.creep_speed, help="[force] final approach speed until contact, m/s")
     p.add_argument("--creep-distance", type=float, default=fc.creep_distance,
                    help="[force] height above the expected surface where the creep starts, m")
+    p.add_argument("--slide-distance", type=float, default=fc.slide_distance, help="[force] stroke length, m (0 = no sliding)")
+    p.add_argument("--slide-direction", type=float, nargs=3, metavar=("X", "Y", "Z"), default=list(fc.slide_direction),
+                   help="[force] world direction of the stroke (projected onto the table plane)")
+    p.add_argument("--slide-speed", type=float, default=fc.slide_speed, help="[force] peak tangential speed, m/s")
+    p.add_argument("--slide-cycles", type=int, default=fc.slide_cycles, help="[force] out-and-back cycles, 0 = unlimited")
+    p.add_argument("--slide-dwell", type=float, default=fc.slide_dwell, help="[force] pause at each stroke end, s")
+    p.add_argument("--motion-freq", type=float, default=fc.motion_freq_hz, help="[force] translation impedance natural frequency, Hz")
+    p.add_argument("--rotation-freq", type=float, default=fc.rotation_freq_hz, help="[force] orientation impedance natural frequency, Hz")
+    p.add_argument("--ki-tangential", type=float, default=fc.ki_tangential, help="[force] tangential integral gain while in contact, 1/s^3")
+    p.add_argument("--ki-rotation", type=float, default=fc.ki_rotation, help="[force] orientation integral gain while in contact, 1/s^3")
+    p.add_argument("--friction-ff", type=float, default=fc.friction_ff, help="[force] nominal Coulomb coefficient for the tangential feedforward")
+    p.add_argument("--friction-viscous-ff", type=float, default=fc.friction_viscous_ff,
+                   help="[force] nominal viscous friction coefficient (N*s/m) for the tangential feedforward")
     p.add_argument("--kp-force", type=float, default=fc.kp_force, help="[force] proportional force gain")
     p.add_argument("--ki-force", type=float, default=fc.ki_force, help="[force] integral force gain, 1/s")
     p.add_argument("--init-site", default=TCP_SITE, help="site whose pose defines the initial state (with --init-pos)")

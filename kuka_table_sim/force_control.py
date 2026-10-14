@@ -15,6 +15,13 @@ The controller works in operational space at the `tcp` site (tool tip centre):
       f_cmd = f_d(t) + kp_f (f_d - f_n) + ki_f * integral(f_d - f_n)  -  d_n * v_n,
   with f_d ramped linearly to the target after contact and an anti-windup
   clamp on the integral term;
+* phase SLIDE (optional, after the force ramp): the tangential set-point
+  moves back and forth along a fixed in-plane direction over a fixed distance
+  with rest-to-rest quintic strokes (SlideProfile), so position, velocity and
+  acceleration of the reference are continuous; the normal force loop keeps
+  running, integral terms on the in-plane position and the orientation absorb
+  the friction force and moment, and a nominal friction feedforward (viscous
+  c_hat * v_d and/or Coulomb mu_hat * f_n * sign(v_d)) removes most of the lag;
 * null space: posture spring/damper toward q_home, projected with the
   dynamically consistent projector N = I - J^T Jbar^T;
 * gravity and Coriolis compensation through qfrc_bias, applied once.
@@ -49,6 +56,7 @@ TABLETOP_GEOM = "tabletop"
 
 APPROACH = "approach"
 CONTACT = "contact"
+SLIDE = "slide"
 
 
 @dataclass(frozen=True)
@@ -66,8 +74,23 @@ class ForceControlConfig:
     ki_force: float = 5.0             # integral gain (1/s)
     integral_limit: float = 10.0      # N, clamp on the integral contribution ki * integral
     normal_damping: float = 40.0      # N*s/m, damping along the normal while in contact
-    motion_freq_hz: float = 2.0       # unit-mass impedance natural frequency (translation and rotation)
+    motion_freq_hz: float = 4.0       # unit-mass impedance natural frequency, translation
     motion_zeta: float = 1.0
+    rotation_freq_hz: float = 6.0     # unit-mass impedance natural frequency, orientation
+    ki_tangential: float = 300.0      # 1/s^3, unit-mass integral gain on the in-plane position error while in contact
+    tangential_integral_limit: float = 5.0   # m/s^2, clamp on the unit-mass integral contribution
+    ki_rotation: float = 300.0        # 1/s^3, unit-inertia integral gain on the orientation error while in contact
+    rotation_integral_limit: float = 20.0    # rad/s^2, clamp on the unit-inertia integral contribution
+    friction_ff: float = 0.0          # nominal Coulomb coefficient mu_hat for the tangential feedforward (mu_hat * f_n * sign)
+    friction_ff_speed: float = 0.005  # m/s, width of the tanh(v_d / v_eps) sign blend of the Coulomb feedforward
+    friction_viscous_ff: float = 80.0 # N*s/m, nominal viscous coefficient c_hat for the tangential feedforward (c_hat * v_d);
+                                      # MuJoCo's soft friction rows act viscously below the cone limit (see the scene file)
+    slide_distance: float = 0.10      # m, stroke length; 0 disables sliding
+    slide_direction: tuple = (1.0, 0.0, 0.0)  # world direction, projected onto the table plane
+    slide_speed: float = 0.05         # m/s, peak speed of each stroke
+    slide_cycles: int = 0             # number of out-and-back cycles, 0 = repeat until the run ends
+    slide_dwell: float = 0.0          # s, pause at each end of a stroke
+    slide_start_delay: float = 1.0    # s, after the force ramp completes
     posture_freq_hz: float = 1.0      # null-space posture spring natural frequency
     posture_zeta: float = 1.0
     lambda_reg: float = 1e-3          # regularisation added to J M^-1 J^T before inversion
@@ -126,6 +149,45 @@ class ApproachProfile:
         return float(z), -self.v_creep, 0.0
 
 
+class SlideProfile:
+    """Scalar s(t) in [0, D]: rest-to-rest quintic strokes 0 -> D -> 0 -> ..., with continuous
+    position, velocity and acceleration (both are zero at every stroke end), optional dwell at
+    the ends, and a cycle limit (0 = unlimited). Each stroke lasts T = 1.875 D / v_peak, the
+    duration for which a rest-to-rest quintic reaches peak speed v_peak."""
+
+    def __init__(self, distance: float, v_peak: float, cycles: int = 0, dwell: float = 0.0) -> None:
+        self.D = float(distance)
+        self.T = 1.875 * self.D / v_peak if v_peak > 0 and self.D > 0 else 0.0
+        self.cycles = int(cycles)
+        self.dwell = float(dwell)
+
+    def strokes_completed(self, t: float) -> int:
+        if self.T <= 0 or t <= 0:
+            return 0
+        n = int(t // (self.T + self.dwell))
+        return min(n, 2 * self.cycles) if self.cycles > 0 else n
+
+    def __call__(self, t: float) -> tuple[float, float, float]:
+        """(s, ds/dt, d2s/dt2) at time t since the slide started."""
+        if self.T <= 0 or t <= 0:
+            return 0.0, 0.0, 0.0
+        period = self.T + self.dwell
+        n = int(t // period)
+        if self.cycles > 0 and n >= 2 * self.cycles:
+            return 0.0, 0.0, 0.0                    # finished: rest at the start point
+        tau = t - n * period
+        forward = n % 2 == 0
+        if tau >= self.T:                           # dwell
+            return (self.D if forward else 0.0), 0.0, 0.0
+        u = tau / self.T
+        p = 10 * u ** 3 - 15 * u ** 4 + 6 * u ** 5           # rest-to-rest quintic, 0 -> 1
+        v = (30 * u ** 2 - 60 * u ** 3 + 30 * u ** 4) / self.T
+        a = (60 * u - 180 * u ** 2 + 120 * u ** 3) / self.T ** 2
+        if forward:
+            return self.D * p, self.D * v, self.D * a
+        return self.D * (1 - p), -self.D * v, -self.D * a
+
+
 class ForceApproachController:
     def __init__(self, model: mujoco.MjModel, arm: ArmIndex, control_period: float,
                  config: ForceControlConfig | None = None) -> None:
@@ -146,6 +208,15 @@ class ForceApproachController:
         self.normal = np.array([0.0, 0.0, 1.0])  # tabletop normal, pointing toward the tool
         wn = 2.0 * np.pi * self.cfg.motion_freq_hz
         self.kp_m, self.kd_m = wn ** 2, 2.0 * self.cfg.motion_zeta * wn
+        wr = 2.0 * np.pi * self.cfg.rotation_freq_hz
+        self.kp_r, self.kd_r = wr ** 2, 2.0 * self.cfg.motion_zeta * wr
+        direction = np.asarray(self.cfg.slide_direction, dtype=float).reshape(3)
+        direction = direction - (direction @ self.normal) * self.normal
+        if self.cfg.slide_distance > 0 and np.linalg.norm(direction) < 1e-9:
+            raise ValueError("slide_direction must have a component in the table plane")
+        self.slide_dir = direction / np.linalg.norm(direction) if np.linalg.norm(direction) > 1e-9 else np.zeros(3)
+        self.slide = SlideProfile(self.cfg.slide_distance, self.cfg.slide_speed,
+                                  self.cfg.slide_cycles, self.cfg.slide_dwell)
         wq = 2.0 * np.pi * self.cfg.posture_freq_hz
         self.kp_q, self.kd_q = wq ** 2, 2.0 * self.cfg.posture_zeta * wq
         self._jacp = np.zeros((3, model.nv))
@@ -171,6 +242,11 @@ class ForceApproachController:
         self.f_cmd = 0.0
         self.n_releases = 0
         self.contact_count = 0
+        self.t_slide: float | None = None
+        self.s_d = self.sd_dot = self.sd_ddot = 0.0
+        self.tan_int = np.zeros(3)
+        self.rot_int = np.zeros(3)
+        self.f_friction_ff = 0.0
 
     # ------------------------------------------------------------------ helpers
     def contact_force_world(self, data: mujoco.MjData) -> np.ndarray:
@@ -189,7 +265,15 @@ class ForceApproachController:
 
     def status(self) -> str:
         return (f"{self.phase:8s} f_n={self.f_n:6.2f} N  f_d={self.f_d:5.2f} N  "
-                f"f_cmd={self.f_cmd:6.2f} N  z_d={self.z_d:.4f} m  dz_d={self.zd_dot:+.4f} m/s")
+                f"f_cmd={self.f_cmd:6.2f} N  z_d={self.z_d:.4f} m  dz_d={self.zd_dot:+.4f} m/s  "
+                f"s_d={self.s_d:.4f} m  ds_d={self.sd_dot:+.4f} m/s")
+
+    @property
+    def in_contact(self) -> bool:
+        return self.phase in (CONTACT, SLIDE)
+
+    def strokes_completed(self, t: float) -> int:
+        return self.slide.strokes_completed(t - self.t_slide) if self.t_slide is not None else 0
 
     def start_approach(self, z0: float, t: float) -> None:
         """Begin a new smooth descent from height z0 at time t."""
@@ -218,6 +302,11 @@ class ForceApproachController:
         self.f_n = self.f_d = self.f_cmd = 0.0
         self.n_releases = 0
         self.contact_count = 0
+        self.t_slide = None
+        self.s_d = self.sd_dot = self.sd_ddot = 0.0
+        self.tan_int[:] = 0.0
+        self.rot_int[:] = 0.0
+        self.f_friction_ff = 0.0
         self.saturated[:] = False
 
     def compute(self, data: mujoco.MjData) -> np.ndarray:
@@ -247,6 +336,14 @@ class ForceApproachController:
                 self.phase = APPROACH          # contact lost: re-approach from the current height
                 self.start_approach(float(x[2]), t)
                 self.n_releases += 1
+                self.t_slide = None
+                self.s_d = self.sd_dot = self.sd_ddot = 0.0
+            if self.phase == CONTACT and cfg.slide_distance > 0 and \
+                    t - self.t_contact >= cfg.force_ramp_time + cfg.slide_start_delay:
+                self.phase = SLIDE
+                self.t_slide = t
+            if self.phase == SLIDE:
+                self.s_d, self.sd_dot, self.sd_ddot = self.slide(t - self.t_slide)
 
         # --- kinematics and dynamics at the current state -----------------------------------
         mujoco.mj_jacSite(m, data, self._jacp, self._jacr, self.tcp)
@@ -260,17 +357,47 @@ class ForceApproachController:
         lam = np.linalg.inv(lambda_inv)
 
         # --- operational-space PD (unit-mass gains, inertia-weighted) -------------------------
-        x_d = np.array([self.x_ref[0], self.x_ref[1], self.z_d])
-        a_p = self.kp_m * (x_d - x) - self.kd_m * v
-        a_o = self.kp_m * self.orientation_error(rot) - self.kd_m * w
-        if self.phase == CONTACT:
+        x_d = self.x_ref + self.s_d * self.slide_dir
+        xd_dot = self.sd_dot * self.slide_dir
+        xd_ddot = self.sd_ddot * self.slide_dir
+        if self.phase == APPROACH:
+            x_d = x_d - (x_d @ n) * n + self.z_d * n
+            xd_dot = xd_dot + self.zd_dot * n
+            xd_ddot = xd_ddot + self.zd_ddot * n
+        e_p = x_d - x
+        e_o = self.orientation_error(rot)
+        a_p = xd_ddot + self.kp_m * e_p + self.kd_m * (xd_dot - v)
+        a_o = self.kp_r * e_o - self.kd_r * w
+        if self.in_contact:
             a_p = a_p - (a_p @ n) * n                 # the normal direction is force-controlled
-        else:
-            a_p = a_p + (self.zd_ddot + self.kd_m * self.zd_dot) * n   # profile feedforward along the normal
+            if cfg.ki_tangential > 0:                 # integral on the in-plane error (friction mismatch)
+                e_t = e_p - (e_p @ n) * n
+                self.tan_int = self.tan_int + e_t * self.dt
+                lim = cfg.tangential_integral_limit / cfg.ki_tangential
+                norm = np.linalg.norm(self.tan_int)
+                if norm > lim:
+                    self.tan_int *= lim / norm
+                a_p = a_p + cfg.ki_tangential * self.tan_int
+            if cfg.ki_rotation > 0:                   # integral on the orientation error (friction moment)
+                self.rot_int = self.rot_int + e_o * self.dt
+                lim = cfg.rotation_integral_limit / cfg.ki_rotation
+                norm = np.linalg.norm(self.rot_int)
+                if norm > lim:
+                    self.rot_int *= lim / norm
+                a_o = a_o + cfg.ki_rotation * self.rot_int
         force = lam @ np.concatenate((a_p, a_o))
+        # Nominal Coulomb friction feedforward along the commanded tangential velocity (a real
+        # force, not inertia-weighted); the tanh blend keeps it continuous through the reversals.
+        self.f_friction_ff = 0.0
+        if self.in_contact and self.sd_dot != 0.0:
+            if cfg.friction_ff > 0:
+                self.f_friction_ff += cfg.friction_ff * max(f_n, 0.0) * float(np.tanh(self.sd_dot / cfg.friction_ff_speed))
+            if cfg.friction_viscous_ff > 0:
+                self.f_friction_ff += cfg.friction_viscous_ff * self.sd_dot
+            force[:3] = force[:3] + self.f_friction_ff * self.slide_dir
 
         # --- normal force control ---------------------------------------------------------------
-        if self.phase == CONTACT:
+        if self.in_contact:
             ramp = min(1.0, (t - self.t_contact) / cfg.force_ramp_time) if cfg.force_ramp_time > 0 else 1.0
             self.f_d = cfg.force_desired * ramp
             err = self.f_d - f_n

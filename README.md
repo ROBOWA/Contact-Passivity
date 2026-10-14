@@ -5,9 +5,10 @@ standing above a stationary table in MuJoCo, driven by seven joint-torque
 actuators and held in place by a gravity-compensated joint PD controller. The
 spherical polishing tool from the MEAM 6230 Panda project is mounted on the
 flange, with a force/torque sensor at its base. A second controller approaches
-the table along its normal and holds a constant contact force from the FT
-sensor reading. There is no tangential motion, object, energy tank, QP, or
-hardware interface yet.
+the table along its normal, holds a constant contact force from the FT sensor
+reading, and slides the tip back and forth along a chosen direction while
+holding the force. There is no object, energy tank, QP, or hardware interface
+yet.
 
 ![KUKA iiwa14 above the table](docs/kuka_table_scene.png)
 
@@ -52,8 +53,10 @@ mjpython -m kuka_table_sim.run viewer
 python -m kuka_table_sim.run viewer
 
 # Approach the table and hold 10 N (headless validation with a time-series log, or live):
-python   -m kuka_table_sim.run --controller force headless --duration 15 --log run.npz --render docs/kuka_force_hold.png
+python   -m kuka_table_sim.run --controller force headless --duration 25 --log run.npz --render docs/kuka_force_hold.png
 mjpython -m kuka_table_sim.run --controller force viewer
+python   -m kuka_table_sim.run --controller force --slide-distance 0 headless --duration 15          # approach + hold only
+python   -m kuka_table_sim.run --controller force --slide-direction 0 1 0 --slide-distance 0.15 --slide-speed 0.08 --slide-cycles 2 headless --duration 30
 python   -m kuka_table_sim.run --controller force --force 15 --approach-speed 0.03 --creep-speed 0.003 headless --duration 20
 
 # Initial state from a site pose (IK): any command accepts --init-site/--init-pos + --init-rpy or --init-quat
@@ -74,7 +77,9 @@ until `Esc` switches back to the free camera (`[` and `]` cycle cameras).
 All timing and controller parameters are command-line options (`--timestep`,
 `--control-period`, `--render-hz`, `--hold-freq-hz`, `--hold-zeta`,
 `--controller`, `--force`, `--approach-speed`, `--creep-speed`,
-`--creep-distance`, `--kp-force`, `--ki-force`); see
+`--creep-distance`, `--kp-force`, `--ki-force`, `--slide-*`, `--motion-freq`,
+`--rotation-freq`, `--ki-tangential`, `--ki-rotation`, `--friction-ff`,
+`--friction-viscous-ff`); see
 `python -m kuka_table_sim.run --help`. Run the commands from the repository
 root so that `kuka_table_sim` is importable; the package locates `assets/`
 relative to its own files.
@@ -194,20 +199,24 @@ tau = qfrc_bias + Kp * (q_home - q) - Kd * qvel
 This is only there to keep the arm still while the scene is checked. It is not
 the hybrid controller of the later milestones.
 
-## Approach and constant-force hold (`--controller force`)
+## Approach, constant-force hold and sliding (`--controller force`)
 
-![Tool holding 10 N on the table](docs/kuka_force_hold.png)
+![Tool sliding on the table while holding 10 N](docs/kuka_force_hold.png)
 
 `kuka_table_sim/force_control.py` is an operational-space controller at the
 `tcp` site, written against the FT-sensor reading only (the true contact force
 from `mj_contactForce` is used for validation, never for control):
 
 * **Tangential translation and orientation** (and the normal direction during
-  the approach): inertia-weighted PD with unit-mass gains,
-  `F = Lambda (Kp e - Kd v)`, `Lambda = (J M^-1 J^T)^-1`, `Kp = wn^2`,
-  `Kd = 2 zeta wn`, `wn = 2 pi * 2 Hz`. Weighting by `Lambda` is what makes the
-  light wrist joints (joint 7 has 0.001 kg m^2) and the heavy shoulder close
-  their loops at the same bandwidth.
+  the approach): inertia-weighted PD with unit-mass gains and full reference
+  feedforward, `F = Lambda (a_d + Kp e + Kd (v_d - v))`,
+  `Lambda = (J M^-1 J^T)^-1`, `Kp = wn^2`, `Kd = 2 zeta wn`; `wn = 2 pi * 4 Hz`
+  for translation (`--motion-freq`) and `2 pi * 6 Hz` for orientation
+  (`--rotation-freq`). Weighting by `Lambda` is what makes the light wrist
+  joints (joint 7 has 0.001 kg m^2) and the heavy shoulder close their loops at
+  the same bandwidth. While in contact, integral terms on the in-plane position
+  (`--ki-tangential`, 300 1/s^3) and on the orientation (`--ki-rotation`,
+  300 1/s^3), both clamped, absorb the steady friction force and moment.
 * **Phase APPROACH:** the normal set-point follows an acceleration-continuous
   profile (`ApproachProfile`): a quintic (minimum-jerk) segment from rest at
   the start height down to a *creep point* `--creep-distance` (10 mm) above
@@ -228,9 +237,44 @@ from `mj_contactForce` is used for validation, never for control):
   the integral contribution clamped to +/- 10 N, and `d_n = 40 N s/m`. If the
   measured force stays below 0.2 N for 0.3 s the controller goes back to
   APPROACH from the current height.
+* **Phase SLIDE** (`--slide-distance` > 0, default 0.10 m): starting
+  `--slide-start-delay` (1 s) after the force ramp, the tangential set-point
+  moves from the contact point along `--slide-direction` (default +x, projected
+  onto the table plane) by the stroke length and back, repeatedly
+  (`--slide-cycles`, 0 = until the run ends, optional `--slide-dwell` at the
+  ends). Each stroke is a rest-to-rest quintic (`SlideProfile`), so the
+  reference position, velocity and acceleration are continuous everywhere
+  (acceleration is zero at every stroke end); the stroke duration is
+  `1.875 D / v_peak` so the peak speed equals `--slide-speed` (0.05 m/s). The
+  normal force loop keeps running unchanged. A nominal friction feedforward
+  along the commanded velocity removes most of the lag: viscous
+  `c_hat * v_d` (`--friction-viscous-ff`, 80 N s/m, see the contact note
+  below) and/or Coulomb `mu_hat * f_n * tanh(v_d / 5 mm/s)` (`--friction-ff`,
+  off by default).
 * **Null space:** posture spring/damper toward `q_home` (1 Hz, unit-mass gains
   scaled by `M`) through the dynamically consistent projector `I - J^T Jbar^T`.
 * `qfrc_bias` compensation once, torque clipping to the actuator limits.
+
+**Sliding contact model (important for the research).** MuJoCo's soft
+contacts implement friction as constraint rows whose reference acceleration
+is `-b v_t` with `b = 2 / (d * timeconst)`. Below the cone limit the friction
+force is therefore *viscous*, `~ m_eff * b * d * v_t`, and it saturates at
+`mu N` (Coulomb) above a speed that depends on the effective mass. With the
+default reference (timeconst 0.02 s) and the arm's effective mass behind the
+tip, saturation happens below 5 mm/s, and in the saturated regime the contact
+chatters: micrometre lift-offs with the normal force flickering between 0 and
+2 f_d at 50 to 250 Hz. This was reproduced with a bare 5 kg sphere pressed
+with 10 N (47 % of samples without contact at 0.05 m/s) and is unaffected by
+timestep, solver accuracy, integrator, friction cone or `noslip`. The scene
+therefore uses `cone="elliptic"` and an explicit `tool_tip`/`tabletop`
+`<pair>` with `solreffriction="0.5 1"`: the friction rows get a 25 x longer
+time constant, sliding below ~0.11 m/s stays in the clean viscous regime
+(0 % lift-offs on the probe, measured viscous coefficient on the arm
+~88 N s/m, hence the 80 N s/m feedforward default), and the normal rows keep
+`solref 0.02 1`. The cost is static creep under sub-limit tangential load
+(25 mm/s per 5 N on the 5 kg probe; the tangential position loop cancels it
+while holding). Anyone studying Coulomb-type friction should treat this as
+a modelling choice and revisit it; the knob is in `assets/kuka_table_scene.xml`.
 
 `headless` in this mode prints a report and writes a `.npz` log with `--log`
 (time, phase, sensor and true normal force, desired and commanded force, tip
@@ -242,25 +286,31 @@ sensor vs true contact force < 0.3 N; tangential tip drift < 3 mm; orientation
 error < 1 deg; no contact loss; no contacts other than tip/tabletop; no
 saturation or MuJoCo warnings.
 
-The validation also checks the profile itself: the logged set-point
-acceleration must not jump between control updates, the tip must reach the
-table at less than twice the creep speed, and the force during touchdown and
-ramp must stay below `f_d + 2 N`.
+The validation also checks the profiles themselves: the logged set-point
+accelerations (approach and slide) must not jump between control updates, the
+tip must reach the table at less than twice the creep speed, and the force
+during touchdown and ramp must stay below `f_d + 2 N`. While sliding it
+requires at least one completed stroke, along-track tracking error below
+`max(5 mm, 0.1 * slide_speed)`, cross-track error below 3 mm, mean normal
+force error below 0.5 N and max below 3 N, orientation error below 2 deg,
+and no contact loss.
 
-Results on the tested platform (15 s, 10 N, defaults):
+Results on the tested platform (25 s, 10 N, defaults, sliding 0.10 m along
++x at 0.05 m/s):
 
 | Quantity | Value |
 | --- | --- |
 | Approach profile | quintic 4.69 s from z = 0.2994 m to the creep point 0.1690 m: peak speed 0.050 m/s, peak acceleration 0.032 m/s^2, max jerk 0.07 m/s^3; then 10 mm of creep at 5 mm/s |
 | Tracking during approach | max 0.26 mm (velocity + acceleration feedforward) |
-| Contact detected | t = 6.74 s, tip speed 4.8 mm/s, no bounce |
-| Touchdown and ramp | peak 9.98 N (no overshoot); within 0.2 N of `f_d` throughout the ramp; max error 0.002 N after 8 s |
-| Hold window (12 to 15 s) | f_n mean 10.000 N, std 0.000 N, max error 0.000 N |
-| Sensor vs true force | max difference 0.000 N in the hold window; during the approach the sensor shows the uncompensated tool-inertia term, 0.016 N = 0.5 kg x 0.032 m/s^2 |
-| Tip drift / orientation | 0.08 mm, 0.031 deg |
-| Tip penetration | 0.2 mm at 10 N (`solref 0.02 1`) |
-| Torques | max 53 N m (joint 2), no saturation |
-| Also verified | mujoco 3.3.7 (conda base) PASS; from a custom initial pose with `--creep-speed 0.003` PASS (touchdown 2.9 mm/s); live viewer under `mjpython` with per-second status lines |
+| Contact detected | t = 6.71 s, tip speed 4.7 mm/s, no bounce |
+| Touchdown and ramp | peak 9.98 N (no overshoot); within 0.2 N of `f_d` throughout the ramp |
+| Hold only (`--slide-distance 0`, 15 s) | f_n mean 10.000 N, max error 0.000 N, drift 0.00 mm, orientation 0.002 deg |
+| Slide | starts 8.71 s, 4 strokes in 25 s, stroke 3.75 s, peak 0.05 m/s, peak acceleration 0.041 m/s^2, max jerk 0.11 m/s^3, no acceleration jumps |
+| Sliding, tangential tracking | along-track max 3.96 mm, rms 2.22 mm; cross-track max 0.07 mm; orientation max 0.36 deg |
+| Sliding, normal force | mean error 0.019 N, max 0.050 N, std 0.022 N; sensor vs true force 0.001 N |
+| Sensor vs true force during approach | 0.016 N = the uncompensated tool-inertia term 0.5 kg x 0.032 m/s^2 |
+| Torques | max 57 N m (joint 2), no saturation |
+| Also verified | mujoco 3.3.7 (conda base) identical PASS; +y stroke of 0.15 m at 0.08 m/s for 2 cycles from an IK-set pose (tracking 5.2 mm, force error 0.04 N); live viewer under `mjpython` with per-second status lines |
 
 The zero steady-state error is a property of the integral term; the commanded
 force settles about 0.4 N above the measured one, which is the coupling the

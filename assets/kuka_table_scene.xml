@@ -15,8 +15,10 @@
 <mujoco model="kuka_table_scene">
   <include file="iiwa14_torque.xml"/>
 
-  <!-- timestep is also set from Python (TimingConfig); the value here is the documented default. -->
-  <option integrator="implicitfast" timestep="0.00025" gravity="0 0 -9.81"/>
+  <!-- timestep is also set from Python (TimingConfig); the value here is the documented default.
+       cone="elliptic" is required for the tip/tabletop pair below to use its own friction-row
+       solver reference (solreffriction is ignored with pyramidal cones). -->
+  <option integrator="implicitfast" timestep="0.00025" gravity="0 0 -9.81" cone="elliptic"/>
 
   <visual>
     <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
@@ -56,6 +58,24 @@
       <geom name="table_leg_4" type="box" pos="-0.27 -0.37 -0.22" size="0.02 0.02 0.33" material="table_leg"/>
     </body>
 
+  </worldbody>
+
+  <!-- Explicit tool-tip / tabletop contact. Normal rows keep the MuJoCo default reference
+       (solref 0.02 1). The friction rows use a much longer time constant (solreffriction 0.5 1):
+       with the default, MuJoCo's friction-row damping b = 2/(d*timeconst) demands a force
+       ~ m_eff * b * v_t that exceeds mu*N at sliding speeds of a few cm/s, and the contact then
+       chatters (micro lift-offs, normal force flickering 0..2 N_d). Measured on a 5 kg sphere
+       at 0.05 m/s under 10 N: 47 % of samples lost contact with 0.02 s, 0 % with 0.5 s. The
+       price is more static creep under sub-limit tangential load (25 mm/s per 5 N for that
+       sphere; the arm's tangential position loop cancels it while holding).
+       Friction: mu = 1.0 tangential (as before: the max of tabletop 1.0 and tip 0.8). -->
+  <contact>
+    <pair name="tip_tabletop" geom1="tool_tip" geom2="tabletop" condim="3"
+          friction="1 1 0.005 0.0001 0.0001" solref="0.02 1" solreffriction="0.5 1"
+          solimp="0.9 0.95 0.001 0.5 2"/>
+  </contact>
+
+  <worldbody>
     <!-- Default camera: whole robot plus usable tabletop. xyaxes computed offline from
          pos and the look-at point (0.35, 0, 0.05) with world z as up. -->
     <camera name="overview" pos="1.75 -1.65 0.8" xyaxes="0.7550 0.6557 0 -0.2098 0.2416 0.9474" fovy="45"/>
