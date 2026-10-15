@@ -277,6 +277,12 @@ time constant, sliding below ~0.11 m/s stays in the clean viscous regime
 (25 mm/s per 5 N on the 5 kg probe; the tangential position loop cancels it
 while holding). Anyone studying Coulomb-type friction should treat this as
 a modelling choice and revisit it; the knob is in `assets/kuka_table_scene.xml`.
+For reference, the same controller with the old friction-row reference
+(`solreffriction 0.02 1`, Coulomb regime) looks like this: lift-off bursts
+with the normal force flickering between 0 and 24 N, and stick-slip
+staircases in the tangential motion.
+
+![Same run with the old contact setting: chattering](docs/kuka_contact_chatter_old_setting.png)
 
 ![Force and position over time while sliding](docs/kuka_force_slide_plot.png)
 
@@ -441,5 +447,6 @@ kuka_table_sim/run.py         CLI: headless validation / render / log, interacti
 docs/kuka_table_scene.png     render from the holding validation
 docs/kuka_force_hold.png      render at the end of the force-hold validation
 docs/kuka_force_slide_plot.png force / position plot of the default sliding run
+docs/kuka_contact_chatter_old_setting.png  the same run with the old friction-row reference (chatter)
 pyproject.toml, requirements.txt
 ```
