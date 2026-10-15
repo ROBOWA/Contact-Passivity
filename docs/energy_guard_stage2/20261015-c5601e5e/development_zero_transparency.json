@@ -1,0 +1,26 @@
+{
+  "A": {
+    "q": true,
+    "qd": true,
+    "tau_applied": true,
+    "F_task": true
+  },
+  "B": {
+    "q": true,
+    "qd": true,
+    "tau_applied": true,
+    "F_task": true
+  },
+  "C": {
+    "q": true,
+    "qd": true,
+    "tau_applied": true,
+    "F_task": true
+  },
+  "D": {
+    "q": true,
+    "qd": true,
+    "tau_applied": true,
+    "F_task": true
+  }
+}

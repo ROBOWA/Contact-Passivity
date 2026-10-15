@@ -20,6 +20,12 @@ class Row:
     tolerance: float
 
 
+def logged_bounds(values):
+    # Preserve unbounded rows in strict JSON failure evidence, never substitute
+    # a large finite number in the actual solver's constraint matrix.
+    return [float(v) if np.isfinite(v) else ('Infinity' if v>0 else '-Infinity') for v in values]
+
+
 def solve_multirow(nominal,center,H,rows,previous,limits,rho,rate,dt,torque_tolerance=1e-7):
     lo=np.maximum.reduce([-limits-nominal,previous-rate*dt-nominal,center-nominal-rho])
     hi=np.minimum.reduce([limits-nominal,previous+rate*dt-nominal,center-nominal+rho])
@@ -43,7 +49,7 @@ def solve_multirow(nominal,center,H,rows,previous,limits,rho,rate,dt,torque_tole
         reason='affine_constraints_infeasible' if result.info.status_val in (3,4) else 'solver_failure'
         raise FilterFailure(reason,dict(status=result.info.status,rows=[r.name for r in rows],gradients=G.tolist(),
                             center=center.tolist(),nominal=nominal.tolist(),H=H.tolist(),center_values=value.tolist(),
-                            physical_lower=[r.lower for r in rows],physical_upper=[r.upper for r in rows],
+                            physical_lower=logged_bounds([r.lower for r in rows]),physical_upper=logged_bounds([r.upper for r in rows]),
                             box_lower=lo.tolist(),box_upper=hi.tolist()))
     delta=B@result.x;physical=value+G@(nominal+delta-center)
     violation=np.maximum(np.asarray([r.lower for r in rows])-physical,physical-np.asarray([r.upper for r in rows]))
@@ -51,7 +57,7 @@ def solve_multirow(nominal,center,H,rows,previous,limits,rho,rate,dt,torque_tole
         raise FilterFailure('physical_row_residual',dict(rows=[rows[i].name for i in np.flatnonzero(violation>tolerances)],violation=violation.tolist()))
     if np.any(delta<lo-torque_tolerance) or np.any(delta>hi+torque_tolerance):raise FilterFailure('physical_box_residual')
     return nominal+delta,dict(status=result.info.status,names=[r.name for r in rows],values=physical.tolist(),
-                              lower=[r.lower for r in rows],upper=[r.upper for r in rows],
+                              lower=logged_bounds([r.lower for r in rows]),upper=logged_bounds([r.upper for r in rows]),
                               gradients=G.tolist(),center_values=value.tolist(),center=center.tolist(),
                               torque=(nominal+delta).tolist(),violation=violation.tolist(),box_lower=lo.tolist(),box_upper=hi.tolist())
 

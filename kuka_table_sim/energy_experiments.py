@@ -21,6 +21,7 @@ from .oracle import OracleFilter
 from .oracle_physics import HumanPulse
 from .joint_qp import QPConfig,FilterFailure
 from .energy_state import HybridSnapshot
+from .energy_state import controller_bytes,controller_from_bytes
 from .energy_prediction import GuardConfig
 from .energy_guard import EnergyGuard
 from .energy_diagnostic import progress
@@ -88,6 +89,9 @@ def metrics(log,c,p,case,variant,wall,ticks,failed,config):
                 timings={k:percentiles(c[k][c[k]>0]) for k in c if k.startswith('seconds_')},
                 interventions=int(np.sum(np.max(np.abs(torque-c['tau_nom']),axis=1)>1e-7)),
                 governor_ticks=int(np.sum(alpha<1.-1e-10)),
+                virtual_time_delay_s=float(np.max(c['t']-c.get('sigma',c['t']))),
+                internal_force_target_range_N=[float(np.min(log.ctl['f_d'][log.ctl['t']>=config.task_start-1e-10])),float(np.max(log.ctl['f_d'][log.ctl['t']>=config.task_start-1e-10]))],
+                fsm_counts={k:int(log.ctl[k][-1]) for k in ('n_uncertain','n_lost','n_reacquired','n_hold')},
                 task_window_start_s=config.task_start,progress='PENDING matched UF reference',
                 recovery='PASS' if complete and alpha_recovery is not None and alpha_recovery<=2.+1e-8 and force_recovery is not None else 'FAIL')
 
@@ -112,13 +116,16 @@ def run_case(case,variant,out,config=None,duration=18.):
                 pre=HybridSnapshot.capture(sim,f.energy,f.previous,f.base_qfrc)
             ts=time.perf_counter();sim.advance(4);ticks.append(time.perf_counter()-ts)
     except (FilterFailure,ValueError) as exc:
-        failed=dict(t=float(sim.data.time),reason=getattr(exc,'reason',str(exc)),diagnostics=getattr(exc,'diagnostics',{}))
+        failed=dict(t=float(sim.data.time),reason=getattr(exc,'reason',str(exc)),diagnostics=getattr(exc,'diagnostics',{}),seconds_failed_tick=time.perf_counter()-ts)
         if variant in ('A','UF'):
             pre.save(out/'failure_pre.npz',force=f.force)
             HybridSnapshot.capture(sim,f.energy,f.previous,f.base_qfrc).save(out/'failure_complete.npz',force=f.force)
         else:f.save_failure(out,sim)
         save_json(out/'failure.json',failed)
     wall=time.perf_counter()-start
+    base=f.base_qfrc if variant in ('A','UF') else f.base
+    extra={} if variant in ('A','UF') else dict(counterfactual_blob=np.frombuffer(controller_bytes(f.counterfactual),dtype=np.uint8))
+    HybridSnapshot.capture(sim,f.energy,f.previous,base).save(out/'final_state.npz',**extra)
     log=sim.recorder.finish();c,p=f.arrays()
     log.save(out/'baseline_log.npz')
     np.savez_compressed(out/'guard.npz',**{'ctl__'+k:v for k,v in c.items()},**{'phys__'+k:v for k,v in p.items()},tick_seconds=np.asarray(ticks))
@@ -134,13 +141,49 @@ def run_case(case,variant,out,config=None,duration=18.):
     return result
 
 
+def extend_run(source,reference,out,until=20.):
+    """Continue a completed, released C/D state; do not reset energy or timing."""
+    from .recorder import Recorder,RunLog
+    from .oracle_physics import restore_state
+    from .energy_diagnostic import joined
+    source,reference,out=Path(source),Path(reference),Path(out)
+    meta=json.loads((source/'metadata.json').read_text());cfg=GuardConfig(**meta['config'])
+    previous=json.loads((source/'metrics.json').read_text());case=meta['case']
+    if previous['completion']!='PASS' or meta['variant'] not in ('C','D'):raise ValueError('extension requires completed C/D run')
+    if meta['source_sha256']!=source_hash():raise ValueError('extension numerical source differs')
+    snap=HybridSnapshot.load(source/'final_state.npz');sim=make_force_sim(duration=until,record=False)
+    pulse=HumanPulse(**{k:case[k] for k in ('magnitude','start','ramp','hold','direction')})
+    g=EnergyGuard(sim,meta['variant'],pulse,case['body'],case['local'],(case['budget'],)*2,config=cfg)
+    restore_state(sim.model,sim.data,snap.plant);sim.controller=controller_from_bytes(snap.controller,sim.model)
+    sim.n_steps=snap.n_steps;sim.n_control_updates=snap.n_updates
+    g.energy=snap.energy.copy();g.previous=snap.previous.copy();g.base=snap.base_qfrc.copy()
+    with np.load(source/'final_state.npz') as z:g.counterfactual=controller_from_bytes(z['counterfactual_blob'].tobytes(),sim.model)
+    if np.any(pulse.force(float(sim.data.time))) or until<=sim.data.time:raise ValueError('extension requires released force and later endpoint')
+    out.mkdir(parents=True,exist_ok=False);sim.recorder=Recorder(sim,until-float(sim.data.time)+.01)
+    start=time.perf_counter()
+    while sim.data.time<until-.000125:sim.advance(4)
+    segment=sim.recorder.finish();segment.save(out/'extension_log.npz')
+    full=joined(RunLog.load(source/'baseline_log.npz'),segment)
+    ref,measured,count=progress(full);target=progress(RunLog.load(reference/'baseline_log.npz'))[1][-1]
+    crossed=np.flatnonzero(measured>=target)
+    c,p=g.arrays();np.savez_compressed(out/'guard.npz',**{'ctl__'+k:v for k,v in c.items()},**{'phys__'+k:v for k,v in p.items()})
+    result=dict(source=str(source.resolve()),reference=str(reference.resolve()),source_sha256=source_hash(),commit=git_info()['commit'],
+                achieved_18s_UF_amount=bool(len(crossed)),extra_physical_time_s=float(full.ctl['t'][crossed[0]]-18.) if len(crossed) else None,
+                requested_until_s=until,reference_amount_m=float(target),measured_amount_m=float(measured[-1]),completed_strokes=count,
+                energy_start_J=snap.energy.tolist(),energy_final_J=g.energy.tolist(),wall_seconds=time.perf_counter()-start)
+    save_json(out/'extension.json',result);print(json.dumps(result));return result
+
+
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('command',choices=['case','matrix'])
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('command',choices=['case','matrix','extend'])
     ap.add_argument('--out',required=True,type=Path);ap.add_argument('--case',default='main')
     ap.add_argument('--variant',choices=['A','B','C','D','UF'],default='D')
     ap.add_argument('--variants',default='UF,A,B,C,D');ap.add_argument('--cases',default='all')
     ap.add_argument('--heldout',type=Path);ap.add_argument('--config',type=Path)
+    ap.add_argument('--from-run',type=Path);ap.add_argument('--reference-run',type=Path);ap.add_argument('--until',type=float,default=20.)
     args=ap.parse_args();cases=development_cases()
+    if args.command=='extend':
+        extend_run(args.from_run,args.reference_run,args.out,args.until);return 0
     if args.heldout:
         for c in json.loads(args.heldout.read_text())['cases']:cases[c['name']]=c
     cfg=GuardConfig(**json.loads(args.config.read_text())) if args.config else GuardConfig()

@@ -79,13 +79,19 @@ def test_different_account_minima_and_unresolved_is_not_zero():
     assert b.status in ('UNRESOLVED','INVALID')
 
 
-def test_contact_backup_prefix_reserve_cache_and_actual_execution():
+def test_contact_backup_prefix_reserve_cache_and_actual_execution(monkeypatch):
     s=make_force_sim(duration=10.,record=False);s.advance(s.steps_for(9.6))
     # At this point real force is newly measured; future policy has no pulse.
     class MeasuredForce:
-        def force(self,t):return np.array([-5.,0,0])
+        def force(self,t):
+            assert abs(t-s.data.time)<1e-10 # predictions may never query this future fixture
+            return np.array([-5.,0,0])
     g=EnergyGuard(s,'D',MeasuredForce(),'link5',(0,.04,.12),(1.,.9),minimum=(.1,.2))
     before=HybridSnapshot.capture(s,g.energy,g.previous,g.base)
+    p=g.predictor.interval(before,np.array([-5.,0,0]),1.)
+    perturbed=g.predictor.interval(before,np.array([-5.,0,0]),1.,p.nominal+np.arange(7)*.1)
+    assert p.trace['prefix'][0]==perturbed.trace['prefix'][0]
+    assert p.work!=perturbed.work
     backup=backup_rollout(g.predictor,before,np.array([-5.,0,0]))
     assert backup.status=='SETTLED'
     cumulative=np.cumsum(np.concatenate([p.trace['power'] for p in backup.intervals])*.00025)
@@ -97,6 +103,14 @@ def test_contact_backup_prefix_reserve_cache_and_actual_execution():
     assert max(abs(r['predicted']-r['actual']) for r in g.rows)<1e-12
     assert all(r['alpha']==1 for r in g.rows) # ample budget remains transparent
     assert np.min(g.energy-g.minimum)>0
+    def reject(*args,**kwargs):raise FilterFailure('test_rejected_proposal')
+    monkeypatch.setattr(g,'plan',reject);g.cache_steps=0
+    s.advance(4) # verified suffix remains available after a rejected replan
+    assert g.rows[-1]['cache_hit']
+    g.cache_force=np.array([-4.,0,0]) # exact force invalidation, no reuse
+    snapshot=HybridSnapshot.capture(s,g.energy,g.previous,g.base)
+    with pytest.raises(FilterFailure,match='no_verified_reserve_candidate'):s.advance(4)
+    assert HybridSnapshot.capture(s,g.energy,g.previous,g.base).signature()==snapshot.signature()
     s.reset();assert np.array_equal(g.energy,g.initial)
     assert not g.cache and g.cache_steps==0 and g.snapshot is None
     assert s.controller.stroke.clock.alpha==1

@@ -1,0 +1,296 @@
+[
+  {
+    "body": "link5",
+    "rate_factor": 1.0,
+    "terminal": "SETTLED",
+    "reason": null,
+    "reserve": 0.02987209527415204,
+    "horizons": [
+      {
+        "horizon": 0.02,
+        "reserve_J": 0.004174201660016495,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.04043440187892627,
+          "abs_human_power": 0.20030181856538623,
+          "tool_speed": 0.048892941654989044,
+          "angular_speed": 0.017095612159310596
+        }
+      },
+      {
+        "horizon": 0.05,
+        "reserve_J": 0.009236908523558879,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.027223804257406736,
+          "abs_human_power": 0.13460112517246928,
+          "tool_speed": 0.04738792150535093,
+          "angular_speed": 0.0606636001481655
+        }
+      },
+      {
+        "horizon": 0.1,
+        "reserve_J": 0.01402721778813275,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.0179206213003625,
+          "abs_human_power": 0.08891102250558795,
+          "tool_speed": 0.039055034436140626,
+          "angular_speed": 0.06570534867932407
+        }
+      },
+      {
+        "horizon": 0.25,
+        "reserve_J": 0.0250591661816368,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.009933470708250276,
+          "abs_human_power": 0.049218635995453695,
+          "tool_speed": 0.016637675403883546,
+          "angular_speed": 0.019951665868611756
+        }
+      },
+      {
+        "horizon": 0.5,
+        "reserve_J": 0.02987209527415204,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.0006127523682356151,
+          "abs_human_power": 0.0022624999571704885,
+          "tool_speed": 0.0023397535401254175,
+          "angular_speed": 0.005709759216911271
+        }
+      },
+      {
+        "horizon": 1.0,
+        "reserve_J": 0.02987209527415204,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.0026714775726016464,
+          "abs_human_power": 0.013215426897855046,
+          "tool_speed": 0.005133578390186346,
+          "angular_speed": 0.0075124377193370485
+        }
+      },
+      {
+        "horizon": 1.55,
+        "reserve_J": 0.02987209527415204,
+        "terminal": true,
+        "persistence_ticks": 21,
+        "terminal_metrics": {
+          "human_speed": 0.00035796541167425856,
+          "abs_human_power": 0.001752077447994355,
+          "tool_speed": 0.0005952928861220394,
+          "angular_speed": 0.0007156822940527509
+        }
+      }
+    ],
+    "available_margin": [
+      0.023397665166740376,
+      0.023397665166740376
+    ],
+    "budget001_can_cover": false
+  },
+  {
+    "body": "link3",
+    "rate_factor": 1.0,
+    "terminal": "SETTLED",
+    "reason": null,
+    "reserve": 0.01734496761825218,
+    "horizons": [
+      {
+        "horizon": 0.02,
+        "reserve_J": 0.0024934450165843094,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.03190118973899747,
+          "abs_human_power": 0.12121231854931606,
+          "tool_speed": 0.04887423423438148,
+          "angular_speed": 0.014413177124464514
+        }
+      },
+      {
+        "horizon": 0.05,
+        "reserve_J": 0.005573278360623804,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.021586666570076213,
+          "abs_human_power": 0.08193760000466477,
+          "tool_speed": 0.047269121142719875,
+          "angular_speed": 0.05573214861683015
+        }
+      },
+      {
+        "horizon": 0.1,
+        "reserve_J": 0.008418290563733591,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.013860181068641472,
+          "abs_human_power": 0.05114562935691957,
+          "tool_speed": 0.038802658720064984,
+          "angular_speed": 0.06412772434945269
+        }
+      },
+      {
+        "horizon": 0.25,
+        "reserve_J": 0.014736800958015028,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.0077814414061173395,
+          "abs_human_power": 0.027760697204717695,
+          "tool_speed": 0.016377318368628317,
+          "angular_speed": 0.019922944787827943
+        }
+      },
+      {
+        "horizon": 0.5,
+        "reserve_J": 0.01734496761825218,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.0012265613455218606,
+          "abs_human_power": 0.0020111322283466373,
+          "tool_speed": 0.003811665274166321,
+          "angular_speed": 0.007224010303151726
+        }
+      },
+      {
+        "horizon": 1.0,
+        "reserve_J": 0.01734496761825218,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.0020765764962761423,
+          "abs_human_power": 0.007719626963071268,
+          "tool_speed": 0.005123392455640686,
+          "angular_speed": 0.007475816452601296
+        }
+      },
+      {
+        "horizon": 1.473,
+        "reserve_J": 0.01734496761825218,
+        "terminal": true,
+        "persistence_ticks": 21,
+        "terminal_metrics": {
+          "human_speed": 0.0003987004668786293,
+          "abs_human_power": 0.0014918809700483122,
+          "tool_speed": 0.0008877923884749293,
+          "angular_speed": 0.0011221209877067878
+        }
+      }
+    ],
+    "available_margin": [
+      0.023397665166740376,
+      0.023397665166740376
+    ],
+    "budget001_can_cover": false
+  },
+  {
+    "body": "link5",
+    "rate_factor": 0.02,
+    "terminal": "SETTLED",
+    "reason": null,
+    "reserve": 0.02987209527415204,
+    "horizons": [
+      {
+        "horizon": 0.02,
+        "reserve_J": 0.004174201660016495,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.04043440187892627,
+          "abs_human_power": 0.20030181856538623,
+          "tool_speed": 0.048892941654989044,
+          "angular_speed": 0.017095612159310596
+        }
+      },
+      {
+        "horizon": 0.05,
+        "reserve_J": 0.009236908523558879,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.027223804257406736,
+          "abs_human_power": 0.13460112517246928,
+          "tool_speed": 0.04738792150535093,
+          "angular_speed": 0.0606636001481655
+        }
+      },
+      {
+        "horizon": 0.1,
+        "reserve_J": 0.01402721778813275,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.0179206213003625,
+          "abs_human_power": 0.08891102250558795,
+          "tool_speed": 0.039055034436140626,
+          "angular_speed": 0.06570534867932407
+        }
+      },
+      {
+        "horizon": 0.25,
+        "reserve_J": 0.0250591661816368,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.009933470708250276,
+          "abs_human_power": 0.049218635995453695,
+          "tool_speed": 0.016637675403883546,
+          "angular_speed": 0.019951665868611756
+        }
+      },
+      {
+        "horizon": 0.5,
+        "reserve_J": 0.02987209527415204,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.0006127523682356151,
+          "abs_human_power": 0.0022624999571704885,
+          "tool_speed": 0.0023397535401254175,
+          "angular_speed": 0.005709759216911271
+        }
+      },
+      {
+        "horizon": 1.0,
+        "reserve_J": 0.02987209527415204,
+        "terminal": false,
+        "persistence_ticks": 0,
+        "terminal_metrics": {
+          "human_speed": 0.0026714775726016464,
+          "abs_human_power": 0.013215426897855046,
+          "tool_speed": 0.005133578390186346,
+          "angular_speed": 0.0075124377193370485
+        }
+      },
+      {
+        "horizon": 1.55,
+        "reserve_J": 0.02987209527415204,
+        "terminal": true,
+        "persistence_ticks": 21,
+        "terminal_metrics": {
+          "human_speed": 0.00035796541167425856,
+          "abs_human_power": 0.001752077447994355,
+          "tool_speed": 0.0005952928861220394,
+          "angular_speed": 0.0007156822940527509
+        }
+      }
+    ],
+    "available_margin": [
+      0.023397665166740376,
+      0.023397665166740376
+    ],
+    "budget001_can_cover": false
+  }
+]

@@ -9,6 +9,7 @@ its reserve includes that reaction delay and every physics prefix.
 from dataclasses import asdict
 from time import perf_counter
 import json
+import base64
 import numpy as np
 import mujoco
 
@@ -57,7 +58,7 @@ class EnergyGuard:
         if variant not in ('B','C','D'):raise ValueError(variant)
         self.variant=variant;self.pulse=pulse;self.cfg=config or GuardConfig()
         self.energy=np.asarray(energy,dtype=float).copy();self.minimum=np.asarray(minimum,dtype=float).copy()
-        if self.energy.shape!=(2,) or np.any(self.energy<self.minimum):raise ValueError('invalid accounts')
+        if self.energy.shape!=(2,) or self.minimum.shape!=(2,) or not np.all(np.isfinite(np.r_[self.energy,self.minimum])) or np.any(self.energy<self.minimum):raise ValueError('invalid accounts')
         self.initial=self.energy.copy();self.base=sim.data.qfrc_applied.copy()
         self.previous=sim.data.ctrl[sim.arm.actuator_ids].copy()
         self.counterfactual=clone_controller(sim.controller)
@@ -68,11 +69,26 @@ class EnergyGuard:
         self.cache_steps=0
         self.selected=None;self.force=np.zeros(3);self.snapshot=None
 
+    @staticmethod
+    def backup_diagnostics(tail):
+        d=dict(reason=tail.reason,reserve=tail.reserve,horizons=tail.horizons,elapsed_ticks=len(tail.intervals),held_force=tail.force)
+        if tail.intervals:
+            last=tail.intervals[-1];s=last.next
+            d['last_forecast']=dict(plant=s.plant,controller_blob_base64=base64.b64encode(s.controller).decode(),
+                                    energy=s.energy,previous=s.previous,base_qfrc=s.base_qfrc,n_steps=s.n_steps,
+                                    n_updates=s.n_updates,trace=last.trace,torque=last.torque)
+        return d
+
     def plan(self,snapshot,force,target):
         """20 ms reaction-delay backup; finite horizon begins after this delay.
         All states/observers evolve closed-loop. Invalid/unsettled tails reject
         the WHOLE plan, even if the first command alone has enough energy.
         """
+        if target==0:
+            tail=backup_rollout(self.predictor,snapshot,force)
+            if tail.status!='SETTLED':
+                raise FilterFailure('backup_'+tail.status.lower(),self.backup_diagnostics(tail))
+            return tail.intervals,[],dict(backup=tail.seconds),tail
         first,attempts,timing=filtered_interval(self.predictor,snapshot,force,target,
                                                self.variant=='D',self.minimum)
         path=[first];current=first.next
@@ -88,8 +104,7 @@ class EnergyGuard:
                 path.append(p);current=p.next
         tail=backup_rollout(self.predictor,current,force)
         if tail.status!='SETTLED':
-            raise FilterFailure('backup_'+tail.status.lower(),dict(reason=tail.reason,reserve=tail.reserve,horizons=tail.horizons,
-                                 elapsed_ticks=len(tail.intervals),timing=timing))
+            raise FilterFailure('backup_'+tail.status.lower(),dict(**self.backup_diagnostics(tail),timing=timing))
         return path+tail.intervals,attempts,dict(**timing,backup=tail.seconds),tail
 
     @staticmethod
@@ -102,6 +117,7 @@ class EnergyGuard:
     def select(self,sim):
         start=perf_counter();t=float(sim.data.time)
         self.force=np.asarray(self.pulse.force(t),float) # ONLY real control-boundary measurement
+        if self.force.shape!=(3,) or not np.all(np.isfinite(self.force)):raise ValueError('finite measured force vector required')
         snap=HybridSnapshot.capture(sim,self.energy,self.previous,self.base);self.snapshot=snap
         attempts=[];reserve=0.;backup_status='not_used';horizons=[];timing={};cache_hit=False
         if self.variant=='B' or not np.any(self.force):
@@ -112,8 +128,9 @@ class EnergyGuard:
             backup_status='held_zero' if self.variant!='B' else 'not_used'
             self.cache=[]
         else:
-            valid_cache=(bool(self.cache) and self.cache_steps>0 and np.array_equal(self.cache_force,self.force) and
+            exact_cache=(bool(self.cache) and np.array_equal(self.cache_force,self.force) and
                          self.cache_signature==snap.signature())
+            valid_cache=exact_cache and self.cache_steps>0
             path=None;tail=None;rejections=[]
             if valid_cache:
                 reserve=self.reserve(self.cache)
@@ -134,8 +151,15 @@ class EnergyGuard:
                     except (FilterFailure,ValueError) as exc:
                         rejections.append(dict(target=target,reason=getattr(exc,'reason',str(exc)),diagnostics=getattr(exc,'diagnostics',{})))
                 if path is None:
-                    self.events.append(dict(t=t,rejections=rejections))
-                    raise FilterFailure('no_verified_reserve_candidate',dict(rejections=rejections))
+                    # An expired progress segment still has a previously
+                    # verified braking suffix. Do not discard that feasible
+                    # option merely because a newly proposed delay fails.
+                    if exact_cache and np.all(self.energy-self.minimum>=self.reserve(self.cache)+self.cfg.reserve_margin):
+                        path=self.cache;reserve=self.reserve(path);self.cache_steps=len(path)
+                        cache_hit=True;backup_status='SETTLED_cached_brake'
+                    else:
+                        self.events.append(dict(t=t,rejections=rejections))
+                        raise FilterFailure('no_verified_reserve_candidate',dict(rejections=rejections))
             proposed=path[0]
             # Re-evaluate even cached actions from CURRENT complete state.
             clock=controller_from_bytes(proposed.computed_controller,sim.model).stroke.clock
@@ -150,6 +174,7 @@ class EnergyGuard:
         if not ok:raise FilterFailure('final_'+why)
         rate=np.asarray(QPConfig().rate)*self.cfg.rate_factor*.001
         if np.any(np.abs(selected.torque-self.previous)>rate+self.cfg.torque_tolerance):raise FilterFailure('final_rate')
+        if np.any(np.abs(selected.torque-selected.nominal)>np.asarray(QPConfig().rho)+self.cfg.torque_tolerance):raise FilterFailure('final_trust')
         cf=clone_controller(self.counterfactual);ungoverned=cf.compute(sim.data)
         self.counterfactual=cf # committed only after selection
         ctl=controller_from_bytes(selected.computed_controller,sim.model)
@@ -162,6 +187,9 @@ class EnergyGuard:
                       reserve=reserve,backup_status=backup_status,reserve_margin=self.cfg.reserve_margin,
                       predicted=selected.work,predicted_prefix=selected.trace['prefix'].copy(),
                       cache_hit=cache_hit,seconds_select=perf_counter()-start,**{'seconds_'+k:v for k,v in timing.items()})
+        for key in ('t','normal_force','normal_velocity','orientation','cross_error','present',
+                    'unexpected','point','velocity','power'):
+            self.row['predicted_'+key]=selected.trace[key].copy()
         if attempts or horizons:self.events.append(dict(t=t,attempts=attempts,horizons=horizons))
         self.work=0.;self.gross=0.;self.task_work=0.;self.min_energy=self.energy.copy();self.selected=selected
         self.previous=selected.torque.copy();self.stage=0

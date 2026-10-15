@@ -43,6 +43,7 @@ class GuardConfig:
     rate_factor: float=1.
 
     def __post_init__(self):
+        object.__setattr__(self,'horizons',tuple(self.horizons));object.__setattr__(self,'targets',tuple(self.targets))
         positive=('transition','damping','terminal_persistence','terminal_speed','terminal_power',
                   'terminal_tool_speed','terminal_angular_speed','energy_margin','reserve_margin',
                   'normal_speed','orientation','cross_error','eta','rate_factor')
@@ -185,6 +186,8 @@ def backup_rollout(predictor,snapshot,force):
         intervals.append(p)
         if np.max(np.abs(p.torque-current.previous)-rate)>cfg.torque_tolerance:
             return Backup('INVALID',max(0.,-minimum),intervals,study,force.copy(),snapshot.signature(),perf_counter()-start,'backup_rate')
+        if np.any(np.abs(p.torque-p.nominal)>np.asarray(QPConfig().rho)+cfg.torque_tolerance):
+            return Backup('INVALID',max(0.,-minimum),intervals,study,force.copy(),snapshot.signature(),perf_counter()-start,'backup_trust')
         if not predictor.task_ok(p.trace):
             return Backup('INVALID',max(0.,-minimum),intervals,study,force.copy(),snapshot.signature(),perf_counter()-start,'backup_task')
         clock=getattr(branch.controller.stroke,'clock',None)
@@ -199,11 +202,16 @@ def backup_rollout(predictor,snapshot,force):
                   np.max(np.linalg.norm(p.trace['angular_velocity'],axis=1))<=cfg.terminal_angular_speed and
                   (clock is None or (clock.alpha<=.01 and abs(clock.alpha_dot)<=.1)))
         settled=settled+1 if terminal else 0
+        terminal_metrics=dict(human_speed=float(np.max(np.linalg.norm(p.trace['velocity'],axis=1))),
+                              abs_human_power=float(np.max(np.abs(p.trace['power']))),
+                              tool_speed=float(np.max(np.linalg.norm(p.trace['tool_velocity'],axis=1))),
+                              angular_speed=float(np.max(np.linalg.norm(p.trace['angular_velocity'],axis=1))))
         elapsed=(k+1)*predictor.timing.control_period
         while checkpoint<len(cfg.horizons) and elapsed>=cfg.horizons[checkpoint]-1e-9:
-            study.append(dict(horizon=cfg.horizons[checkpoint],reserve_J=max(0.,-minimum),terminal=bool(terminal),persistence_ticks=settled))
+            study.append(dict(horizon=cfg.horizons[checkpoint],reserve_J=max(0.,-minimum),terminal=bool(terminal),persistence_ticks=settled,terminal_metrics=terminal_metrics))
             checkpoint+=1
         if settled>=round(cfg.terminal_persistence/predictor.timing.control_period)+1:
+            study.append(dict(horizon=elapsed,reserve_J=max(0.,-minimum),terminal=True,persistence_ticks=settled,terminal_metrics=terminal_metrics))
             return Backup('SETTLED',max(0.,-minimum),intervals,study,force.copy(),snapshot.signature(),perf_counter()-start)
         current=p.next
     return Backup('UNRESOLVED',max(0.,-minimum),intervals,study,force.copy(),snapshot.signature(),perf_counter()-start,'terminal_not_persistent')
