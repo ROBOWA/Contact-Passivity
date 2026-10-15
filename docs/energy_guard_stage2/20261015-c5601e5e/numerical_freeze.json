@@ -1,0 +1,25 @@
+{
+  "commit": "81dffa64109752a9a027975e7b831daa4ff91e86",
+  "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "config_sha256": "e086fd5db6c4d779f1ce768a79b082341468a8192364b1bf9c1d4fcf8e209af9",
+  "heldout_sha256": "24a111694848bea0044413452e5def83703769bd6f34cfcb85dd6d6b9b17d177",
+  "frozen_utc": "2026-10-15T09:42:11.732943+00:00",
+  "seed": 20261015,
+  "targets": {
+    "force_mae_N": 0.5,
+    "force_max_error_N": 3.0,
+    "cross_mm": 3.0,
+    "orientation_deg": 2.0,
+    "progress_fraction": 0.8,
+    "alpha_recovery_s": 2.0,
+    "energy_tolerance_J": 1e-10,
+    "window_start_s": 8.71
+  },
+  "asset_sha256": {
+    "assets/iiwa14_torque.xml": "b1315d433880f3055f709183ce914e8c571e1eeb542cf4d252426e25eb3ca90e",
+    "assets/kuka_iiwa_14/iiwa14.xml": "ee7e6d796a9f8642de6097f95077281d15f43678dc5285beafeda99b84cf9ef5",
+    "assets/kuka_iiwa_14/scene.xml": "46491c7cd161130b684bd8724060cca2777573e431eda04d6becd7e8a1a98045",
+    "assets/kuka_table_scene.xml": "918d95d6836c2147e769a1970d5f013da785bf805589d478e364ba98052a9940",
+    "assets/polishing_tool.xml": "62ecf0422cf4670835ed375c8decaf2994d2d097d44042fda4ba13f1c91bb32a"
+  }
+}

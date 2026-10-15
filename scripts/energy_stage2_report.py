@@ -10,7 +10,7 @@ import numpy as np
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from kuka_table_sim.recorder import RunLog,_json_default
 from kuka_table_sim.energy_prediction import GuardConfig
-from kuka_table_sim.energy_experiments import metrics
+from kuka_table_sim.energy_experiments import metrics,development_cases
 
 
 def write(path,obj):
@@ -40,6 +40,12 @@ def read_case(folder):
     # Implementation helper independently recomputes from saved actual data;
     # additional dot-product/cumsum checks below use different formulations.
     r=metrics(log,c,p,meta['case'],meta['variant'],old['wall_seconds'],z['tick_seconds'],old['failure'],GuardConfig(**meta['config']))
+    changed=(np.max(np.abs(c['tau_exec']-c['tau_nom']),axis=1)>1e-7)|(c.get('alpha_target',np.ones(len(c['t'])))<1.)
+    at=np.flatnonzero(changed)
+    r['first_intervention_s']=float(c['t'][at[0]]) if len(at) else None
+    r['first_intervention_energy_J']=c['energy_before'][at[0]].tolist() if len(at) else None
+    r['max_total_change_from_ungoverned_Nm']=float(np.max(np.abs(c['tau_exec']-c.get('tau_ungoverned',c['tau_nom']))))
+    r['max_change_from_governed_Nm']=float(np.max(np.abs(c['tau_exec']-c['tau_nom'])))
     h=log.meta['timestep'];work=float(np.dot(p['power'],np.full(len(p['power']),h)))
     velocity_identity=float(np.max(np.abs(np.einsum('ij,ij->i',p['force'],p['velocity'])-p['power'])))
     budget=meta['case']['budget'];E=budget+np.add.accumulate(p['power']*h)
@@ -56,6 +62,21 @@ def read_case(folder):
         if 'predicted_normal_force' in c:
             independent['stage_force_prediction_defect_N']=float(np.max(np.abs(p['normal_force'].reshape(-1,4)-c['predicted_normal_force'])))
             independent['stage_orientation_prediction_defect_rad']=float(np.max(np.abs(p['orientation'].reshape(-1,4,3)-c['predicted_orientation'])))
+    if meta['variant'] in ('C','D'):
+        active=np.any(p['force'][::4]!=0,axis=1)
+        independent['reserve_min_gap_J']=float(np.min(c['energy_before'][active]-c['reserve'][active,None]-c['reserve_margin'][active,None])) if np.any(active) else 0.
+    qp_count=0;qp_violation=0.;logged_defect=0.
+    with gzip.open(folder/'events.json.gz','rt') as f:events=json.load(f)
+    for event in events:
+        for trial in event.get('attempts',[]):
+            if 'names' not in trial:continue # frozen A has a separate tested solver
+            qp_count+=1;G=np.asarray(trial['gradients']);base=np.asarray(trial['center_values'])
+            value=base+G@(np.asarray(trial['torque'])-np.asarray(trial['center']))
+            lo=np.asarray(trial['lower'],float);hi=np.asarray(trial['upper'],float)
+            tolerance=np.asarray([1e-10 if name.startswith('energy_') else 1e-7 for name in trial['names']])
+            qp_violation=max(qp_violation,float(np.max(np.maximum(lo-value,value-hi)/tolerance)))
+            logged_defect=max(logged_defect,float(np.max(np.abs(value-trial['values']))))
+    independent.update(qp_rows_recomputed=qp_count,qp_max_normalized_violation=qp_violation,qp_logged_row_defect=logged_defect)
     return r,meta,c,p,log,independent
 
 
@@ -75,7 +96,7 @@ def compact(folder,dest,c,p,log):
     for k in ('t','phase','f_d','f_n','f_int','tan_int','rot_int','x_d','v_d','a_d','s_d','e_o','strokes','stroke_state','x','v'):
         if k in log.ctl:a['reference__'+k]=log.ctl[k]
     np.savez_compressed(dest/'trace.npz',**a)
-    for name in ('metadata.json','failure.json','failure_pre.npz','failure_complete.npz','events.json.gz'):
+    for name in ('metadata.json','failure.json','failure_pre.npz','failure_complete.npz','final_state.npz','events.json.gz'):
         if (folder/name).exists():shutil.copy2(folder/name,dest/name)
 
 
@@ -136,10 +157,13 @@ def figures(data,out):
 
 
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--roots',nargs='+',type=Path,required=True)
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--roots',nargs='+',type=Path,default=[])
+    ap.add_argument('--matrix-parent',type=Path);ap.add_argument('--validation',type=Path)
     ap.add_argument('--out',type=Path,required=True);ap.add_argument('--preservation',type=Path,required=True)
     ap.add_argument('--tests',type=Path,required=True);ap.add_argument('--freeze',type=Path,required=True)
     ap.add_argument('--repeats',nargs='*',type=Path,default=[]);args=ap.parse_args()
+    if args.matrix_parent:args.roots.extend(sorted(p for p in args.matrix_parent.iterdir() if p.is_dir()))
+    if not args.roots:ap.error('provide --roots or --matrix-parent')
     args.out.mkdir(parents=True,exist_ok=False);raw=args.out/'raw';raw.mkdir();data={};manifest=[];fingerprints={}
     freeze=json.loads(args.freeze.read_text())
     for root in args.roots:
@@ -153,6 +177,9 @@ def main():
                                                      alpha_one=bool(np.all(c.get('alpha',np.ones(len(c['t'])))==1)))
             data.setdefault(name,{})[v]=(r,m,c,p,l,check) if name in ('main','historical') else (r,m,None,None,None,check)
             manifest.append(dict(case=name,variant=v,path=str(folder.resolve()),files={f.name:dict(size=f.stat().st_size,sha256=sha(f)) for f in folder.iterdir() if f.is_file()}))
+    heldout=json.loads((args.freeze.parent/'heldout_manifest.json').read_text())
+    required=set(development_cases())|{c['name'] for c in heldout['cases']}
+    if set(data)!=required or any(set(vs)!=set(('UF','A','B','C','D')) for vs in data.values()):raise ValueError('incomplete matrix: every required case must have UF/A/B/C/D')
     for name,variants in data.items():
         uf=variants['UF'][0]
         for v,item in variants.items():
@@ -176,15 +203,22 @@ def main():
     held=[data[n]['D'][0] for n in data if n.startswith('new-')]
     tree_hash=frozen_tree_hash(freeze['commit'])
     numerical_provenance=tree_hash==freeze['source_sha256'] and all(m['source_sha256']==tree_hash and m.get('source_end_sha256')==tree_hash for vs in data.values() for r,m,*rest in vs.values())
+    original_manifest=json.loads((args.freeze.parent/'preservation_manifest.json').read_text())
+    original_hashes={item['path']:item['sha256'] for item in original_manifest['tracked']}
+    asset_preserved=all(original_hashes.get(p)==h for p,h in freeze['asset_sha256'].items()) and all(
+        h==freeze['asset_sha256']['assets/'+name][:16] for vs in data.values() for r,m,*rest in vs.values() for name,h in m['asset_hashes'].items())
     physical_checks=all(max(check[k] for k in ('work_difference_J','account_recompute_defect_J','account_difference_J','force_velocity_power_defect_W'))<1e-10 for vs in data.values() for *_,check in vs.values())
+    reserve_checks=all(check.get('reserve_min_gap_J',0.)>=-1e-10 for vs in data.values() for *_,check in vs.values())
+    qp_checks=all(check['qp_max_normalized_violation']<=1.+1e-6 and check['qp_logged_row_defect']<=1e-10 for vs in data.values() for *_,check in vs.values())
     repeated={}
     for folder in args.repeats:
         rr,meta,*_=read_case(folder);original=results[rr['case']][rr['variant']]
         fields=('net_outgoing_J','gross_outgoing_J','min_substep_energy_J','force_max_error_N','contact_absence_s','measured_progress_m','completed_s')
         repeated[str(folder)]=dict(case=rr['case'],variant=rr['variant'],max_absolute_difference=max(abs(rr[k]-original[k]) for k in fields),
                                   same_failure_reason=(rr['failure'] or {}).get('reason')==(original['failure'] or {}).get('reason'))
-    gates=dict(preservation=preservation['status'],frozen_numerical_provenance=passfail(numerical_provenance),
+    gates=dict(preservation=preservation['status'],frozen_numerical_provenance=passfail(numerical_provenance),unchanged_plant_assets=passfail(asset_preserved),
                existing_and_new_tests='PENDING see test transcript',independent_power_work_accounts=passfail(physical_checks),
+               independent_reserve_accounts=passfail(reserve_checks),logged_multirow_physical_residuals=passfail(qp_checks),
                transparency=passfail(all(all(all(x.values()) for x in vs.values()) for vs in transparency.values())),
                final_executed_torque_rate=passfail(all(r['torque_bound_residual_Nm']<=1e-7 and r['rate_bound_residual_Nm']<=1e-7 for r in final)),
                final_energy_all_physics=passfail(all(r['energy']=='PASS' for r in final)),
@@ -205,6 +239,9 @@ def main():
                                   completion=gates['primary_completion'],energy=gates['final_energy_all_physics'],contact=gates['primary_contact'],
                                   progress=gates['primary_progress'],preservation=gates['preservation'],generalization=gates['generalization'])
     write(args.out/'acceptance.json',acceptance);write(args.out/'metrics.json',results);write(args.out/'raw_manifest.json',manifest)
+    if args.validation:
+        shutil.copy2(args.validation/'validation.json',args.out/'validation.json')
+        shutil.copy2(args.validation/'validation.npz',args.out/'validation.npz')
     figures(data,args.out)
     rows=[]
     for name,variants in results.items():
@@ -337,7 +374,9 @@ Both accounts coincide by construction; they do not test account mismatch.
 
 Runtime includes Python allocation, serialization, isolated prediction and
 buffered logging. Whole tick and component quantiles, deadline misses and
-wall/simulation factors are logged. Final matrix jobs may share the CPU; fresh
+wall/simulation factors are logged. Tick quantiles describe accepted/completed
+ticks; a stopped tick's duration is separately retained as seconds_failed_tick,
+and total wall time includes it. Final matrix jobs may share the CPU; fresh
 repeats provide an additional execution check. This implementation does not
 establish 1 kHz execution; reserve forecasts can take orders of magnitude longer.
 
