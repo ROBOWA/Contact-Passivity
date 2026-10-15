@@ -1,7 +1,7 @@
 """Command-line entry point.
 
     python   -m kuka_table_sim.run headless --duration 10 [--render out.png]
-    python   -m kuka_table_sim.run --controller force headless --duration 12 [--log run.npz]
+    python   -m kuka_table_sim.run --controller force headless --duration 25 [--log run.npz] [--plot run.png]
     mjpython -m kuka_table_sim.run [--controller force] viewer   # macOS; plain python elsewhere
     python   -m kuka_table_sim.run ik --site tcp --pos 0.6 0.15 0.3 --rpy 0 180 0 [--render pose.png]
     python   -m kuka_table_sim.run --init-site tcp --init-pos 0.6 0.15 0.3 --init-rpy 0 180 0 headless
@@ -19,6 +19,8 @@ on the fixed scene camera instead (Esc returns to the free camera).
 from __future__ import annotations
 
 import argparse
+import contextlib
+import io
 import signal
 import struct
 import sys
@@ -29,7 +31,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from .force_control import APPROACH, CONTACT, SLIDE, ForceApproachController, ForceControlConfig
+from .force_control import ForceApproachController, ForceControlConfig
 from .holding import DEFAULT_HOLD_FREQ_HZ, DEFAULT_HOLD_ZETA, HoldingController, Simulation
 from .ik import quat_from_rpy, site_pose, solve_site_ik
 from .scene import (FLANGE_SITE, OVERVIEW_CAMERA, ROBOT_BODIES, SCENE_XML, TCP_SITE, TOOL_TIP_GEOM, ArmIndex,
@@ -275,222 +277,36 @@ def run_headless(sim: Simulation, duration: float, render: Path | None, verbose:
     return ok
 
 
-def _tip_contact_force_world(sim: Simulation) -> np.ndarray:
-    """Ground truth: total force on the tool tip from its contacts, world frame (for validation only)."""
-    m, d = sim.model, sim.data
-    tip = m.geom(TOOL_TIP_GEOM).id
-    total = np.zeros(3)
-    wrench = np.zeros(6)
-    for i in range(d.ncon):
-        c = d.contact[i]
-        if tip not in (c.geom1, c.geom2):
-            continue
-        mujoco.mj_contactForce(m, d, i, wrench)
-        frame = c.frame.reshape(3, 3)           # rows: normal (geom1 -> geom2), tangent1, tangent2
-        f_on_geom2 = frame.T @ wrench[:3]       # mj_contactForce: force applied by geom1 on geom2
-        total += -f_on_geom2 if c.geom1 == tip else f_on_geom2
-    return total
-
-
-def run_force_headless(sim: Simulation, duration: float, render: Path | None, log: Path | None,
+def run_force_headless(sim: Simulation, duration: float, render: Path | None, log: Path | None, plot: Path | None = None,
                        verbose: bool = True) -> bool:
-    m, d, arm = sim.model, sim.data, sim.arm
-    ctl: ForceApproachController = sim.controller
-    cfg = ctl.cfg
-    ok = True
-    failures: list[str] = []
-    phase_code = {APPROACH: 0, CONTACT: 1, SLIDE: 2}
-
-    def check(cond: bool, msg: str) -> None:
-        nonlocal ok
-        if not cond:
-            ok = False
-            failures.append(msg)
-
-    # --- static sensor check at the held initial state -------------------------------------
-    f0 = ctl.contact_force_world(d)
-    check(np.linalg.norm(f0) < 0.05, f"bias-compensated force at rest is {np.linalg.norm(f0):.3f} N, expected ~0")
-    tcp = m.site(TCP_SITE).id
-    x0 = d.site_xpos[tcp].copy()
-    tabletop = m.geom("tabletop").id
-    top_z = d.geom_xpos[tabletop][2] + m.geom_size[tabletop][2]
-    sliding = cfg.slide_distance > 0
-    if verbose:
-        print("== force control ==")
-        print(f"target / approach   : {cfg.force_desired} N, peak {cfg.approach_speed} m/s, creep {cfg.creep_speed} m/s from "
-              f"{cfg.creep_distance} m above the surface, contact threshold {cfg.contact_threshold} N, ramp {cfg.force_ramp_time} s")
-        print(f"gains               : kp_f {cfg.kp_force}, ki_f {cfg.ki_force} 1/s, normal damping {cfg.normal_damping} N*s/m, "
-              f"translation {cfg.motion_freq_hz} Hz, rotation {cfg.rotation_freq_hz} Hz (zeta {cfg.motion_zeta}), "
-              f"tangential ki {cfg.ki_tangential} 1/s^3, rotation ki {cfg.ki_rotation} 1/s^3, friction ff mu_hat {cfg.friction_ff} / c_hat {cfg.friction_viscous_ff} N*s/m, "
-              f"posture {cfg.posture_freq_hz} Hz")
-        if sliding:
-            print(f"slide               : {cfg.slide_distance} m along {np.array2string(ctl.slide_dir, precision=3)}, peak {cfg.slide_speed} m/s "
-                  f"(stroke {ctl.slide.T:.2f} s), {'unlimited' if cfg.slide_cycles == 0 else cfg.slide_cycles} cycle(s), "
-                  f"dwell {cfg.slide_dwell} s, starts {cfg.slide_start_delay} s after the ramp")
-        print(f"sensor at rest      : raw {np.array2string(d.sensordata[ctl.ft_adr:ctl.ft_adr + 3], precision=3)} N (site frame), "
-              f"tool mass {ctl.tool_mass} kg, compensated {np.array2string(f0, precision=4)} N")
-        print(f"start / surface     : tip centre z {x0[2]:.4f} m, surface {top_z:.3f} m")
-
-    # --- run ----------------------------------------------------------------------------------
-    n = sim.steps_for(duration)
-    ci = sim.timing.control_interval
-    names = (["t", "phase", "f_n", "f_true_n", "f_d", "f_cmd", "x", "y", "z", "fe_x", "fe_y", "fe_z", "ft_x", "ft_y", "ft_z",
-              "ori_err", "z_d", "zd_dot", "zd_ddot", "vx", "vy", "vz", "s_d", "sd_dot", "sd_ddot", "xd", "yd"]
-             + [f"q{i}" for i in range(1, 8)] + [f"qd{i}" for i in range(1, 8)] + [f"tau{i}" for i in range(1, 8)])
-    rows = []
-    jacp_log = np.zeros((3, m.nv))
-    warn_before = _warning_counts(d)
-    other_contacts: dict[tuple[str, str], int] = {}
-    sat_updates = 0
-    t_contact = None
-    t_slide = None
-    t0 = time.perf_counter()
-    for _ in range(n):
-        sim.step()
-        if sim.n_steps % ci:
-            continue
-        f_true = _tip_contact_force_world(sim)
-        f_est = ctl.contact_force_world(d)
-        rot = d.site_xmat[tcp].reshape(3, 3)
-        mujoco.mj_jacSite(m, d, jacp_log, None, tcp)
-        v_tip = jacp_log @ d.qvel
-        x_d = ctl.x_ref + ctl.s_d * ctl.slide_dir
-        rows.append([d.time, phase_code[ctl.phase], ctl.f_n, float(f_true @ ctl.normal), ctl.f_d, ctl.f_cmd,
-                     *d.site_xpos[tcp], *f_est, *f_true, float(np.linalg.norm(ctl.orientation_error(rot))),
-                     ctl.z_d, ctl.zd_dot, ctl.zd_ddot, *v_tip, ctl.s_d, ctl.sd_dot, ctl.sd_ddot, x_d[0], x_d[1],
-                     *sim.q, *sim.qvel, *sim.tau])
-        if t_contact is None and ctl.in_contact:
-            t_contact = ctl.t_contact
-        if t_slide is None and ctl.phase == SLIDE:
-            t_slide = ctl.t_slide
-        if ctl.saturated.any():
-            sat_updates += 1
-        for a, b, _ in _robot_contact_pairs(sim):
-            if not ({a.split("/")[1], b.split("/")[1]} == {TOOL_TIP_GEOM, "tabletop"}):
-                other_contacts[(a, b)] = other_contacts.get((a, b), 0) + 1
-        if not (np.all(np.isfinite(d.qpos)) and np.all(np.isfinite(d.qvel))):
-            check(False, f"non-finite state at t={d.time:.4f}")
-            break
-    wall = time.perf_counter() - t0
-    arr = np.array(rows)
-    col = {name: arr[:, i] for i, name in enumerate(names)}
-    t, phase, f_n, f_true_n, f_d = col["t"], col["phase"], col["f_n"], col["f_true_n"], col["f_d"]
-    pos = arr[:, 6:9]
-    dt_c = sim.timing.control_period
-    approach = phase == 0
-    in_contact = phase >= 1
-    acc_jumps = np.abs(np.diff(col["zd_ddot"][approach])) if approach.sum() > 2 else np.zeros(1)
-    new_warnings = {_warning_names()[i]: int(c) for i, c in enumerate(_warning_counts(d) - warn_before) if c}
-
-    check(t_contact is not None, "contact was never detected")
-    check(float(np.max(acc_jumps)) < 1e-3, f"approach set-point acceleration jumps by {np.max(acc_jumps):.2e} m/s^2")
-    check(not new_warnings, f"MuJoCo warnings raised: {new_warnings}")
-    check(not other_contacts, f"contacts other than tip/tabletop: {other_contacts}")
-    check(sat_updates == 0, f"torque saturated in {sat_updates} control updates")
-    check(ctl.n_releases == 0, f"contact was lost and re-approached {ctl.n_releases} time(s)")
-    contact_speed = touchdown_peak = float("nan")
-    if t_contact is not None:
-        k_c = int(np.argmax(in_contact))
-        contact_speed = float(-col["vz"][max(k_c - 3, 0)])
-        touchdown_peak = float(np.max(f_n[k_c:k_c + int(cfg.force_ramp_time / dt_c)]))
-        check(contact_speed < 2.0 * cfg.creep_speed, f"tip reached the table at {contact_speed:.4f} m/s (creep speed {cfg.creep_speed})")
-        check(touchdown_peak < cfg.force_desired + 2.0, f"touchdown/ramp peak force {touchdown_peak:.2f} N")
-        settle_from = t_contact + cfg.force_ramp_time + 1.0
-        win = t >= max(settle_from, t[-1] - 3.0)
-        check(win.sum() > 100, f"run too short to assess the hold (contact at {t_contact:.2f} s, duration {duration} s)")
-    hold_stats = None
-    if t_contact is not None and win.sum() > 100:
-        err = f_d[win] - f_n[win]
-        hold_stats = dict(mean_err=float(np.mean(np.abs(err))), max_err=float(np.max(np.abs(err))),
-                          truth=float(np.max(np.abs(f_n[win] - f_true_n[win]))), f_mean=float(np.mean(f_n[win])),
-                          f_std=float(np.std(f_n[win])), ori=float(np.degrees(np.max(col["ori_err"][win]))),
-                          drift=float(np.max(np.linalg.norm(pos[win, :2] - x0[:2], axis=1))))
-        check(hold_stats["mean_err"] < (0.5 if sliding else 0.2), f"mean |f_d - f_n| in the hold window is {hold_stats['mean_err']:.3f} N")
-        check(hold_stats["max_err"] < (3.0 if sliding else 0.5), f"max |f_d - f_n| in the hold window is {hold_stats['max_err']:.3f} N")
-        check(hold_stats["truth"] < 0.3, f"sensor estimate deviates from the true contact force by up to {hold_stats['truth']:.3f} N")
-        check(hold_stats["ori"] < (2.0 if sliding else 1.0), f"orientation error reaches {hold_stats['ori']:.2f} deg")
-        check(np.all(in_contact[win]), "contact flag dropped inside the hold window")
-        if not sliding:
-            check(hold_stats["drift"] < 0.003, f"tangential drift of the tip is {hold_stats['drift'] * 1000:.1f} mm")
-
-    slide_stats = None
-    if sliding:
-        check(t_slide is not None, "sliding never started (run too short?)")
-    if t_slide is not None:
-        sl = phase == 2
-        e_vec = np.stack([col["xd"] - pos[:, 0], col["yd"] - pos[:, 1]], axis=1)[sl]
-        along = e_vec @ ctl.slide_dir[:2]
-        cross = e_vec - np.outer(along, ctl.slide_dir[:2])
-        s_jumps = np.abs(np.diff(col["sd_ddot"][sl]))
-        strokes = ctl.strokes_completed(float(t[-1]))
-        f_err = f_d[sl] - f_n[sl]
-        slide_stats = dict(strokes=strokes, along_max=float(np.max(np.abs(along))), along_rms=float(np.sqrt(np.mean(along ** 2))),
-                           cross_max=float(np.max(np.linalg.norm(cross, axis=1))), f_mean_err=float(np.mean(np.abs(f_err))),
-                           f_max_err=float(np.max(np.abs(f_err))), f_std=float(np.std(f_n[sl])),
-                           ori=float(np.degrees(np.max(col["ori_err"][sl]))), acc_jump=float(np.max(s_jumps)) if len(s_jumps) else 0.0,
-                           v_peak=float(np.max(np.abs(col["sd_dot"][sl]))), a_peak=float(np.max(np.abs(col["sd_ddot"][sl]))),
-                           travel=float(np.max(col["s_d"][sl])))
-        check(strokes >= 1, f"only {strokes} stroke(s) completed")
-        check(slide_stats["acc_jump"] < 1e-3, f"slide set-point acceleration jumps by {slide_stats['acc_jump']:.2e} m/s^2")
-        along_tol = max(0.005, 0.1 * cfg.slide_speed)      # 5 mm at the default 0.05 m/s, scaled with speed
-        check(slide_stats["along_max"] < along_tol, f"tangential tracking error reaches {slide_stats['along_max'] * 1000:.2f} mm "
-                                                     f"(limit {along_tol * 1000:.1f} mm)")
-        check(slide_stats["cross_max"] < 0.003, f"cross-track error reaches {slide_stats['cross_max'] * 1000:.2f} mm")
-        check(slide_stats["f_mean_err"] < 0.5, f"mean |f_d - f_n| while sliding is {slide_stats['f_mean_err']:.3f} N")
-        check(slide_stats["f_max_err"] < 3.0, f"max |f_d - f_n| while sliding is {slide_stats['f_max_err']:.3f} N")
-
-    if verbose:
-        print("== run ==")
-        print(f"simulated / wall    : {d.time:.3f} s in {sim.n_steps} steps; wall {wall:.2f} s ({d.time / wall:.1f}x)")
-        print(f"approach profile    : quintic {ctl.profile.T:.2f} s from z {ctl.profile.z0:.4f} to creep point {ctl.profile.z_creep:.4f} m, "
-              f"peak speed {np.max(-col['zd_dot']):.4f} m/s, peak |accel| {np.max(np.abs(col['zd_ddot'])):.4f} m/s^2, "
-              f"max |jerk| {np.max(acc_jumps) / dt_c:.3f} m/s^3, then creep {cfg.creep_speed} m/s")
-        if t_contact is not None:
-            lag = (col["z_d"] - pos[:, 2])[approach]
-            print(f"contact detected    : t = {t_contact:.3f} s (sensor f_n > {cfg.contact_threshold} N); tip z {pos[k_c, 2]:.4f} m, "
-                  f"tip speed {contact_speed:.4f} m/s, touchdown/ramp peak {touchdown_peak:.2f} N; approach tracking max {np.max(np.abs(lag)) * 1000:.2f} mm")
-        else:
-            print("contact detected    : never")
-        if hold_stats:
-            print(f"hold window         : t in [{t[win][0]:.2f}, {t[win][-1]:.2f}] s" + (" (sliding)" if sliding else ""))
-            print(f"  f_n mean / std    : {hold_stats['f_mean']:.3f} / {hold_stats['f_std']:.3f} N   (target {cfg.force_desired} N)")
-            print(f"  |f_d - f_n|       : mean {hold_stats['mean_err']:.3f} N, max {hold_stats['max_err']:.3f} N")
-            print(f"  sensor vs truth   : max |f_n - f_true| {hold_stats['truth']:.3f} N")
-            print(f"  orientation error : max {hold_stats['ori']:.3f} deg" + ("" if sliding else f", tip xy drift {hold_stats['drift'] * 1000:.2f} mm"))
-            print(f"  tip z (mean)      : {np.mean(pos[win, 2]):.4f} m  (surface + radius = {top_z + ctl.tip_radius:.4f} m)")
-        if slide_stats:
-            ss = slide_stats
-            print(f"slide               : started t = {t_slide:.2f} s, {ss['strokes']} stroke(s) completed, travel {ss['travel']:.4f} m, "
-                  f"peak |v_d| {ss['v_peak']:.4f} m/s, peak |a_d| {ss['a_peak']:.4f} m/s^2, max accel jump {ss['acc_jump']:.1e}")
-            print(f"  tracking          : along-track max {ss['along_max'] * 1000:.2f} mm, rms {ss['along_rms'] * 1000:.2f} mm; "
-                  f"cross-track max {ss['cross_max'] * 1000:.2f} mm; orientation max {ss['ori']:.3f} deg")
-            print(f"  normal force      : |f_d - f_n| mean {ss['f_mean_err']:.3f} N, max {ss['f_max_err']:.3f} N, std {ss['f_std']:.3f} N")
-        print(f"peak f_n            : {float(np.max(f_n)):.2f} N")
-        print(f"max |tau| (N*m)     : {np.array2string(np.max(np.abs(arr[:, -7:]), axis=0), precision=1)} of limits {arm.torque_limit}")
-        print(f"saturated updates   : {sat_updates};  releases: {ctl.n_releases};  other contacts: {dict(other_contacts) or 'none'}")
-        print(f"MuJoCo warnings     : {new_warnings or 'none'}")
-        print("  t[s]   phase     f_n[N]  f_true[N]  f_d[N]   tip_z[m]  z_d[m]   s_d[m]   ds_d[m/s]  dds_d[m/s2]  e_along[mm]")
-        pname = {0: "approach", 1: "contact", 2: "slide"}
-        for tt in np.arange(0.0, t[-1] + 1e-9, max(0.5, round(t[-1] / 24, 1))):
-            k = int(np.argmin(np.abs(t - tt)))
-            e_al = ((col["xd"][k] - pos[k, 0]) * ctl.slide_dir[0] + (col["yd"][k] - pos[k, 1]) * ctl.slide_dir[1]) * 1000
-            print(f"  {t[k]:5.2f}  {pname[int(phase[k])]:8s} {f_n[k]:7.3f} {f_true_n[k]:9.3f} {f_d[k]:7.3f}   {pos[k, 2]:.4f}  "
-                  f"{col['z_d'][k]:.4f}  {col['s_d'][k]:.4f}  {col['sd_dot'][k]:+.4f}   {col['sd_ddot'][k]:+.4f}     {e_al:+6.2f}")
-
+    """Force-controller validation through the stage-coherent recorder (see recorder.py and scenarios.py):
+    the controller under test is the one in `sim`; the report, gates and logs use time-aligned samples."""
+    from . import scenarios as sc
+    from .recorder import Recorder
+    sim.recorder = Recorder(sim, duration)
+    sim.reset()
+    run_log = sc.run_for(sim, duration)
+    res = sc.ScenarioResult("nominal", sim, run_log)
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf if not verbose else sys.stdout):
+        ok = sc.report_nominal(res)
     if log is not None:
-        np.savez(log, **col, tcp_pos=pos, force_desired=cfg.force_desired, slide_dir=ctl.slide_dir)
+        run_log.save(log, float32=True)
         if verbose:
-            print(f"== log ==\nwrote {log}")
+            print(f"== log ==\nwrote {log} (compressed RunLog, float32 except time/work; load with RunLog.load)")
+    if plot is not None:
+        from .plot import plot_scenario
+        plot_scenario(res, plot)
+        if verbose:
+            print(f"== plot ==\nwrote {plot}")
     if render is not None:
         try:
             render_overview(sim, render)
             if verbose:
                 print(f"== render ==\nwrote {render} (final state, {OVERVIEW_CAMERA} camera)")
-        except Exception as exc:
-            check(False, f"offscreen render failed: {exc!r}")
-    if verbose:
-        print("== result ==")
-        print("PASS" if ok else "FAIL:\n  - " + "\n  - ".join(failures))
+        except Exception as exc:  # offscreen GL may be unavailable on headless hosts
+            print(f"offscreen render failed: {exc!r}")
+            ok = False
     return ok
 
 
@@ -720,8 +536,8 @@ def main(argv: list[str] | None = None) -> int:
     h = sub.add_parser("headless", help="run without GUI and print the validation report")
     h.add_argument("--duration", type=float, default=10.0, help="simulated seconds")
     h.add_argument("--render", type=Path, default=None, help="write an offscreen PNG of the final state")
-    h.add_argument("--log", type=Path, default=None, help="[force] write the per-control-step time series to .npz")
-    h.add_argument("--plot", type=Path, default=None, help="[force] also write a force/position PNG (needs matplotlib; implies a log)")
+    h.add_argument("--log", type=Path, default=None, help="[force] write the compressed RunLog (.npz, float32)")
+    h.add_argument("--plot", type=Path, default=None, help="[force] write a force/position PNG (needs matplotlib)")
     h.add_argument("--quiet", action="store_true")
     v = sub.add_parser("viewer", help="interactive passive viewer (mjpython on macOS)")
     v.add_argument("--no-realtime", action="store_true", help="do not pace frames to wall-clock time")
@@ -743,13 +559,7 @@ def main(argv: list[str] | None = None) -> int:
     sim = build_simulation(args)
     if args.cmd == "headless":
         if args.controller == "force":
-            log = args.log if args.log is not None else (args.plot.with_suffix(".npz") if args.plot is not None else None)
-            ok = run_force_headless(sim, args.duration, args.render, log, verbose=not args.quiet)
-            if args.plot is not None:
-                from .plot import plot_log
-                plot_log(log, args.plot)
-                if not args.quiet:
-                    print(f"== plot ==\nwrote {args.plot}")
+            ok = run_force_headless(sim, args.duration, args.render, args.log, args.plot, verbose=not args.quiet)
             return 0 if ok else 1
         return 0 if run_headless(sim, args.duration, args.render, verbose=not args.quiet) else 1
     run_viewer(sim, realtime=not args.no_realtime, camera=args.camera)
