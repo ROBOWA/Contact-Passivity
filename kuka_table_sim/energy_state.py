@@ -143,6 +143,23 @@ def controller_from_bytes(blob,model):
     return _Reader(io.BytesIO(blob),model).load()
 
 
+def _state_digest(obj,h):
+    """Hash values, not pickle's incidental array alias/memo representation.
+    Persistent models are replaced by None for this read-only state traversal.
+    No rounding: a changed bit in any dynamic numeric field invalidates cache.
+    """
+    h.update((type(obj).__module__+'.'+type(obj).__qualname__).encode())
+    if isinstance(obj,np.ndarray):
+        h.update(str(obj.dtype).encode());h.update(str(obj.shape).encode());h.update(obj.tobytes())
+    elif isinstance(obj,dict):
+        for k in sorted(obj,key=str):_state_digest(k,h);_state_digest(obj[k],h)
+    elif isinstance(obj,(list,tuple)):
+        h.update(str(len(obj)).encode())
+        for v in obj:_state_digest(v,h)
+    elif hasattr(obj,'__dict__'):_state_digest(vars(obj),h)
+    else:h.update(pickle.dumps(obj,protocol=5))
+
+
 @dataclass
 class HybridSnapshot:
     plant: np.ndarray
@@ -160,7 +177,8 @@ class HybridSnapshot:
                    sim.n_steps,sim.n_control_updates)
 
     def signature(self):
-        h=hashlib.sha256(self.plant.tobytes()+self.controller+self.previous.tobytes()+self.base_qfrc.tobytes())
+        h=hashlib.sha256(self.plant.tobytes()+self.previous.tobytes()+self.base_qfrc.tobytes())
+        _state_digest(controller_from_bytes(self.controller,None),h)
         return h.hexdigest()
 
     def save(self,path,**extra):
