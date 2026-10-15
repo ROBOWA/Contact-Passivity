@@ -262,6 +262,10 @@ def main():
     acceptance['outcome_counts']={v:dict(completed=sum(results[n][v]['completion']=='PASS' for n in results),
                                          stopped=sum(results[n][v]['completion']=='FAIL' for n in results),
                                          energy_invalid=sum(results[n][v]['energy']=='FAIL' for n in results)) for v in ('UF','A','B','C','D')}
+    acceptance['category_scope']=dict(completion_contact_progress_recovery='main and historical primary regressions',
+                                      energy='every recorded D physics prefix; incomplete trials remain incomplete',
+                                      generalization='new-1/new-2/new-3, frozen before evaluation',
+                                      arbitrary_stress_completion='reported per case; not a required universal-success gate')
     write(args.out/'acceptance.json',acceptance);write(args.out/'metrics.json',results);write(args.out/'raw_manifest.json',manifest)
     write(args.out/'cases.json',{n:vs['UF'][1]['case'] for n,vs in data.items()})
     if args.validation:
@@ -275,6 +279,9 @@ def main():
         for v,r in variants.items():
             rows.append(f'| {name} | {v} | {r["completion"]} | {r["completed_s"]:.3f} | {r["net_outgoing_J"]:.9f} | {r["gross_outgoing_J"]:.9f} | {r["min_substep_energy_J"]:.3g} | {r["force_mae_N"]:.3f} / {r["force_max_error_N"]:.3f} | {r["contact_absence_s"]:.5f} | {r["progress_ratio_to_UF"]:.3f} | {r["pause_s"]:.3f} |')
     gate_rows='\n'.join(f'| {k} | {v} |' for k,v in gates.items())
+    stress=results['stress']['D']
+    stress_text=(f"The 0.001 J D stress trial stops at {stress['completed_s']:.3f} s: {stress['failure']['reason']}. Its observed energy/contact prefix remains valid; this is NOT a completed task."
+                 if stress['failure'] else 'The 0.001 J D stress trial completes; see its separate energy/task/progress gates.')
     report=f'''# KUKA energy guard Stage 2 — {status}
 
 This opt-in implementation adds four-physics-prefix energy enforcement, a causal
@@ -282,6 +289,7 @@ closed-loop backup reserve, smooth path timing and explicit task constraints.
 Original Stage 1 code, branch tips and results are preserved. No hardware was used.
 Unmet gates: {', '.join(k for k,v in gates.items() if v!='PASS') or 'none'}.
 Completion, energy, contact, progress and generalization are separate outcomes.
+{stress_text}
 
 ## Provenance and preservation
 
@@ -476,6 +484,7 @@ budgets, rather than spending additional effort on an unvalidated local margin.
 历史失败场景最终 D：完成状态 {primary[1]['completion']}，最大力误差 {primary[1]['force_max_error_N']:.3f} N。
 
 仍未通过：{failed}。能量满足、试验完成、任务质量和泛化是独立结论。
+0.001 J 压力试验的 D 完成状态是 {stress['completion']}，记录终点 {stress['completed_s']:.3f} s；明确停止不能算作任务完成。
 所有停止试验和失败快照均保留；不能把明确停止当作完成控制任务。
 备用轨迹只假定当前测得的人力保持不变，并不证明未来变力下的递归可行性或硬件安全。
 运行时间不能证明 1 kHz 实时控制。详见 report.md、acceptance.json 和 reviews.md。
