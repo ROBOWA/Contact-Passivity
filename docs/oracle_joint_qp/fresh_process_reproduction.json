@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "checks": {
+    "ctl__actual": true,
+    "ctl__predicted": true,
+    "ctl__affine": true,
+    "ctl__energy_before": true,
+    "ctl__energy_after": true,
+    "ctl__tau_nom": true,
+    "ctl__tau_exec": true,
+    "phys__power": true,
+    "phys__velocity": true,
+    "baseline_all_physics": true,
+    "baseline_all_control": true
+  },
+  "command": ".venv/bin/python -m kuka_table_sim.oracle_experiments case --name resistance --mode active --budget .12 --task-weight 1 --out results/oracle/reproduce_final",
+  "first": "results/oracle/final/tight-active",
+  "reproduction": "results/oracle/reproduce_final"
+}

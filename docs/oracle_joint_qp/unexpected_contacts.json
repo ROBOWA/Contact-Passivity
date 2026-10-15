@@ -1,0 +1,74 @@
+{
+  "ample-active": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "ample-off": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "assist": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "elbow": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "elbow-tight": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "held-out-active": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "held-out-off": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "lower-budget": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "no-human-active": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "no-human-off": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "no-human-shadow": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "stress": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "task-cost": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "tight-active": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "tight-off": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "tight-shadow": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "torque-only": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  },
+  "varying": {
+    "unexpected_contact_samples": 0,
+    "max_unexpected_contact_count": 0
+  }
+}

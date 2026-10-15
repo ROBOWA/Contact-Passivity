@@ -1,0 +1,246 @@
+{
+  "overall": "PARTIAL",
+  "source_sha256": "023460012a05710dffd75a3e146a66659b94d67f4ad64d1cf94385f69bccba41",
+  "postprocessing_source_sha256": "348eb275c12d7734e4a7d841b687be81f16f83c67d614cf04f68f6debba13bc2",
+  "gates": [
+    {
+      "gate": "final_source_provenance",
+      "status": "PASS",
+      "command": "python -m kuka_table_sim.oracle_report",
+      "evidence": "raw/* metadata_json; validation.json",
+      "value": {
+        "numerical_source_sha256": "023460012a05710dffd75a3e146a66659b94d67f4ad64d1cf94385f69bccba41",
+        "postprocessing_source_sha256": "348eb275c12d7734e4a7d841b687be81f16f83c67d614cf04f68f6debba13bc2",
+        "changed_files": [
+          "kuka_table_sim/oracle_report.py"
+        ]
+      },
+      "tolerance": "recorded Git source hash; only reporting module may differ",
+      "failure_reason": null
+    },
+    {
+      "gate": "physical_QP_and_regression_suite",
+      "status": "PASS",
+      "command": ".venv/bin/python -m pytest -q",
+      "evidence": "results/oracle/final_tests.txt",
+      "value": [
+        "61 passed in 70.03s (0:01:10)"
+      ],
+      "tolerance": "61 passed",
+      "failure_reason": null
+    },
+    {
+      "gate": "unchanged_25s_baseline",
+      "status": "PASS",
+      "command": ".venv/bin/python -m kuka_table_sim.scenarios nominal --log results/oracle/baseline_final.npz",
+      "evidence": "results/oracle/baseline{,_final}.npz",
+      "value": true,
+      "tolerance": "bitwise physics and control arrays",
+      "failure_reason": null
+    },
+    {
+      "gate": "no_human_transparency",
+      "status": "PASS",
+      "command": ".venv/bin/python -m kuka_table_sim.oracle_experiments matrix",
+      "evidence": "raw/no-human-*.npz",
+      "value": true,
+      "tolerance": "bitwise",
+      "failure_reason": null
+    },
+    {
+      "gate": "ample_budget_transparency",
+      "status": "PASS",
+      "command": "matrix",
+      "evidence": "raw/ample-*.npz",
+      "value": true,
+      "tolerance": "bitwise",
+      "failure_reason": null
+    },
+    {
+      "gate": "human_power_and_oracle_identities",
+      "status": "PASS",
+      "command": "pytest + matrix",
+      "evidence": "metrics.json",
+      "value": 1.942890293094024e-16,
+      "tolerance": 1e-12,
+      "failure_reason": null
+    },
+    {
+      "gate": "held_force_execution_prediction",
+      "status": "PASS",
+      "command": "matrix",
+      "evidence": "metrics.json",
+      "value": 0.0,
+      "tolerance": 1e-11,
+      "failure_reason": null
+    },
+    {
+      "gate": "gradients_and_empirical_envelope",
+      "status": "PASS",
+      "command": ".venv/bin/python -m kuka_table_sim.oracle_validation --out results/oracle/validation_final",
+      "evidence": "validation.json; scans.npz",
+      "value": 2.1678487054747233e-05,
+      "tolerance": 2.5e-05,
+      "failure_reason": null
+    },
+    {
+      "gate": "main_active_energy",
+      "status": "PASS",
+      "command": ".venv/bin/python -m kuka_table_sim.oracle_experiments case --name resistance --mode active --budget .12 --task-weight 1",
+      "evidence": "raw/tight-active.npz; metrics.json",
+      "value": 1.8616617627674414e-07,
+      "tolerance": -1e-10,
+      "failure_reason": null
+    },
+    {
+      "gate": "logged_QP_physical_residuals",
+      "status": "PASS",
+      "command": "matrix + oracle_report",
+      "evidence": "raw/*_events.json; full results/oracle/final/*/events.json",
+      "value": {
+        "torque_Nm": 1.115111558647186e-09,
+        "energy_J": 2.1481024400140385e-16
+      },
+      "tolerance": {
+        "torque_Nm": 1e-07,
+        "energy_J": 1e-10
+      },
+      "failure_reason": null
+    },
+    {
+      "gate": "main_active_task_quality",
+      "status": "FAIL",
+      "command": "matrix",
+      "evidence": "metrics.json; active_comparison.png",
+      "value": {
+        "force_max_N": 53.10421223941033,
+        "contact_absence_s": 1.14975
+      },
+      "tolerance": {
+        "force_mean_N": 0.5,
+        "force_max_N": 3,
+        "contact_absence_s": 0
+      },
+      "failure_reason": "hard energy constraint causes force spikes/contact interruption"
+    },
+    {
+      "gate": "release_recovery",
+      "status": "PASS",
+      "command": "matrix",
+      "evidence": "metrics.json; failures_and_recovery.png",
+      "value": {
+        "force": {
+          "window": [
+            16.999749999994933,
+            17.999749999994933
+          ],
+          "controller_mean_abs": 0.014700556795772885,
+          "controller_max_abs": 0.04569838647975999,
+          "truth_mean_abs": 0.01453975993495512,
+          "truth_max_abs": 0.04580816109808339,
+          "f_true_mean": 10.009570506739088,
+          "f_true_std": 0.01648107658480001,
+          "sensor_vs_truth_max": 2.1316282072803006e-14
+        },
+        "tracking": {
+          "window": [
+            16.999749999994933,
+            17.999749999994933
+          ],
+          "along_max_mm": 3.8397299427004317,
+          "along_rms_mm": 3.492393788633364,
+          "cross_max_mm": 0.040706723589870646,
+          "ori_max_deg": 0.34715819330728387
+        },
+        "integrals_max": {
+          "f": 0.26590279971667247,
+          "tangent": 0.003316395764989234,
+          "rotation": 0.005956939232554441
+        }
+      },
+      "tolerance": "last-second max force error .5 N, along error 5 mm",
+      "failure_reason": null
+    },
+    {
+      "gate": "stress_outcome_is_explicit",
+      "status": "PASS",
+      "command": "matrix",
+      "evidence": "raw/stress.npz; metrics.json",
+      "value": {
+        "trial_status": "PASS",
+        "failure": null,
+        "min_endpoint_margin_J": 2.597440392300561e-07
+      },
+      "tolerance": "completed with valid endpoints OR explicit failure + snapshot",
+      "failure_reason": null
+    },
+    {
+      "gate": "held_out_active",
+      "status": "FAIL",
+      "command": "matrix",
+      "evidence": "raw/held-out-active*; metrics.json",
+      "value": {
+        "reason": "energy_infeasible",
+        "diagnostics": {
+          "best_margin": [
+            -5.220059654506882e-05,
+            -5.220059654506882e-05
+          ],
+          "classification": "affine halfspace cannot intersect actuator/rate/trust box; no global nonlinear claim",
+          "attempts": [
+            {
+              "retry": 0,
+              "status": "failed",
+              "accepted": false,
+              "reason": "energy_infeasible",
+              "center": [
+                0.711401757047118,
+                -52.80392433701855,
+                -0.40006199122790503,
+                20.89122402902813,
+                -0.6884196652982202,
+                -1.2791416969174132,
+                -5.496876799176136e-05
+              ],
+              "rho": [
+                80.0,
+                80.0,
+                60.0,
+                60.0,
+                40.0,
+                20.0,
+                20.0
+              ],
+              "details": {
+                "best_margin": [
+                  -5.220059654506882e-05,
+                  -5.220059654506882e-05
+                ],
+                "classification": "affine halfspace cannot intersect actuator/rate/trust box; no global nonlinear claim"
+              }
+            }
+          ],
+          "timing_seconds": {
+            "gradient": 0.0031147500267252326,
+            "qp": 0.0,
+            "nonlinear": 0.0,
+            "retry": 0.0
+          }
+        },
+        "t": 10.752999999997614
+      },
+      "tolerance": "completed trial",
+      "failure_reason": "held-out affine QP infeasible within configured bounds"
+    },
+    {
+      "gate": "varying_force_error_measured",
+      "status": "PASS",
+      "command": "matrix",
+      "evidence": "forecast_and_runtime.png; metrics.json",
+      "value": 7.117830334791897e-07,
+      "tolerance": "measured; shadow only",
+      "failure_reason": null
+    }
+  ],
+  "limits": "Oracle simulation; empirical margins; endpoint energy only; no hardware/unknown-contact/real-time certificate"
+}

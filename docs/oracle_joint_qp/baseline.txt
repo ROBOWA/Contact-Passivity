@@ -1,0 +1,22 @@
+== nominal: 100000 physics steps, 25000 control updates, dt 0.00025 s, control period 0.001 s, mujoco 3.15.0, commit dbff1c1fbb
+transitions: [(6.705, 'approach', 'contact'), (8.705, 'contact', 'slide')]
+steady-contact window t in [8.71, 25.00] s
+  force   : truth |f_d - f| mean 0.0186 N max 0.0498 N; controller |f_d - f_n| mean 0.0187 max 0.0498; f_true mean 9.9975 std 0.0225; sensor vs truth max 0.0000 N
+  tracking: along max 3.95 mm (rms 2.21), cross max 0.069 mm, orientation max 0.355 deg
+  torque  : peak applied utilisation 18 % of limit, saturated substeps 0
+  contact : geometric absence 0 events (longest 0.0000 s, fraction 0.0000); low load (<0.5 N) 0 events (longest 0.0000 s, fraction 0.0000); FSM {'n_uncertain': 0, 'n_lost': 0, 'n_reacquired': 0, 'n_hold': 0}
+  work    : environment on robot in the window: rect -1.38941 J, trapezoid -1.38943 J, force(k) x velocity(k+1) -1.38951 J (positive part +0.00125, negative part -1.39067)
+  identity: P_task vs qvel . qfrc_constraint max |diff| 4.72e-16 W
+  [PASS] mean |f_d - f| < 0.5 N
+  [PASS] max |f_d - f| < 3 N
+  [PASS] along-path < 5.0 mm
+  [PASS] cross-path < 3 mm
+  [PASS] orientation < 2 deg
+  [PASS] no unexpected contacts
+  [PASS] no actuator saturation
+  [PASS] no recovery/loss events
+  [PASS] sensor vs truth < 0.3 N
+  [PASS] contact detected
+== result: PASS
+(wall 7.3 s)
+wrote results/oracle/baseline.npz

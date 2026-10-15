@@ -90,5 +90,68 @@ Round 2 continued:
 - Core source frozen first at `daec55f`; the degeneracy repair is a follow-up
   source commit before final matrix reproduction. Fresh full suite, validation,
   baseline and sequential matrix must all use that final source hash.
-- Final reproduction results will be recorded below after logs/figures are
-  generated; NOT RUN is not a pass.
+- Final numerical/control revision `43a6661`. Fresh full suite:
+  `.venv/bin/python -m pytest -q` → **61 passed in 70.03 s** (`final_tests.txt`).
+- Fresh baseline `.venv/bin/python -m kuka_table_sim.scenarios nominal --log
+  results/oracle/baseline_final.npz` → PASS, every physics/control array bitwise
+  equal to the original 25 s baseline. `git diff dbff1c1 -- assets` is empty.
+- `.venv/bin/python -m kuka_table_sim.oracle_validation --out
+  results/oracle/validation_final` → PASS: 1155 samples / 15 snapshots,
+  independent replay work error 0 J; max eta difference 8.47e-18 J/(N m).
+  Normalized held-out affine overprediction 2.16785e-5 J < 2.5e-5 J.
+- Sequential fresh-process matrix `.venv/bin/python -m
+  kuka_table_sim.oracle_experiments matrix --out results/oracle/final` ran all
+  18 cases, deliberately exits **2**. Main .12 J / task weight 1 completes:
+  net output .119998982855545 J vs .241623266070888 J off, endpoint margin
+  +1.86166e-7 J. Held-force prediction error 0 J. Both accounts identical.
+- Independently reassembled logged physical constraints: largest torque/rate/
+  trust residual 1.11512e-9 N m (<1e-7); affine energy residual 2.14811e-16 J
+  (<1e-10). Tests independently challenge shifted centers, previous EXECUTED
+  rate bounds, zero/near-zero gradients, infeasible rows and nonlinear retry.
+- Manual numeric interval trace (`interval_trace.json`): first intervention at
+  10.285 s; four powers (-.2261883, -.1680011, -.1097810, -.0515230) W give
+  W_H=-.000138873346699213 J. E_before=.000161905068564909 J →
+  E_after=.0000230317218656961 J. Torque mapping error 0 N m, account arithmetic
+  error 2.71e-20 J. Task nominal and actual work equal; R=H.
+- Blocking task finding: main active force error 53.104 N, geometric contact
+  absence 1.14975 s; fixed ORIGINAL 10 N errors are reported as well as the
+  FSM's varying f_d so SEARCH cannot mask this failure. Last-second recovery
+  passes (.04581 N max force error, 3.840 mm along error); integrators remain
+  bounded and recover. A successful energy gate is not successful task preservation.
+- The main substep minimum is -1.11334e-6 J despite valid endpoints. Explicitly
+  prohibit a continuous-time claim. Held-out active stops at 10.753 s with an
+  empty affine halfspace/box intersection; tight elbow at 10.884 s. Failure
+  snapshots and candidate histories are retained. The final .001 J stress
+  case succeeds (net .0009996804 J), with its own substep undershoot; feasibility
+  is nonmonotonic and a larger budget cannot be claimed universally feasible.
+- Postprocessing findings/fixes: (i) the report originally assumed stress must
+  fail, but the contract permits success; now validates either explicit outcome;
+  (ii) plotting every eighth physics sample skipped the short 63.104 N force
+  peak, so figures now use full physics force/power and show substep minima;
+  (iii) numerical source provenance is verified against its recorded Git tree,
+  permitting reporting-only revisions; (iv) retain nine representative compact
+  raw cases, all failed snapshots and relevant candidate histories, about 7 MB
+  including plots/reports, instead of committing full logs.
+  Reporting commits: `3dba2f1`, `ddc02b6`, `25a8bf6`. Re-ran the report generator
+  after each affected fix; simulation sources and final physics logs unchanged.
+- Visually inspected final `active_comparison.png`, `failures_and_recovery.png`,
+  `gradient_response.png`, `forecast_and_runtime.png`; figures agree with raw
+  metrics. Force-forecast mismatch is measured separately: max 7.11783e-7 J
+  when the plant varies force within a tick and prediction holds it constant.
+- Runtime on Apple M4: main tick median .640 ms, p95 .684 ms, p99 3.013 ms,
+  max 9.497 ms; total 11.540 s for 18 s simulated. No 1 kHz wall-time claim.
+- Independent final standalone process reproduces main physics/control/work/
+  candidate/account arrays bitwise (`fresh_process_reproduction.json`).
+- Checked every physics row in all 18 cases: no unexpected contacts
+  (`unexpected_contacts.json`), so the oracle's two modeled ports are not
+  omitting an observed third contact. All installed global callback slots are
+  unset (`callback_inventory.json`), including contactfilter/time callbacks.
+- Final manifest: 13 PASS, 2 FAIL (task quality and held-out active); overall
+  **PARTIAL**, not complete. The remaining blockers need a new scope decision
+  (task constraints / viability reserve), not hidden changes to this fixture.
+
+| round | evidence / outcome | implementation commit |
+|---|---|---|
+| 1 physics | independent point/wrench/frame/work/replay checks pass | `a57d37f` |
+| 2 control | empirical margin, reserve fast path, scaling and failure evidence | `daec55f` |
+| 3 reproduction | vertex repair, 61 regressions, final matrix/figures; partial result explicit | `43a6661` + reporting commits above |

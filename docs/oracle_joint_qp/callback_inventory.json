@@ -1,0 +1,13 @@
+{
+  "mujoco": "3.15.0",
+  "callbacks_are_unset": {
+    "get_mjcb_act_bias": true,
+    "get_mjcb_act_dyn": true,
+    "get_mjcb_act_gain": true,
+    "get_mjcb_contactfilter": true,
+    "get_mjcb_control": true,
+    "get_mjcb_passive": true,
+    "get_mjcb_sensor": true,
+    "get_mjcb_time": true
+  }
+}
