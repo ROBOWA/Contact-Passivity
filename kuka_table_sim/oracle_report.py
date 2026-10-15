@@ -31,9 +31,11 @@ def plot_runs(root, out, summary):
         p={k[6:]:z[k] for k in z.files if k.startswith("phys__")}
         budget=json.loads((root/label/"metadata.json").read_text())["oracle"]["energy_init"][0]
         axs[0,0].plot(c["t"]+.001,c["energy_after"][:,0],label=label)
-        axs[0,1].plot(p["t"][::8],p["normal_force"][::8],label=label)
-        axs[1,0].plot(p["t"][::8],p["power"][::8],label=label)
-        axs[1,1].plot(p["t"][::8],p["velocity"][::8,0],label=label)
+        # Full physics samples preserve brief force/power spikes. A fixed
+        # stride can skip the very transient this experiment must expose.
+        axs[0,1].plot(p["t"],p["normal_force"],label=label)
+        axs[1,0].plot(p["t"],p["power"],label=label)
+        axs[1,1].plot(p["t"],p["velocity"][:,0],label=label)
         axs[2,0].plot(c["t"],c["intervention"],label=label)
         axs[2,1].plot(b.ctl["t"],1000*(b.ctl["x_d"][:,0]-b.ctl["x"][:,0]),label=label)
         axs[3,0].plot(c["t"],(c["predicted"][:,0]-c["actual"][:,0])*1e6,label=label)
@@ -52,15 +54,16 @@ def plot_runs(root, out, summary):
     for label in ("tight-active","task-cost","stress","held-out-active","elbow-tight"):
         z=np.load(root/label/"oracle.npz")
         axs[0,0].plot(z["ctl__t"]+.001,z["ctl__energy_after"][:,0],label=label)
-        axs[0,1].plot(z["phys__t"][::8],z["phys__prefix_energy"][::8,0],label=label)
+        axs[0,1].plot(z["phys__t"],z["phys__prefix_energy"][:,0]*1e6,label=label)
         b=RunLog.load(root/label/"baseline_log.npz")
-        axs[1,0].plot(b.phys["t"][::8],b.phys["F_task"][::8,2],label=label)
+        axs[1,0].plot(b.phys["t"],b.phys["F_task"][:,2],label=label)
         axs[1,1].plot(b.ctl["t"],b.ctl["f_int"],label=label)
-    for ax,yl in zip(axs.flat,["boundary energy (J)","observed substep energy (J)","normal force (N)","force integrator (N s)"]):
+    for ax,yl in zip(axs.flat,["boundary energy (J)","substep energy near floor (µJ)","normal force (N)","force integrator (N s)"]):
         ax.set(xlim=(9.3,14.),xlabel="simulation time (s)",ylabel=yl)
         ax.legend(fontsize=7)
     axs[0,0].axhline(0,color="k",ls="--")
     axs[0,1].axhline(0,color="k",ls="--")
+    axs[0,1].set_ylim(-5,50)
     fig.savefig(out/"failures_and_recovery.png",dpi=140)
     plt.close(fig)
     fig,axs=plt.subplots(1,2,figsize=(11,3.8),constrained_layout=True)
@@ -81,18 +84,27 @@ def compact_case(folder, dest):
     out={}
     for k in ("t","energy_before","energy_after","actual","predicted","affine","intervention","attempts","min_prefix","gross"):
         out["ctl__"+k]=z["ctl__"+k]
-    csel=(z["ctl__t"]>=9.25)&(z["ctl__t"]<=11.6)
+    csel=((z["ctl__t"]>=9.25)&(z["ctl__t"]<=11.6)&
+          ((z["ctl__intervention"]>1e-7)|np.any(z["ctl__gradient"]!=0,axis=(1,2))))
     for k in ("t","tau_nom","tau_exec","tau_previous","gradient"):
         out["audit__"+k]=z["ctl__"+k][csel]
-    psel=(z["phys__t"]>=9.25)&(z["phys__t"]<=11.6)
+    psel=((z["phys__t"]>=9.25)&(z["phys__t"]<=11.6)&np.any(z["phys__force"]!=0,axis=1))
     for k in ("t","force","velocity","power","task_power","prefix_energy","power_identity"):
         out["phys__"+k]=z["phys__"+k][psel]
     # Broad task/recovery trace is strided; account/work above remain full precision/full rate.
     b=RunLog.load(folder/"baseline_log.npz")
+    fn=b.phys["F_task"][:,2]
+    transitions=np.flatnonzero(np.diff(b.phys["present"].astype(int))!=0)
+    tidx=np.unique(np.r_[np.arange(0,len(fn),40),np.argmin(fn),np.argmax(fn),transitions,transitions+1])
     for k in ("t","tcp","F_task","present"):
-        out["task__"+k]=b.phys[k][::20]
+        out["task__"+k]=b.phys[k][tidx]
     for k in ("t","x_d","x","f_int","tan_int","rot_int","phase"):
-        out["taskctl__"+k]=b.ctl[k][::10]
+        out["taskctl__"+k]=b.ctl[k][::20]
+    out["compaction_json"]=np.array(json.dumps(dict(
+        account_work="all control boundaries, float64",
+        audit="only intervention or nonzero diagnostic-gradient ticks in 9.25–11.6 s",
+        physics="all nonzero-human-force samples in 9.25–11.6 s; omitted human power is zero",
+        task="every 40 physics steps plus global force extrema/contact transitions; control every 20 ticks")))
     out["metadata_json"]=np.array((folder/"metadata.json").read_text())
     np.savez_compressed(dest,**out)
 
@@ -269,7 +281,9 @@ The matrix deliberately returns exit 2 when held-out/optional active trials fail
 all logs are still saved. A single failed case also exits 2. Unsupported inputs
 fail closed. `results/` holds full logs and is ignored; `raw/` contains compact
 full-precision account/work data, force/power physics samples around interaction,
-strided task recovery traces, rejected candidates and failure snapshots. No
+strided task recovery traces preserving global force extrema and contact transitions,
+rejected candidates and failure snapshots. `compaction_json` declares retained
+samples; omitted human powers are zero. No
 float32 conversion is applied to work/accounts. Regenerate figures with the report
 command after reproducing logs; do not treat a missing test as passing.
 
@@ -404,7 +418,9 @@ performance; tail latency and intervening-gradient ticks exceed the deadline.
 
 Three evidence-backed rounds and repairs are in `reviews.md`; exact source/test
 and run provenance are in `acceptance.json`. Final figures are regenerated from
-the matching final logs, including the failed trials. Final manifest:
+the matching final logs, including the failed trials. Numerical/control sources
+must match the recorded Git revision and SHA; reporting-only repairs are tracked
+separately and do not change the physics logs. Final manifest:
 
 | gate | status |
 |---|---|
