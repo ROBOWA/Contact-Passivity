@@ -1,7 +1,22 @@
 """Joint-space holding controller and the stepping loop that schedules it.
 
 Any controller used by `Simulation` provides reset(model, data, q_home),
-compute(data) -> 7 torques, a `saturated` flag array and status() -> str.
+compute(data) -> 7 torques, a `saturated` flag array and status() -> str. It may also provide
+observe(model, data, t_eval), called after EVERY physics step with the evaluation instant of that step
+(see "Step stages and timestamps" below), and diagnostics() -> dict for the recorder.
+
+Step stages and timestamps (verified on the installed MuJoCo, tests/test_timing.py)
+    One physics step starting at time t_k with state x_k = (qpos, qvel) is
+        mj_step1   position/velocity stage at x_k: kinematics, site poses, cvel, qfrc_bias, contacts
+        [control]  the controller reads x_k and its latest FT sample and writes ctrl (held for the next
+                   `control_interval` physics steps, i.e. one control period)
+        mj_step2   actuation, qacc, constraint forces and every acceleration-stage sensor (the FT
+                   sensor, cacc) at x_k, THEN integration to x_{k+1}; data.time becomes t_k + dt
+    After mj_step2 returns, `sensordata`, `qacc`, `cacc`, `contact`, `qfrc_constraint`, `actuator_force`,
+    `site_xpos/xmat` and `cvel` still describe the evaluation at (t_k, x_k), while `time`, `qpos` and
+    `qvel` already describe x_{k+1}. At a control update, after mj_step1, `sensordata` still holds the
+    PREVIOUS step's evaluation (t_{k-1}). The stepping loop therefore hands every consumer a timestamp:
+    `observe(model, data, t_k)` for the sensor sample, and `Recorder.pre/post` for the logs.
 
     tau = qfrc_bias + Kp * (q_home - q) - Kd * qvel
 
@@ -110,6 +125,8 @@ class Simulation:
         self.data = mujoco.MjData(model)
         self.n_steps = 0
         self.n_control_updates = 0
+        self.recorder = None          # optional recorder.Recorder (read-only diagnostics)
+        self.disturbance = None       # optional callable(t_k, data) that sets data.xfrc_applied for the coming step
         self.reset()
 
     def reset(self) -> None:
@@ -121,12 +138,16 @@ class Simulation:
         # Prime the state with pure gravity/Coriolis compensation so that the derived
         # quantities the controller sees at reset (accelerations, force sensors) describe
         # a held, static arm rather than a free-falling one (ctrl is 0 after mj_resetData).
+        # This equals the holding torque at q_home; the first control update computes the real command.
         mujoco.mj_forward(self.model, self.data)
         self.data.ctrl[self.arm.actuator_ids] = self.data.qfrc_bias[self.arm.dof_adr]
         mujoco.mj_forward(self.model, self.data)
         self.controller.reset(self.model, self.data, self.q_home)
-        self.data.ctrl[self.arm.actuator_ids] = self.controller.compute(self.data)
-        mujoco.mj_forward(self.model, self.data)
+        observe = getattr(self.controller, "observe", None)
+        if observe is not None:
+            observe(self.model, self.data, float(self.data.time))     # sample at t = 0 for the first update
+        if self.recorder is not None:
+            self.recorder.on_reset(self)
 
     def set_home(self, q: np.ndarray) -> None:
         """Make `q` the initial configuration: update the `home` keyframe, the controller, and reset."""
@@ -165,16 +186,29 @@ class Simulation:
         return result
 
     def step(self) -> None:
-        """Advance exactly one physics step; recompute torque every control_interval steps."""
-        if self.n_steps % self.timing.control_interval == 0:
-            # mj_step1 evaluates kinematics, qfrc_bias, contacts for the current state;
-            # the torque is then computed from those same quantities before mj_step2 integrates.
-            mujoco.mj_step1(self.model, self.data)
-            self.data.ctrl[self.arm.actuator_ids] = self.controller.compute(self.data)
+        """Advance exactly one physics step; recompute torque every control_interval steps.
+
+        mj_step1 and mj_step2 are always used (also on non-control substeps) so that the recorder can
+        capture the pre-integration state without any extra forward evaluation. Stepping with
+        step1 + step2 is identical to mj_step (tests/test_timing.py)."""
+        m, d = self.model, self.data
+        t_k = float(d.time)
+        is_control = self.n_steps % self.timing.control_interval == 0
+        mujoco.mj_step1(m, d)                                   # state x_k: kinematics, velocity stage
+        rec = self.recorder
+        if rec is not None:
+            rec.pre(self, t_k)
+        if is_control:
+            d.ctrl[self.arm.actuator_ids] = self.controller.compute(d)
             self.n_control_updates += 1
-            mujoco.mj_step2(self.model, self.data)
-        else:
-            mujoco.mj_step(self.model, self.data)
+        if self.disturbance is not None:
+            self.disturbance(t_k, d)
+        mujoco.mj_step2(m, d)                                   # acceleration stage at x_k, then integrate
+        observe = getattr(self.controller, "observe", None)
+        if observe is not None:
+            observe(m, d, t_k)
+        if rec is not None:
+            rec.post(self, t_k, is_control)
         self.n_steps += 1
 
     def advance(self, n_steps: int) -> None:

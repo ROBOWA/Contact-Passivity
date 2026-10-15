@@ -14,6 +14,11 @@ dependencies = [
 
 [project.optional-dependencies]
 plot = ["matplotlib>=3.8"]
+test = ["pytest>=7"]
 
 [tool.setuptools]
 packages = ["kuka_table_sim"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
