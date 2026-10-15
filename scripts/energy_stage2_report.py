@@ -250,6 +250,7 @@ def main():
                                   completion=gates['primary_completion'],energy=gates['final_energy_all_physics'],contact=gates['primary_contact'],
                                   progress=gates['primary_progress'],preservation=gates['preservation'],generalization=gates['generalization'])
     write(args.out/'acceptance.json',acceptance);write(args.out/'metrics.json',results);write(args.out/'raw_manifest.json',manifest)
+    write(args.out/'cases.json',{n:vs['UF'][1]['case'] for n,vs in data.items()})
     if args.validation:
         shutil.copy2(args.validation/'validation.json',args.out/'validation.json')
         shutil.copy2(args.validation/'validation.npz',args.out/'validation.npz')
@@ -282,6 +283,13 @@ See preservation manifest, final verification, reviews and raw manifest.
 ## Algorithm and information
 
 The unchanged plant uses 1 ms control and four 0.25 ms split physics steps.
+The complete seven-joint command includes the unchanged nominal bias/gravity
+calculation once; actual applied torque is checked at every rollout/executed step.
+The main known human point is link5 local (0,0.04,0.12) m; the second is link3
+local (0.02,0.04,0.16) m. Main resistance is 5 N in -x, onset 9.5 s,
+0.2 s cosine ramps and 1 s hold. Historical uses 4.5 N, onset 10.1 s,
+0.15 s ramps and 0.8 s hold. Both primary budgets are 0.12 J.
+The complete force/location/budget/rate case manifest is cases.json.
 The only exogenous predictor input is the current measured WORLD force vector,
 held throughout every rollout. The human point and Jacobian move every substep.
 The real fixture is sampled once per control boundary. Future pulse onset,
