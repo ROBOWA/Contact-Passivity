@@ -64,7 +64,8 @@ class OracleFilter:
                     lo, hi = torque_box(nominal, nominal, self.previous, sim.arm.torque_limit,
                                         sim.timing.control_period, self.cfg)
                     ep = 0. if np.all(self.force == 0) else self.cfg.epsilon_prediction
-                    nominal_ok = (np.min(self.energy + pred - ep - self.minimum) >= 0 and
+                    el = self.cfg.epsilon_linearization * float(np.linalg.norm(self.force)) / self.cfg.margin_force_reference
+                    nominal_ok = (np.min(self.energy + pred - ep - el - self.minimum) >= 0 and
                                   np.all(lo <= 0) and np.all(hi >= 0))
                     if not nominal_ok:
                         a = accepted_command(self.predictor, self.snapshot, nominal, self.force, self.energy,
@@ -95,8 +96,11 @@ class OracleFilter:
             self.substeps = 0
             return torque
         except FilterFailure as exc:
+            self.events.append(dict(t=float(d.time), failed=True, reason=exc.reason,
+                                    attempts=exc.diagnostics.get("attempts", [])))
             self.failure = dict(t=float(d.time), reason=exc.reason, diagnostics=exc.diagnostics,
-                                energy=self.energy.tolist(), nominal=nominal.tolist(), force=self.force.tolist())
+                                energy=self.energy.tolist(), nominal=nominal.tolist(), force=self.force.tolist(),
+                                seconds_failed_command=perf_counter() - start)
             raise
 
     def pre(self, sim, t):

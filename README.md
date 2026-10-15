@@ -1,5 +1,21 @@
 # KUKA iiwa14 table scene (MuJoCo)
 
+**Oracle joint-torque QP experiment:** [report and acceptance evidence](docs/oracle_joint_qp/report.md),
+[中文摘要](docs/oracle_joint_qp/morning_summary_zh.md). The optional implementation
+uses the same nominal controller/plant, a known forearm force point, isolated
+MuJoCo predictions and seven joint torque corrections. Shadow/replay and a
+specific active net-energy limit are validated; contact preservation and some
+held-out active cases fail, so the overall delivery is explicitly **partial**.
+
+```bash
+python -m kuka_table_sim.oracle_experiments case --name resistance --mode active --budget .12 --task-weight 1 --out results/oracle/single
+python -m kuka_table_sim.oracle_experiments matrix --out results/oracle/final
+```
+
+Install the optional solver/plot dependencies with `pip install -e '.[oracle,test]'`
+or use the pinned `requirements.txt`. Failed trials exit 2 and preserve logs/state;
+the matrix continues through its remaining cases. See the report for full reproduction.
+
 Milestone 1 of the contact-passivity simulation rebuild: a KUKA LBR iiwa 14
 standing above a stationary table in MuJoCo, driven by seven joint-torque
 actuators. The spherical polishing tool from the MEAM 6230 Panda project is

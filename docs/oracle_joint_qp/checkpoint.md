@@ -24,6 +24,14 @@ Initial commands:
 .venv/bin/python -m kuka_table_sim.scenarios nominal --log results/oracle/baseline.npz
 ```
 
-Status: baseline and regression processes started; implementation not yet validated.
+Status: baseline 50/50 passed; new physics/recorder 10/10 passed; QP/mode checks
+6/6 passed. Baseline before/after physics and control arrays reproduce bitwise.
+Shadow matched off: W_H=-0.241623266070888 J, prediction error exactly zero.
+Ample 1 J active is transparent. Initial 0.12 J active trial stops at 10.662 s
+with `energy_infeasible` (best affine box margin -4.6812e-6 J); 188 intervention
+ticks, 5 nonlinear retries, smallest preceding boundary margin +7.7641e-8 J.
+This is a preserved failed fixture, not an accepted protected demonstration.
+Next: validate 0.20/0.22 J feasible budget candidates, gradients over the declared
+trust domain, then freeze final configuration and reproduce full matrix.
 The initial attempted `scenarios nominal --out ...` was rejected by argparse without
 running; corrected to the supported `--log` option above.
