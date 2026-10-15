@@ -1,0 +1,8 @@
+{
+  "first_attempt": "results/energy_guard_stage2/20261015-c5601e5e/report_attempt_01",
+  "reason": "Clipped heatmap title caught in final visual review; all physics gates already PASS",
+  "files": 326,
+  "byte_preservation": true,
+  "original_manifest_sha256": "ce7bfe95c03ae031575cf9243fe623acd3c4b839b7fed1b6b842ebb5c0faa2e8",
+  "numerical_code_changed": false
+}

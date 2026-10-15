@@ -160,7 +160,7 @@ def figures(data,out):
     fig,ax=plt.subplots(figsize=(8,max(5,len(names)*.32)))
     ax.imshow(scores,vmin=0,vmax=3,cmap=plt.matplotlib.colors.ListedColormap(['white','#c45a5a','#e8bd69','#69b391']),aspect='auto')
     ax.set_xticks(range(4),variants);ax.set_yticks(range(len(names)),names)
-    ax.set_title('Red: stopped; yellow: completed with unmet gate; green: completion/energy/contact/progress')
+    ax.set_title('Red: stopped; yellow: completed with an unmet gate\nGreen: completion, energy, contact and progress pass',fontsize=10)
     fig.tight_layout();fig.savefig(out/'feasibility.png',dpi=150);plt.close(fig)
 
 
