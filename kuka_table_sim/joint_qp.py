@@ -86,7 +86,23 @@ def active_set_recovery(H, g, lower, lo, hi, cfg):
                     lam = float((lower-g[bound]@x[bound]-g[free]@x0)/denom)
                 x[free] = x0 + lam*v
             elif energy_active:
-                continue
+                # Degenerate feasible set can be a single box vertex. Find a
+                # nonnegative energy multiplier satisfying ALL bound signs.
+                if abs(float(g@x-lower)) > cfg.energy_tolerance:
+                    continue
+                lhs, coefficient = state*(H@x), state*g
+                lmin, lmax = 0., np.inf
+                impossible = False
+                for a,b in zip(lhs,coefficient):
+                    if b > 1e-30:
+                        lmin=max(lmin,float(a/b))
+                    elif b < -1e-30:
+                        lmax=min(lmax,float(a/b))
+                    elif a > 1e-10:
+                        impossible=True
+                if impossible or lmin > lmax:
+                    continue
+                lam=lmin
             if lam < -1e-10 or np.any(x<lo-cfg.torque_tolerance) or np.any(x>hi+cfg.torque_tolerance):
                 continue
             if g@x < lower-cfg.energy_tolerance:

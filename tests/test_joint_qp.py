@@ -82,6 +82,13 @@ def test_whitened_dense_objective_matches_independent_kkt_solution():
                         np.ones(7)*100,.001,cfg(solver_max_iter=1),H=H)
     assert recovery.status.startswith("active_set_recovery")
     np.testing.assert_allclose(recovery.torque,reference,atol=1e-6,rtol=1e-6)
+    # A tight affine energy row can leave exactly one actuator-box vertex.
+    # The energy multiplier is still required when every variable is bound.
+    vertex = lin(work=-7e-5)
+    vertex.gradients[:] = 1e-5
+    r = solve_qp(np.zeros(7),vertex,np.zeros(2),np.zeros(2),np.zeros(7),
+                 np.ones(7),.001,cfg(solver_max_iter=1))
+    np.testing.assert_allclose(r.torque,np.ones(7),atol=1e-7,rtol=0)
 
 
 class CurvedPredictor:

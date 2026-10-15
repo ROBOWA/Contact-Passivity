@@ -75,4 +75,20 @@ Round 2 continued:
   outside this run. Final delivery will be marked PARTIAL even if its main
   active energy gate passes. Final source/configuration frozen before Round 3.
 
-## Round 3 — final reproduction pending
+## Round 3 — final audit and reproduction
+
+- Reviewed final command/step/account flow and diff for changed plant settings,
+  hidden clipping/recharge, solver-success-only acceptance, shifted objectives,
+  discarded failures and stale evidence. Plant XML is unchanged; nominal
+  controller change is only the previous-intervention conditional integration.
+- Finding (solver robustness): a feasible energy halfspace can intersect the
+  torque box at exactly one vertex. The independent bound-active solver initially
+  skipped the all-bound/nonzero-energy-multiplier case. Added multiplier-interval
+  checks for that degeneracy, without relaxing constraints. Exact rerun:
+  `.venv/bin/python -m pytest -q tests/test_joint_qp.py` → 5 passed in .11 s,
+  including forced one-iteration OSQP and the unique feasible vertex.
+- Core source frozen first at `daec55f`; the degeneracy repair is a follow-up
+  source commit before final matrix reproduction. Fresh full suite, validation,
+  baseline and sequential matrix must all use that final source hash.
+- Final reproduction results will be recorded below after logs/figures are
+  generated; NOT RUN is not a pass.
