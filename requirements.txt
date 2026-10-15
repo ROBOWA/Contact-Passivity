@@ -5,3 +5,6 @@ numpy==2.5.4
 matplotlib==3.11.2
 # Optional, for the test suite: python -m pytest (tested 9.1.1 on the venv, 7.4.4 on conda base)
 pytest==9.1.1
+# Oracle joint-space QP / sparse matrices (optional for baseline-only runs)
+osqp==1.1.3
+scipy==1.18.1

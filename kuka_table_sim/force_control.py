@@ -193,6 +193,7 @@ class ForceApproachController:
     def _init_state(self) -> None:
         self.saturated = np.zeros(7, dtype=bool)
         self._sat_prev = False
+        self.filter_intervened = False  # previous executed command differs from nominal
         self.q_home = np.zeros(7)
         self.x_ref = np.zeros(3)
         self.quat_d = np.array([1.0, 0, 0, 0])
@@ -493,7 +494,7 @@ class ForceApproachController:
 
         # --- integrators: freeze / taper / anti-windup ------------------------------------------------------------
         in_contact_phase = self.phase in _CONTACT_PHASES
-        can_integrate = in_contact_phase and not self.taper_active and not self._sat_prev
+        can_integrate = in_contact_phase and not self.taper_active and not self._sat_prev and not self.filter_intervened
         if self.taper_active:
             self.int_scale -= dt / cfg.integral_taper_time
             if self.int_scale <= 0.0:

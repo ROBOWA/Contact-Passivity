@@ -127,6 +127,7 @@ class Simulation:
         self.n_control_updates = 0
         self.recorder = None          # optional recorder.Recorder (read-only diagnostics)
         self.disturbance = None       # optional callable(t_k, data) that sets data.xfrc_applied for the coming step
+        self.oracle = None            # optional oracle interval filter; default stepping is unchanged
         self.reset()
 
     def reset(self) -> None:
@@ -148,6 +149,8 @@ class Simulation:
             observe(self.model, self.data, float(self.data.time))     # sample at t = 0 for the first update
         if self.recorder is not None:
             self.recorder.on_reset(self)
+        if self.oracle is not None:
+            self.oracle.reset(self)
 
     def set_home(self, q: np.ndarray) -> None:
         """Make `q` the initial configuration: update the `home` keyframe, the controller, and reset."""
@@ -199,16 +202,23 @@ class Simulation:
         if rec is not None:
             rec.pre(self, t_k)
         if is_control:
-            d.ctrl[self.arm.actuator_ids] = self.controller.compute(d)
+            tau = self.controller.compute(d)
+            if self.oracle is not None:
+                tau = self.oracle.command(self, tau)
+            d.ctrl[self.arm.actuator_ids] = tau
             self.n_control_updates += 1
         if self.disturbance is not None:
             self.disturbance(t_k, d)
+        if self.oracle is not None:
+            self.oracle.pre(self, t_k)
         mujoco.mj_step2(m, d)                                   # acceleration stage at x_k, then integrate
         observe = getattr(self.controller, "observe", None)
         if observe is not None:
             observe(m, d, t_k)
         if rec is not None:
             rec.post(self, t_k, is_control)
+        if self.oracle is not None:
+            self.oracle.post(self, t_k)
         self.n_steps += 1
 
     def advance(self, n_steps: int) -> None:

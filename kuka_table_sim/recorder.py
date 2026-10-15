@@ -45,6 +45,7 @@ import mujoco
 import numpy as np
 
 from .ft_sensor import FTSensor
+from .oracle_physics import TaskMeter
 from .scene import ASSETS_DIR, TCP_SITE, TOOL_TIP_GEOM
 
 TABLETOP_GEOM = "tabletop"
@@ -125,6 +126,7 @@ class Recorder:
         self.tcp = m.site(TCP_SITE).id
         self.link7 = m.body("link7").id
         self.ft = FTSensor(m)
+        self.task_meter = TaskMeter(m)
         z = lambda *shape: np.zeros(shape)
         self.phys: dict[str, np.ndarray] = dict(
             t=z(n), q=z(n, 7), qd=z(n, 7), tcp=z(n, 3), tcp_v=z(n, 3), tip=z(n, 3),
@@ -171,40 +173,14 @@ class Recorder:
         d, m = sim.data, self.m
         i = self.row
         P = self.phys
-        tip, table = self.tip, self.table
-        mujoco.mj_objectVelocity(m, d, mujoco.mjtObj.mjOBJ_GEOM, tip, self._v6, 0)   # cvel still at x_k
-        omega, v_centre = self._v6[:3].copy(), self._v6[3:].copy()
-        x_tip = d.geom_xpos[tip]
-        F = np.zeros(3)
-        M = np.zeros(3)
-        power = 0.0
-        wsum = 0.0
-        pc = np.zeros(3)
-        n_task = n_unexp = 0
-        fn_unexp = 0.0
-        for k in range(d.ncon):
-            c = d.contact[k]
-            g1, g2 = c.geom1, c.geom2
-            mujoco.mj_contactForce(m, d, k, self._w6)
-            if (g1 == tip and g2 == table) or (g1 == table and g2 == tip):
-                frame = c.frame.reshape(3, 3)                      # rows: normal, tangent1, tangent2
-                sign = -1.0 if g1 == tip else 1.0                  # mj_contactForce: force on geom2 by geom1
-                f = sign * (frame.T @ self._w6[:3])
-                mo = sign * (frame.T @ self._w6[3:])
-                v_p = v_centre + np.cross(omega, c.pos - x_tip)
-                power += float(f @ v_p + mo @ omega)
-                F += f
-                M += mo
-                mag = float(np.linalg.norm(f)) + 1e-300
-                pc += c.pos * mag
-                wsum += mag
-                n_task += 1
-            else:
-                n_unexp += 1
-                fn_unexp += abs(float(self._w6[0]))
-                key = (m.geom(g1).name or f"geom{g1}", m.geom(g2).name or f"geom{g2}")
-                self.unexpected_pairs[key] = self.unexpected_pairs.get(key, 0) + 1
-        p_c = pc / wsum if wsum > 1e-200 else x_tip.copy()
+        task = self.task_meter.sample(d)
+        F, M, p_c = task["F"], task["M"], task["pc"]
+        omega, v_centre = task["omega"], task["vc"]
+        power, n_task, n_unexp = task["power"], task["nt"], task["nu"]
+        fn_unexp = task["fn_unexp"]
+        for key in task["pairs"]:
+            self.unexpected_pairs[key] = self.unexpected_pairs.get(key, 0) + 1
+        x_tip = d.geom_xpos[self.tip]
         P["present"][i] = n_task > 0
         P["n_task"][i] = n_task
         P["n_unexpected"][i] = n_unexp
