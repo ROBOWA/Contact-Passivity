@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import shutil
 import hashlib
+import gzip
 import subprocess
 
 import numpy as np
@@ -137,7 +138,9 @@ def generate(root, validation, out):
     # Keep accepted/rejected QP history for the main case and all failing trials.
     for k in summary:
         if k=="tight-active" or summary[k]["status"]=="FAIL":
-            shutil.copy2(root/k/"events.json",raw/(k+"_events.json"))
+            (raw/(k+"_events.json.gz")).write_bytes(gzip.compress((root/k/"events.json").read_bytes(),mtime=0))
+            old=raw/(k+"_events.json")
+            if old.exists(): old.unlink()
     plot_runs(root,out,summary)
     gates=[]
     def gate(name,ok,command,evidence,value=None,tolerance=None,reason=None):
@@ -223,7 +226,7 @@ def generate(root, validation, out):
                 energy=np.array(a["energy"])+affine-a["epsilon_linearization"]-cfg["epsilon_prediction"]-np.array(a["minimum"])
                 max_energy=max(max_energy,-float(np.min(energy)))
     gate("logged_QP_physical_residuals",max_box<=1e-7 and max_energy<=1e-10,"matrix + oracle_report",
-         "raw/*_events.json; full results/oracle/final/*/events.json",dict(torque_Nm=max_box,energy_J=max_energy),
+         "raw/*_events.json.gz; full results/oracle/final/*/events.json",dict(torque_Nm=max_box,energy_J=max_energy),
          dict(torque_Nm=1e-7,energy_J=1e-10),"recomputed original-unit constraint residual")
     task_ok=(primary["force"]["original_10N_mean_abs"]<=.5 and primary["force"]["original_10N_max_abs"]<=3 and
              primary["contact"]["geometric_absence"]["total_s"]==0 and primary["tracking"]["cross_max_mm"]<=3 and
@@ -291,7 +294,7 @@ all logs are still saved. A single failed case also exits 2. Unsupported inputs
 fail closed. `results/` holds full logs and is ignored; `raw/` contains compact
 full-precision account/work data for nine representative cases, force/power physics samples around interaction,
 strided task recovery traces preserving global force extrema and contact transitions,
-rejected candidates and failure snapshots. `compaction_json` declares retained
+rejected candidates (lossless gzip JSON histories) and failure snapshots. `compaction_json` declares retained
 samples; omitted human powers are zero. No
 float32 conversion is applied to work/accounts. Regenerate figures with the report
 command after reproducing logs; do not treat a missing test as passing.
