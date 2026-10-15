@@ -159,6 +159,7 @@ def figures(data,out):
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--roots',nargs='+',type=Path,default=[])
     ap.add_argument('--matrix-parent',type=Path);ap.add_argument('--validation',type=Path)
+    ap.add_argument('--backup-audit',type=Path);ap.add_argument('--extensions',nargs='*',type=Path,default=[])
     ap.add_argument('--out',type=Path,required=True);ap.add_argument('--preservation',type=Path,required=True)
     ap.add_argument('--tests',type=Path,required=True);ap.add_argument('--freeze',type=Path,required=True)
     ap.add_argument('--repeats',nargs='*',type=Path,default=[]);args=ap.parse_args()
@@ -203,6 +204,12 @@ def main():
     held=[data[n]['D'][0] for n in data if n.startswith('new-')]
     tree_hash=frozen_tree_hash(freeze['commit'])
     numerical_provenance=tree_hash==freeze['source_sha256'] and all(m['source_sha256']==tree_hash and m.get('source_end_sha256')==tree_hash for vs in data.values() for r,m,*rest in vs.values())
+    frozen_config=json.loads((args.freeze.parent/'frozen_config.json').read_text())
+    declared_cases=development_cases()|{c['name']:c for c in heldout['cases']}
+    settings_preserved=sha(args.freeze.parent/'frozen_config.json')==freeze['config_sha256'] and sha(args.freeze.parent/'heldout_manifest.json')==freeze['heldout_sha256']
+    for name,vs in data.items():
+        expected=dict(frozen_config,rate_factor=declared_cases[name].get('rate_factor',1.))
+        settings_preserved=settings_preserved and all(m['config']==expected and m['case']==declared_cases[name] for r,m,*rest in vs.values())
     original_manifest=json.loads((args.freeze.parent/'preservation_manifest.json').read_text())
     original_hashes={item['path']:item['sha256'] for item in original_manifest['tracked']}
     asset_preserved=all(original_hashes.get(p)==h for p,h in freeze['asset_sha256'].items()) and all(
@@ -215,10 +222,14 @@ def main():
         rr,meta,*_=read_case(folder);original=results[rr['case']][rr['variant']]
         fields=('net_outgoing_J','gross_outgoing_J','min_substep_energy_J','force_max_error_N','contact_absence_s','measured_progress_m','completed_s')
         repeated[str(folder)]=dict(case=rr['case'],variant=rr['variant'],max_absolute_difference=max(abs(rr[k]-original[k]) for k in fields),
-                                  same_failure_reason=(rr['failure'] or {}).get('reason')==(original['failure'] or {}).get('reason'))
-    gates=dict(preservation=preservation['status'],frozen_numerical_provenance=passfail(numerical_provenance),unchanged_plant_assets=passfail(asset_preserved),
+                                  same_failure_reason=(rr['failure'] or {}).get('reason')==(original['failure'] or {}).get('reason'),
+                                  raw_files={f.name:dict(size=f.stat().st_size,sha256=sha(f)) for f in folder.iterdir() if f.is_file()})
+    backup_audit=json.loads((args.backup_audit/'audit.json').read_text()) if args.backup_audit else None
+    extensions={str(p):json.loads((p/'extension.json').read_text()) for p in args.extensions}
+    gates=dict(preservation=preservation['status'],frozen_numerical_provenance=passfail(numerical_provenance),unchanged_plant_assets=passfail(asset_preserved),frozen_settings_and_holdouts=passfail(settings_preserved),
                existing_and_new_tests='PENDING see test transcript',independent_power_work_accounts=passfail(physical_checks),
                independent_reserve_accounts=passfail(reserve_checks),logged_multirow_physical_residuals=passfail(qp_checks),
+               independent_closed_loop_backup=passfail(backup_audit is not None and backup_audit['source_sha256']==tree_hash and backup_audit['max_complete_plant_state_difference']<1e-10 and backup_audit['max_prefix_work_difference_J']<1e-11),
                transparency=passfail(all(all(all(x.values()) for x in vs.values()) for vs in transparency.values())),
                final_executed_torque_rate=passfail(all(r['torque_bound_residual_Nm']<=1e-7 and r['rate_bound_residual_Nm']<=1e-7 for r in final)),
                final_energy_all_physics=passfail(all(r['energy']=='PASS' for r in final)),
@@ -232,7 +243,7 @@ def main():
     text=args.tests.read_text();gates['existing_and_new_tests']='PASS' if 'passed' in text and 'failed' not in text.lower() else 'FAIL'
     status='PASS' if all(x=='PASS' for x in gates.values()) else 'PARTIAL'
     acceptance=dict(status=status,gates=gates,numerical_freeze=freeze,targets=dict(force_mae_N=.5,force_max_error_N=3.,cross_mm=3.,orientation_deg=2.,progress_fraction=.8,alpha_recovery_s=2.,energy_tolerance_J=1e-10,window_start_s=8.71),
-                    independent_checks=checks,transparency=transparency,repeats=repeated,
+                    independent_checks=checks,transparency=transparency,repeats=repeated,independent_backup=backup_audit,extensions=extensions,
                     known_regression='historical is development, not held out',
                     evidence_limit='finite held-current-force policy rollouts and empirical terminal persistence; no recursive feasibility or invariant-set proof')
     acceptance['categories']=dict(correctness=passfail(all(gates[k]=='PASS' for k in ('frozen_numerical_provenance','existing_and_new_tests','independent_power_work_accounts','final_executed_torque_rate'))),
@@ -242,6 +253,8 @@ def main():
     if args.validation:
         shutil.copy2(args.validation/'validation.json',args.out/'validation.json')
         shutil.copy2(args.validation/'validation.npz',args.out/'validation.npz')
+    if args.backup_audit:shutil.copytree(args.backup_audit,args.out/'independent_backup_audit')
+    for p in args.extensions:shutil.copytree(p,args.out/p.name)
     figures(data,args.out)
     rows=[]
     for name,variants in results.items():
@@ -295,6 +308,10 @@ Decision is seven joint torques, with objective
 of that proposal. `H = diag(1/torque_scale^2) + S_nom^T W_y S_nom`, weight 1 in
 every matched variant. Scales and original torque/rate/trust bounds are unchanged;
 the reduced-rate challenge uses an explicitly labeled factor 0.02.
+Torque scales are (20,20,10,10,5,2,2) N m; task output scales are
+(1 N,0.01 m/s x3,0.1 rad/s x3). Motor limits are
+(320,320,176,176,110,40,40) N m; trust halfwidths are
+(80,80,60,60,40,20,20) N m, with rates equal to these halfwidths /0.001 s.
 The central torque stencil is 0.02 N m and never clips an override. Four work
 prefix rows per account replace the endpoint row. D also uses four-stage normal
 force [7,13] N, normal speed +/-0.005 m/s, cross error +/-3 mm, and conservative
@@ -337,6 +354,12 @@ The one-interval QP uses a 1e-8 J numerical guard for nonzero force. Independent
 held-force replay errors are reported in acceptance.json; these guards are
 conservative resolutions for deterministic replay, not bounds on unknown future
 force. The old affine Stage 1 margin is not reused for multi-step forecasting.
+With current measured force exactly zero, the held-zero forecast has identically
+zero human work for any motion, so a zero-reserve shortcut skips the long backup.
+The logged held_zero status describes that forecast assumption; it does not claim
+the person will keep applying zero force. This shortcut does not establish a
+settled backup or recursive task feasibility. D still freshly checks every first
+interval's task and energy prefixes; changed measurements are reconsidered next tick.
 Cached suffixes require exact full dynamic-value state and exact force equality;
 both account margins are rechecked. Each cached first command is replayed fresh.
 
@@ -365,6 +388,17 @@ All case details, orientation/cross errors, reference progress, completed stroke
 release recovery, QP/candidate rejection history and runtime quantiles are in
 metrics.json and raw artifacts. Figures use physical time and retain every peak.
 Both accounts coincide by construction; they do not test account mismatch.
+Main D first intervenes at {primary[0]['first_intervention_s']:.3f} s with
+{primary[0]['first_intervention_energy_J'][0]:.9f} J remaining, versus
+{results['main']['A']['first_intervention_s']:.3f} s and
+{results['main']['A']['first_intervention_energy_J'][0]:.9f} J for A.
+Its maximum total joint-torque difference from the isolated ungoverned controller
+is {primary[0]['max_total_change_from_ungoverned_Nm']:.3f} N m; the maximum correction
+from its governed nominal is {primary[0]['max_change_from_governed_Nm']:.3f} N m.
+Small per-tick command changes therefore do not mean a small total governor effect.
+Continuation experiments through 20 s measure the extra physical time needed to
+reach the matched UF run's 18 s measured amount, without resetting the clock,
+controller or accounts: {json.dumps({p:dict(extra_physical_time_s=v['extra_physical_time_s'],achieved=v['achieved_18s_UF_amount']) for p,v in extensions.items()})}.
 
 ## Engineering gates
 

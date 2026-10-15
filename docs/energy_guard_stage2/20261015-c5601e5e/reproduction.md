@@ -24,6 +24,9 @@ docs="docs/energy_guard_stage2/20261015-c5601e5e"
   --case main --variant D --config "$docs/frozen_config.json" --out "$out/repeat-main-D"
 .venv/bin/python -m kuka_table_sim.energy_experiments case \
   --case stress --variant D --config "$docs/frozen_config.json" --out "$out/repeat-stress-D"
+.venv/bin/python scripts/energy_stage2_backup_audit.py \
+  --snapshot "$out/repeat-stress-D/failure_pre.npz" --config "$docs/frozen_config.json" \
+  --out "$out/independent-backup-audit"
 
 .venv/bin/python -m kuka_table_sim.energy_experiments extend \
   --from-run "$out/matrix/main/main/D" --reference-run "$out/matrix/main/main/UF" \
@@ -38,6 +41,8 @@ docs="docs/energy_guard_stage2/20261015-c5601e5e"
   --tests "$out/tests.txt" --preservation "$out/preservation.json" \
   --freeze "$docs/numerical_freeze.json" \
   --repeats "$out/repeat-main-D" "$out/repeat-stress-D" \
+  --backup-audit "$out/independent-backup-audit" \
+  --extensions "$out/extension-main-D" "$out/extension-historical-D" \
   --out "$docs/reproduction-$run_id"
 ```
 
