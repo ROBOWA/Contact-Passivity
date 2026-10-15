@@ -51,10 +51,12 @@ def plot_runs(root, out, summary):
     fig.savefig(out/"active_comparison.png",dpi=140)
     plt.close(fig)
     fig,axs=plt.subplots(2,2,figsize=(11,7),constrained_layout=True)
+    observed_floor=0.
     for label in ("tight-active","task-cost","stress","held-out-active","elbow-tight"):
         z=np.load(root/label/"oracle.npz")
         axs[0,0].plot(z["ctl__t"]+.001,z["ctl__energy_after"][:,0],label=label)
         axs[0,1].plot(z["phys__t"],z["phys__prefix_energy"][:,0]*1e6,label=label)
+        observed_floor=min(observed_floor,float(np.min(z["phys__prefix_energy"][:,0]))*1e6)
         b=RunLog.load(root/label/"baseline_log.npz")
         axs[1,0].plot(b.phys["t"],b.phys["F_task"][:,2],label=label)
         axs[1,1].plot(b.ctl["t"],b.ctl["f_int"],label=label)
@@ -63,7 +65,7 @@ def plot_runs(root, out, summary):
         ax.legend(fontsize=7)
     axs[0,0].axhline(0,color="k",ls="--")
     axs[0,1].axhline(0,color="k",ls="--")
-    axs[0,1].set_ylim(-5,50)
+    axs[0,1].set_ylim(min(-5,1.1*observed_floor),50)
     fig.savefig(out/"failures_and_recovery.png",dpi=140)
     plt.close(fig)
     fig,axs=plt.subplots(1,2,figsize=(11,3.8),constrained_layout=True)
@@ -119,8 +121,14 @@ def generate(root, validation, out):
     metas={k:json.loads((root/k/"metadata.json").read_text()) for k in summary}
     save_json(out/"metrics.json",summary)
     save_json(out/"validation.json",val)
+    retained={"no-human-off","tight-off","tight-shadow","tight-active","stress",
+              "varying","elbow","held-out-active","elbow-tight"}
     for k in summary:
-        compact_case(root/k,raw/(k+".npz"))
+        if k in retained:
+            compact_case(root/k,raw/(k+".npz"))
+        elif (raw/(k+".npz")).exists():
+            # Remove only this generator's known obsolete compact case file.
+            (raw/(k+".npz")).unlink()
         if (root/k/"failure.json").exists():
             shutil.copy2(root/k/"failure.json",raw/(k+"_failure.json"))
             shutil.copy2(root/k/"failure_snapshot.npz",raw/(k+"_failure_snapshot.npz"))
@@ -263,8 +271,9 @@ task-preserving passivity controller. No robot hardware was accessed.
 
 Starting checkout `dbff1c1` / `main`, clean. Work branch
 `feature/kuka-oracle-joint-qp`. Source revision for these runs: `{meta['commit']}`;
-source SHA256 `{meta['source_sha256']}`. Artifact commits may be later, with the
-same source hash. Seed 0 (deterministic fixtures); validation scan seed 7341.
+source SHA256 `{meta['source_sha256']}`. Artifact/reporting commits may be later;
+the provenance gate verifies that all numerical/control files still match this
+recorded Git tree. Seed 0 (deterministic fixtures); validation scan seed 7341.
 Hardware `{meta['hardware']}`; software `{meta['versions']}`.
 XML hashes and unchanged nominal gains/trajectory are in `baseline_final.txt`
 and full `results/oracle/final/*/baseline_log.npz` metadata.
@@ -280,7 +289,7 @@ and full `results/oracle/final/*/baseline_log.npz` metadata.
 The matrix deliberately returns exit 2 when held-out/optional active trials fail;
 all logs are still saved. A single failed case also exits 2. Unsupported inputs
 fail closed. `results/` holds full logs and is ignored; `raw/` contains compact
-full-precision account/work data, force/power physics samples around interaction,
+full-precision account/work data for nine representative cases, force/power physics samples around interaction,
 strided task recovery traces preserving global force extrema and contact transitions,
 rejected candidates and failure snapshots. `compaction_json` declares retained
 samples; omitted human powers are zero. No
