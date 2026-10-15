@@ -1,0 +1,15 @@
+== timestep study: dt 0.00025 s vs 0.000125 s, control period 0.001 s fixed (same control interval in time); common window [8.705, 25.000] s
+  contact work, sliding window (rectangle             ): -1.38941 J  vs  -1.38957 J   diff -1.56e-04 J (0.011 %)
+  contact work, sliding window (trapezoid             ): -1.38943 J  vs  -1.38958 J   diff -1.46e-04 J (0.011 %)
+  contact work, sliding window (force(k) x velocity(k+1)): -1.38951 J  vs  -1.38962 J   diff -1.06e-04 J (0.008 %)
+  dt 0.00025: quadrature spread at fixed dt (max-min of three rules) 1.00e-04 J
+  dt 0.000125: quadrature spread at fixed dt (max-min of three rules) 5.02e-05 J
+  tracking along_max_mm : 3.9485 vs 3.9512
+  tracking along_rms_mm : 2.2143 vs 2.2158
+  tracking cross_max_mm : 0.0691 vs 0.0692
+  tracking ori_max_deg  : 0.3548 vs 0.3550
+  force    truth_mean_abs: 0.01856 vs 0.01852 N
+  force    truth_max_abs : 0.04975 vs 0.04983 N
+  force    f_true_std    : 0.02247 vs 0.02246 N
+  contact time: 6.7050 vs 6.7050 s; slide start 8.7050 vs 8.7050 s
+(wall 18.1 s)

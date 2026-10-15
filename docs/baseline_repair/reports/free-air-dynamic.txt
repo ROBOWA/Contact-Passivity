@@ -1,0 +1,7 @@
+== free-air-dynamic: 24000 physics steps; first physical tip/table contact at t = None
+  free-air part: tool COM acceleration |a| max 10.32 m/s^2
+  normal force estimate (N), free-air part: gravity-only max +3.790 min -3.699; corrected max +3.375e-14 min -4.975e-15; ground truth max 0.000
+  would-be false CONTACT (estimate > 1.0 N for >= 3 control intervals in free air): gravity-only 11 time(s), corrected 0 time(s)
+  [PASS] corrected estimate stays below 1 mN in free air, no false CONTACT
+== result: PASS
+(wall 0.8 s)

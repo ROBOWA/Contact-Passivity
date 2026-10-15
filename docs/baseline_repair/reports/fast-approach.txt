@@ -1,0 +1,10 @@
+== fast-approach: 48000 physics steps; first physical tip/table contact at t = 2.257250000000109
+  free-air part: tool COM acceleration |a| max 12.61 m/s^2
+  normal force estimate (N), free-air part: gravity-only max +6.302 min -6.226; corrected max +3.819e-14 min -5.329e-15; ground truth max 0.000
+  would-be false CONTACT (estimate > 1.0 N for >= 3 control intervals in free air): gravity-only 1 time(s), corrected 0 time(s)
+  [PASS] corrected estimate stays below 1 mN in free air, no false CONTACT
+  transitions [(2.26, 'approach', 'contact')]
+  genuine touchdown: CONTACT entered 2.75 ms after the first physical contact; peak corrected force 10.01 N, truth 10.01 N
+  [PASS] CONTACT entered only after genuine contact
+== result: PASS
+(wall 3.3 s)

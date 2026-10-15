@@ -1,0 +1,26 @@
+== loss-short: pull 11 N hold 0.0 s from t = 12.0 s to 12.10 s
+  FSM transitions: [(6.705, 'approach', 'contact'), (8.705, 'contact', 'slide'), (12.043, 'slide', 'search'), (12.314, 'search', 'contact'), (13.314, 'contact', 'slide')]
+  recovery (SEARCH/HOLD) intervals: [(12.043, 12.314)]
+  FSM events (decisions): {'n_uncertain': 1, 'n_lost': 0, 'n_reacquired': 1, 'n_hold': 0}
+  physical, after the pull starts: geometric absence 1 event(s), longest 0.255 s, total 0.255 s, first at 12.056749999994576
+                                   low load (<0.5 N) 1 event(s), longest 0.268 s, total 0.268 s
+  reference continuity (control updates): tangential step max 0.0500 mm/ms (peak speed 0.0500 m/s, peak accel 0.041 m/s^2, pos residual 0.0000 mm, vel residual 0.000 mm/s)
+      normal      step max 0.0029 mm/ms (peak speed 0.0029 m/s, peak accel 0.026 m/s^2, pos residual 0.0000 mm)
+      normal position-loop activations: [(12.043, 0.0, -0.0)]  (t, pos err mm, vel err mm/s)
+  force peaks (true contact force, physics rate): overall 10.05 N; first 0.5 s after each CONTACT entry: [(12.314, 5.83)] (target 10.0 N)
+  torque: peak applied utilisation 20 %, commanded 20 %, saturated substeps 0
+  integrators: max |f_int| 0.22 N (clamp 2.0), max |tan_int| 0.00406
+  tip height after the pull starts: max 1.4 mm above the expected contact height, min 0.1588 m (expected contact height 0.1590, search floor limit 0.1490)
+  post-recovery window [16.31, 22.00] s: mean |f_d - f| 0.0196 N, max 0.0498 N
+  [PASS] no actuator saturation
+  [PASS] tangential reference step <= declared speed * dt + 0.01 mm
+  [PASS] tangential reference accel <= 1.1 * declared a_max
+  [PASS] normal reference accel <= 1.1 * declared a_max
+  [PASS] normal position-loop activation error < 2 mm
+  [PASS] no unexpected contacts
+  [PASS] no LOST escalation
+  [PASS] interruption handled by one SEARCH that reacquired
+  [PASS] sliding resumed
+  [PASS] post-recovery steady force error < 0.5 N (mean)
+== result: PASS
+(wall 5.8 s)

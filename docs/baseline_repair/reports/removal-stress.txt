@@ -1,0 +1,7 @@
+== removal-stress (STRESS TEST: table teleported away) at t = 12.0 s
+  FSM transitions: [(6.705, 'approach', 'contact'), (8.705, 'contact', 'slide'), (12.011, 'slide', 'search'), (14.02, 'search', 'hold')]; events {'n_uncertain': 1, 'n_lost': 1, 'n_reacquired': 0, 'n_hold': 1}
+  tip z: min 0.1491 m, final 0.1691 m (expected contact height 0.1590, floor 0.1490)
+  reference: tangential step max 0.0288 mm/ms; normal step max 0.0500 mm/ms, activations [(12.011, -0.02)]
+  torque: peak applied 20 %, saturated substeps 0; max tip height after removal 0.1691 m
+== result (bounded search then controlled HOLD, no saturation): PASS
+(wall 5.9 s)
