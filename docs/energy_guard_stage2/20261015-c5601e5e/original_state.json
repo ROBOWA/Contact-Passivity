@@ -1,0 +1,22 @@
+{
+  "cwd": "/Users/carl/code/contactSimulation",
+  "head": "32c4866183b020c50724160749b588f140228db5",
+  "status": "",
+  "refs": [
+    "refs/codex/turn-diffs/captures/1792053939874/b6dbd4c8-dfb0-4907-ac41-6cddcce96a86/base 2c367d2b5fa4068987bcc1b529dcdce6df987aa5",
+    "refs/codex/turn-diffs/checkpoints/cbb696ef5ed8d0ceaf82af6dad5d6bb1/9056e7a7482cb9a813c60fda3aa08128/1792051424347/a210744d-4148-4246-9a86-ee9396dcb2ee 2c367d2b5fa4068987bcc1b529dcdce6df987aa5",
+    "refs/heads/feature/kuka-oracle-joint-qp 32c4866183b020c50724160749b588f140228db5",
+    "refs/heads/list 18975e6acf89e1a9be93d003a36c5781320fb4bd",
+    "refs/heads/main dbff1c1fbb0a26c66afe07aa28eae65dade3907c",
+    "refs/heads/proposal c06f39b9288d690d8f4d1d083d17eb75c804fbce",
+    "refs/remotes/origin/HEAD dbff1c1fbb0a26c66afe07aa28eae65dade3907c",
+    "refs/remotes/origin/feature/kuka-oracle-joint-qp 32c4866183b020c50724160749b588f140228db5",
+    "refs/remotes/origin/fix/mujoco-compat-and-certificate a1ffb53840a1526224b718af265426e983164816",
+    "refs/remotes/origin/main dbff1c1fbb0a26c66afe07aa28eae65dade3907c",
+    "refs/remotes/origin/proposal c06f39b9288d690d8f4d1d083d17eb75c804fbce"
+  ],
+  "remotes": "origin\tgit@github.com:ROBOWA/Contact-Passivity.git (fetch)\norigin\tgit@github.com:ROBOWA/Contact-Passivity.git (push)\n",
+  "worktrees": "worktree /Users/carl/code/contactSimulation\nHEAD 32c4866183b020c50724160749b588f140228db5\nbranch refs/heads/feature/kuka-oracle-joint-qp\n\n",
+  "run_id": "20261015-c5601e5e",
+  "backup": "/Users/carl/code/contactSimulation-stage2-preservation-20261015-c5601e5e"
+}
