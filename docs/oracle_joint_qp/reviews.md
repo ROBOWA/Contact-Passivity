@@ -130,9 +130,11 @@ Round 2 continued:
   peak, so figures now use full physics force/power and show substep minima;
   (iii) numerical source provenance is verified against its recorded Git tree,
   permitting reporting-only revisions; (iv) retain nine representative compact
-  raw cases, all failed snapshots and relevant candidate histories, about 7 MB
+  raw cases, all failed snapshots and relevant candidate histories, about 5.7 MB
   including plots/reports, instead of committing full logs.
-  Reporting commits: `3dba2f1`, `ddc02b6`, `25a8bf6`. Re-ran the report generator
+  Reporting commits: `3dba2f1`, `ddc02b6`, `25a8bf6`, `f9217d0`. Candidate
+  histories use lossless gzip; independently decompressed and compared every
+  retained history byte-for-byte against the full logs. Re-ran the report generator
   after each affected fix; simulation sources and final physics logs unchanged.
 - Visually inspected final `active_comparison.png`, `failures_and_recovery.png`,
   `gradient_response.png`, `forecast_and_runtime.png`; figures agree with raw

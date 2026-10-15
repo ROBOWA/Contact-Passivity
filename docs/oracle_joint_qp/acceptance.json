@@ -1,7 +1,7 @@
 {
   "overall": "PARTIAL",
   "source_sha256": "023460012a05710dffd75a3e146a66659b94d67f4ad64d1cf94385f69bccba41",
-  "postprocessing_source_sha256": "348eb275c12d7734e4a7d841b687be81f16f83c67d614cf04f68f6debba13bc2",
+  "postprocessing_source_sha256": "db658c607013230696ae03043308afdde970a3dcd61fcdd5e706fe5bce9ddb1a",
   "gates": [
     {
       "gate": "final_source_provenance",
@@ -10,7 +10,7 @@
       "evidence": "raw/* metadata_json; validation.json",
       "value": {
         "numerical_source_sha256": "023460012a05710dffd75a3e146a66659b94d67f4ad64d1cf94385f69bccba41",
-        "postprocessing_source_sha256": "348eb275c12d7734e4a7d841b687be81f16f83c67d614cf04f68f6debba13bc2",
+        "postprocessing_source_sha256": "db658c607013230696ae03043308afdde970a3dcd61fcdd5e706fe5bce9ddb1a",
         "changed_files": [
           "kuka_table_sim/oracle_report.py"
         ]
@@ -96,7 +96,7 @@
       "gate": "logged_QP_physical_residuals",
       "status": "PASS",
       "command": "matrix + oracle_report",
-      "evidence": "raw/*_events.json; full results/oracle/final/*/events.json",
+      "evidence": "raw/*_events.json.gz; full results/oracle/final/*/events.json",
       "value": {
         "torque_Nm": 1.115111558647186e-09,
         "energy_J": 2.1481024400140385e-16

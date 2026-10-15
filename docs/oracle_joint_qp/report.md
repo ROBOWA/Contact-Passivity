@@ -29,7 +29,7 @@ all logs are still saved. A single failed case also exits 2. Unsupported inputs
 fail closed. `results/` holds full logs and is ignored; `raw/` contains compact
 full-precision account/work data for nine representative cases, force/power physics samples around interaction,
 strided task recovery traces preserving global force extrema and contact transitions,
-rejected candidates and failure snapshots. `compaction_json` declares retained
+rejected candidates (lossless gzip JSON histories) and failure snapshots. `compaction_json` declares retained
 samples; omitted human powers are zero. No
 float32 conversion is applied to work/accounts. Regenerate figures with the report
 command after reproducing logs; do not treat a missing test as passing.
