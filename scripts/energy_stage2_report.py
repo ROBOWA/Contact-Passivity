@@ -192,7 +192,7 @@ def main():
     def passfail(value):return 'PASS' if value else 'FAIL'
     preservation=json.loads(args.preservation.read_text())
     transparency={}
-    for name in ('nohuman-ample','nohuman-zero','ample'):
+    for name in ('nohuman-ample','nohuman-zero','ample','elbow-ample','assist'):
         if name not in data:continue
         uf=fingerprints[name]['UF'];transparency[name]={}
         for v in ('A','B','C','D'):
@@ -246,9 +246,11 @@ def main():
                     independent_checks=checks,transparency=transparency,repeats=repeated,independent_backup=backup_audit,extensions=extensions,
                     known_regression='historical is development, not held out',
                     evidence_limit='finite held-current-force policy rollouts and empirical terminal persistence; no recursive feasibility or invariant-set proof')
-    acceptance['categories']=dict(correctness=passfail(all(gates[k]=='PASS' for k in ('frozen_numerical_provenance','existing_and_new_tests','independent_power_work_accounts','final_executed_torque_rate'))),
+    acceptance['categories']=dict(correctness=passfail(all(gates[k]=='PASS' for k in ('frozen_numerical_provenance','existing_and_new_tests','independent_power_work_accounts','final_executed_torque_rate','unchanged_plant_assets','frozen_settings_and_holdouts','independent_reserve_accounts','logged_multirow_physical_residuals','independent_closed_loop_backup'))),
                                   completion=gates['primary_completion'],energy=gates['final_energy_all_physics'],contact=gates['primary_contact'],
                                   progress=gates['primary_progress'],preservation=gates['preservation'],generalization=gates['generalization'])
+    acceptance['audit_source_sha256']={p.name:sha(p) for p in Path(__file__).parent.glob('energy_stage2_*.py')}
+    acceptance['test_transcript_sha256']=sha(args.tests)
     write(args.out/'acceptance.json',acceptance);write(args.out/'metrics.json',results);write(args.out/'raw_manifest.json',manifest)
     write(args.out/'cases.json',{n:vs['UF'][1]['case'] for n,vs in data.items()})
     if args.validation:
@@ -444,7 +446,7 @@ force-change envelope and useful progress can remain feasible across the tested
 budgets, rather than spending additional effort on an unvalidated local margin.
 '''
     (args.out/'report.md').write_text(report)
-    failed=', '.join(k for k,v in gates.items() if v!='PASS')
+    failed=', '.join(k for k,v in gates.items() if v!='PASS') or '无；压力测试中的明确停止另行报告'
     (args.out/'morning_summary_zh.md').write_text(f'''# Stage 2 早间摘要 — {status}
 
 已实现可选的四个物理子步能量约束、因果制动备用能量估计、平滑虚拟时间进度调节和接触保护。
