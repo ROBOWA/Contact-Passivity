@@ -134,6 +134,14 @@ def figures(data,out):
         axes[1,0].axhspan(7,13,color='green',alpha=.1)
         axes[3,0].set_xlabel('Physical simulation time, s');axes[3,1].set_xlabel('Physical simulation time, s')
         fig.suptitle(name+' — all variants; stopped trials end at failure');fig.tight_layout();fig.savefig(out/(name+'_comparison.png'),dpi=150);plt.close(fig)
+        fig,ax=plt.subplots(figsize=(10,4))
+        for variant,(r,m,c,p,l,check) in data[name].items():
+            energy=m['case']['budget']+np.cumsum(p['power']*.00025);index=int(np.argmin(energy))
+            ax.plot(p['t'],energy,color=colors[variant],lw=.8,label=f'{variant}: min {np.min(energy):.6g} J')
+            ax.plot(p['t'][index],energy[index],'.',color=colors[variant],ms=5)
+        ax.set_yscale('symlog',linthresh=1e-7);ax.axhline(0,color='k',lw=.6)
+        ax.set_xlim(8.71,12.5);ax.set_ylabel('Physics energy margin, J (symlog)');ax.set_xlabel('Physical simulation time, s')
+        ax.legend(fontsize=8);ax.grid(alpha=.2);fig.tight_layout();fig.savefig(out/(name+'_energy_detail.png'),dpi=150);plt.close(fig)
         fig,axes=plt.subplots(2,1,figsize=(10,6),sharex=True)
         for variant,(r,m,c,p,l,check) in data[name].items():
             release=m['case']['start']+2*m['case']['ramp']+m['case']['hold']
@@ -251,6 +259,9 @@ def main():
                                   progress=gates['primary_progress'],preservation=gates['preservation'],generalization=gates['generalization'])
     acceptance['audit_source_sha256']={p.name:sha(p) for p in Path(__file__).parent.glob('energy_stage2_*.py')}
     acceptance['test_transcript_sha256']=sha(args.tests)
+    acceptance['outcome_counts']={v:dict(completed=sum(results[n][v]['completion']=='PASS' for n in results),
+                                         stopped=sum(results[n][v]['completion']=='FAIL' for n in results),
+                                         energy_invalid=sum(results[n][v]['energy']=='FAIL' for n in results)) for v in ('UF','A','B','C','D')}
     write(args.out/'acceptance.json',acceptance);write(args.out/'metrics.json',results);write(args.out/'raw_manifest.json',manifest)
     write(args.out/'cases.json',{n:vs['UF'][1]['case'] for n,vs in data.items()})
     if args.validation:
@@ -332,8 +343,8 @@ including all subsequent SEARCH/recovery and force reramping.
 
 The new multi-row OSQP solver whitens the objective and scales rows; all original
 N m/J/task-unit residuals decide acceptance, independently of solver status.
-The old one-halfspace fallback is never called. Four bounded retries use shrinking
-trust regions while retaining the original objective. Affine infeasibility is
+The old one-halfspace fallback is never called. Up to three relinearizations
+(four solves) shrink trust regions while retaining the original objective. Affine infeasibility is
 reported as local affine infeasibility, not global physical impossibility.
 Every accepted action receives a fresh nonlinear interval check. Stage-zero
 power can be torque insensitive: a depleted account may require stopping before
@@ -406,6 +417,12 @@ Its maximum total joint-torque difference from the isolated ungoverned controlle
 is {primary[0]['max_total_change_from_ungoverned_Nm']:.3f} N m; the maximum correction
 from its governed nominal is {primary[0]['max_change_from_governed_Nm']:.3f} N m.
 Small per-tick command changes therefore do not mean a small total governor effect.
+
+![Main matched comparison](main_comparison.png)
+![Main physics energy, including small deficits](main_energy_detail.png)
+![Historical matched comparison](historical_comparison.png)
+![Feasibility across all required cases](feasibility.png)
+
 Continuation experiments through 20 s measure the extra physical time needed to
 reach the matched UF run's 18 s measured amount, without resetting the clock,
 controller or accounts: {json.dumps({p:dict(extra_physical_time_s=v['extra_physical_time_s'],achieved=v['achieved_18s_UF_amount']) for p,v in extensions.items()})}.
