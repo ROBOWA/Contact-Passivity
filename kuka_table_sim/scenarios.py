@@ -245,7 +245,7 @@ def report_nominal(res: ScenarioResult) -> bool:
           f"{' (dirty)' if log.meta['dirty'] else ''}")
     print(f"transitions: {[(round(t, 3), a, b) for t, a, b in mx.transitions(log)]}")
     f, tr, tq = st["force"], st["tracking"], st["torque"]
-    print(f"steady-sliding window t in [{w[0]:.2f}, {w[1]:.2f}] s")
+    print(f"steady-contact window t in [{w[0]:.2f}, {w[1]:.2f}] s")
     print(f"  force   : truth |f_d - f| mean {f['truth_mean_abs']:.4f} N max {f['truth_max_abs']:.4f} N; controller |f_d - f_n| mean "
           f"{f['controller_mean_abs']:.4f} max {f['controller_max_abs']:.4f}; f_true mean {f['f_true_mean']:.4f} std {f['f_true_std']:.4f}; "
           f"sensor vs truth max {f['sensor_vs_truth_max']:.4f} N")
