@@ -1,0 +1,21 @@
+{
+  "source": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D",
+  "reference": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/UF",
+  "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "commit": "64045a9a772b69b1851113761d88bb92af8ce1b1",
+  "achieved_18s_UF_amount": true,
+  "extra_physical_time_s": 0.5459999999975409,
+  "requested_until_s": 20.0,
+  "reference_amount_m": 0.24529420740319513,
+  "measured_amount_m": 0.3004699348651144,
+  "completed_strokes": 3,
+  "energy_start_J": [
+    0.00013055358846319567,
+    0.00013055358846319567
+  ],
+  "energy_final_J": [
+    0.00013055358846319567,
+    0.00013055358846319567
+  ],
+  "wall_seconds": 12.535169708076864
+}

@@ -1,0 +1,209 @@
+{
+  "commit": "81dffa64109752a9a027975e7b831daa4ff91e86",
+  "branch": "feature/kuka-energy-reserve-contact-20261015-c5601e5e",
+  "dirty": false,
+  "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "seed": 7342,
+  "snapshots": [
+    {
+      "t": 6.7,
+      "force": [
+        -0.0,
+        0.0,
+        0.0
+      ],
+      "contact_mode_crossings": 0,
+      "samples": 24,
+      "max_abs_affine_errors": {
+        "prefix": 0.0,
+        "normal_force": 0.0,
+        "normal_velocity": 8.887059122780414e-06,
+        "cross_error": 9.278603158460014e-10,
+        "orientation": 5.3723648344414004e-08
+      },
+      "stencil_spread": {
+        "prefix": 0.0,
+        "normal_force": 0.0,
+        "normal_velocity": 2.6020852139652106e-16,
+        "cross_error": 1.050299678771651e-14,
+        "orientation": 4.622498079974316e-14
+      }
+    },
+    {
+      "t": 6.701,
+      "force": [
+        -0.0,
+        0.0,
+        0.0
+      ],
+      "contact_mode_crossings": 3,
+      "samples": 24,
+      "max_abs_affine_errors": {
+        "prefix": 0.0,
+        "normal_force": 38.98447106484197,
+        "normal_velocity": 1.0520565881437169e-05,
+        "cross_error": 1.4539283132646117e-09,
+        "orientation": 4.36610754291387e-08
+      },
+      "stencil_spread": {
+        "prefix": 0.0,
+        "normal_force": 0.0,
+        "normal_velocity": 2.38524477946811e-16,
+        "cross_error": 8.190101856833719e-15,
+        "orientation": 2.8785610031137505e-14
+      }
+    },
+    {
+      "t": 6.702,
+      "force": [
+        -0.0,
+        0.0,
+        0.0
+      ],
+      "contact_mode_crossings": 0,
+      "samples": 24,
+      "max_abs_affine_errors": {
+        "prefix": 0.0,
+        "normal_force": 37.30191439722939,
+        "normal_velocity": 0.0029279370297551396,
+        "cross_error": 1.2536948900439333e-06,
+        "orientation": 5.405968211745438e-06
+      },
+      "stencil_spread": {
+        "prefix": 0.0,
+        "normal_force": 2.928990383566088e-10,
+        "normal_velocity": 9.194034422677078e-15,
+        "cross_error": 1.0438335086616505e-14,
+        "orientation": 4.14378999829526e-14
+      }
+    },
+    {
+      "t": 6.703,
+      "force": [
+        -0.0,
+        0.0,
+        0.0
+      ],
+      "contact_mode_crossings": 0,
+      "samples": 24,
+      "max_abs_affine_errors": {
+        "prefix": 0.0,
+        "normal_force": 56.6991747200722,
+        "normal_velocity": 0.006699134718171521,
+        "cross_error": 4.373227132279872e-06,
+        "orientation": 1.5569108042336802e-05
+      },
+      "stencil_spread": {
+        "prefix": 0.0,
+        "normal_force": 3.2697178298235485e-10,
+        "normal_velocity": 1.489693784995083e-14,
+        "cross_error": 9.42275846472636e-15,
+        "orientation": 3.3550636227563935e-14
+      }
+    },
+    {
+      "t": 6.704,
+      "force": [
+        -0.0,
+        0.0,
+        0.0
+      ],
+      "contact_mode_crossings": 0,
+      "samples": 24,
+      "max_abs_affine_errors": {
+        "prefix": 0.0,
+        "normal_force": 45.138114055578654,
+        "normal_velocity": 0.005330388166681816,
+        "cross_error": 3.48838824248079e-06,
+        "orientation": 1.2827510804781176e-05
+      },
+      "stencil_spread": {
+        "prefix": 0.0,
+        "normal_force": 3.989364394385575e-10,
+        "normal_velocity": 1.8323016715005025e-14,
+        "cross_error": 1.1087814804280481e-14,
+        "orientation": 3.462940680127517e-14
+      }
+    },
+    {
+      "t": 8.71,
+      "force": [
+        -0.0,
+        0.0,
+        0.0
+      ],
+      "contact_mode_crossings": 0,
+      "samples": 24,
+      "max_abs_affine_errors": {
+        "prefix": 0.0,
+        "normal_force": 41.36449280262553,
+        "normal_velocity": 0.00451381242248038,
+        "cross_error": 2.788678736467171e-06,
+        "orientation": 9.170911697969318e-06
+      },
+      "stencil_spread": {
+        "prefix": 0.0,
+        "normal_force": 2.41140440948584e-10,
+        "normal_velocity": 8.939685675209662e-15,
+        "cross_error": 1.2822808272009226e-14,
+        "orientation": 4.2841910032585806e-14
+      }
+    },
+    {
+      "t": 9.6,
+      "force": [
+        -2.499999999999986,
+        0.0,
+        0.0
+      ],
+      "contact_mode_crossings": 0,
+      "samples": 24,
+      "max_abs_affine_errors": {
+        "prefix": 1.4413780228924369e-06,
+        "normal_force": 45.62047335460054,
+        "normal_velocity": 0.005449131111930064,
+        "cross_error": 3.3337882512911574e-06,
+        "orientation": 1.1924728350918087e-05
+      },
+      "stencil_spread": {
+        "prefix": 5.251604272976662e-18,
+        "normal_force": 3.653521929436465e-10,
+        "normal_velocity": 1.810922559911804e-14,
+        "cross_error": 1.0322112901830355e-14,
+        "orientation": 2.096508188408064e-14
+      }
+    },
+    {
+      "t": 10.18,
+      "force": [
+        -5.0,
+        0.0,
+        0.0
+      ],
+      "contact_mode_crossings": 0,
+      "samples": 24,
+      "max_abs_affine_errors": {
+        "prefix": 2.074895774761517e-06,
+        "normal_force": 48.652578915516735,
+        "normal_velocity": 0.0058975155767049285,
+        "cross_error": 3.716753524221064e-06,
+        "orientation": 1.3359310113162694e-05
+      },
+      "stencil_spread": {
+        "prefix": 1.2197274440461925e-17,
+        "normal_force": 4.4919623576333834e-10,
+        "normal_velocity": 1.9713329818364655e-14,
+        "cross_error": 1.0289078616887437e-14,
+        "orientation": 3.966011546951975e-14
+      }
+    }
+  ],
+  "closed_loop_20ms_max_state_error": 0.0,
+  "forecast_mismatch": {
+    "mode": "shadow only; 100 Hz within-tick force modulation; no held-force guarantee",
+    "held_work_J": -0.00021596177349315183,
+    "actual_work_J": -0.00024072456966036244,
+    "prediction_minus_actual_J": 2.4762796167210614e-05
+  },
+  "interpretation": "Stencil errors are measurements, not uniform envelopes. All candidates require fresh nonlinear validation."
+}

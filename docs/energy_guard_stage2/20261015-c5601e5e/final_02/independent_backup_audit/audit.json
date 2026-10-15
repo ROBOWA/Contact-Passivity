@@ -1,0 +1,25 @@
+{
+  "scope": "ISOLATED SHADOW AUDIT ONLY; rejected action was never executed by online trial",
+  "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "snapshot": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/repeat_stress_D_01/failure_pre.npz",
+  "held_force": [
+    -0.3284212139134285,
+    0.0,
+    0.0
+  ],
+  "terminal_status": "SETTLED",
+  "terminal_time_s": 0.494,
+  "reserve_from_independent_generalized_work_J": 0.0009586507736152701,
+  "reserve_from_predictor_J": 0.0009586507736152706,
+  "max_prefix_work_difference_J": 5.421010862427522e-20,
+  "max_complete_plant_state_difference": 0.0,
+  "initial_accounts_J": [
+    0.0009313803062280018,
+    0.0009313803062280018
+  ],
+  "minimum_shadow_energy_J": [
+    -2.727046738726824e-05,
+    -2.727046738726824e-05
+  ],
+  "conclusion": "An unaffordable backup is rejected; negative shadow energy is evidence, not an accepted energy result."
+}

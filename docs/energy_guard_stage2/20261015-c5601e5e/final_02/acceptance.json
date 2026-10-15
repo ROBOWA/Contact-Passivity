@@ -1,0 +1,1275 @@
+{
+  "status": "PASS",
+  "gates": {
+    "preservation": "PASS",
+    "frozen_numerical_provenance": "PASS",
+    "unchanged_plant_assets": "PASS",
+    "frozen_settings_and_holdouts": "PASS",
+    "existing_and_new_tests": "PASS",
+    "independent_power_work_accounts": "PASS",
+    "independent_reserve_accounts": "PASS",
+    "logged_multirow_physical_residuals": "PASS",
+    "independent_closed_loop_backup": "PASS",
+    "transparency": "PASS",
+    "final_executed_torque_rate": "PASS",
+    "final_energy_all_physics": "PASS",
+    "final_original_force_target": "PASS",
+    "primary_completion": "PASS",
+    "primary_contact": "PASS",
+    "primary_progress": "PASS",
+    "primary_recovery": "PASS",
+    "generalization": "PASS",
+    "fresh_process_repeats": "PASS"
+  },
+  "numerical_freeze": {
+    "commit": "81dffa64109752a9a027975e7b831daa4ff91e86",
+    "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+    "config_sha256": "e086fd5db6c4d779f1ce768a79b082341468a8192364b1bf9c1d4fcf8e209af9",
+    "heldout_sha256": "24a111694848bea0044413452e5def83703769bd6f34cfcb85dd6d6b9b17d177",
+    "frozen_utc": "2026-10-15T09:42:11.732943+00:00",
+    "seed": 20261015,
+    "targets": {
+      "force_mae_N": 0.5,
+      "force_max_error_N": 3.0,
+      "cross_mm": 3.0,
+      "orientation_deg": 2.0,
+      "progress_fraction": 0.8,
+      "alpha_recovery_s": 2.0,
+      "energy_tolerance_J": 1e-10,
+      "window_start_s": 8.71
+    },
+    "asset_sha256": {
+      "assets/iiwa14_torque.xml": "b1315d433880f3055f709183ce914e8c571e1eeb542cf4d252426e25eb3ca90e",
+      "assets/kuka_iiwa_14/iiwa14.xml": "ee7e6d796a9f8642de6097f95077281d15f43678dc5285beafeda99b84cf9ef5",
+      "assets/kuka_iiwa_14/scene.xml": "46491c7cd161130b684bd8724060cca2777573e431eda04d6becd7e8a1a98045",
+      "assets/kuka_table_scene.xml": "918d95d6836c2147e769a1970d5f013da785bf805589d478e364ba98052a9940",
+      "assets/polishing_tool.xml": "62ecf0422cf4670835ed375c8decaf2994d2d097d44042fda4ba13f1c91bb32a"
+    }
+  },
+  "targets": {
+    "force_mae_N": 0.5,
+    "force_max_error_N": 3.0,
+    "cross_mm": 3.0,
+    "orientation_deg": 2.0,
+    "progress_fraction": 0.8,
+    "alpha_recovery_s": 2.0,
+    "energy_tolerance_J": 1e-10,
+    "window_start_s": 8.71
+  },
+  "independent_checks": {
+    "ample": {
+      "A": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.4424906541753444e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 4.3298697960381105e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 4.3298697960381105e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 0.7419959270188319,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 4.3298697960381105e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 0.7419959270188319,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.4424906541753444e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "assist": {
+      "A": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 8.326672684688674e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.4988010832439613e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.4988010832439613e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 0.11999,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.4988010832439613e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 0.11999,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 8.326672684688674e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "elbow-ample": {
+      "A": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 9.992007221626409e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.5543122344752192e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.5543122344752192e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 0.8492347359143109,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.5543122344752192e-15,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 0.8492347359143109,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 9.992007221626409e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "elbow-tight": {
+      "A": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.5326962749261384e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.42861286636753e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 3,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.42861286636753e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 4.363007454306807e-07,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.42861286636753e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 4.363007454306807e-07,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.5326962749261384e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "historical": {
+      "A": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.3877787807814457e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.8449465006019636e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 3.920475055707584e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 1.3981154194483595e-06,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 3.920475055707584e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 1.3981154194483595e-06,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.498001805406602e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "main": {
+      "A": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.220446049250313e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 7.337880303381894e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 2,
+        "qp_max_normalized_violation": 2.710505431213761e-10,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 6.303551430830723e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 1.2443098089075866e-07,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 6.303551430830723e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 1.2443098089075866e-07,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 6.800116025829084e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "new-1": {
+      "A": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.457167719820518e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.8041124150158794e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.8041124150158794e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 7.351593443059763e-07,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.8041124150158794e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 7.351593443059763e-07,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.706168622523819e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "new-2": {
+      "A": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 4.86955535607353e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.8041124150158794e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 1,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 3.391384395534658e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 6.217862576877037e-08,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 3.391384395534658e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 6.217862576877037e-08,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 7.077671781985373e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "new-3": {
+      "A": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.457167719820518e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.7755575615628914e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 1,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.7755575615628914e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 3.9882374292500343e-07,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.7755575615628914e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 3.9882374292500343e-07,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 1.457167719820518e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "nohuman-ample": {
+      "A": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 0.0,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 0.0,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 0.0,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 0.0,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 0.0,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "nohuman-zero": {
+      "A": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 0.0,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 0.0,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 0.0,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 0.0,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 0.0,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "reduced-rate": {
+      "A": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.220446049250313e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 1.3877787807814457e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 7.337880303381894e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 6.303551430830723e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 1.2443098089075866e-07,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 2.7755575615628914e-17,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 6.303551430830723e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 1.2443098089075866e-07,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 6.800116025829084e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    },
+    "stress": {
+      "A": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 2.4123498337802474e-18,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "B": {
+        "work_difference_J": 2.168404344971009e-19,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 9.73240856395191e-19,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "qp_rows_recomputed": 2,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "C": {
+        "work_difference_J": 1.3552527156068805e-20,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 7.589415207398531e-19,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 1.832476139296564e-05,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "D": {
+        "work_difference_J": 1.3552527156068805e-20,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 7.589415207398531e-19,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "stage_orientation_prediction_defect_rad": 0.0,
+        "reserve_min_gap_J": 1.832476139296564e-05,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      },
+      "UF": {
+        "work_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "account_recompute_defect_J": 6.661338147750939e-16,
+        "account_difference_J": 0.0,
+        "force_meter_difference_N": 0.0,
+        "torque_logged_difference_Nm": 0.0,
+        "qp_rows_recomputed": 0,
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0
+      }
+    }
+  },
+  "transparency": {
+    "nohuman-ample": {
+      "A": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "B": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "C": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "D": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      }
+    },
+    "nohuman-zero": {
+      "A": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "B": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "C": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "D": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      }
+    },
+    "ample": {
+      "A": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "B": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "C": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "D": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      }
+    },
+    "elbow-ample": {
+      "A": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "B": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "C": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "D": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      }
+    },
+    "assist": {
+      "A": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "B": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "C": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      },
+      "D": {
+        "bitwise_q": true,
+        "bitwise_qvel": true,
+        "bitwise_torque": true,
+        "alpha_one": true
+      }
+    }
+  },
+  "repeats": {
+    "results/energy_guard_stage2/20261015-c5601e5e/repeat_main_D_01": {
+      "case": "main",
+      "variant": "D",
+      "max_absolute_difference": 0.0,
+      "same_failure_reason": true,
+      "raw_files": {
+        "metrics.json": {
+          "size": 2321,
+          "sha256": "51d7ae3fcb30f1770a758c75c661f5c3c267c987726349a7f5d323384642c878"
+        },
+        "baseline_log.npz": {
+          "size": 35643422,
+          "sha256": "642d6083422da0224d15723c00de085b41980cf9474d99c0d3f5116fff7ccd2e"
+        },
+        "metadata.json": {
+          "size": 1872,
+          "sha256": "684fdf8a7d7257c30d1743bd379249cc35acf756d6db9469db98dcbb4633b1dc"
+        },
+        "events.json.gz": {
+          "size": 145793,
+          "sha256": "627f893284565cd91b2ed5f71d5c0d4cd747d78eec64fe0f315d5410212b2644"
+        },
+        "guard.npz": {
+          "size": 20576310,
+          "sha256": "297b42326f177546d152572e292c5f81618717bffa974434e92f6771aeb5f2dc"
+        },
+        "final_state.npz": {
+          "size": 8869,
+          "sha256": "58717fdd93606fcb53c598bb618845a12fa44ac9abb120a81d030c25cedc0997"
+        }
+      }
+    },
+    "results/energy_guard_stage2/20261015-c5601e5e/repeat_stress_D_01": {
+      "case": "stress",
+      "variant": "D",
+      "max_absolute_difference": 0.0,
+      "same_failure_reason": true,
+      "raw_files": {
+        "metrics.json": {
+          "size": 3328,
+          "sha256": "a4e36461ec883212c7ea50bfeef2ffbf25af6cd2cac04f7e86e4770ecdca1152"
+        },
+        "baseline_log.npz": {
+          "size": 17564016,
+          "sha256": "47581a32b99331aed56c915aa3e21b16bd53f80d5aea85fea4e04851e01ccb6b"
+        },
+        "metadata.json": {
+          "size": 1875,
+          "sha256": "b01bb4c06a72fc3a6568990286efc1bf151149602abfd11a4914d7337fb8e5f6"
+        },
+        "events.json.gz": {
+          "size": 9617,
+          "sha256": "f9b798bdde626bf107f248f588a8847dc36c587eda84f559ca8b502016db6235"
+        },
+        "guard.npz": {
+          "size": 10268090,
+          "sha256": "f430fc5cdc984933f0e91a9daae5b8ce17f7edc32049f47987c776f15d7055cb"
+        },
+        "failure_pre.npz": {
+          "size": 36144,
+          "sha256": "51b09a558c52483553a571f0d212a01636b66f6f309c3fef4b0f2ca87810eb43"
+        },
+        "failure.json": {
+          "size": 954,
+          "sha256": "2cb2d39147526c7feecfe4d370122e799644031ac26819306a27c26bcca309e0"
+        },
+        "final_state.npz": {
+          "size": 8919,
+          "sha256": "ca41c302a88d7322f081eda2439830729f23dbc51cad7059885c4f8bd8577f15"
+        },
+        "failure_complete.npz": {
+          "size": 36144,
+          "sha256": "51b09a558c52483553a571f0d212a01636b66f6f309c3fef4b0f2ca87810eb43"
+        }
+      }
+    }
+  },
+  "independent_backup": {
+    "scope": "ISOLATED SHADOW AUDIT ONLY; rejected action was never executed by online trial",
+    "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+    "snapshot": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/repeat_stress_D_01/failure_pre.npz",
+    "held_force": [
+      -0.3284212139134285,
+      0.0,
+      0.0
+    ],
+    "terminal_status": "SETTLED",
+    "terminal_time_s": 0.494,
+    "reserve_from_independent_generalized_work_J": 0.0009586507736152701,
+    "reserve_from_predictor_J": 0.0009586507736152706,
+    "max_prefix_work_difference_J": 5.421010862427522e-20,
+    "max_complete_plant_state_difference": 0.0,
+    "initial_accounts_J": [
+      0.0009313803062280018,
+      0.0009313803062280018
+    ],
+    "minimum_shadow_energy_J": [
+      -2.727046738726824e-05,
+      -2.727046738726824e-05
+    ],
+    "conclusion": "An unaffordable backup is rejected; negative shadow energy is evidence, not an accepted energy result."
+  },
+  "extensions": {
+    "results/energy_guard_stage2/20261015-c5601e5e/extension_main_D_01": {
+      "source": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/repeat_main_D_01",
+      "reference": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/main/main/UF",
+      "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+      "commit": "f3b729833dc93faedc503664bb0559b2abca57d9",
+      "achieved_18s_UF_amount": true,
+      "extra_physical_time_s": 0.6679999999981234,
+      "requested_until_s": 20.0,
+      "reference_amount_m": 0.24529383431831936,
+      "measured_amount_m": 0.3004753096439511,
+      "completed_strokes": 3,
+      "energy_start_J": [
+        0.0004091799947276076,
+        0.0004091799947276076
+      ],
+      "energy_final_J": [
+        0.0004091799947276076,
+        0.0004091799947276076
+      ],
+      "wall_seconds": 12.450520084006712
+    },
+    "results/energy_guard_stage2/20261015-c5601e5e/extension_historical_D_01": {
+      "source": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D",
+      "reference": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/UF",
+      "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+      "commit": "64045a9a772b69b1851113761d88bb92af8ce1b1",
+      "achieved_18s_UF_amount": true,
+      "extra_physical_time_s": 0.5459999999975409,
+      "requested_until_s": 20.0,
+      "reference_amount_m": 0.24529420740319513,
+      "measured_amount_m": 0.3004699348651144,
+      "completed_strokes": 3,
+      "energy_start_J": [
+        0.00013055358846319567,
+        0.00013055358846319567
+      ],
+      "energy_final_J": [
+        0.00013055358846319567,
+        0.00013055358846319567
+      ],
+      "wall_seconds": 12.535169708076864
+    }
+  },
+  "known_regression": "historical is development, not held out",
+  "evidence_limit": "finite held-current-force policy rollouts and empirical terminal persistence; no recursive feasibility or invariant-set proof",
+  "categories": {
+    "correctness": "PASS",
+    "completion": "PASS",
+    "energy": "PASS",
+    "contact": "PASS",
+    "progress": "PASS",
+    "preservation": "PASS",
+    "generalization": "PASS"
+  },
+  "audit_source_sha256": {
+    "energy_stage2_report.py": "b158f67a3792bd7a0933915ab415cfc89ec648b72ce8c5322f592828ef34a114",
+    "energy_stage2_preservation.py": "779282d6ab8e247f29c2ce3a5406219d9d7447840e4b41fc82fd0866cf375845",
+    "energy_stage2_backup_audit.py": "08d61b29fa6a33a36452bd413cba51a407aa50d6ecc9330800562e6dd8f5907d",
+    "energy_stage2_matrix.py": "0ca0c551df2ca400c1707179173f17c92a400e54c3f30a52f7e1b52c651fe615"
+  },
+  "test_transcript_sha256": "2cc5d742b0de60d4278f6862452348bc40fc72dd804a15493da25131b1185976",
+  "outcome_counts": {
+    "UF": {
+      "completed": 13,
+      "stopped": 0,
+      "energy_invalid": 8
+    },
+    "A": {
+      "completed": 9,
+      "stopped": 4,
+      "energy_invalid": 3
+    },
+    "B": {
+      "completed": 5,
+      "stopped": 8,
+      "energy_invalid": 0
+    },
+    "C": {
+      "completed": 12,
+      "stopped": 1,
+      "energy_invalid": 0
+    },
+    "D": {
+      "completed": 12,
+      "stopped": 1,
+      "energy_invalid": 0
+    }
+  },
+  "category_scope": {
+    "completion_contact_progress_recovery": "main and historical primary regressions",
+    "energy": "every recorded D physics prefix; incomplete trials remain incomplete",
+    "generalization": "new-1/new-2/new-3, frozen before evaluation",
+    "arbitrary_stress_completion": "reported per case; not a required universal-success gate"
+  }
+}

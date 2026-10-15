@@ -1,0 +1,81 @@
+{
+  "commit": "63eda9313a591d4cbac4b8fe27825e8f5cb39e40",
+  "branch": "feature/kuka-energy-reserve-contact-20261015-c5601e5e",
+  "dirty": true,
+  "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "source_end_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "case": {
+    "magnitude": 5.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 0.001,
+    "rate_factor": 1.0,
+    "name": "stress"
+  },
+  "variant": "UF",
+  "config": {
+    "transition": 0.1,
+    "damping": 40.0,
+    "horizons": [
+      0.02,
+      0.05,
+      0.1,
+      0.25,
+      0.5,
+      1.0,
+      2.0
+    ],
+    "terminal_persistence": 0.02,
+    "terminal_speed": 0.001,
+    "terminal_power": 0.002,
+    "terminal_tool_speed": 0.001,
+    "terminal_angular_speed": 0.01,
+    "energy_margin": 1e-08,
+    "reserve_margin": 1e-05,
+    "force_lower": 7.0,
+    "force_upper": 13.0,
+    "normal_speed": 0.005,
+    "orientation": 0.03490658503988659,
+    "cross_error": 0.003,
+    "task_start": 8.71,
+    "energy_tolerance": 1e-10,
+    "torque_tolerance": 1e-07,
+    "task_tolerance": 1e-07,
+    "eta": 0.02,
+    "retries": 3,
+    "targets": [
+      1.0,
+      0.5,
+      0.0
+    ],
+    "task_weight": 1.0,
+    "rate_factor": 1.0
+  },
+  "duration": 18.0,
+  "forecast": "current measured world force vector held throughout each complete rollout",
+  "versions": {
+    "python": "3.13.5",
+    "mujoco": "3.15.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "osqp": "1.1.3"
+  },
+  "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+  "asset_hashes": {
+    "kuka_table_scene.xml": "918d95d6836c2147",
+    "iiwa14_torque.xml": "b1315d433880f305",
+    "polishing_tool.xml": "62ecf0422cf46708"
+  }
+}

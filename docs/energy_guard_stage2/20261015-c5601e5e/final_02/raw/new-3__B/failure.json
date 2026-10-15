@@ -1,0 +1,11 @@
+{
+  "t": 11.317999999996298,
+  "reason": "constant_row_infeasible",
+  "diagnostics": {
+    "rows": [
+      "energy_0_prefix_0",
+      "energy_1_prefix_0"
+    ]
+  },
+  "seconds_failed_tick": 0.035597958019934595
+}

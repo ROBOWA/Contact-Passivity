@@ -1,0 +1,2185 @@
+[
+  {
+    "case": "ample",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/ample/ample/A",
+    "files": {
+      "metrics.json": {
+        "size": 2417,
+        "sha256": "c7d780c28c12baa3f7c15df390a20537c6ecf51722ec953f988ebbb5febb3893"
+      },
+      "baseline_log.npz": {
+        "size": 35613819,
+        "sha256": "314c9b94700bab0edf16ba9de483b8b67c5b30533e8ef4ed7547daaf9a8ceefc"
+      },
+      "metadata.json": {
+        "size": 1872,
+        "sha256": "edef0198340eb589f9d0e17c6330dc1900362b7337be13c3eb6c73240e4268ab"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "a5cd20876e36381e2740249affe4a1dc3a2035c6975428beec7ed4093862b452"
+      },
+      "guard.npz": {
+        "size": 7360311,
+        "sha256": "501d6bc279740794a0ddfcf2d9c176e242c0bd3fce161d882dcf29f4e18c8bc3"
+      },
+      "final_state.npz": {
+        "size": 5045,
+        "sha256": "df2ebecef21c41c9b3b812f3924399774cc37338160d338187c009883319e921"
+      }
+    }
+  },
+  {
+    "case": "ample",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/ample/ample/B",
+    "files": {
+      "metrics.json": {
+        "size": 2175,
+        "sha256": "d8abe46b9fe26ad27edea74e8cc88fa3a597957baf079b7a089b3aafae0d2089"
+      },
+      "baseline_log.npz": {
+        "size": 35613819,
+        "sha256": "314c9b94700bab0edf16ba9de483b8b67c5b30533e8ef4ed7547daaf9a8ceefc"
+      },
+      "metadata.json": {
+        "size": 1872,
+        "sha256": "639e206c2ad94a526900192030abbffc0746ced91cfd3a17c84ccfdcb220c476"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "a8814d8028705a5181ce73705d10b99854536eb946331b09aec7a8be7269fda8"
+      },
+      "guard.npz": {
+        "size": 20477973,
+        "sha256": "c0684604d500f3070e624f69617acefeb458077ac08a351f143c7df6fb7bc304"
+      },
+      "final_state.npz": {
+        "size": 8666,
+        "sha256": "cf7f15e51085b56858fe7546f617648d12dbc587952ba1e1f7dbab4c060b146d"
+      }
+    }
+  },
+  {
+    "case": "ample",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/ample/ample/C",
+    "files": {
+      "metrics.json": {
+        "size": 2333,
+        "sha256": "fa2cca9a3b494bfc0027be3744b6bc81e618d2aba4a34e8ad41c360216edf43c"
+      },
+      "baseline_log.npz": {
+        "size": 35613819,
+        "sha256": "1d6ebc765a7f92c5c585aa02e043f206c5cecc5fcbd7d49fbe7a25b6e7da3080"
+      },
+      "metadata.json": {
+        "size": 1872,
+        "sha256": "c2146b8f66570d64c11987da38c4abc838f78529d036a949d52ab9fe77f43ef9"
+      },
+      "events.json.gz": {
+        "size": 154587,
+        "sha256": "57315aa652593df21cdb5e30ec44304f617a0d2e4d7ca4325f5ab3158e48addc"
+      },
+      "guard.npz": {
+        "size": 20487413,
+        "sha256": "47f425c3f7f4e98a53914eff25469678b7ad45ed8750e2f9c0b9a39bd6f406c7"
+      },
+      "final_state.npz": {
+        "size": 8786,
+        "sha256": "5a8f99c69cc37e835f607f20c24a65cae34568269f3a66b8e4a7f959f6da5812"
+      }
+    }
+  },
+  {
+    "case": "ample",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/ample/ample/D",
+    "files": {
+      "metrics.json": {
+        "size": 2332,
+        "sha256": "79161d042ee977c47dd585a75c2e11b3358864316c61802beec2a46b2a83a7d7"
+      },
+      "baseline_log.npz": {
+        "size": 35613811,
+        "sha256": "c1d5911699a9f157594406698025628af161225ca05bb7cfbec0cc19d24507a8"
+      },
+      "metadata.json": {
+        "size": 1871,
+        "sha256": "e7962f1262348bcbdd4d74617121ac9d73adac1f8b09d3d2ff646baa6cd1c84a"
+      },
+      "events.json.gz": {
+        "size": 154587,
+        "sha256": "65ecc4864f460cdfa16289dc4ba19c30057df225c3c905e90f9ff47fc80860de"
+      },
+      "guard.npz": {
+        "size": 20490226,
+        "sha256": "f773344bcdd99b4d58dbd57a133c538f52c41d148f68fd0cc80105cdc6e0bf06"
+      },
+      "final_state.npz": {
+        "size": 8786,
+        "sha256": "5a8f99c69cc37e835f607f20c24a65cae34568269f3a66b8e4a7f959f6da5812"
+      }
+    }
+  },
+  {
+    "case": "ample",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/ample/ample/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2273,
+        "sha256": "9ca69655a9b0ed7f9d12896d68d32a1e1b875af87bd87a671ac31f0bf578f2a1"
+      },
+      "baseline_log.npz": {
+        "size": 35613810,
+        "sha256": "4fb797481e7f5413694a0072ba0f281d7c96671d6f663533c2cac4fc0b8becef"
+      },
+      "metadata.json": {
+        "size": 1873,
+        "sha256": "47e8c340ec68ee460fe6c34b98089a7b9f99d203c0fe90eb8cc6947bc058bfff"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "320d6fa20c930af1467bc9a5057441d622841ecb0ce080070791cbef2a19531d"
+      },
+      "guard.npz": {
+        "size": 7259391,
+        "sha256": "373dd9338916d915e1c6c1a3cda1751e299ced46841d41c0021bfe06b51fb7b7"
+      },
+      "final_state.npz": {
+        "size": 5045,
+        "sha256": "df2ebecef21c41c9b3b812f3924399774cc37338160d338187c009883319e921"
+      }
+    }
+  },
+  {
+    "case": "assist",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/assist/assist/A",
+    "files": {
+      "metrics.json": {
+        "size": 2391,
+        "sha256": "c4e82a5892bd6a4d4abb2a8dd69898baafd6fb44eb12de6be844809588373e16"
+      },
+      "baseline_log.npz": {
+        "size": 35588467,
+        "sha256": "71211b6618db51c8b2d9a5451dbdb349fa9c775d10092036950bac4b440d494a"
+      },
+      "metadata.json": {
+        "size": 1874,
+        "sha256": "995e611f8525169603a21153362a775f3ecf8366786cd5016c612dcd565aaa5b"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "f896bd92a19a3794910587258525c3fd1bf5ec35a3fdb959b93eaf54a1294fdd"
+      },
+      "guard.npz": {
+        "size": 7353166,
+        "sha256": "e7e28cf0a001d6a94f91c2f624bc69110e024f0bf3605780ccee41b8b6a5d44f"
+      },
+      "final_state.npz": {
+        "size": 5035,
+        "sha256": "312d0d0fd637efd68947fffa909ad7eba486b220da448efd52d3731374e12928"
+      }
+    }
+  },
+  {
+    "case": "assist",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/assist/assist/B",
+    "files": {
+      "metrics.json": {
+        "size": 2146,
+        "sha256": "3efe48ed2a2cd9227e9a639ab366a213506a1ebf276ca7673815c86a7992dfd8"
+      },
+      "baseline_log.npz": {
+        "size": 35588467,
+        "sha256": "71211b6618db51c8b2d9a5451dbdb349fa9c775d10092036950bac4b440d494a"
+      },
+      "metadata.json": {
+        "size": 1874,
+        "sha256": "455ea9f712cd88d5bca7628cb27f2be12f0f48511919e69fba0d09a73a2a67f5"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "1abc62a80311d4e071080787e10aaea2a6c3922524de81ec5dfe429e91afcf1c"
+      },
+      "guard.npz": {
+        "size": 20444313,
+        "sha256": "c2a7fc79cd12d4e826eb21c0e4ec9af6c503907a4f420d9df3975b6bb7f8a4b8"
+      },
+      "final_state.npz": {
+        "size": 8645,
+        "sha256": "703fbc0043c327ace5ad9d9ab7d65a446473e7597e15eb65720cda3afb3c65ee"
+      }
+    }
+  },
+  {
+    "case": "assist",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/assist/assist/C",
+    "files": {
+      "metrics.json": {
+        "size": 2305,
+        "sha256": "7b12db2d967694aa87de0735daa7880ae9b04c69e6fff5de3282a673470983b8"
+      },
+      "baseline_log.npz": {
+        "size": 35588471,
+        "sha256": "de46045b1a8e3e5ea224d831654e22628a863a7ede78789ade81098a9ca4aa5d"
+      },
+      "metadata.json": {
+        "size": 1874,
+        "sha256": "f71a759a2e041af11f0da85b378554e9a4104193c8b8541ed04edeadbfa5b0a4"
+      },
+      "events.json.gz": {
+        "size": 125833,
+        "sha256": "dfba6309c33f5d795e1a0eb195535d42b07d41a1b314afd98199be0d82301bdd"
+      },
+      "guard.npz": {
+        "size": 20431487,
+        "sha256": "d99a6ff140ca0ca2f2f47b94f70ae6a9a6f1131ca09b36f8eba3e426cf601e33"
+      },
+      "final_state.npz": {
+        "size": 8763,
+        "sha256": "a4157d59b96e9412c820821fe64075e259dd013cd004f2954418322543655e64"
+      }
+    }
+  },
+  {
+    "case": "assist",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/assist/assist/D",
+    "files": {
+      "metrics.json": {
+        "size": 2308,
+        "sha256": "a89a97ab66c4c727fffcf53b7a200926cf7d71efcc84cfdbf84f8eca75b5225a"
+      },
+      "baseline_log.npz": {
+        "size": 35588471,
+        "sha256": "de46045b1a8e3e5ea224d831654e22628a863a7ede78789ade81098a9ca4aa5d"
+      },
+      "metadata.json": {
+        "size": 1874,
+        "sha256": "53a43633dfa4d254c6638ae928475bcb47f1e2c66dc4040601b7129a0bb38cbd"
+      },
+      "events.json.gz": {
+        "size": 125833,
+        "sha256": "c4a46b3937b9b2f47ba04f2d8c9f7351541a95e60c700bc051b00eeb4efe11e5"
+      },
+      "guard.npz": {
+        "size": 20425755,
+        "sha256": "e66e9d349f7c8cb8997f5ad0f291db6af2244581cb6d5df862b9d6459d2c6146"
+      },
+      "final_state.npz": {
+        "size": 8763,
+        "sha256": "a4157d59b96e9412c820821fe64075e259dd013cd004f2954418322543655e64"
+      }
+    }
+  },
+  {
+    "case": "assist",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/assist/assist/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2248,
+        "sha256": "402480dda0bc9186e9526820b04de2c361b7b26554d0f19a6a75a7edfebd14b4"
+      },
+      "baseline_log.npz": {
+        "size": 35588467,
+        "sha256": "71211b6618db51c8b2d9a5451dbdb349fa9c775d10092036950bac4b440d494a"
+      },
+      "metadata.json": {
+        "size": 1875,
+        "sha256": "c194a1ddac4435036335ab6c1476ebf1a598e7ed1684962f4cd89206dc8218bd"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "ab95d660a39bf1320dc1d39708239f5c42268f12aafb71c0297550f76ae25a54"
+      },
+      "guard.npz": {
+        "size": 7247765,
+        "sha256": "dee084ecf7688326d07f829d87e8926b13b54cfd8b0d726aa6407f5c0ff06404"
+      },
+      "final_state.npz": {
+        "size": 5035,
+        "sha256": "312d0d0fd637efd68947fffa909ad7eba486b220da448efd52d3731374e12928"
+      }
+    }
+  },
+  {
+    "case": "elbow-ample",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/elbow-ample/elbow-ample/A",
+    "files": {
+      "metrics.json": {
+        "size": 2413,
+        "sha256": "c3fe613ee0ccfa9ca4ddcb0f289e5c074fe1a7969c9fb7c7c793b673a4677dfc"
+      },
+      "baseline_log.npz": {
+        "size": 35621300,
+        "sha256": "b9a37c01ddb058899bf66f8633ca18d4f94c1c8669cb4e4a2dd78408b574848c"
+      },
+      "metadata.json": {
+        "size": 1878,
+        "sha256": "ed8c951917c3f9417300b9318d150588c36346abebcf35820a4d7ed0480af173"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "c2b51e9450c0f3c98a7577fa8a26882fb8de114ad8b6c11764169f80073277fb"
+      },
+      "guard.npz": {
+        "size": 7371770,
+        "sha256": "850fddd2352375529a257a930c05452a16dd10065d12716dafee2bba8e83e92f"
+      },
+      "final_state.npz": {
+        "size": 5039,
+        "sha256": "7d1dfa8a98f2de0b2675cd8ca889959446798d4baa5500d8630477ead3a89d5b"
+      }
+    }
+  },
+  {
+    "case": "elbow-ample",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/elbow-ample/elbow-ample/B",
+    "files": {
+      "metrics.json": {
+        "size": 2171,
+        "sha256": "a5941443e4ea2be7e2e24bccf9c4d0210373d4d7439ab5f8f7e02d487956b050"
+      },
+      "baseline_log.npz": {
+        "size": 35621300,
+        "sha256": "b9a37c01ddb058899bf66f8633ca18d4f94c1c8669cb4e4a2dd78408b574848c"
+      },
+      "metadata.json": {
+        "size": 1878,
+        "sha256": "b10270fa44d7ef6ece788bed7ab40b98ca0b3872f08af24e9f4a7192a8812d64"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "d8ee327c6c1272730d1c9bb3207155d3a5e5cd81dc821a5b4926d1db2c44b13e"
+      },
+      "guard.npz": {
+        "size": 20433366,
+        "sha256": "91ad2ba3afda31d5d5409c70bd7d4492ebe936764965fe47bc756a46be56094e"
+      },
+      "final_state.npz": {
+        "size": 8655,
+        "sha256": "6600c10fcbab9bb79f6f5e39984fdeb4207e7e8418a41e6273eddc0fd8f0299a"
+      }
+    }
+  },
+  {
+    "case": "elbow-ample",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/elbow-ample/elbow-ample/C",
+    "files": {
+      "metrics.json": {
+        "size": 2329,
+        "sha256": "b18d581585983a9737b218c0ae2d134633c4bac6310d678e2eca22c5bfe1b210"
+      },
+      "baseline_log.npz": {
+        "size": 35621297,
+        "sha256": "637ccc0a8398d8ea74656ab03b6ca8f54d64788bcb7e9cff63543c759b7e9abc"
+      },
+      "metadata.json": {
+        "size": 1878,
+        "sha256": "6798cc74a1b0306814592044144d4edd7ad7992cd064b74274383677be599b9f"
+      },
+      "events.json.gz": {
+        "size": 146594,
+        "sha256": "09d93c01cb18172a62b9addea31bcbd93b90efb1386259a2f43093912f0248b4"
+      },
+      "guard.npz": {
+        "size": 20440319,
+        "sha256": "1ccde4a321644434fb78b07daab5c27301d9ce679b98629ca53d35dcb79304ec"
+      },
+      "final_state.npz": {
+        "size": 8774,
+        "sha256": "5879b264d0d0cac9fe2c187b6fdd02242039a14a623bf0a2269dfd82fcf99dd3"
+      }
+    }
+  },
+  {
+    "case": "elbow-ample",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/elbow-ample/elbow-ample/D",
+    "files": {
+      "metrics.json": {
+        "size": 2327,
+        "sha256": "2c708f847d11f477cedb8a288664eecd2b3fe9d1a4def1940890545c954ef9d2"
+      },
+      "baseline_log.npz": {
+        "size": 35621289,
+        "sha256": "514433ec7e6c392a06e40c1979a056a67a1ff62cf3dea25c2b20b093df55f262"
+      },
+      "metadata.json": {
+        "size": 1878,
+        "sha256": "24e54f76d54223ed4ac34a38dab7fae46b2235a267f3ade19c3359ab47240154"
+      },
+      "events.json.gz": {
+        "size": 146594,
+        "sha256": "c6c313062f80bcb2a252f0d59b725ddc19414c4219ded5552bfc2efcaa9950a0"
+      },
+      "guard.npz": {
+        "size": 20441799,
+        "sha256": "0ff81ba795080497e6eff576f1e3d499976a03aa7cda325c8f5479d19fd37d8b"
+      },
+      "final_state.npz": {
+        "size": 8774,
+        "sha256": "5879b264d0d0cac9fe2c187b6fdd02242039a14a623bf0a2269dfd82fcf99dd3"
+      }
+    }
+  },
+  {
+    "case": "elbow-ample",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/elbow-ample/elbow-ample/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2267,
+        "sha256": "40afd02fc1b604d1066c24adaa1ad5733702abde09c31f0bf4ffe3c3948b1922"
+      },
+      "baseline_log.npz": {
+        "size": 35621300,
+        "sha256": "b9a37c01ddb058899bf66f8633ca18d4f94c1c8669cb4e4a2dd78408b574848c"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "b2bb0e55d802d41f70ea03a7f180a982cd0fd5f9a45282bb45678780f7ce6ad2"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "1e750ef007985e22aa7ce692a6c17597e8f9c5fee0f3d3a0744a3d3ca1241040"
+      },
+      "guard.npz": {
+        "size": 7265869,
+        "sha256": "a8f1b5b783bc55a884fb6359345504aa4d193d89b391fe24479b3cb13701bceb"
+      },
+      "final_state.npz": {
+        "size": 5039,
+        "sha256": "7d1dfa8a98f2de0b2675cd8ca889959446798d4baa5500d8630477ead3a89d5b"
+      }
+    }
+  },
+  {
+    "case": "elbow-tight",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/elbow-tight/elbow-tight/A",
+    "files": {
+      "metrics.json": {
+        "size": 4204,
+        "sha256": "cf9c2e093a6f6dd1d7f9964ba6b717a36aa8f5f79640731d5c84032a0947d285"
+      },
+      "baseline_log.npz": {
+        "size": 20305845,
+        "sha256": "d66facda9d98405f2f08f6aa9d56e2c357a881f93e7e80f191b2b51a0758bb67"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "ea61d5d1ba43ebb3c205b186301bfa283ea4918ff66e791bfa222230706e97f0"
+      },
+      "events.json.gz": {
+        "size": 22419,
+        "sha256": "905888f8c8862ff7532e41131daf1c1ed34d8520ee72ca922346204b1e90fb8d"
+      },
+      "guard.npz": {
+        "size": 4161972,
+        "sha256": "559f04d32c955bbc758b32aa2fd14215819a6712407eb8ae04f669203baf235c"
+      },
+      "failure_pre.npz": {
+        "size": 5425,
+        "sha256": "7b975725686217ae0f99b150b30b5b2784b5fd42fbc2c4b0141d2e6d4d2bede6"
+      },
+      "failure.json": {
+        "size": 1259,
+        "sha256": "4033401d1409465a9f48294103be6b12978bc9d581f47817e7db542baf36823f"
+      },
+      "final_state.npz": {
+        "size": 5065,
+        "sha256": "bc4d49c1921c2b5f13d2e217fc7b5756b5d4dd80e9b42f82a51326a19c2934e5"
+      },
+      "failure_complete.npz": {
+        "size": 5258,
+        "sha256": "5b750e81ac74790aa6924cba2ec92d11c42563e838b53f477041dbd9719308e0"
+      }
+    }
+  },
+  {
+    "case": "elbow-tight",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/elbow-tight/elbow-tight/B",
+    "files": {
+      "metrics.json": {
+        "size": 2703,
+        "sha256": "75fc63ee9408056667779bd408d3a87ba7c9ebb2b16c99a0874acaf35679fc33"
+      },
+      "baseline_log.npz": {
+        "size": 19998284,
+        "sha256": "4cf1b3ddc78ab9824f4e557354f84e9d6289f1f570ca27e0f935ac1258713017"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "830c45e3458b8f489da95552ca4dddb82a997675382c7047e9103496147a6420"
+      },
+      "events.json.gz": {
+        "size": 2283,
+        "sha256": "844611759da29877d95f3aa68fbd50c044cb81dcbbdd07e77cb5ddc61acea1a1"
+      },
+      "guard.npz": {
+        "size": 11885255,
+        "sha256": "5bad31278a53d6f3a16594ccfddb4592939db209a80643fee1d2e4afad9e1837"
+      },
+      "failure_pre.npz": {
+        "size": 10995,
+        "sha256": "8bee5966c4b470a82ea38348a0d7033c5f0861a35a28e8c255df333fca406aa1"
+      },
+      "failure.json": {
+        "size": 213,
+        "sha256": "1a76bac98746184aa19b5e4499994ceca90d7dd34026a40461aa7dce11857f56"
+      },
+      "final_state.npz": {
+        "size": 9008,
+        "sha256": "1464b50d35d916bd8b1297cbb8ebb00c0aadabc992cc0b5bb3b3849927773142"
+      },
+      "failure_complete.npz": {
+        "size": 10995,
+        "sha256": "8bee5966c4b470a82ea38348a0d7033c5f0861a35a28e8c255df333fca406aa1"
+      }
+    }
+  },
+  {
+    "case": "elbow-tight",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/elbow-tight/elbow-tight/C",
+    "files": {
+      "metrics.json": {
+        "size": 2403,
+        "sha256": "1249c96dbfbbd941e174a811574353844071b819a14f301af6f958edb070fcb9"
+      },
+      "baseline_log.npz": {
+        "size": 35672790,
+        "sha256": "040882cf107fa0e76e411780d4a25f8090cba0ff8a0f05999637526e88b33c06"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "43e365363972b26877dae17f21fb7f4b5747de7499e924b29ea24d23477039d3"
+      },
+      "events.json.gz": {
+        "size": 134492,
+        "sha256": "46670ce3582c7b15a435613d9b5d17217b00902f84cb75937154779711b1e66d"
+      },
+      "guard.npz": {
+        "size": 20510270,
+        "sha256": "dd6a3b8222f891ce6b207bc369e3d2bece23e169dcb6fae4daa891350780c628"
+      },
+      "final_state.npz": {
+        "size": 8881,
+        "sha256": "0a08ddb777b95c5b6d254093f23e859dca881349b0c027d2d1cd67893cf738ef"
+      }
+    }
+  },
+  {
+    "case": "elbow-tight",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/elbow-tight/elbow-tight/D",
+    "files": {
+      "metrics.json": {
+        "size": 2407,
+        "sha256": "a1deee5b392c2fe27747e39daf31d1a7dca101309cff5fd8c7f3f9310fe910b2"
+      },
+      "baseline_log.npz": {
+        "size": 35672782,
+        "sha256": "1ab152d8e25d4c1a76fb7893f1554bcebfa45865de5eb28efe47e69d80ecf4c2"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "ce8fcff5e8ad3708fe7541a01de65ff41d07732ed0675c5fe4db253925d1ecdc"
+      },
+      "events.json.gz": {
+        "size": 134492,
+        "sha256": "f1d6c625adac38d2a689b99cae87ff0b696b30a6a88175031e606db5e0b9e5b0"
+      },
+      "guard.npz": {
+        "size": 20508722,
+        "sha256": "6ac6624c25067035c3019fb0f0177c74d74575d25e8d199af7dcd20bc6561660"
+      },
+      "final_state.npz": {
+        "size": 8881,
+        "sha256": "0a08ddb777b95c5b6d254093f23e859dca881349b0c027d2d1cd67893cf738ef"
+      }
+    }
+  },
+  {
+    "case": "elbow-tight",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/elbow-tight/elbow-tight/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2277,
+        "sha256": "d47baffbe2715849c9d0228060a6b38a79d5b3638e3ca1c339fab65fffaa14f0"
+      },
+      "baseline_log.npz": {
+        "size": 35621300,
+        "sha256": "b9a37c01ddb058899bf66f8633ca18d4f94c1c8669cb4e4a2dd78408b574848c"
+      },
+      "metadata.json": {
+        "size": 1880,
+        "sha256": "e751dfe52c59320025d144d8e64c3613536294b3214393fd39377317ed5a97ef"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "719d200039cc07e0a508d3d97b9d318306c990e859c2cd65da859eb2562a7dbc"
+      },
+      "guard.npz": {
+        "size": 7259920,
+        "sha256": "d5e2691aeb4391bcc7d48f860d29ebb839ae229f9aec2bf217fcb3d7101a8218"
+      },
+      "final_state.npz": {
+        "size": 5039,
+        "sha256": "e2371ada93b3a5a914b40b840030a21f9acf95cfb9fb2057e49b4af830b113d8"
+      }
+    }
+  },
+  {
+    "case": "historical",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/A",
+    "files": {
+      "metrics.json": {
+        "size": 4213,
+        "sha256": "1cfc018da429777850af58889249c929bb9cb0fa6b890eb69a18374411b4c5a8"
+      },
+      "baseline_log.npz": {
+        "size": 20200811,
+        "sha256": "091adcca950aee60dfc38924a07c6a711623b57610a310cdd70828fd75dd8c87"
+      },
+      "metadata.json": {
+        "size": 1880,
+        "sha256": "9c4cb7ab6491ff0a4bcede2ae32be53c8e9953729044abed3fa70960676c2bd1"
+      },
+      "events.json.gz": {
+        "size": 824,
+        "sha256": "f447c5bb7d416e522ade7e205c6dc20e8768d55fd9756b8420afaf43b9828001"
+      },
+      "guard.npz": {
+        "size": 4071034,
+        "sha256": "6e734661fdc361497d89fdb12bd15192ea5285835603be8e2c82752364c1087d"
+      },
+      "failure_pre.npz": {
+        "size": 5298,
+        "sha256": "86ba4b28ec6a811656c51149a7f1aba79410082bd02b4454ee937fb2dff7998b"
+      },
+      "failure.json": {
+        "size": 1257,
+        "sha256": "465a5e11d611774efd27e004166cfd3c25b24d15d9ec89aa88190bcfef5b8722"
+      },
+      "final_state.npz": {
+        "size": 4917,
+        "sha256": "47a1b28f5d6e5569319d75a28a2790445c2392c012f24a80ae374204ad9b0870"
+      },
+      "failure_complete.npz": {
+        "size": 5106,
+        "sha256": "5546757a63fef886072ff2ec9a7ef5e8464cc3b1ca89953b92c2eb7a2db20b5e"
+      }
+    }
+  },
+  {
+    "case": "historical",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/B",
+    "files": {
+      "metrics.json": {
+        "size": 2404,
+        "sha256": "ea0be45cce7c879175e73051e0ae65b4688b016787e753032c479daece365df9"
+      },
+      "baseline_log.npz": {
+        "size": 20200743,
+        "sha256": "e76d54c6613666f330330f4d92e2ac618bdee6075f4b1e394dcf773f9da66955"
+      },
+      "metadata.json": {
+        "size": 1880,
+        "sha256": "ca6572ba30b37460d8838b4f63f2c5bcfd8774076c84029d980599795f29d192"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "f265dfa27efdd59f4ae6346a9196c7d13de97d00b111f33225207bd34909c9ce"
+      },
+      "guard.npz": {
+        "size": 11890253,
+        "sha256": "1a2c844ca74588e5d4f555c3f45b1b36831c0bc26060976f621ca451da0fb6e8"
+      },
+      "failure_pre.npz": {
+        "size": 10722,
+        "sha256": "e58a964ce6cf4350da2c57350e6acf9b506c8476c16e4ebbabe7a4dd643d922d"
+      },
+      "failure.json": {
+        "size": 212,
+        "sha256": "f331df3858493214ca2cce8037c654da38a4eedb02c99115fae34f6f5a52e6ab"
+      },
+      "final_state.npz": {
+        "size": 8735,
+        "sha256": "b71d697f8f9062ef25920aad6114c9e74b58c7ca844c670e3f4cfcbccdd4d7e0"
+      },
+      "failure_complete.npz": {
+        "size": 10722,
+        "sha256": "e58a964ce6cf4350da2c57350e6acf9b506c8476c16e4ebbabe7a4dd643d922d"
+      }
+    }
+  },
+  {
+    "case": "historical",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/C",
+    "files": {
+      "metrics.json": {
+        "size": 2405,
+        "sha256": "7a792e1bb8052193f350806da78629c292b0d5edc71177f85766f5656c24e2b5"
+      },
+      "baseline_log.npz": {
+        "size": 35636376,
+        "sha256": "4e85e2ef1dbb0411c58126d8d707aa91b9e885cc990195f56c1b93dd6ef78b82"
+      },
+      "metadata.json": {
+        "size": 1880,
+        "sha256": "1c6373c34f3c4a60db988872f4a25c334b79b0f638ec5e20657dd2d293aa535e"
+      },
+      "events.json.gz": {
+        "size": 106962,
+        "sha256": "6a512dffc0b558f112acb1be3d5dbe341b5a56b7fea4aa98e0764bdc2a03b1b7"
+      },
+      "guard.npz": {
+        "size": 20468258,
+        "sha256": "f9d0ecbb3265914a575781bb2c46953cb3ef96269dd1758392c22b2c0db66aa4"
+      },
+      "final_state.npz": {
+        "size": 8860,
+        "sha256": "b18e22c2c9387364886a29762f2543200d16e155cdd45ab7b2207876caf4a702"
+      }
+    }
+  },
+  {
+    "case": "historical",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D",
+    "files": {
+      "metrics.json": {
+        "size": 2403,
+        "sha256": "dacdef97a310a57125a3058912e554e2a5c810b2ea8c7a851d03ecfd1b526942"
+      },
+      "baseline_log.npz": {
+        "size": 35636381,
+        "sha256": "91fe1f2ca59247dddaac8d9eec33185f7b299ca089ee739720b8e2c22abc95b2"
+      },
+      "metadata.json": {
+        "size": 1880,
+        "sha256": "a60ef10c956220717d6e957bb1ebf9a517fda6aab2128dc2f7e445b018691892"
+      },
+      "events.json.gz": {
+        "size": 106962,
+        "sha256": "d234190b6c5ce2ba2b2337e3b0a669982d4e474cba46f116a88690e38791ac0b"
+      },
+      "guard.npz": {
+        "size": 20466973,
+        "sha256": "c970cd4686fbff2a53d7065947d14b2140df17e994a6bb44fc0263ba8007c134"
+      },
+      "final_state.npz": {
+        "size": 8860,
+        "sha256": "b18e22c2c9387364886a29762f2543200d16e155cdd45ab7b2207876caf4a702"
+      }
+    }
+  },
+  {
+    "case": "historical",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2283,
+        "sha256": "c2b59ba3d152b400c4af7b8cf63139d752b73b56514d9ea455ab07d64810edd2"
+      },
+      "baseline_log.npz": {
+        "size": 35623859,
+        "sha256": "73d08055d9c1863a9a155e8a947d2ae742bb7b24fb8ef10e8fa2b862af0909ee"
+      },
+      "metadata.json": {
+        "size": 1881,
+        "sha256": "16fbe9522432bb68e24e8ae60a6b038058611cb57fa900de999ebf8e10c0eb25"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "36fadabc332bd3ab8ffd99433e916863bc305dafc73b0e2e41bb776589b4459b"
+      },
+      "guard.npz": {
+        "size": 7241329,
+        "sha256": "25e81b20bed47ba44a6e82dde40868be836c8d9d826c5d27b28de85c378aa793"
+      },
+      "final_state.npz": {
+        "size": 5046,
+        "sha256": "3898d182d54e5e08bee0c1b888ee28faa373bbefdcfcdad59da710fd689a0663"
+      }
+    }
+  },
+  {
+    "case": "main",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/main/main/A",
+    "files": {
+      "metrics.json": {
+        "size": 2872,
+        "sha256": "122614a4f5e96260deb25da01a2da6427ac81ae2cca086ebca3a06334aac08ad"
+      },
+      "baseline_log.npz": {
+        "size": 35446762,
+        "sha256": "cd2d8e3941bdbd89d3549d442ee4f9f2711cc3d37d4741732d164afea2448d69"
+      },
+      "metadata.json": {
+        "size": 1872,
+        "sha256": "1be1371676216e14fc8986879eb541f4d026e5c52fae98d986319b0a51f259f0"
+      },
+      "events.json.gz": {
+        "size": 101347,
+        "sha256": "97dd6d39a65a163c111b4975872b516edd0687efc36925bfb55865696d582792"
+      },
+      "guard.npz": {
+        "size": 7334193,
+        "sha256": "99a610e5356dc14898aa7f1e564135facb35a3c3d377f30f44a00b33ae64862e"
+      },
+      "final_state.npz": {
+        "size": 5089,
+        "sha256": "213eca339f4323e541d6acd257b51fea3d75243ec89ac14840e889f151c4ee12"
+      }
+    }
+  },
+  {
+    "case": "main",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/main/main/B",
+    "files": {
+      "metrics.json": {
+        "size": 2694,
+        "sha256": "df509d5020c5bec0e4bf92d68840a53574613f3baf261672408c930642ba9010"
+      },
+      "baseline_log.npz": {
+        "size": 19213495,
+        "sha256": "daa85d0f8098af308fa97d0f0ff033faf27f7580e4de7f6a5512aeab6521cec2"
+      },
+      "metadata.json": {
+        "size": 1872,
+        "sha256": "c38e2f3ed51784bbe75524f166f5011f1aa96f7f48deee4b16183626c21fb318"
+      },
+      "events.json.gz": {
+        "size": 1542,
+        "sha256": "92fd070782e6efd1aee01f8e42fec60808ce33cb3d3bb3dccfececd32ae8cc82"
+      },
+      "guard.npz": {
+        "size": 11408087,
+        "sha256": "7237e9bfe6d443f404bb436520f7d742da7d23d1173756ee55bd0abe56ae55f5"
+      },
+      "failure_pre.npz": {
+        "size": 10720,
+        "sha256": "b8c56470e7dc96b2269ab9931b9cf8becabf5737614744021909be854fd7fb72"
+      },
+      "failure.json": {
+        "size": 212,
+        "sha256": "b823bff3bd1a59cb9d1767216c90b85f871f492309e2053b6ed143d80e1807e9"
+      },
+      "final_state.npz": {
+        "size": 8733,
+        "sha256": "30cbd372ce7ea218c49568c48b090721bbd1fadc71bc4b72fd3c8d2be1e3dda9"
+      },
+      "failure_complete.npz": {
+        "size": 10720,
+        "sha256": "b8c56470e7dc96b2269ab9931b9cf8becabf5737614744021909be854fd7fb72"
+      }
+    }
+  },
+  {
+    "case": "main",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/main/main/C",
+    "files": {
+      "metrics.json": {
+        "size": 2398,
+        "sha256": "5ed1c3a255ea502e9d0efe7994ee59dbb4a11831b62f7925539ed79bcdac5aaf"
+      },
+      "baseline_log.npz": {
+        "size": 35643417,
+        "sha256": "e11d63e55d93cffaa16aead92e771b83b14faa5c42909c5bbb1fb869cbf149d3"
+      },
+      "metadata.json": {
+        "size": 1871,
+        "sha256": "568ac70d08131f7e431645f4bb4db4c9569208727a40cddae2edbfc4bec5e16c"
+      },
+      "events.json.gz": {
+        "size": 145793,
+        "sha256": "da2a74b173b0b53c772457a4e3b51f41b0ad51140d30b66f68852979451eafe0"
+      },
+      "guard.npz": {
+        "size": 20579018,
+        "sha256": "a7f9ac482e9a4f3205e4d6b69a5066c3f41e6d580fcc1aec4e2c6e5ed7b73b58"
+      },
+      "final_state.npz": {
+        "size": 8869,
+        "sha256": "58717fdd93606fcb53c598bb618845a12fa44ac9abb120a81d030c25cedc0997"
+      }
+    }
+  },
+  {
+    "case": "main",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/main/main/D",
+    "files": {
+      "metrics.json": {
+        "size": 2396,
+        "sha256": "12b66453e87f7f663cd838a421e1144c7373eeec929ef756cd03bcc473c06d0f"
+      },
+      "baseline_log.npz": {
+        "size": 35643422,
+        "sha256": "642d6083422da0224d15723c00de085b41980cf9474d99c0d3f5116fff7ccd2e"
+      },
+      "metadata.json": {
+        "size": 1872,
+        "sha256": "684fdf8a7d7257c30d1743bd379249cc35acf756d6db9469db98dcbb4633b1dc"
+      },
+      "events.json.gz": {
+        "size": 145793,
+        "sha256": "ce7a844b73d3e4f384e1b0ccb5be19bbfe84d700632fdb34175efca7369ba38f"
+      },
+      "guard.npz": {
+        "size": 20576425,
+        "sha256": "884f7c923d1a675291a88f04aa04d62eea39d07f096d326f044aa2c53e3c0827"
+      },
+      "final_state.npz": {
+        "size": 8869,
+        "sha256": "58717fdd93606fcb53c598bb618845a12fa44ac9abb120a81d030c25cedc0997"
+      }
+    }
+  },
+  {
+    "case": "main",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/main/main/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2276,
+        "sha256": "9e6170f6f6da5e4e6464f785ee2bbcd95afc2f47331346c9a5ae23b4b6edc22d"
+      },
+      "baseline_log.npz": {
+        "size": 35613809,
+        "sha256": "1bdfcb58c68f6a32bc597845b05e94bd38727782a1dc8313f79ab7528f60232b"
+      },
+      "metadata.json": {
+        "size": 1873,
+        "sha256": "193ccbc512dc5e1c62d2b02974735fb343c8e7e43e8dedd23f8066b215f49c04"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "36fadabc332bd3ab8ffd99433e916863bc305dafc73b0e2e41bb776589b4459b"
+      },
+      "guard.npz": {
+        "size": 7272018,
+        "sha256": "d3e64e26c139b0439380aadfb01cd9b3f583e5bfa1d85ef29a5578ac33c94cd2"
+      },
+      "final_state.npz": {
+        "size": 5045,
+        "sha256": "d2be8c22a34d8cc89977d06e6671de0482e6ea623401ddc4f9beaf2634ced44d"
+      }
+    }
+  },
+  {
+    "case": "new-1",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-1/new-1/A",
+    "files": {
+      "metrics.json": {
+        "size": 3764,
+        "sha256": "61a4cc9c1e815fd5e0fc0c5ca44de1fda861322a26007640117f9c9076a7958d"
+      },
+      "baseline_log.npz": {
+        "size": 19905755,
+        "sha256": "20b7f2ca941a2293877fe499486e11216302c21bfb9cb6aa336ab258d4c4626a"
+      },
+      "metadata.json": {
+        "size": 1940,
+        "sha256": "8c4d4a325ffb1f3ee2f76b4859ea37b19431a6fcd4cc6d6e6316206d3a6be134"
+      },
+      "events.json.gz": {
+        "size": 376,
+        "sha256": "e022f128bc0fce7a8f7bee5832eca84c92d29516d8eec5b088a55291f9c2d8dc"
+      },
+      "guard.npz": {
+        "size": 4018204,
+        "sha256": "0aefa0d0b47ce9c3bf6768c5bdb730f13bdc296f7129385fe9e8a3d24b7d08d7"
+      },
+      "failure_pre.npz": {
+        "size": 5292,
+        "sha256": "f609ec417f9146bd4082558a2bd3a716d1528c5e320427f00902f0f7687f2efb"
+      },
+      "failure.json": {
+        "size": 1257,
+        "sha256": "efb72e96c47ca98cb976b7eceba877a72a718af05253ea8f8d219db098d214da"
+      },
+      "final_state.npz": {
+        "size": 4912,
+        "sha256": "66a18e4ee10def41ef961eb8a1dadd4710665dcf242dc40fc74e565ae36ec387"
+      },
+      "failure_complete.npz": {
+        "size": 5114,
+        "sha256": "92685e5d6e136f3da997b24497bf09e61c0f6d4a4391fd21ea00d8fd41101132"
+      }
+    }
+  },
+  {
+    "case": "new-1",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-1/new-1/B",
+    "files": {
+      "metrics.json": {
+        "size": 2395,
+        "sha256": "f49863d8781c8bf3667d4409d7092ea78f6bee20adc6ec37dd12fecbe1cf494b"
+      },
+      "baseline_log.npz": {
+        "size": 19905755,
+        "sha256": "20b7f2ca941a2293877fe499486e11216302c21bfb9cb6aa336ab258d4c4626a"
+      },
+      "metadata.json": {
+        "size": 1940,
+        "sha256": "daf85ace689c62d25d9b129ce2328f1e883f0db02d347efd9d87e6bfe0338a56"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "c05a628ec4d3b5f6d319e790ad6ecc46ed0d7cd9d8f8242909dfab38265bbbc7"
+      },
+      "guard.npz": {
+        "size": 11745894,
+        "sha256": "4e6ce00e82015aef1c692e4938a03975ecbdfc5fd9f4afab3e201b23c25893e7"
+      },
+      "failure_pre.npz": {
+        "size": 10718,
+        "sha256": "7cc1a503bc831fec6c3f32d158a1ac83f695e347385a2243b7833ac4c7768b02"
+      },
+      "failure.json": {
+        "size": 211,
+        "sha256": "153815c1f4e623ef39fc18cbb9ecc360699c1ffc56af1a13e48fc782404ef977"
+      },
+      "final_state.npz": {
+        "size": 8718,
+        "sha256": "a9d4fd56e785ed0fbd8fe7c565fdbdc1d6a9ddc4d55b19ab14c207704a2999a6"
+      },
+      "failure_complete.npz": {
+        "size": 10718,
+        "sha256": "7cc1a503bc831fec6c3f32d158a1ac83f695e347385a2243b7833ac4c7768b02"
+      }
+    }
+  },
+  {
+    "case": "new-1",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-1/new-1/C",
+    "files": {
+      "metrics.json": {
+        "size": 2415,
+        "sha256": "d6458e430ce15a6c9f2bdaab4b822aaaa83463b452a02ea99a4d2d7028abebb0"
+      },
+      "baseline_log.npz": {
+        "size": 35661440,
+        "sha256": "6c58215faf67aa38539b937664b6cd5e16bab27ff437b62b1bc821f2c5f2fe3c"
+      },
+      "metadata.json": {
+        "size": 1940,
+        "sha256": "11d6826b297b353d4450214286148f604839446834d3d1d16962c7e878335ee7"
+      },
+      "events.json.gz": {
+        "size": 150604,
+        "sha256": "003fe9153a5c20c7c48ec97b65d988e4b3d695c31b86fe8b80bce3261a6fe452"
+      },
+      "guard.npz": {
+        "size": 20477962,
+        "sha256": "8183a8b0e3e7b956e81c11873596c096daf71307479376a2c9cdf48bcb5a7b89"
+      },
+      "final_state.npz": {
+        "size": 8835,
+        "sha256": "7d0e94dc6a958612189080844467cdea40ad198f67e47d5d4abfe2008ae5bb50"
+      }
+    }
+  },
+  {
+    "case": "new-1",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-1/new-1/D",
+    "files": {
+      "metrics.json": {
+        "size": 2418,
+        "sha256": "a4957201105e3c5b06bbf78fff305118b6b847c7aa76e579a097ab1bfc440daa"
+      },
+      "baseline_log.npz": {
+        "size": 35661429,
+        "sha256": "91234086761226d22fda9d86d9f713c11c10856d6dc052e54886b8483853e58f"
+      },
+      "metadata.json": {
+        "size": 1939,
+        "sha256": "3977fe15ab977b710ddc5ebb4a014eb9331f968bd70e8ec387f1d231c5a4ee45"
+      },
+      "events.json.gz": {
+        "size": 150604,
+        "sha256": "1d906d33deffd95a9937581cb4bd27ec7a8b0ea19bf3722eb4c97b5d46a58451"
+      },
+      "guard.npz": {
+        "size": 20475780,
+        "sha256": "98ca0ab38214bd3c2a77e8a3b032ed1b9f4826305b5d957181a47894e15ef6fb"
+      },
+      "final_state.npz": {
+        "size": 8835,
+        "sha256": "7d0e94dc6a958612189080844467cdea40ad198f67e47d5d4abfe2008ae5bb50"
+      }
+    }
+  },
+  {
+    "case": "new-1",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-1/new-1/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2274,
+        "sha256": "9fd0650f5dd4d74d32f9aa92ecb3b8579f78ceb40cff6a30d74bbd064fd9c12e"
+      },
+      "baseline_log.npz": {
+        "size": 35628462,
+        "sha256": "f6ad7b3b7e4ea81b9e9684daf6ce3ede47e73693c5d30b17a94d36274873d45a"
+      },
+      "metadata.json": {
+        "size": 1941,
+        "sha256": "c4b8d1a1d57c983d267f3847dc984507284004d8d41acc47b5dab8848b306491"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "36fadabc332bd3ab8ffd99433e916863bc305dafc73b0e2e41bb776589b4459b"
+      },
+      "guard.npz": {
+        "size": 7247858,
+        "sha256": "d5702b9f5cc1b07b0df7902f8576e19eb307a16dac8585e9e04e5af769ac3fd4"
+      },
+      "final_state.npz": {
+        "size": 5044,
+        "sha256": "6df81e91f858d37ff728273ed3a81a98202168bcbee76fe65fac563920d12434"
+      }
+    }
+  },
+  {
+    "case": "new-2",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-2/new-2/A",
+    "files": {
+      "metrics.json": {
+        "size": 2872,
+        "sha256": "641779f6cc881f2c73db301c7e482a8088e82565a4b608d812a2f7a29d5dda53"
+      },
+      "baseline_log.npz": {
+        "size": 35451186,
+        "sha256": "f2e5ff9b394c484e84950ebdff36cf9963665f96cce78bebd0e9afe1d65668e6"
+      },
+      "metadata.json": {
+        "size": 1936,
+        "sha256": "34f19e444cb373cadb51fd4b1593e177efb5df99cc0dade7095e123a3b1f87b6"
+      },
+      "events.json.gz": {
+        "size": 92782,
+        "sha256": "39c2b92b932c99c3d57c1d5f28d11685bbce2809fe0684cb5fd9851bc2af93cc"
+      },
+      "guard.npz": {
+        "size": 7350305,
+        "sha256": "c40f3af9e11499bb5b2238e32d498619128d64a4c4bcb5dd3f678d661e532f9a"
+      },
+      "final_state.npz": {
+        "size": 5100,
+        "sha256": "1e98981a3caa2559dd11b7e5f00de083fa7dae85e23efad05ec91190550ee728"
+      }
+    }
+  },
+  {
+    "case": "new-2",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-2/new-2/B",
+    "files": {
+      "metrics.json": {
+        "size": 2691,
+        "sha256": "8033a269c3b03bddd2b4ea0d46e8a609c9bc539c7b53b8a9d8c3c08e08526b46"
+      },
+      "baseline_log.npz": {
+        "size": 20692912,
+        "sha256": "a3bbe56f4c815d29c10c8c3c56857bfb38abdd3af838e10e9b2671184dfa6b1a"
+      },
+      "metadata.json": {
+        "size": 1936,
+        "sha256": "741701c825571e89757d64badd64647ff1bd28341d109572a84122e45035543b"
+      },
+      "events.json.gz": {
+        "size": 916,
+        "sha256": "1aeb09a078eacf5d30cad202916e767a973bae13d3d87fa5d1a27168861ed663"
+      },
+      "guard.npz": {
+        "size": 12211474,
+        "sha256": "f279cbf186d20f0be1673ff38533771c1c335bc09e63a806db0ab0eab35a442a"
+      },
+      "failure_pre.npz": {
+        "size": 10725,
+        "sha256": "d95b75926f11d7a991658c929f3e40ccb07d0ce34fb344e1798a5d8f4e0c2402"
+      },
+      "failure.json": {
+        "size": 212,
+        "sha256": "102966d4bca1d2823ca329010c70929f308e29ef6eeb305cab7f59d307569fef"
+      },
+      "final_state.npz": {
+        "size": 8726,
+        "sha256": "8d18e915f104a914c01c0b623ec4d7060b383adbaa18a44c21da0d2952be9ad0"
+      },
+      "failure_complete.npz": {
+        "size": 10725,
+        "sha256": "d95b75926f11d7a991658c929f3e40ccb07d0ce34fb344e1798a5d8f4e0c2402"
+      }
+    }
+  },
+  {
+    "case": "new-2",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-2/new-2/C",
+    "files": {
+      "metrics.json": {
+        "size": 2399,
+        "sha256": "b1bbd58df59341396029c5e1d24be1d1c855aa6b50f0d11aa9745149e75fea7f"
+      },
+      "baseline_log.npz": {
+        "size": 35628779,
+        "sha256": "c3c6338428e67e9c09f2966459fd59770524aebe4781de590ff01083bbdcb413"
+      },
+      "metadata.json": {
+        "size": 1935,
+        "sha256": "91461afa8c22a17d07f521518b6d1dbbc155c7ea790076626492d2ebe3157478"
+      },
+      "events.json.gz": {
+        "size": 173834,
+        "sha256": "e8b24ab2ed117e15a0ca4dda88152289feac59881b055c0159102333ac89f694"
+      },
+      "guard.npz": {
+        "size": 20613707,
+        "sha256": "55b222af8c318259d0ab0b9ddd95d8281c55f772e582a0cbea9e46507d16661d"
+      },
+      "final_state.npz": {
+        "size": 8862,
+        "sha256": "388ec858f79749e9756ed9120c067a694d09a40d91c0d72d405371144014f2a6"
+      }
+    }
+  },
+  {
+    "case": "new-2",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-2/new-2/D",
+    "files": {
+      "metrics.json": {
+        "size": 2402,
+        "sha256": "1b91be5f7045286b0b9aa3418a02daa1ca74f8bffa332df088ae9e9a085144df"
+      },
+      "baseline_log.npz": {
+        "size": 35628780,
+        "sha256": "24a2f40f88e670b99e4eedb6d4621c5eae8d62bc678ef225ce5a39ed4f804b67"
+      },
+      "metadata.json": {
+        "size": 1935,
+        "sha256": "e35157b03a6c51c1c63c41f717c642bca62ff498495901cbe9567919f8c3a43f"
+      },
+      "events.json.gz": {
+        "size": 173834,
+        "sha256": "2ce6c795e9911f2fd34e9739cc47dd14a8018eaf547e9ec32f9d9e5e3988979f"
+      },
+      "guard.npz": {
+        "size": 20612130,
+        "sha256": "4ccb3dd1fc2a52365c97c013e5167a4693329bc98bc57ec1431dde5f5efe3fd0"
+      },
+      "final_state.npz": {
+        "size": 8862,
+        "sha256": "388ec858f79749e9756ed9120c067a694d09a40d91c0d72d405371144014f2a6"
+      }
+    }
+  },
+  {
+    "case": "new-2",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-2/new-2/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2278,
+        "sha256": "c7b712b4c626915e8bf87d62a604e81deaf094665de9def87cb296abae77c57e"
+      },
+      "baseline_log.npz": {
+        "size": 35618575,
+        "sha256": "644b2e5a969f480b83465bc19ba065b36e6b583a72b5ac69f7f0d1ee67d5a128"
+      },
+      "metadata.json": {
+        "size": 1937,
+        "sha256": "a58bf36445d7bc39218630146978b46b59421189ced8d3ff60d0d610c4f393f5"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "36fadabc332bd3ab8ffd99433e916863bc305dafc73b0e2e41bb776589b4459b"
+      },
+      "guard.npz": {
+        "size": 7291877,
+        "sha256": "5a866d8bf83ddb2f87d10e477668a10fc8959f8895f395682623306561ed19f0"
+      },
+      "final_state.npz": {
+        "size": 5042,
+        "sha256": "fbc8c20c31d9413b03ebf542e485560f010cb1b3cb05820d7006350791352a7e"
+      }
+    }
+  },
+  {
+    "case": "new-3",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-3/new-3/A",
+    "files": {
+      "metrics.json": {
+        "size": 2903,
+        "sha256": "85a682738a79df75013d47a265e373854000d73275460f3fa2698e404e978b79"
+      },
+      "baseline_log.npz": {
+        "size": 35571872,
+        "sha256": "a98f60d080573084ce4cec0ac8b9673b6314ae6e76f32fd49cb16f03d5818b5a"
+      },
+      "metadata.json": {
+        "size": 1938,
+        "sha256": "602c66139192675a86eee3826fd205b75cce85734ab574f71cef86dcb2123068"
+      },
+      "events.json.gz": {
+        "size": 23755,
+        "sha256": "235d47a99a8b643e11e12fde8b211a03c11d70a3fd422ecd14ec6c58b5de8e5e"
+      },
+      "guard.npz": {
+        "size": 7363210,
+        "sha256": "c3cfc65358750eb51f731f8b441b1944ec103a47af49ff09cc64f57291cb3d99"
+      },
+      "final_state.npz": {
+        "size": 5102,
+        "sha256": "22cfa1e51929460ec013273984fc8991ddb4b33ddc7c6fe943f349e180a2669c"
+      }
+    }
+  },
+  {
+    "case": "new-3",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-3/new-3/B",
+    "files": {
+      "metrics.json": {
+        "size": 2694,
+        "sha256": "5071caddd790ebed4cfb0351d878753e5e5afc52615e5658c504335e93e4763b"
+      },
+      "baseline_log.npz": {
+        "size": 21409073,
+        "sha256": "be0ec3b57d25065cec4d3510cb8225e9312d1afe8084d2989152736422a57245"
+      },
+      "metadata.json": {
+        "size": 1938,
+        "sha256": "b0cb2defbb591d26adb7f5ddf0754040e16a59ed8bf29737dce695cdbb7261ee"
+      },
+      "events.json.gz": {
+        "size": 933,
+        "sha256": "23ae317512f4d21b2cf20d3abaa2f5d4fe754967ebede4f12b69e422a9a27e7a"
+      },
+      "guard.npz": {
+        "size": 12647098,
+        "sha256": "8a2299ebac4d119c58a0f7eb2d869d9f6e1819082abc1d4f3793f2c627cbbeb7"
+      },
+      "failure_pre.npz": {
+        "size": 10731,
+        "sha256": "556368ccca343cc0ee5db41702f50e23fb2d867129caac4124bf076d01dc513c"
+      },
+      "failure.json": {
+        "size": 213,
+        "sha256": "5352d1aecff7dde39ae9afda48aa78842b0c945cec3c9a5d951f176594311d1e"
+      },
+      "final_state.npz": {
+        "size": 8732,
+        "sha256": "d1bf3cfc0eb646aacedad894096089cf706295ad52c9a59640556fdafc032bcf"
+      },
+      "failure_complete.npz": {
+        "size": 10731,
+        "sha256": "556368ccca343cc0ee5db41702f50e23fb2d867129caac4124bf076d01dc513c"
+      }
+    }
+  },
+  {
+    "case": "new-3",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-3/new-3/C",
+    "files": {
+      "metrics.json": {
+        "size": 2405,
+        "sha256": "c9518ba6daef743e2f82dcbfd4d63756a850ef7ec98edf1e23e6fa8255e9e18d"
+      },
+      "baseline_log.npz": {
+        "size": 35659028,
+        "sha256": "fea5f3688c66ecec4118a719b5b26fec656d9031ea8883a52a26e33e9ca9253a"
+      },
+      "metadata.json": {
+        "size": 1938,
+        "sha256": "aace85c1558489349167940d46ed23f330f39cbe8aa99a4c6e11abb4cd072970"
+      },
+      "events.json.gz": {
+        "size": 156481,
+        "sha256": "b583e5c5ed172a4c2b84a3a7b902642431a00b067e4c51b303fd0fac28e2eced"
+      },
+      "guard.npz": {
+        "size": 20487010,
+        "sha256": "dc741bc7767a8f6640042ea6af846defd4edcc641a0beea65313ae3a33a61e45"
+      },
+      "final_state.npz": {
+        "size": 8856,
+        "sha256": "12e62677dcda5c3d31600f9b6660d8fb9531aeba752e8bb0c53b0b66d6686eb7"
+      }
+    }
+  },
+  {
+    "case": "new-3",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-3/new-3/D",
+    "files": {
+      "metrics.json": {
+        "size": 2405,
+        "sha256": "f333a930892db0bf296f5aa3e49b314562a54972733a9fb336c6135357957edf"
+      },
+      "baseline_log.npz": {
+        "size": 35659024,
+        "sha256": "cf01eb1ebcd18d75a6a2a9744260ddcf5ce459c2605a0cec2891b619aee632f0"
+      },
+      "metadata.json": {
+        "size": 1938,
+        "sha256": "4a14f569ff93b6875e050e507d6244c9e10303de436c55f7392cee66474498ce"
+      },
+      "events.json.gz": {
+        "size": 156481,
+        "sha256": "30841354628e99e65cbe653fec830ad4ff28985609a54cbeff3c8508c34ca759"
+      },
+      "guard.npz": {
+        "size": 20483931,
+        "sha256": "1477e7fa5a4a50418dc9b9886152624f902eeec4e7829069dd224d81d39c610e"
+      },
+      "final_state.npz": {
+        "size": 8856,
+        "sha256": "12e62677dcda5c3d31600f9b6660d8fb9531aeba752e8bb0c53b0b66d6686eb7"
+      }
+    }
+  },
+  {
+    "case": "new-3",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/new-3/new-3/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2274,
+        "sha256": "6fd040b2b28316fb45effaa0cef37eafff704dd59990cbeb62f7d21142526d8f"
+      },
+      "baseline_log.npz": {
+        "size": 35621879,
+        "sha256": "cc335f4ce5ba9cd7c66b5f924c3f874c99e81881805be9c5d6ff294d432bf685"
+      },
+      "metadata.json": {
+        "size": 1939,
+        "sha256": "280732ba3c039034ecb3ec91f3a0c7bc588063a4be36d48fedf737fec427967c"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "4d718372bcd3e58131209564cda47987ade1d583ec63a7db43a180ed0e76d9fd"
+      },
+      "guard.npz": {
+        "size": 7277973,
+        "sha256": "d64dfb05236f59c7fc10f9daf010335fc57ad0b17355b6be6244677f25cd8042"
+      },
+      "final_state.npz": {
+        "size": 5047,
+        "sha256": "1f222506539c7f3d75c76eaa0aa57b96a22bd08365617f648098554bb950a216"
+      }
+    }
+  },
+  {
+    "case": "nohuman-ample",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/nohuman-ample/nohuman-ample/A",
+    "files": {
+      "metrics.json": {
+        "size": 2325,
+        "sha256": "1b6bab504657f6c2b386bf15f50ec0d65ce1baa5dcabfb74ff1e94615cb27c67"
+      },
+      "baseline_log.npz": {
+        "size": 35557576,
+        "sha256": "a8dc377500ad772990d40256ce3157aa94e10fa1192723195e57de5c1a873d70"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "758c6c2ffb0c04b63b9c25ea4354b52650d519ccc367075e20c56cab7432d303"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "31b8f5bcae949482fa04d4a687afa5557c553c93a9871080ced96fbb5e6b86a3"
+      },
+      "guard.npz": {
+        "size": 7191479,
+        "sha256": "1a6c98fa9ea48cb980f7c72c68102c7ae01c6cb27dc95d9681981580aafda83f"
+      },
+      "final_state.npz": {
+        "size": 5042,
+        "sha256": "32bb504aa5626097896b269b3ff2fd39677bc6e5ffd4e083cb9f85bc124d00e8"
+      }
+    }
+  },
+  {
+    "case": "nohuman-ample",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/nohuman-ample/nohuman-ample/B",
+    "files": {
+      "metrics.json": {
+        "size": 2083,
+        "sha256": "d7a8e00bd5b155e591a8d56842691449006a7250f1ef6cd8a876d8618e22a009"
+      },
+      "baseline_log.npz": {
+        "size": 35557576,
+        "sha256": "a8dc377500ad772990d40256ce3157aa94e10fa1192723195e57de5c1a873d70"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "46f45aa98828e369f598388118197bdc5a3b6a98f2fcae97129cb93d983c4202"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "1b4ea00e4a2fe41d0d549953634e2597278ae7dd89523bdb157bb0810e8bcb9d"
+      },
+      "guard.npz": {
+        "size": 20005156,
+        "sha256": "3840317440ad9fe495a9be8f3a98b912cce44d69c9c500c14a45955ecd567163"
+      },
+      "final_state.npz": {
+        "size": 8664,
+        "sha256": "bacc7af0b382939f8c354a2eb4d2ecaec2c757c8022d0f1bb428ba1e95940d9b"
+      }
+    }
+  },
+  {
+    "case": "nohuman-ample",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/nohuman-ample/nohuman-ample/C",
+    "files": {
+      "metrics.json": {
+        "size": 2088,
+        "sha256": "011c44751e96b4fc885efcc2b7a68832b91426fa6535fcb1aadd96f937e7bc3d"
+      },
+      "baseline_log.npz": {
+        "size": 35557563,
+        "sha256": "17adef18b8daa26f05c06f78406e789eaca04faa79d8b20ee042cc0ad4cf1c0a"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "370f0e863af1b45b189766e18919c86116973442bf87ea318298e7103f1702b3"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "634d4bc2b4e17ae5a075009ce1e0c140326ffd84b0ad1fdb39cdec35f65c9941"
+      },
+      "guard.npz": {
+        "size": 20008807,
+        "sha256": "b0cb31d0f253be7153c650cc0a246a7cdcdd4eafc2578360d37a37d88f7f773c"
+      },
+      "final_state.npz": {
+        "size": 8786,
+        "sha256": "594494d9a4afb786ca71e856fca774e8497adae6fd251757b878412e49eda92f"
+      }
+    }
+  },
+  {
+    "case": "nohuman-ample",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/nohuman-ample/nohuman-ample/D",
+    "files": {
+      "metrics.json": {
+        "size": 2080,
+        "sha256": "6c2cd2ff407b6aefee1cb0b49a44862cf7b7d9b2f26b428acd97c68506624cc7"
+      },
+      "baseline_log.npz": {
+        "size": 35557563,
+        "sha256": "17adef18b8daa26f05c06f78406e789eaca04faa79d8b20ee042cc0ad4cf1c0a"
+      },
+      "metadata.json": {
+        "size": 1880,
+        "sha256": "1d0ff13772c65dabb669426f6b592957c5e037b41918e9842710657e415f2740"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "219a76ff9340356bbec27b49ad04d6f1762e2b783a1b862eff04e310e8ef9717"
+      },
+      "guard.npz": {
+        "size": 20006521,
+        "sha256": "c6064bd5666cbf3045aad3106cadf87b4adb31b650b486398c38b2ac2b0c5a85"
+      },
+      "final_state.npz": {
+        "size": 8786,
+        "sha256": "594494d9a4afb786ca71e856fca774e8497adae6fd251757b878412e49eda92f"
+      }
+    }
+  },
+  {
+    "case": "nohuman-ample",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/nohuman-ample/nohuman-ample/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2187,
+        "sha256": "0a16db77e2be0e5710bcac8bff828839ec83ed8c090330f1905605c4be39d6d3"
+      },
+      "baseline_log.npz": {
+        "size": 35557576,
+        "sha256": "a8dc377500ad772990d40256ce3157aa94e10fa1192723195e57de5c1a873d70"
+      },
+      "metadata.json": {
+        "size": 1880,
+        "sha256": "49e2ffd8a2295c8715ec78bdbae0e90865539dfd70bc183004bcfe02266528fc"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "234d29dc7ca2962e9ae1082142e2689ba233adbfb451b2c0ce13896d2f063d5e"
+      },
+      "guard.npz": {
+        "size": 7108289,
+        "sha256": "cae2904aa2923e77d4e72f69775d807e0955c577b7e9a4209a8a50d79ccb39ef"
+      },
+      "final_state.npz": {
+        "size": 5042,
+        "sha256": "32bb504aa5626097896b269b3ff2fd39677bc6e5ffd4e083cb9f85bc124d00e8"
+      }
+    }
+  },
+  {
+    "case": "nohuman-zero",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/nohuman-zero/nohuman-zero/A",
+    "files": {
+      "metrics.json": {
+        "size": 2326,
+        "sha256": "8adddaea8be313703f1089de502377abeeea0586297e98b9a82cdcea8f9a489c"
+      },
+      "baseline_log.npz": {
+        "size": 35557566,
+        "sha256": "21bcf185459d452f7491e8b3a44dfaae6c735a147092ab934cabfd28c8fc54dc"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "ec3b42f345332ba390cb8696dd9593573423696677d11b65c9b1bc4786cc5cc6"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "479f17842d27dc0644eb1b40e2fed177bda53d9eda22da48c7284600998c6641"
+      },
+      "guard.npz": {
+        "size": 7190130,
+        "sha256": "7eab943805e273edd92b2b04591a8cf7eca0a68b3b0be66e1fb397dbc046bc28"
+      },
+      "final_state.npz": {
+        "size": 5039,
+        "sha256": "2fea946c4bd162a0e09d3d0f6ff75d2ac9b25576b76d7fe5b167b81bb21a4c20"
+      }
+    }
+  },
+  {
+    "case": "nohuman-zero",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/nohuman-zero/nohuman-zero/B",
+    "files": {
+      "metrics.json": {
+        "size": 2086,
+        "sha256": "fdcf59550592b8f74707cdfa2a12d188247a344fef3efe149ffd0d10483d2952"
+      },
+      "baseline_log.npz": {
+        "size": 35557575,
+        "sha256": "e445a9f7b637f18585f5522a2b27e44ad2d7c8a5d7feab61c440e1754761c95f"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "3f408b2befa9c316f92918eb52ecb5a0a033835aa068c3d51168fb19aeb4087e"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "2a3484063654566e3400357545307f24936772654173bb50fe0a8db06757351b"
+      },
+      "guard.npz": {
+        "size": 20007951,
+        "sha256": "29d9dfbed3499fa4d84bfdebaa469ff2ac6e77da670d11e98afceff057e626e3"
+      },
+      "final_state.npz": {
+        "size": 8661,
+        "sha256": "be67e5d56e4118532bb86abdd1bf3075e3a889fc314d53379fecb76afeed9654"
+      }
+    }
+  },
+  {
+    "case": "nohuman-zero",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/nohuman-zero/nohuman-zero/C",
+    "files": {
+      "metrics.json": {
+        "size": 2085,
+        "sha256": "142243acc5be6d8672fb78fb3e105a09a922536d46225fea1de9f92fa400f750"
+      },
+      "baseline_log.npz": {
+        "size": 35557571,
+        "sha256": "d509ca47ac6fb23cbb82f5020aa11473fff2a8120943a17e1efde09a9678cd89"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "a8fdfab2cc7580f4c6b1d63f30d067961c82e698f80b6cf36dcef397a1e164b0"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "5906672dbc9211ccec65e53df9a9ed48e5787958f8247e4bbc745c8dc644d12a"
+      },
+      "guard.npz": {
+        "size": 20006443,
+        "sha256": "8095ab261ef3afa1ba3006080bd49be97b5f564f35026e59b9b8cef59134bb9a"
+      },
+      "final_state.npz": {
+        "size": 8783,
+        "sha256": "f3c490b0d86426af2a847644a48262e175c5ce2ca52f8c8be5876e830da40565"
+      }
+    }
+  },
+  {
+    "case": "nohuman-zero",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/nohuman-zero/nohuman-zero/D",
+    "files": {
+      "metrics.json": {
+        "size": 2081,
+        "sha256": "ad0c71b632c820bbc4b5b0b04ab6f0f2c8597c182bbe2383e698cb6386c7f1ae"
+      },
+      "baseline_log.npz": {
+        "size": 35557575,
+        "sha256": "fa54d09a9f737a29ad5767656890cb8fc248da9e19325d97678cd32f87c15d13"
+      },
+      "metadata.json": {
+        "size": 1879,
+        "sha256": "841ca3cb92003206f077be4a45c9ef8edd69f36d2df231bda4049c31efbbe0a2"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "9034df10709465e0d727a903cae4cbbce2f1f7c565c338a808fe13c933adf79c"
+      },
+      "guard.npz": {
+        "size": 20010060,
+        "sha256": "acc29f445b7224c2d9b319fdf35363685cbc18dbdc59ea3f2193222cd1cdf0c2"
+      },
+      "final_state.npz": {
+        "size": 8783,
+        "sha256": "f3c490b0d86426af2a847644a48262e175c5ce2ca52f8c8be5876e830da40565"
+      }
+    }
+  },
+  {
+    "case": "nohuman-zero",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/nohuman-zero/nohuman-zero/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2184,
+        "sha256": "b7f3f9524ee274e3f8728ee8cde1033ab0881aa2c13b65eb785b6991f9468b81"
+      },
+      "baseline_log.npz": {
+        "size": 35557566,
+        "sha256": "21bcf185459d452f7491e8b3a44dfaae6c735a147092ab934cabfd28c8fc54dc"
+      },
+      "metadata.json": {
+        "size": 1880,
+        "sha256": "31e1e2dd7c0ded1a4abc19b4c7c8d576632b6201570da6f6b1bc06c0b4c008e9"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "f5dd3e618b93b0addc4fa062fc812e5056ffe9e37611510b7f4e6f6d82500c84"
+      },
+      "guard.npz": {
+        "size": 7105378,
+        "sha256": "3cbc7c03b64ad6c250733b2756e821eaa3d8d96bc9c392e5a92b9f285818bb28"
+      },
+      "final_state.npz": {
+        "size": 5039,
+        "sha256": "2fea946c4bd162a0e09d3d0f6ff75d2ac9b25576b76d7fe5b167b81bb21a4c20"
+      }
+    }
+  },
+  {
+    "case": "reduced-rate",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/reduced-rate/reduced-rate/A",
+    "files": {
+      "metrics.json": {
+        "size": 3780,
+        "sha256": "76fa98be13d9287fc302c6e4be3370dedaa7aa6e5ce5094abc8630b583942049"
+      },
+      "baseline_log.npz": {
+        "size": 19211203,
+        "sha256": "07c389c880c01e581f9409010b0ad08c13c86541c25e27fe3abfb51f3aacf21e"
+      },
+      "metadata.json": {
+        "size": 1881,
+        "sha256": "5f065ce38d263e4840d613d94ce7cba21df6cb96a3079001c926a647ffbc4253"
+      },
+      "events.json.gz": {
+        "size": 374,
+        "sha256": "53427d5087579377f5d7a006d953511fe362464db44a262d60e355df6c61eacf"
+      },
+      "guard.npz": {
+        "size": 3876815,
+        "sha256": "570e3dec553b5d6050ba6dbc1a465d8bc4c8c5b6693874fc40bde52f9d1a0528"
+      },
+      "failure_pre.npz": {
+        "size": 5273,
+        "sha256": "9314ab28ce4fcc814360c96e2dc5ff7ba834e19694b6bcdb51664b578c749691"
+      },
+      "failure.json": {
+        "size": 1259,
+        "sha256": "94aa0ea3524230cc3a74bafd82fdf610f9b605c4b6fda2d433d9c71461b758eb"
+      },
+      "final_state.npz": {
+        "size": 4907,
+        "sha256": "ab46be6b94e673e52f91ebc75431152fa333869b2da9a693d37c65bce2c39c6b"
+      },
+      "failure_complete.npz": {
+        "size": 5096,
+        "sha256": "357f47bd04d089db8dfaecab5ba1d343899962edf942b0d13fb2bbef7f1df952"
+      }
+    }
+  },
+  {
+    "case": "reduced-rate",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/reduced-rate/reduced-rate/B",
+    "files": {
+      "metrics.json": {
+        "size": 7842,
+        "sha256": "6860a4aee010642419dafd4c7b4716de1eb22cb41c4969541bccc4d809cf8c62"
+      },
+      "baseline_log.npz": {
+        "size": 19211203,
+        "sha256": "07c389c880c01e581f9409010b0ad08c13c86541c25e27fe3abfb51f3aacf21e"
+      },
+      "metadata.json": {
+        "size": 1881,
+        "sha256": "f9f12ba47ce45b237d54262a201557e0cc56415c06c52a73dc53d4bc9c70e4fa"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "42f945b23ca38a9145b4ae9ec9a6a3d1d32e316c44fc808abe27f540c7bcea7d"
+      },
+      "guard.npz": {
+        "size": 11403696,
+        "sha256": "cdc8e62e8b5053d5a9d8b7b5c770ecdfd2d046f21970fe2dc050244ffdf16b92"
+      },
+      "failure_pre.npz": {
+        "size": 10697,
+        "sha256": "0cd9ff1a79204aad11bb0785afd448730ba622fe572b76b6710928df1ed07f92"
+      },
+      "failure.json": {
+        "size": 5222,
+        "sha256": "4c06b7602c587aa93280c0492842144869e14649afdd321fb53d4b30655c0b21"
+      },
+      "final_state.npz": {
+        "size": 8709,
+        "sha256": "72bf600674700ab08a7a99cf7dc6832b2bfe6f225dcf4d8a2925dd613cc3da18"
+      },
+      "failure_complete.npz": {
+        "size": 10697,
+        "sha256": "0cd9ff1a79204aad11bb0785afd448730ba622fe572b76b6710928df1ed07f92"
+      }
+    }
+  },
+  {
+    "case": "reduced-rate",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/reduced-rate/reduced-rate/C",
+    "files": {
+      "metrics.json": {
+        "size": 2409,
+        "sha256": "2eb5dd254d18c0faf3ca05e8558159989645f8e6f0ed52bc32dc3772e8ad5f75"
+      },
+      "baseline_log.npz": {
+        "size": 35643421,
+        "sha256": "69adba4cf7fb5376e355b872819ea6b5466c458e75fa5746941ee1b252905acf"
+      },
+      "metadata.json": {
+        "size": 1881,
+        "sha256": "1d5a2cb162c56b6f8aa6426d821974438ec7ba4ffd062e84978657bd1f57e6b4"
+      },
+      "events.json.gz": {
+        "size": 145793,
+        "sha256": "c93dedf8113b62c4c7bac228a1322f0ccc2d6fa966643f7197f924313ca49390"
+      },
+      "guard.npz": {
+        "size": 20564164,
+        "sha256": "7571306353f41c10f92515a07e7fac1803882dc23116f01f4b8198624098c48b"
+      },
+      "final_state.npz": {
+        "size": 8869,
+        "sha256": "58717fdd93606fcb53c598bb618845a12fa44ac9abb120a81d030c25cedc0997"
+      }
+    }
+  },
+  {
+    "case": "reduced-rate",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/reduced-rate/reduced-rate/D",
+    "files": {
+      "metrics.json": {
+        "size": 2410,
+        "sha256": "58ed02e9cbffa0a2a7c8878e489beda70c3e0b3372309596570a0cc96552c00a"
+      },
+      "baseline_log.npz": {
+        "size": 35643421,
+        "sha256": "69adba4cf7fb5376e355b872819ea6b5466c458e75fa5746941ee1b252905acf"
+      },
+      "metadata.json": {
+        "size": 1881,
+        "sha256": "6a58fc8b83954fcc016407c1da8134b7c34ade8b0ce8300ed1c7902d73519fec"
+      },
+      "events.json.gz": {
+        "size": 145793,
+        "sha256": "f69e0042463fced3dee34a54b68cc0280ad15445df2bd4c5a3060a2cfc5a916d"
+      },
+      "guard.npz": {
+        "size": 20551166,
+        "sha256": "00e328b0730a6d1babfd5a804c784e6fda944ac25fba7246e40d71a3dd7b7deb"
+      },
+      "final_state.npz": {
+        "size": 8869,
+        "sha256": "58717fdd93606fcb53c598bb618845a12fa44ac9abb120a81d030c25cedc0997"
+      }
+    }
+  },
+  {
+    "case": "reduced-rate",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/reduced-rate/reduced-rate/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2287,
+        "sha256": "4e1e499f3b71133e9e4e42ec4d69730f509b12406ca5899b2a5b237f58e112ef"
+      },
+      "baseline_log.npz": {
+        "size": 35613813,
+        "sha256": "f8c0d75934648afaeabaa8a2ed3528ad186387e164f01bfdbafe99c300fef170"
+      },
+      "metadata.json": {
+        "size": 1882,
+        "sha256": "6696a212d2c17a0def34e5d0e0d6ea04bd82eafa87fc3d20a9f3e0ec3aeff454"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "57d7c896881421964b5cd7ed0cf6a5221789c831d31eb40296fc5526f6f4d4c0"
+      },
+      "guard.npz": {
+        "size": 7257953,
+        "sha256": "32bda2645649e05e8b9a3d0e4199c8ca9b538f73f75d764c42332ad840790d30"
+      },
+      "final_state.npz": {
+        "size": 5045,
+        "sha256": "d2be8c22a34d8cc89977d06e6671de0482e6ea623401ddc4f9beaf2634ced44d"
+      }
+    }
+  },
+  {
+    "case": "stress",
+    "variant": "A",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/stress/stress/A",
+    "files": {
+      "metrics.json": {
+        "size": 2908,
+        "sha256": "f38ddf32fcd84d477b3a974aced2874d3521445c6c63269d9b861dc58cd28e1d"
+      },
+      "baseline_log.npz": {
+        "size": 35335812,
+        "sha256": "fd902fff5cd8ce7d7d3cde15b28fcff05f001639e01611b2547b1b74e12b4032"
+      },
+      "metadata.json": {
+        "size": 1874,
+        "sha256": "ac0653b410666ea8a172dfe93299eb6b1016069e7255ed43f698616929d4c60f"
+      },
+      "events.json.gz": {
+        "size": 171271,
+        "sha256": "1368e19af3332771ca646bcfded998669b4e927762c97973ffd6f5476463b950"
+      },
+      "guard.npz": {
+        "size": 7316355,
+        "sha256": "93106ac3f6803007c807528a5840abe7a2d8b20d3227b52f46723499e1bac7ff"
+      },
+      "final_state.npz": {
+        "size": 5106,
+        "sha256": "efac1d4d36f013061f7a34a277f264399608ace038c1eaa9f70a22045f6262cc"
+      }
+    }
+  },
+  {
+    "case": "stress",
+    "variant": "B",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/stress/stress/B",
+    "files": {
+      "metrics.json": {
+        "size": 2693,
+        "sha256": "b7e936b6f16046ac064abf19c67f53e1e3ef2342b82040f20af4a27fb5ddfbc5"
+      },
+      "baseline_log.npz": {
+        "size": 17670196,
+        "sha256": "665efeec0342bf1c63c8d6fdfcd76f8a383b4e053dff181ff690656fce0438b8"
+      },
+      "metadata.json": {
+        "size": 1874,
+        "sha256": "fbfd926566041f929f3b04ad38dc244427ee2653515c5682b207c9c048939df6"
+      },
+      "events.json.gz": {
+        "size": 1551,
+        "sha256": "a6ffdfe275b38e2de1553f36ad8998082ebd004893b8a60df3592ccbe1df69c2"
+      },
+      "guard.npz": {
+        "size": 10341575,
+        "sha256": "ed32a3af5e25c7d7027b714fe969af0e2905c882d803989662eafe185b2bf5fb"
+      },
+      "failure_pre.npz": {
+        "size": 10711,
+        "sha256": "d999a7c541f30a84dbf8f4a823ac9916eb0cad05ae9feb590d9ca96f694fc876"
+      },
+      "failure.json": {
+        "size": 212,
+        "sha256": "35b9f0c14dfcd20868913640becc0cba30a5fd65da994e80aa5829b888ecb4a7"
+      },
+      "final_state.npz": {
+        "size": 8720,
+        "sha256": "8d22c949c894961323f35b40c67bf29db7c04eda9cbd72baf2879db826703f43"
+      },
+      "failure_complete.npz": {
+        "size": 10711,
+        "sha256": "d999a7c541f30a84dbf8f4a823ac9916eb0cad05ae9feb590d9ca96f694fc876"
+      }
+    }
+  },
+  {
+    "case": "stress",
+    "variant": "C",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/stress/stress/C",
+    "files": {
+      "metrics.json": {
+        "size": 3406,
+        "sha256": "bbe541905e124454a9e1aed91faf351cb8617c5fb72200abfa0fa587a927e043"
+      },
+      "baseline_log.npz": {
+        "size": 17564015,
+        "sha256": "f40ac6f474a5b3c332cd4d658c5c351f80a05f35f9d16f3172b8dea65ed94159"
+      },
+      "metadata.json": {
+        "size": 1874,
+        "sha256": "6560407fa78033c151a3b4d2a513423bab5ce14f8f7fd2c31dc0cc53243f8fd7"
+      },
+      "events.json.gz": {
+        "size": 9617,
+        "sha256": "5dfb3f70f3f6bfc69f6e440d566f38e78480cb39ff8409c1daf7b4485c7113a4"
+      },
+      "guard.npz": {
+        "size": 10267790,
+        "sha256": "33e8e598e8662e93101a9004d8b0f325e09ee7ecad9d713582b9eab70be0b1b2"
+      },
+      "failure_pre.npz": {
+        "size": 36144,
+        "sha256": "51b09a558c52483553a571f0d212a01636b66f6f309c3fef4b0f2ca87810eb43"
+      },
+      "failure.json": {
+        "size": 954,
+        "sha256": "9c9e53817859d6beff0f8905ffadfc08a97f77539d33562ef5b2becec35b0abf"
+      },
+      "final_state.npz": {
+        "size": 8919,
+        "sha256": "ca41c302a88d7322f081eda2439830729f23dbc51cad7059885c4f8bd8577f15"
+      },
+      "failure_complete.npz": {
+        "size": 36144,
+        "sha256": "51b09a558c52483553a571f0d212a01636b66f6f309c3fef4b0f2ca87810eb43"
+      }
+    }
+  },
+  {
+    "case": "stress",
+    "variant": "D",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/stress/stress/D",
+    "files": {
+      "metrics.json": {
+        "size": 3406,
+        "sha256": "05b3a5f96c23a7cba555a2a37fa17900abd08e244105e4d2a62e674389aa6b23"
+      },
+      "baseline_log.npz": {
+        "size": 17564015,
+        "sha256": "3203a91306f4819bb28d5e22a0ea318138c94f1a65fbc745adf87fc5055348c4"
+      },
+      "metadata.json": {
+        "size": 1874,
+        "sha256": "9cadf6f2dc84a3b83a47f055e3f83bb7d792e9901513510bcbe3d895c62343bc"
+      },
+      "events.json.gz": {
+        "size": 9617,
+        "sha256": "4cab54ca19962b3c09f83c4ec6b6780a520bef635f3f23065036f7eecd0248ae"
+      },
+      "guard.npz": {
+        "size": 10265190,
+        "sha256": "5ec3a020169977e81b123f32c79172607b83c954db3b0dd3e7fe1931c34463b7"
+      },
+      "failure_pre.npz": {
+        "size": 36144,
+        "sha256": "51b09a558c52483553a571f0d212a01636b66f6f309c3fef4b0f2ca87810eb43"
+      },
+      "failure.json": {
+        "size": 954,
+        "sha256": "c4352d20374ee2c571af1d603895eab5471c275e0f385ce36b574d1b94bedc49"
+      },
+      "final_state.npz": {
+        "size": 8919,
+        "sha256": "ca41c302a88d7322f081eda2439830729f23dbc51cad7059885c4f8bd8577f15"
+      },
+      "failure_complete.npz": {
+        "size": 36144,
+        "sha256": "51b09a558c52483553a571f0d212a01636b66f6f309c3fef4b0f2ca87810eb43"
+      }
+    }
+  },
+  {
+    "case": "stress",
+    "variant": "UF",
+    "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/stress/stress/UF",
+    "files": {
+      "metrics.json": {
+        "size": 2277,
+        "sha256": "cdc168569ccc9454ef581467c95fd8a300e242ebbe89f20375fbef07d5a54ab7"
+      },
+      "baseline_log.npz": {
+        "size": 35613813,
+        "sha256": "f8c0d75934648afaeabaa8a2ed3528ad186387e164f01bfdbafe99c300fef170"
+      },
+      "metadata.json": {
+        "size": 1875,
+        "sha256": "4415bc034b6fe7c4cf35f2882d62e74b70a065161548f4dc0db7cb920c40b77a"
+      },
+      "events.json.gz": {
+        "size": 40,
+        "sha256": "b83408488ee5ff76265075a3a317033265ab6d0c95a4d8a463cbce549c42ce90"
+      },
+      "guard.npz": {
+        "size": 7260550,
+        "sha256": "25d37b4d3098456490649f13336e0d48eb0f4b151c170a3a7697bb8436e6238c"
+      },
+      "final_state.npz": {
+        "size": 5045,
+        "sha256": "4f9e55150fc0742558a8336e922dd57f17e8a0f478c988e4b4a48c25723850e0"
+      }
+    }
+  }
+]

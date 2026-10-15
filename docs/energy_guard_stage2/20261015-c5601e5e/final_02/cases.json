@@ -1,0 +1,259 @@
+{
+  "ample": {
+    "magnitude": 5.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 1.0,
+    "rate_factor": 1.0,
+    "name": "ample"
+  },
+  "assist": {
+    "magnitude": -5.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 0.12,
+    "rate_factor": 1.0,
+    "name": "assist"
+  },
+  "elbow-ample": {
+    "magnitude": 5.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link3",
+    "local": [
+      0.02,
+      0.04,
+      0.16
+    ],
+    "budget": 1.0,
+    "rate_factor": 1.0,
+    "name": "elbow-ample"
+  },
+  "elbow-tight": {
+    "magnitude": 5.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link3",
+    "local": [
+      0.02,
+      0.04,
+      0.16
+    ],
+    "budget": 0.12,
+    "rate_factor": 1.0,
+    "name": "elbow-tight"
+  },
+  "historical": {
+    "magnitude": 4.5,
+    "start": 10.1,
+    "ramp": 0.15,
+    "hold": 0.8,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 0.12,
+    "rate_factor": 1.0,
+    "name": "historical"
+  },
+  "main": {
+    "magnitude": 5.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 0.12,
+    "rate_factor": 1.0,
+    "name": "main"
+  },
+  "new-1": {
+    "name": "new-1",
+    "magnitude": 4.681280506285387,
+    "start": 9.934939351352902,
+    "ramp": 0.20540574203531733,
+    "hold": 0.6518109110835791,
+    "direction": [
+      -0.9975429283102776,
+      -0.07005787734549437,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 0.12
+  },
+  "new-2": {
+    "name": "new-2",
+    "magnitude": 3.83271503635153,
+    "start": 10.180920433448298,
+    "ramp": 0.247746819425357,
+    "hold": 0.9997667674952464,
+    "direction": [
+      -0.9964042274246122,
+      0.0847267110795742,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 0.12
+  },
+  "new-3": {
+    "name": "new-3",
+    "magnitude": 4.674678789085766,
+    "start": 10.193174441819695,
+    "ramp": 0.2095998950299397,
+    "hold": 0.9152855894145344,
+    "direction": [
+      -0.9911079926811257,
+      0.1330599370343672,
+      0.0
+    ],
+    "body": "link3",
+    "local": [
+      0.02,
+      0.04,
+      0.16
+    ],
+    "budget": 0.12
+  },
+  "nohuman-ample": {
+    "magnitude": 0.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 1.0,
+    "rate_factor": 1.0,
+    "name": "nohuman-ample"
+  },
+  "nohuman-zero": {
+    "magnitude": 0.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 0.0,
+    "rate_factor": 1.0,
+    "name": "nohuman-zero"
+  },
+  "reduced-rate": {
+    "magnitude": 5.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 0.12,
+    "rate_factor": 0.02,
+    "name": "reduced-rate"
+  },
+  "stress": {
+    "magnitude": 5.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.0,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "budget": 0.001,
+    "rate_factor": 1.0,
+    "name": "stress"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "t": 10.61299999999794,
+  "reason": "energy_infeasible",
+  "diagnostics": {
+    "best_margin": [
+      -6.329042223639572e-05,
+      -6.329042223639572e-05
+    ],
+    "classification": "affine halfspace cannot intersect actuator/rate/trust box; no global nonlinear claim",
+    "attempts": [
+      {
+        "retry": 0,
+        "status": "failed",
+        "accepted": false,
+        "reason": "energy_infeasible",
+        "center": [
+          0.2998496628167457,
+          -52.25074766960856,
+          -0.7153230819397932,
+          20.428286057482765,
+          -0.6898107217921836,
+          -1.3279285019035358,
+          -9.47721985950673e-05
+        ],
+        "rho": [
+          80.0,
+          80.0,
+          60.0,
+          60.0,
+          40.0,
+          20.0,
+          20.0
+        ],
+        "details": {
+          "best_margin": [
+            -6.329042223639572e-05,
+            -6.329042223639572e-05
+          ],
+          "classification": "affine halfspace cannot intersect actuator/rate/trust box; no global nonlinear claim"
+        }
+      }
+    ],
+    "timing_seconds": {
+      "gradient": 0.007991582970134914,
+      "qp": 0.0,
+      "nonlinear": 0.0,
+      "retry": 0.0
+    }
+  },
+  "seconds_failed_tick": 0.008937500067986548
+}
