@@ -29,7 +29,7 @@ those releases; `holding.full_mass_matrix` handles both.
 ```bash
 git clone git@github.com:ROBOWA/Contact-Passivity.git && cd Contact-Passivity
 python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt        # pinned, tested versions
+pip install -r requirements.txt        # pinned, tested versions (matplotlib is optional, plots only)
 ```
 
 Robot meshes and the MJCF are vendored under `assets/kuka_iiwa_14/`, so no
@@ -54,6 +54,8 @@ python -m kuka_table_sim.run viewer
 
 # Approach the table and hold 10 N (headless validation with a time-series log, or live):
 python   -m kuka_table_sim.run --controller force headless --duration 25 --log run.npz --render docs/kuka_force_hold.png
+python   -m kuka_table_sim.run --controller force headless --duration 25 --plot run.png   # log + force/position plot (matplotlib)
+python   -m kuka_table_sim.plot run.npz --out run.png [--show]                             # plot an existing log
 mjpython -m kuka_table_sim.run --controller force viewer
 python   -m kuka_table_sim.run --controller force --slide-distance 0 headless --duration 15          # approach + hold only
 python   -m kuka_table_sim.run --controller force --slide-direction 0 1 0 --slide-distance 0.15 --slide-speed 0.08 --slide-cycles 2 headless --duration 30
@@ -276,6 +278,15 @@ time constant, sliding below ~0.11 m/s stays in the clean viscous regime
 while holding). Anyone studying Coulomb-type friction should treat this as
 a modelling choice and revisit it; the knob is in `assets/kuka_table_scene.xml`.
 
+![Force and position over time while sliding](docs/kuka_force_slide_plot.png)
+
+`python -m kuka_table_sim.plot run.npz` (or `headless --plot run.png`) draws
+the figure above from a log: normal force (FT-sensor estimate, simulator
+truth, desired), tip height against its set-point, tangential position along
+the slide direction against its set-point, and the along/cross-track error,
+with the approach / contact / slide phases shaded. One y-axis per panel.
+matplotlib is an optional dependency (`pip install matplotlib`).
+
 `headless` in this mode prints a report and writes a `.npz` log with `--log`
 (time, phase, sensor and true normal force, desired and commanded force, tip
 position and velocity, set-point `z_d` with its first two derivatives,
@@ -425,8 +436,10 @@ kuka_table_sim/scene.py       paths, TimingConfig, ArmIndex (joint/actuator mapp
 kuka_table_sim/holding.py     HoldingController, Simulation (reset, mj_step1/step2 scheduling)
 kuka_table_sim/force_control.py  ForceApproachController: approach + FT-sensor force hold
 kuka_table_sim/ik.py          solve_site_ik, quat_from_rpy, orientation helpers
+kuka_table_sim/plot.py        force / position figure from a force-controller log (matplotlib)
 kuka_table_sim/run.py         CLI: headless validation / render / log, interactive viewer, ik
 docs/kuka_table_scene.png     render from the holding validation
 docs/kuka_force_hold.png      render at the end of the force-hold validation
+docs/kuka_force_slide_plot.png force / position plot of the default sliding run
 pyproject.toml, requirements.txt
 ```

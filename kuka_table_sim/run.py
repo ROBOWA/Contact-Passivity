@@ -721,6 +721,7 @@ def main(argv: list[str] | None = None) -> int:
     h.add_argument("--duration", type=float, default=10.0, help="simulated seconds")
     h.add_argument("--render", type=Path, default=None, help="write an offscreen PNG of the final state")
     h.add_argument("--log", type=Path, default=None, help="[force] write the per-control-step time series to .npz")
+    h.add_argument("--plot", type=Path, default=None, help="[force] also write a force/position PNG (needs matplotlib; implies a log)")
     h.add_argument("--quiet", action="store_true")
     v = sub.add_parser("viewer", help="interactive passive viewer (mjpython on macOS)")
     v.add_argument("--no-realtime", action="store_true", help="do not pace frames to wall-clock time")
@@ -742,7 +743,14 @@ def main(argv: list[str] | None = None) -> int:
     sim = build_simulation(args)
     if args.cmd == "headless":
         if args.controller == "force":
-            return 0 if run_force_headless(sim, args.duration, args.render, args.log, verbose=not args.quiet) else 1
+            log = args.log if args.log is not None else (args.plot.with_suffix(".npz") if args.plot is not None else None)
+            ok = run_force_headless(sim, args.duration, args.render, log, verbose=not args.quiet)
+            if args.plot is not None:
+                from .plot import plot_log
+                plot_log(log, args.plot)
+                if not args.quiet:
+                    print(f"== plot ==\nwrote {args.plot}")
+            return 0 if ok else 1
         return 0 if run_headless(sim, args.duration, args.render, verbose=not args.quiet) else 1
     run_viewer(sim, realtime=not args.no_realtime, camera=args.camera)
     return 0

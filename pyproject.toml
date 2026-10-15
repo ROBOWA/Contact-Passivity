@@ -12,5 +12,8 @@ dependencies = [
     "numpy>=1.26",
 ]
 
+[project.optional-dependencies]
+plot = ["matplotlib>=3.8"]
+
 [tool.setuptools]
 packages = ["kuka_table_sim"]

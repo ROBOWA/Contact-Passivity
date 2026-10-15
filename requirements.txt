@@ -1,3 +1,5 @@
 # Versions actually tested for the KUKA table scene (macOS 26.2 arm64, Python 3.13.5).
 mujoco==3.15.0
 numpy==2.5.4
+# Optional, for `python -m kuka_table_sim.plot` / `headless --plot` (tested 3.11.2)
+matplotlib==3.11.2
