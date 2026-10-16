@@ -1,0 +1,65 @@
+{
+  "case": "C_blocking",
+  "mode": "K4",
+  "completed_s": 60.00000000019548,
+  "completion": "COMPLETE",
+  "failure": null,
+  "wall_seconds": 207.6344517499674,
+  "tick_seconds": {
+    "median": 0.0031341039575636387,
+    "p95": 0.0054019211849663405,
+    "p99": 0.007300477294484157,
+    "max": 0.05108266696333885
+  },
+  "initial_J": [
+    0.12,
+    0.3,
+    0.3
+  ],
+  "caps_J": [
+    0.15,
+    0.3,
+    0.3
+  ],
+  "final_J": [
+    0.04679123819350859,
+    0.22679123819350955,
+    -4.375347516499286
+  ],
+  "minimum_J": [
+    0.04679123819350859,
+    0.22679123819350955,
+    -4.375347516499286
+  ],
+  "net_outgoing_J": [
+    0.07320876180649173,
+    0.07320876180649173,
+    4.675347516499305
+  ],
+  "gross_outgoing_J": [
+    0.07320876180649173,
+    0.07320876180649173,
+    4.679492407834223
+  ],
+  "discarded_J": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "peak_human_outgoing_W": 0.14822124447831586,
+  "residual_human_max_difference_W": 0.0,
+  "residual_human_difference_work_J": 0.0,
+  "force_max_error_N": 1.6467288555749473,
+  "force_mean_error_N": 0.02339735006671156,
+  "contact_absent_s": 0.0,
+  "measured_progress_m": 1.349130671607928,
+  "reference_progress_m": 1.3491500465911024,
+  "completed_strokes": 13,
+  "intervention_ticks": 40,
+  "qp_attempts": 40,
+  "governor_min_alpha": -4.440892098500626e-16,
+  "max_prediction_error": [
+    0.0,
+    0.0
+  ]
+}

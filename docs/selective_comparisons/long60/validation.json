@@ -1,0 +1,142 @@
+{
+  "K0": {
+    "status": "PASS",
+    "prefix_checks": {
+      "phys__t": true,
+      "phys__q": true,
+      "phys__qd": true,
+      "phys__tau_applied": true,
+      "phys__F_task": true,
+      "ctl__t": true,
+      "ctl__x_d": true,
+      "phys__power": true,
+      "phys__energy": true,
+      "phys__force": true,
+      "ctl__alpha": true,
+      "ctl__tau_exec": true
+    },
+    "unchanged_interaction_controller_model": true,
+    "outcome_matches": true,
+    "completed_s": 60.00000000019548,
+    "completion": "COMPLETE",
+    "post_18s_sliding": {
+      "samples": 168000,
+      "x_span_m": 0.10632588770670492,
+      "moves_positive_x": true,
+      "moves_negative_x": true
+    },
+    "source_sha256": "b98d443a9e4b0acf376dd5ba02f0cb2f2e0b5a1fca5ac9f5d1bee90c3ecf319b"
+  },
+  "K1": {
+    "status": "PASS",
+    "prefix_checks": {
+      "phys__t": true,
+      "phys__q": true,
+      "phys__qd": true,
+      "phys__tau_applied": true,
+      "phys__F_task": true,
+      "ctl__t": true,
+      "ctl__x_d": true,
+      "phys__power": true,
+      "phys__energy": true,
+      "phys__force": true,
+      "ctl__alpha": true,
+      "ctl__tau_exec": true
+    },
+    "unchanged_interaction_controller_model": true,
+    "outcome_matches": true,
+    "completed_s": 10.623999999997915,
+    "completion": "STOP",
+    "post_18s_sliding": {
+      "samples": 0,
+      "x_span_m": 0.0,
+      "moves_positive_x": false,
+      "moves_negative_x": false
+    },
+    "source_sha256": "b98d443a9e4b0acf376dd5ba02f0cb2f2e0b5a1fca5ac9f5d1bee90c3ecf319b"
+  },
+  "K2": {
+    "status": "PASS",
+    "prefix_checks": {
+      "phys__t": true,
+      "phys__q": true,
+      "phys__qd": true,
+      "phys__tau_applied": true,
+      "phys__F_task": true,
+      "ctl__t": true,
+      "ctl__x_d": true,
+      "phys__power": true,
+      "phys__energy": true,
+      "phys__force": true,
+      "ctl__alpha": true,
+      "ctl__tau_exec": true
+    },
+    "unchanged_interaction_controller_model": true,
+    "outcome_matches": true,
+    "completed_s": 60.00000000019548,
+    "completion": "COMPLETE",
+    "post_18s_sliding": {
+      "samples": 168000,
+      "x_span_m": 0.10632588770670492,
+      "moves_positive_x": true,
+      "moves_negative_x": true
+    },
+    "source_sha256": "b98d443a9e4b0acf376dd5ba02f0cb2f2e0b5a1fca5ac9f5d1bee90c3ecf319b"
+  },
+  "K3": {
+    "status": "PASS",
+    "prefix_checks": {
+      "phys__t": true,
+      "phys__q": true,
+      "phys__qd": true,
+      "phys__tau_applied": true,
+      "phys__F_task": true,
+      "ctl__t": true,
+      "ctl__x_d": true,
+      "phys__power": true,
+      "phys__energy": true,
+      "phys__force": true,
+      "ctl__alpha": true,
+      "ctl__tau_exec": true
+    },
+    "unchanged_interaction_controller_model": true,
+    "outcome_matches": true,
+    "completed_s": 10.753999999997612,
+    "completion": "STOP",
+    "post_18s_sliding": {
+      "samples": 0,
+      "x_span_m": 0.0,
+      "moves_positive_x": false,
+      "moves_negative_x": false
+    },
+    "source_sha256": "b98d443a9e4b0acf376dd5ba02f0cb2f2e0b5a1fca5ac9f5d1bee90c3ecf319b"
+  },
+  "K4": {
+    "status": "PASS",
+    "prefix_checks": {
+      "phys__t": true,
+      "phys__q": true,
+      "phys__qd": true,
+      "phys__tau_applied": true,
+      "phys__F_task": true,
+      "ctl__t": true,
+      "ctl__x_d": true,
+      "phys__power": true,
+      "phys__energy": true,
+      "phys__force": true,
+      "ctl__alpha": true,
+      "ctl__tau_exec": true
+    },
+    "unchanged_interaction_controller_model": true,
+    "outcome_matches": true,
+    "completed_s": 60.00000000019548,
+    "completion": "COMPLETE",
+    "post_18s_sliding": {
+      "samples": 168000,
+      "x_span_m": 0.10630877739049616,
+      "moves_positive_x": true,
+      "moves_negative_x": true
+    },
+    "source_sha256": "b98d443a9e4b0acf376dd5ba02f0cb2f2e0b5a1fca5ac9f5d1bee90c3ecf319b"
+  }
+}

@@ -47,3 +47,26 @@ The original live nominal viewer remains available:
 PYTHONDONTWRITEBYTECODE=1 /Users/carl/code/contactSimulation/.venv/bin/mjpython \
   -m kuka_table_sim.run --controller force viewer
 ```
+
+## Longer sliding after the interaction
+
+The main TCP-blocking experiment also has a separate 60-second recording. The
+human-force pulse still ends at 10.9 s, leaving 49.1 s of subsequent sliding.
+The original trajectory already repeats indefinitely (`slide_cycles=0`); only
+the simulation duration is extended. Playback remains at normal speed.
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 /Users/carl/code/contactSimulation/.venv/bin/mjpython \
+  scripts/selective_viewer.py --root results/selective/long60 --mode K4
+```
+
+K0–K4 are available for this longer main experiment. Controllers that stopped
+early retain their actual stop; the extra requested duration does not create
+an unexecuted continuation. The original 18-second report and recordings remain
+separate. To regenerate an extended recording (use a new output directory):
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 /Users/carl/code/contactSimulation/.venv/bin/python \
+  -m kuka_table_sim.selective_experiments case --case C_blocking --mode K4 \
+  --duration 60 --out results/selective/long60/C_blocking/K4
+```
