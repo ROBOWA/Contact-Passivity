@@ -1,0 +1,74 @@
+{
+  "round": 3,
+  "verdict": "PASS",
+  "summary": "Reused exact-source main repeat and fresh no-human, stop and repeated continuous runs verified; 597 headline and 30 common-window checks passed. Charging coverage and torque mapping corrected.",
+  "artifacts": {
+    "corrected_build": "build_round03_02",
+    "report_sha256": "c425fe9f3a44077ce8e6bd3dd988cb6045ca17a843d6af4d80cbdd590e96b92f",
+    "fresh_audit": "support/round03_fresh_audit.json",
+    "replay": "support/new_runs_reproduction_02.json",
+    "bundle_audit": "support/round03_bundle_audit_01.json",
+    "phase_audit": "support/round03_phase_metric_comparison.json"
+  },
+  "commands": [
+    {
+      "command": "scripts/poc_figures_simulate.py run --config .../new_runs_config.json --name help_then_block_01 --out .../help_then_block_01",
+      "exit_status": 0,
+      "process_wall_seconds": 1237.0529952910729,
+      "control_loop_wall_seconds": 1237.053
+    },
+    {
+      "command": "same frozen settings, name/output help_then_block_02",
+      "exit_status": 0,
+      "process_wall_seconds": 1240.5709834160516,
+      "control_loop_wall_seconds": 1240.571
+    },
+    {
+      "command": "fresh_nohuman_D_01",
+      "exit_status": 0
+    },
+    {
+      "command": "fresh_stress_D_01",
+      "exit_status": 2,
+      "expected": "explicit trial stop, retained as stopped"
+    },
+    {
+      "command": "scripts/kuka_poc_figures.py --inputs .../inputs --out .../build_round03_02",
+      "exit_status": 0
+    },
+    {
+      "command": "scripts/poc_figures_audit.py --bundle .../inputs --reported-metrics .../build_round03_01/metrics.json --out .../support/round03_bundle_audit_01.json",
+      "exit_status": 0
+    }
+  ],
+  "checks": [
+    "Exact-source/environment/config main D archived repeat,127non-timing signal/state fields equal to matrix (allowed equivalent checked-fresh exemption)",
+    "Fresh no-human D complete18s and stress D explicit stop9.533s, both bitwise equal to archived counterparts",
+    "Help repeats one continuous history:50guard,69baseline,7initial-state,8final-state fields bytewise equal",
+    "Actual-point J/velocity/power independently reconstructed; measured help and block phase work, no ledger resets",
+    "597 headline plus30 common-window comparisons and12phase metric comparisons; raw energy/caps/stops checked",
+    "Independent actual continuation equal-progress crossings main+.668s and historical+.546s"
+  ],
+  "changes": [
+    "New continuous actual run fills supported F7 subset; no gain/budget/controller changes",
+    "Reproduction-checker NumPy-bool JSON serialization repaired in reporting helper; failed partial artifacts retained and complete_02 proof used",
+    "Crosswalk lists actual fresh sources, correct ungoverned torque intervention and demonstrated bidirectional coverage",
+    "Figure captions consolidated to four sentences and source/report sizes improved"
+  ],
+  "metrics": {
+    "help_incoming_J": 0.062228032911125275,
+    "peak_energy_J": 0.18222803291112508,
+    "net_outgoing_J": 0.11984945588107547,
+    "gross_outgoing_J": 0.18229732623874065,
+    "minimum_energy_J": 0.00015054411892513657,
+    "help_recorded_QP_calls": 0
+  },
+  "pre_post_checks": {
+    "round03_01_to_02_metrics_bytewise_identical": true
+  },
+  "remaining_limitations": [
+    "Fresh runs use the same current-held-force oracle assumption",
+    "New charging demonstrates uncapped signed accounting, not a cap or peak/gross bound",
+    "No new independently configured model mismatch or isolated governor toggle"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "round": 4,
+  "status": "PASS",
+  "scope": "Independent scientific-claim and visual audit of requested pages6,8,9,10 in clean pre-seal build; final review-stamp update still required by workflow.",
+  "build": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01",
+  "report_pdf_sha256": "3b1b262802d5c164e26eec4a67fc58c47334e08bbd6a09ebc28d7804dbee095c",
+  "report_md_sha256": "fe36e2f99764c616bc2d82e733d1804fb7c510ca4c2fdb19dd03a7180495e2d1",
+  "analysis_commit": "1ebec31",
+  "pages": {
+    "6": {
+      "status": "PASS",
+      "family": "F7 continuous help then block",
+      "visual": "Axes, units, floor, phase labels and pulse ramp-out/end markers are readable; full18s executed history shown; ledger not clipped at zero or initial budget.",
+      "claims": [
+        "Helping measured work+.062228J charges.12J to.182228J; same continuous state and ledger history.",
+        "Gross output.182297J exceeds initial.12J; full-run net.119849J remains below signed budget.",
+        "The shaded blocking pulse contains a small positive-power interval; report does not claim all blocking-phase power is negative.",
+        "Repeated executed signals and initial/final states match exactly."
+      ],
+      "raw_evidence": [
+        "round03_phase_replay_audit.json",
+        "round03_fresh_audit.json",
+        "new_runs_reproduction_02.json"
+      ],
+      "image_file": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01/rendered_pages/page-06.png",
+      "image_sha256": "c611fd0f6998a30ef658f8fcc656a43f2a34023cfa3ac3d25a4ac26241e2ea7f"
+    },
+    "8": {
+      "status": "PASS",
+      "family": "Quantitative full/common windows and recovery",
+      "visual": "Parallel tables readable; units and window note present; no clipped columns or peaks.",
+      "claims": [
+        "MainA forceRMSE3.838N/maxerror53.104N/contactabsence1.14975s andD.129N/1.241N/0s agree with independently verified raw figures.",
+        "B ends10.286s; its shortened full-run task aggregate is not compared without explicit common-window table.",
+        "HistoricalA andtiny-budgetD remain stopped, without invented recovery.",
+        "Online tracking error, original reference debt, ordered progress and physical-peak/control-RMSE speed definitions are distinguished.",
+        "Energy/net/gross/power are not conflated."
+      ],
+      "raw_evidence": [
+        "round03_full_bundle_independent.json",
+        "matrix_audit_02.json"
+      ],
+      "image_file": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01/rendered_pages/page-08.png",
+      "image_sha256": "64d7b4cef579fd6d8a81a243836dc1b8f71e51b1f781331899f27791c1e8928d"
+    },
+    "9": {
+      "status": "PASS",
+      "family": "Reserve/governor/progress/timing supplement",
+      "visual": "Four panels remain readable, including log wall-ms ECDF and1ms marker; legend distinguishes executed energy from unexecuted reserve.",
+      "claims": [
+        "C/D0recordedQP calls coexist with626main torque corrections and705interventionticks; no active task-QP superiority claimed.",
+        "Some rejected plans omit QP/attempt timing, so zero recorded calls is explicitly scoped.",
+        "Newhelp has507backup/damping corrections with0recordedQP; no report claim contradicts this distinction.",
+        "Extra physical time.668s/.546s comes from continued states without ledger/controller resets.",
+        "Whole successful control-tick timing median.004415s/p992.544035s/max7.916327s and18000misses do not imply real-time1kHz.",
+        "Current measured worldforce is held in forecast; scripted future force is not supplied."
+      ],
+      "raw_evidence": [
+        "round02_controller_audit.json",
+        "round03_phase_replay_audit.json",
+        "round03_full_bundle_independent.json"
+      ],
+      "image_file": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01/rendered_pages/page-09.png",
+      "image_sha256": "3cca5bd69aaae24b1a2f32d23bddc86dfa8274a304012fc63a4a048e68ada0c1"
+    },
+    "10": {
+      "status": "PASS",
+      "family": "Coverage, four-round status and provenance",
+      "visual": "Coverage table and provenance readable; no overlap/clipped content; currentRound4PENDING is expected before seal.",
+      "claims": [
+        "Independent mismatch/residual and whole-port causal baseline correctly marked missing; E_H=E_R is not mismatch accounting.",
+        "Isolated governor ablation, finite cap andpeak-power/force protection correctly marked missing.",
+        "Global passivity/arbitrary-force robustness/recursive feasibility/hardware1kHz not established.",
+        "Continuous bidirectional charging is demonstrated on exact frozen repeat; per-stage taskQP remains partially tested.",
+        "Original sources/results/reports preserved; rawledgers notlowerclamped; counterfactuals/predictions notexecuted trajectories."
+      ],
+      "raw_evidence": [
+        "round02_controller_audit.json",
+        "round03_phase_replay_audit.json",
+        "round03_full_bundle_independent.json"
+      ],
+      "image_file": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01/rendered_pages/page-10.png",
+      "image_sha256": "281f09b412afc0e09e51af039c033f5cbc9d9fbcbf8296b5efdd7cb3e132f5f5"
+    }
+  },
+  "source_evidence": {
+    "matrix_audit_02.json": "150f22c2807d67d291476fd3d318e5c6c627ca8c2e0ea0cef2ef06c2b1b2c160",
+    "round02_controller_audit.json": "1f44c034830a070433691a6bc50873d2dff24e2ef63d6796b5f85c4b6dfe4a99",
+    "round03_fresh_audit.json": "3f780b8af11a465a3e96c3654c636897f25b4c589d8a9c51b634dd38c7c57f3b",
+    "round03_phase_replay_audit.json": "45aca40a05adee971592cc1a1cf46fd69d4555c81b1730c0e2f1901d29c9d3ce",
+    "round03_full_bundle_independent.json": "b38e17b2386672505242bcdcd7c7d463e24589ba9929a386097264d5a72b723e"
+  },
+  "numerical_recomputation": "Not duplicated:597headline+30common-window independent comparisons already pass; root verifies R3/R4 metrics byte hashes.",
+  "code_changes": "None; frozen audit and numerical/controller sources unchanged.",
+  "editorial_findings": [
+    {
+      "page": 10,
+      "severity": "minor_readability",
+      "finding": "Review summaries contain fused words: and5transparent;26focused;All597headline;and30common-window.",
+      "recommended_correction": "Insert normal word/number spaces in review-summary JSON text before final report regeneration."
+    },
+    {
+      "page": 10,
+      "severity": "historical_status_clarity",
+      "finding": "Round1summary uses present tense F7 remains pending in this draft, while finalF7 is complete.",
+      "recommended_correction": "Use F7 was pending at Round1; preserve historical outcome without suggesting current missing evidence."
+    }
+  ],
+  "unresolved_scientific_or_numerical_errors": []
+}

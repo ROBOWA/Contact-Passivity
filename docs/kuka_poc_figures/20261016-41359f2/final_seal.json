@@ -1,0 +1,39 @@
+{
+  "status": "VERIFIED",
+  "analysis_commit": "8293fde52c2ba149a7f958d6206d648b9e387d4b",
+  "artifact_commit_lookup": "git log -1 --format=%H -- docs/kuka_poc_figures/20261016-41359f2/final/report.pdf",
+  "branch": "feature/kuka-poc-figures-20261016-41359f2",
+  "source_stage2_head": "41359f20430c930eec5afaebffa2cfbc482f07da",
+  "numerical_source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "pdf_sha256": "d9065f1838233704e5a0c9227a40df4b115e258c71fc97b7e5ba56ef9a5b9d68",
+  "manifest_sha256": "3806ba0012a891f8647cca4433b36c90b576d2b64f807b2e85ae031f3b352e3f",
+  "review_summary_sha256": "663019896ee23156fd6bd3c089eee6c4c882927d710a8182c709b0bf42548187",
+  "reproduction_wrapper_sha256": "509c83f44883ba5d6d517a0ec77e7305a351f6d6a9d60fe1f374e43e044614d4",
+  "pages": 10,
+  "figure_sets": 6,
+  "complete_review_rounds": 4,
+  "input_files_hash_verified": 116,
+  "output_files_hash_verified": 62,
+  "independent_headline_checks": 597,
+  "independent_common_window_checks": 30,
+  "phase_work_checks": 12,
+  "focused_test_counts": {
+    "tests": 26,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "all_final_pages_inspected": true,
+  "preservation": {
+    "status": "PASS",
+    "errors": [],
+    "worktrees": 2,
+    "mutable_refs": [
+      "refs/heads/feature/kuka-poc-figures-20261016-41359f2"
+    ],
+    "files": 2774,
+    "bytes": 11103046890
+  },
+  "unresolved_report_errors": [],
+  "publication": "local new branch; no push or merge performed"
+}

@@ -1,0 +1,53 @@
+{
+  "round": 1,
+  "verdict": "PASS",
+  "summary": "Canonical mapping and independent raw metrics passed; elapsed-zero timestamps, curve provenance and PDF legibility corrected. F7 was pending at this round and completed in Round 3.",
+  "artifacts": {
+    "initial": "build_initial_03",
+    "corrected": "build_round01_03",
+    "report_sha256": "d84aee3f353421e2c7bb466c264aa2c620228c33b82906533e442377d730fe9c",
+    "independent_audit": "support/round01_revalidated.json"
+  },
+  "commands": [
+    {
+      "command": "scripts/kuka_poc_figures.py --inputs .../inputs_archived_01 --out .../build_initial_03",
+      "exit_status": 0
+    },
+    {
+      "command": "scripts/kuka_poc_figures.py --inputs .../inputs_archived_01 --out .../build_round01_03",
+      "exit_status": 0
+    },
+    {
+      "command": "scripts/poc_figures_audit.py --bundle .../inputs_archived_01 --reported-metrics .../build_round01_03/metrics.json --out .../support/round01_revalidated.json",
+      "exit_status": 0
+    }
+  ],
+  "checks": [
+    "Six original source/function/scenario/signal crosswalks and C4 naming trap",
+    "132 raw-matrix shared metrics; maximum defect 6.66e-16 within 1e-8",
+    "Independent normalized signals, complete clocks, negative prefixes, exact stop endpoints and common windows",
+    "Task and human ports/frames, raw quadrature and no-cap/no-mismatch semantics",
+    "PDF 10 pages; no missing glyph or overfull warnings; enlarged F8 readable"
+  ],
+  "changes": [
+    "Elapsed recovery returns zero for picosecond timestamp drift; raw energy never clamped",
+    "Machine curve_kind distinguishes offline diagnostic, unexecuted prediction and online references; displayed windows separate from source domains",
+    "Long reproduction command retained in editable Markdown, replaced by readable PDF pointer",
+    "F8 figure aspect, font sizes and report embedding enlarged"
+  ],
+  "pre_post_metrics": {
+    "main_D_force_rmse_N": [
+      0.12852101913540256,
+      0.12852101913540256
+    ],
+    "main_A_min_energy_J": [
+      -1.1133352738751379e-06,
+      -1.1133352738751379e-06
+    ]
+  },
+  "remaining_limitations": [
+    "F4/F6 mismatch mechanism unsupported",
+    "No closed-loop whole-port baseline or isolated governor ablation",
+    "Fresh continuous help/block repetitions pending; final report must include them"
+  ]
+}

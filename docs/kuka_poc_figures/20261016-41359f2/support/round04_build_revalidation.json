@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "curve_contracts_unchanged": true,
+  "curves": 51,
+  "byte_identical_rendered_pages": [
+    "page-01.png",
+    "page-02.png",
+    "page-05.png",
+    "page-06.png",
+    "page-08.png",
+    "page-09.png"
+  ],
+  "changed_pages": [
+    "page-03.png",
+    "page-04.png",
+    "page-07.png",
+    "page-10.png"
+  ],
+  "all10_initial_pages_visually_inspected": true,
+  "corrected_pages_3_4_7_10_visually_inspected": true,
+  "no_pdf_overflow_or_missing_glyphs": true
+}

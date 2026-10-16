@@ -1,0 +1,75 @@
+{
+  "schema": "kuka-poc-round04-canonical-visual-closure-v1",
+  "round": 4,
+  "status": "PASS",
+  "source_commit": "8293fde52c2ba149a7f958d6206d648b9e387d4b",
+  "initial_review": "support/round04_canonical_visual.json",
+  "initial_review_sha256": "2a14fbfdeb255da0c77046144a4a726f7e988aa636076db47347e5a4b756428a",
+  "revalidated_artifact": {
+    "directory": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_02",
+    "pdf_sha256": "0a44f7efdec731c085b015b637140de09ed1c3d4de9bed5244b9f79dca791e68",
+    "crosswalk_sha256": "be3940e21ec0f963c3d4f4b67b8c9605490451763b21f7f7f22246c7183979e2"
+  },
+  "pages": [
+    {
+      "page": 3,
+      "image": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_02/rendered_pages/page-03.png",
+      "image_sha256": "607c905a42dce0ee1ab0ce839024b4b644a0186d6c31c05b278953b1dfbaf894",
+      "visually_inspected_with": "functions.view_image",
+      "status": "PASS",
+      "findings": [
+        "Force legend is outside and above panel (b), leaving the 16.2 s maximum unobscured.",
+        "Full no-human signals, startup integral qualification, floor and units remain legible."
+      ]
+    },
+    {
+      "page": 4,
+      "image": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_02/rendered_pages/page-04.png",
+      "image_sha256": "e3119eb30c9ef7ddc188b0a36534c27be938906dec61e6815b797ef52248acd5",
+      "visually_inspected_with": "functions.view_image",
+      "status": "PASS",
+      "findings": [
+        "Limitation annotation is in empty upper-middle space; full energy-depletion curve is visible.",
+        "Identical H/R, missing mismatch power and separate release anchors remain explicit."
+      ]
+    },
+    {
+      "page": 7,
+      "image": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_02/rendered_pages/page-07.png",
+      "image_sha256": "18e7f6f27eb310732e4761195cec468234fd304b3df268a19787aa86b514f855",
+      "visually_inspected_with": "functions.view_image",
+      "status": "PASS",
+      "findings": [
+        "Position legend is above panel (b); all actual/reference maxima around 12-15.5 s are visible.",
+        "Joint-change legend is above panel (d); first and second D maxima are visible.",
+        "Six panels, physical-time axis, units, force-error extreme and separate release anchors remain readable."
+      ]
+    }
+  ],
+  "unchanged_previously_passed_pages": {
+    "1": true,
+    "2": true,
+    "5": true
+  },
+  "metric_identity_checks": {
+    "metrics.json": {
+      "byte_identical": true,
+      "sha256": "cf47444bf2c18edef074986822504128f82b98a4b09ec1214d24b57bbd05171c"
+    },
+    "common_window_metrics.json": {
+      "byte_identical": true,
+      "sha256": "e098327a47c8437b21ec25fb7ddab14e895b524f77fb9c0e831a39bbb4397578"
+    }
+  },
+  "report_checks": {
+    "pages": 10,
+    "no_overfull_boxes": true,
+    "no_missing_characters": true,
+    "pdfinfo_exit": 0
+  },
+  "scientific_claim_audit": "PASS",
+  "scientific_claim_conclusion": "All previous claim boundaries retained: account identity is not mismatch separation; recorded inactive QP is not superiority; signed energy is not peak power/force or gross-energy protection; stops are not completions; coupled policies are not governor-only ablations.",
+  "reviewer_changes": "none: visual corrections implemented and committed by root; reviewer wrote audit records only",
+  "no_further_change": true,
+  "unresolved_findings": []
+}

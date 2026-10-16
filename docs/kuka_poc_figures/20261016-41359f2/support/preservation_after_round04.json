@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "errors": [],
+  "worktrees": 2,
+  "mutable_refs": [
+    "refs/heads/feature/kuka-poc-figures-20261016-41359f2"
+  ],
+  "files": 2774,
+  "bytes": 11103046890
+}

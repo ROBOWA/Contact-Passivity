@@ -1,0 +1,263 @@
+{
+  "completed_rounds": 4,
+  "rounds": [
+    {
+      "round": 1,
+      "verdict": "PASS",
+      "summary": "Canonical mapping and independent raw metrics passed; elapsed-zero timestamps, curve provenance and PDF legibility corrected. F7 was pending at this round and completed in Round 3.",
+      "artifacts": {
+        "initial": "build_initial_03",
+        "corrected": "build_round01_03",
+        "report_sha256": "d84aee3f353421e2c7bb466c264aa2c620228c33b82906533e442377d730fe9c",
+        "independent_audit": "support/round01_revalidated.json"
+      },
+      "commands": [
+        {
+          "command": "scripts/kuka_poc_figures.py --inputs .../inputs_archived_01 --out .../build_initial_03",
+          "exit_status": 0
+        },
+        {
+          "command": "scripts/kuka_poc_figures.py --inputs .../inputs_archived_01 --out .../build_round01_03",
+          "exit_status": 0
+        },
+        {
+          "command": "scripts/poc_figures_audit.py --bundle .../inputs_archived_01 --reported-metrics .../build_round01_03/metrics.json --out .../support/round01_revalidated.json",
+          "exit_status": 0
+        }
+      ],
+      "checks": [
+        "Six original source/function/scenario/signal crosswalks and C4 naming trap",
+        "132 raw-matrix shared metrics; maximum defect 6.66e-16 within 1e-8",
+        "Independent normalized signals, complete clocks, negative prefixes, exact stop endpoints and common windows",
+        "Task and human ports/frames, raw quadrature and no-cap/no-mismatch semantics",
+        "PDF 10 pages; no missing glyph or overfull warnings; enlarged F8 readable"
+      ],
+      "changes": [
+        "Elapsed recovery returns zero for picosecond timestamp drift; raw energy never clamped",
+        "Machine curve_kind distinguishes offline diagnostic, unexecuted prediction and online references; displayed windows separate from source domains",
+        "Long reproduction command retained in editable Markdown, replaced by readable PDF pointer",
+        "F8 figure aspect, font sizes and report embedding enlarged"
+      ],
+      "pre_post_metrics": {
+        "main_D_force_rmse_N": [
+          0.12852101913540256,
+          0.12852101913540256
+        ],
+        "main_A_min_energy_J": [
+          -1.1133352738751379e-06,
+          -1.1133352738751379e-06
+        ]
+      },
+      "remaining_limitations": [
+        "F4/F6 mismatch mechanism unsupported",
+        "No closed-loop whole-port baseline or isolated governor ablation",
+        "Fresh continuous help/block repetitions pending; final report must include them"
+      ]
+    },
+    {
+      "round": 2,
+      "verdict": "PASS",
+      "summary": "All 13 matched fixtures and five transparent fixture families verified; 26 focused tests passed. F3 startup accounting and release-anchor labels corrected.",
+      "artifacts": {
+        "controller_audit": "support/round02_controller_audit.json",
+        "tests": "support/round02_tests.json",
+        "corrected": "build_round02_02",
+        "report_sha256": "30ee71aea50893a4d74c5492d8b7b2d2b490a36e612743cdd6bedb98d1fbf468"
+      },
+      "commands": [
+        {
+          "command": "standalone controller/config/source/transparency audit (see support/round02_controller_audit.json)",
+          "exit_status": 0
+        },
+        {
+          "command": [
+            "/Users/carl/code/contactSimulation/.venv/bin/python",
+            "-m",
+            "pytest",
+            "-q",
+            "tests/test_poc_figures_audit.py",
+            "tests/test_oracle_physics.py",
+            "tests/test_recorder_infra.py",
+            "tests/test_timing.py",
+            "tests/test_energy_task_qp.py",
+            "--junitxml=docs/kuka_poc_figures/20261016-41359f2/support/round02_tests.xml"
+          ],
+          "exit_status": 0,
+          "tests": {
+            "tests": 26,
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          }
+        },
+        {
+          "command": "scripts/kuka_poc_figures.py --inputs .../inputs_archived_01 --out .../build_round02_02",
+          "exit_status": 0
+        },
+        {
+          "command": "scripts/poc_figures_audit.py --bundle .../inputs_archived_01 --reported-metrics .../build_round02_01/metrics.json --out .../support/round02_revalidated.json",
+          "exit_status": 0
+        }
+      ],
+      "checks": [
+        "All13fixtures identical case/config/assets/source/duration/forecast and initialq/qd across UF/A/B/C/D",
+        "5transparency fixtures x5policies bitwise q/qd/executed torque; alpha1 where implemented",
+        "C=D executed signals bitwise all13; exact human point J/velocity/power checks and current-force-only causal forecasts",
+        "Recorded QP calls distinguish successful, failed, pre-solver infeasible and active-set fallback records",
+        "Known-sign work, short negative prefix, early termination, material-point/moment work, split-stage timing and task-QP tests"
+      ],
+      "changes": [
+        "F3 offline integral explicitly starts at t=0 and includes startup contact work; no closed-loop depletion inference",
+        "Ramp-out onset and pulse-end line styles explicitly labelled",
+        "F3 force-axis range uses ALL raw extrema in displayed task window, excluding startup hidden by the time window"
+      ],
+      "pre_post_metrics": {
+        "main_D_net_outgoing_J": [
+          0.11959082000527274,
+          0.11959082000527274
+        ]
+      },
+      "activity": {
+        "A_recorded_QP_calls": 1354,
+        "B_recorded_QP_calls": 10,
+        "C_recorded_QP_calls": 0,
+        "D_recorded_QP_calls": 0
+      },
+      "remaining_limitations": [
+        "Rejected candidate QP diagnostics can be discarded; zero recorded calls does not rule out all unlogged rejected-plan solver work",
+        "No isolated governor/reserve toggle; multiple declared mechanisms differ",
+        "No logging instrumentation was added to numerical source"
+      ]
+    },
+    {
+      "round": 3,
+      "verdict": "PASS",
+      "summary": "Reused exact-source main repeat and fresh no-human, stop and repeated continuous runs verified; 597 headline and 30 common-window checks passed. Charging coverage and torque mapping corrected.",
+      "artifacts": {
+        "corrected_build": "build_round03_02",
+        "report_sha256": "c425fe9f3a44077ce8e6bd3dd988cb6045ca17a843d6af4d80cbdd590e96b92f",
+        "fresh_audit": "support/round03_fresh_audit.json",
+        "replay": "support/new_runs_reproduction_02.json",
+        "bundle_audit": "support/round03_bundle_audit_01.json",
+        "phase_audit": "support/round03_phase_metric_comparison.json"
+      },
+      "commands": [
+        {
+          "command": "scripts/poc_figures_simulate.py run --config .../new_runs_config.json --name help_then_block_01 --out .../help_then_block_01",
+          "exit_status": 0,
+          "process_wall_seconds": 1237.0529952910729,
+          "control_loop_wall_seconds": 1237.053
+        },
+        {
+          "command": "same frozen settings, name/output help_then_block_02",
+          "exit_status": 0,
+          "process_wall_seconds": 1240.5709834160516,
+          "control_loop_wall_seconds": 1240.571
+        },
+        {
+          "command": "fresh_nohuman_D_01",
+          "exit_status": 0
+        },
+        {
+          "command": "fresh_stress_D_01",
+          "exit_status": 2,
+          "expected": "explicit trial stop, retained as stopped"
+        },
+        {
+          "command": "scripts/kuka_poc_figures.py --inputs .../inputs --out .../build_round03_02",
+          "exit_status": 0
+        },
+        {
+          "command": "scripts/poc_figures_audit.py --bundle .../inputs --reported-metrics .../build_round03_01/metrics.json --out .../support/round03_bundle_audit_01.json",
+          "exit_status": 0
+        }
+      ],
+      "checks": [
+        "Exact-source/environment/config main D archived repeat,127non-timing signal/state fields equal to matrix (allowed equivalent checked-fresh exemption)",
+        "Fresh no-human D complete18s and stress D explicit stop9.533s, both bitwise equal to archived counterparts",
+        "Help repeats one continuous history:50guard,69baseline,7initial-state,8final-state fields bytewise equal",
+        "Actual-point J/velocity/power independently reconstructed; measured help and block phase work, no ledger resets",
+        "597 headline plus30 common-window comparisons and12phase metric comparisons; raw energy/caps/stops checked",
+        "Independent actual continuation equal-progress crossings main+.668s and historical+.546s"
+      ],
+      "changes": [
+        "New continuous actual run fills supported F7 subset; no gain/budget/controller changes",
+        "Reproduction-checker NumPy-bool JSON serialization repaired in reporting helper; failed partial artifacts retained and complete_02 proof used",
+        "Crosswalk lists actual fresh sources, correct ungoverned torque intervention and demonstrated bidirectional coverage",
+        "Figure captions consolidated to four sentences and source/report sizes improved"
+      ],
+      "metrics": {
+        "help_incoming_J": 0.062228032911125275,
+        "peak_energy_J": 0.18222803291112508,
+        "net_outgoing_J": 0.11984945588107547,
+        "gross_outgoing_J": 0.18229732623874065,
+        "minimum_energy_J": 0.00015054411892513657,
+        "help_recorded_QP_calls": 0
+      },
+      "pre_post_checks": {
+        "round03_01_to_02_metrics_bytewise_identical": true
+      },
+      "remaining_limitations": [
+        "Fresh runs use the same current-held-force oracle assumption",
+        "New charging demonstrates uncapped signed accounting, not a cap or peak/gross bound",
+        "No new independently configured model mismatch or isolated governor toggle"
+      ]
+    },
+    {
+      "round": 4,
+      "verdict": "PASS",
+      "summary": "Clean build and all 10 PDF pages inspected; four legend/annotation occlusions corrected. Metrics and curve contracts unchanged; scientific claims and preservation verified.",
+      "source_commit": "8293fde52c2ba149a7f958d6206d648b9e387d4b",
+      "artifacts": {
+        "initial": "build_round04_clean_01",
+        "corrected": "build_round04_clean_02",
+        "corrected_pdf_sha256": "0a44f7efdec731c085b015b637140de09ed1c3d4de9bed5244b9f79dca791e68",
+        "visual_closure": "support/round04_canonical_visual_closure.json",
+        "claims": "support/round04_independent_claims.json",
+        "revalidation": "support/round04_build_revalidation.json",
+        "preservation": "support/preservation_after_round04.json"
+      },
+      "commands": [
+        {
+          "command": "bash docs/kuka_poc_figures/20261016-41359f2/reproduce.sh results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01",
+          "exit_status": 0
+        },
+        {
+          "command": "same documented wrapper, NEW output build_round04_clean_02",
+          "exit_status": 0
+        },
+        {
+          "command": "pdftoppm -r 110 -png <report.pdf> <rendered_pages/page> (automatic in builder)",
+          "exit_status": 0,
+          "pages": 10
+        },
+        {
+          "command": "scripts/poc_figures_preserve.py --verify .../preservation_before.json --mutable-ref refs/heads/feature/kuka-poc-figures-20261016-41359f2 --out .../preservation_after_round04.json",
+          "exit_status": 0
+        }
+      ],
+      "checks": [
+        "Every one of10rendered PDF pages visually inspected; revised3/4/7/10 reinspected",
+        "Legibility, units, source notes, phase/release events, raw extrema, stops, legends and page breaks checked",
+        "All51curve provenance entries unchanged; metrics and common-window JSON bytewise unchanged after plot-only correction",
+        "Code hashes match frozen source8293fde; no PDF overflow or missing-glyph warnings",
+        "H=R cannot support mismatch; zero recorded solver calls cannot show active-QP benefit; net does not bound gross/peak; stops retained; coupled governor/reserve cannot isolate governor",
+        "Original2worktrees2774files11103046890bytes hash-identical; existing protected refs/statuses unchanged"
+      ],
+      "changes": [
+        "Move F3force legend above axis to expose maximum",
+        "Move F4/F6annotation off energy decline into empty region",
+        "Move F8position and total-torque legends into reserved space above axes",
+        "Clarify historical review summaries and correct their spacing"
+      ],
+      "invalidated_checks_and_reruns": "Only plot/report layout changed. Regenerated every figure/PDF/page; compared all metric and curve contracts exactly. Numerical audits and26focused tests remain applicable because calculation/controller sources did not change.",
+      "remaining_limitations": [
+        "Scientifically unsupported whole-port/mismatch/isolated-governor experiments remain explicitly missing",
+        "Recorded solver telemetry for discarded plans incomplete",
+        "No finite cap, human peak-power/force or gross-work bound, arbitrary-force robustness, real-time/hardware or global-passivity claim"
+      ],
+      "unresolved_report_errors": []
+    }
+  ],
+  "status": "VERIFIED"
+}

@@ -1,0 +1,75 @@
+{
+  "round": 2,
+  "verdict": "PASS",
+  "summary": "All 13 matched fixtures and five transparent fixture families verified; 26 focused tests passed. F3 startup accounting and release-anchor labels corrected.",
+  "artifacts": {
+    "controller_audit": "support/round02_controller_audit.json",
+    "tests": "support/round02_tests.json",
+    "corrected": "build_round02_02",
+    "report_sha256": "30ee71aea50893a4d74c5492d8b7b2d2b490a36e612743cdd6bedb98d1fbf468"
+  },
+  "commands": [
+    {
+      "command": "standalone controller/config/source/transparency audit (see support/round02_controller_audit.json)",
+      "exit_status": 0
+    },
+    {
+      "command": [
+        "/Users/carl/code/contactSimulation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_poc_figures_audit.py",
+        "tests/test_oracle_physics.py",
+        "tests/test_recorder_infra.py",
+        "tests/test_timing.py",
+        "tests/test_energy_task_qp.py",
+        "--junitxml=docs/kuka_poc_figures/20261016-41359f2/support/round02_tests.xml"
+      ],
+      "exit_status": 0,
+      "tests": {
+        "tests": 26,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "scripts/kuka_poc_figures.py --inputs .../inputs_archived_01 --out .../build_round02_02",
+      "exit_status": 0
+    },
+    {
+      "command": "scripts/poc_figures_audit.py --bundle .../inputs_archived_01 --reported-metrics .../build_round02_01/metrics.json --out .../support/round02_revalidated.json",
+      "exit_status": 0
+    }
+  ],
+  "checks": [
+    "All13fixtures identical case/config/assets/source/duration/forecast and initialq/qd across UF/A/B/C/D",
+    "5transparency fixtures x5policies bitwise q/qd/executed torque; alpha1 where implemented",
+    "C=D executed signals bitwise all13; exact human point J/velocity/power checks and current-force-only causal forecasts",
+    "Recorded QP calls distinguish successful, failed, pre-solver infeasible and active-set fallback records",
+    "Known-sign work, short negative prefix, early termination, material-point/moment work, split-stage timing and task-QP tests"
+  ],
+  "changes": [
+    "F3 offline integral explicitly starts at t=0 and includes startup contact work; no closed-loop depletion inference",
+    "Ramp-out onset and pulse-end line styles explicitly labelled",
+    "F3 force-axis range uses ALL raw extrema in displayed task window, excluding startup hidden by the time window"
+  ],
+  "pre_post_metrics": {
+    "main_D_net_outgoing_J": [
+      0.11959082000527274,
+      0.11959082000527274
+    ]
+  },
+  "activity": {
+    "A_recorded_QP_calls": 1354,
+    "B_recorded_QP_calls": 10,
+    "C_recorded_QP_calls": 0,
+    "D_recorded_QP_calls": 0
+  },
+  "remaining_limitations": [
+    "Rejected candidate QP diagnostics can be discarded; zero recorded calls does not rule out all unlogged rejected-plan solver work",
+    "No isolated governor/reserve toggle; multiple declared mechanisms differ",
+    "No logging instrumentation was added to numerical source"
+  ]
+}

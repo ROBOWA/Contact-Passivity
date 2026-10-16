@@ -1,0 +1,101 @@
+{
+  "schema": "kuka-poc-round04-canonical-visual-v1",
+  "round": 4,
+  "status": "AWAITING_VISUAL_CORRECTION_REVALIDATION",
+  "source_commit": "1ebec31341211462e765d1b69581a60fecd52c9a",
+  "initial_artifact": {
+    "directory": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01",
+    "pdf_sha256": "3b1b262802d5c164e26eec4a67fc58c47334e08bbd6a09ebc28d7804dbee095c",
+    "crosswalk_sha256": "be3940e21ec0f963c3d4f4b67b8c9605490451763b21f7f7f22246c7183979e2"
+  },
+  "pages": [
+    {
+      "page": 1,
+      "image": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01/rendered_pages/page-01.png",
+      "image_sha256": "846393775a823869d5377fa4ecd963df0b2e875351275f1763e65058b17ce3d2",
+      "visually_inspected_with": "functions.view_image",
+      "status": "PASS",
+      "findings": [
+        "Results and role tables readable; negative A physics energy and explicit stress stop retained.",
+        "13-case completion/stop/energy-invalid and recorded QP counts match the independent audit.",
+        "No active task-QP superiority, independent mismatch accounting or global passivity claimed."
+      ]
+    },
+    {
+      "page": 2,
+      "image": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01/rendered_pages/page-02.png",
+      "image_sha256": "7843b6392e1faef7653cf0fe6b17fd4284ab948223b563891f508028b44b7ee7",
+      "visually_inspected_with": "functions.view_image",
+      "status": "PASS",
+      "findings": [
+        "All six family statuses visible and match crosswalk; none called exact.",
+        "2-DOF C4 correctly identified as C3 implementation with governor ON; legacy scalar C4 excluded.",
+        "Actual link5/link3 human-point power and separate 10 N task contact are stated."
+      ]
+    },
+    {
+      "page": 3,
+      "image": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01/rendered_pages/page-03.png",
+      "image_sha256": "e73055a387420549c4b712e7fbb422171608af26376d7c9985c79feccbec54d2",
+      "visually_inspected_with": "functions.view_image",
+      "status": "CORRECTION_REQUIRED",
+      "findings": [
+        "No-human zero energy and no actual intervention visible; offline integral explicitly begins at t=0 and includes startup work.",
+        "Force-panel upper-right legend obscures the maximum near 16.2 s; root is moving it outside the axis."
+      ]
+    },
+    {
+      "page": 4,
+      "image": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01/rendered_pages/page-04.png",
+      "image_sha256": "712752121c033302e5533d5a990a551855577135ed3767d957cd490374d36aca",
+      "visually_inspected_with": "functions.view_image",
+      "status": "CORRECTION_REQUIRED",
+      "findings": [
+        "Coincident H/R and missing p_delta are explicit; no fabricated zero mismatch trace.",
+        "Lower-left source-limitation annotation obscures the energy decline near 10.1 s; root is moving it into empty upper-middle space."
+      ]
+    },
+    {
+      "page": 5,
+      "image": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01/rendered_pages/page-05.png",
+      "image_sha256": "e0b9f22a4b2775249912986dbd86b008e54e821016ab47906e1f0fa1565be6cc",
+      "visually_inspected_with": "functions.view_image",
+      "status": "PASS",
+      "findings": [
+        "Human-directed power, net/gross output and symlog raw energy legible; all visible axes retain extrema.",
+        "Negative A physics prefix, UF depletion and B actual stop remain visible without padding.",
+        "Ramp-out versus pulse-end styles are identified; no unenforced peak-power threshold appears."
+      ]
+    },
+    {
+      "page": 7,
+      "image": "results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01/rendered_pages/page-07.png",
+      "image_sha256": "df116a58bcbc7b4f664d7aa415ff2bfe8c954e74ebf0f81a75cfc663594de76c",
+      "visually_inspected_with": "functions.view_image",
+      "status": "CORRECTION_REQUIRED",
+      "findings": [
+        "Six panels readable, units and torque-command adaptation explicit; force-error and first command extrema remain inside axes.",
+        "Position-panel upper-right legend obscures maxima around 12-15.5 s; joint-change legend obscures the second D maximum near 14 s.",
+        "Virtual-clock endpoints and coupled-policy limitation explicit; both release anchors and sustained recovery criterion stated.",
+        "Physical time xlabel confirmed in vector PDF and direct figure PNG."
+      ]
+    }
+  ],
+  "scientific_claim_audit": "PASS",
+  "scientific_claim_checks": [
+    "identical H/R does not establish mismatch accounting",
+    "zero recorded QP calls does not establish task-QP superiority",
+    "signed work does not establish power, force or gross-work bounds",
+    "stopped runs are not successful completions",
+    "coupled reserve/governor comparison is not governor-only ablation",
+    "original whole-port baseline is absent and offline integral includes startup"
+  ],
+  "reviewer_code_changes": "none; discussed visual fixes are owned by root",
+  "no_change": false,
+  "pending_revalidation": [
+    "F3 force legend",
+    "F4/F6 annotation",
+    "F8 position and joint-change legends"
+  ],
+  "revalidation": []
+}

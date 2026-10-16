@@ -1,0 +1,55 @@
+{
+  "round": 4,
+  "verdict": "PASS",
+  "summary": "Clean build and all 10 PDF pages inspected; four legend/annotation occlusions corrected. Metrics and curve contracts unchanged; scientific claims and preservation verified.",
+  "source_commit": "8293fde52c2ba149a7f958d6206d648b9e387d4b",
+  "artifacts": {
+    "initial": "build_round04_clean_01",
+    "corrected": "build_round04_clean_02",
+    "corrected_pdf_sha256": "0a44f7efdec731c085b015b637140de09ed1c3d4de9bed5244b9f79dca791e68",
+    "visual_closure": "support/round04_canonical_visual_closure.json",
+    "claims": "support/round04_independent_claims.json",
+    "revalidation": "support/round04_build_revalidation.json",
+    "preservation": "support/preservation_after_round04.json"
+  },
+  "commands": [
+    {
+      "command": "bash docs/kuka_poc_figures/20261016-41359f2/reproduce.sh results/kuka_poc_figures/20261016-41359f2/build_round04_clean_01",
+      "exit_status": 0
+    },
+    {
+      "command": "same documented wrapper, NEW output build_round04_clean_02",
+      "exit_status": 0
+    },
+    {
+      "command": "pdftoppm -r 110 -png <report.pdf> <rendered_pages/page> (automatic in builder)",
+      "exit_status": 0,
+      "pages": 10
+    },
+    {
+      "command": "scripts/poc_figures_preserve.py --verify .../preservation_before.json --mutable-ref refs/heads/feature/kuka-poc-figures-20261016-41359f2 --out .../preservation_after_round04.json",
+      "exit_status": 0
+    }
+  ],
+  "checks": [
+    "Every one of10rendered PDF pages visually inspected; revised3/4/7/10 reinspected",
+    "Legibility, units, source notes, phase/release events, raw extrema, stops, legends and page breaks checked",
+    "All51curve provenance entries unchanged; metrics and common-window JSON bytewise unchanged after plot-only correction",
+    "Code hashes match frozen source8293fde; no PDF overflow or missing-glyph warnings",
+    "H=R cannot support mismatch; zero recorded solver calls cannot show active-QP benefit; net does not bound gross/peak; stops retained; coupled governor/reserve cannot isolate governor",
+    "Original2worktrees2774files11103046890bytes hash-identical; existing protected refs/statuses unchanged"
+  ],
+  "changes": [
+    "Move F3force legend above axis to expose maximum",
+    "Move F4/F6annotation off energy decline into empty region",
+    "Move F8position and total-torque legends into reserved space above axes",
+    "Clarify historical review summaries and correct their spacing"
+  ],
+  "invalidated_checks_and_reruns": "Only plot/report layout changed. Regenerated every figure/PDF/page; compared all metric and curve contracts exactly. Numerical audits and26focused tests remain applicable because calculation/controller sources did not change.",
+  "remaining_limitations": [
+    "Scientifically unsupported whole-port/mismatch/isolated-governor experiments remain explicitly missing",
+    "Recorded solver telemetry for discarded plans incomplete",
+    "No finite cap, human peak-power/force or gross-work bound, arbitrary-force robustness, real-time/hardware or global-passivity claim"
+  ],
+  "unresolved_report_errors": []
+}

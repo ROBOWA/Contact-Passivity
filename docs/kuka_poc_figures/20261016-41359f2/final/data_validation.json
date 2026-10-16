@@ -1,0 +1,1164 @@
+{
+  "status": "PASS",
+  "cases": {
+    "main__UF": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 72000,
+      "control_samples": 18000,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 11295,
+        "v_des_normal_axis": 11295
+      },
+      "minimum_raw_energy_J": -0.12162326607088864
+    },
+    "main__A": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 72000,
+      "control_samples": 18000,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 10152,
+        "v_des_normal_axis": 10152
+      },
+      "minimum_raw_energy_J": -1.1133352738751379e-06
+    },
+    "main__B": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 41144,
+      "control_samples": 10286,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 3581,
+        "v_des_normal_axis": 3581
+      },
+      "minimum_raw_energy_J": 6.2963140951000085e-09
+    },
+    "main__C": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 72000,
+      "control_samples": 18000,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 11295,
+        "v_des_normal_axis": 11295
+      },
+      "minimum_raw_energy_J": 0.00040917999472711575
+    },
+    "main__D": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 72000,
+      "control_samples": 18000,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 11295,
+        "v_des_normal_axis": 11295
+      },
+      "minimum_raw_energy_J": 0.00040917999472711575
+    },
+    "historical__UF": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 72000,
+      "control_samples": 18000,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 11295,
+        "v_des_normal_axis": 11295
+      },
+      "minimum_raw_energy_J": -0.07465391682473146
+    },
+    "historical__A": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 43012,
+      "control_samples": 10753,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 4048,
+        "v_des_normal_axis": 4048
+      },
+      "minimum_raw_energy_J": 2.2500047235834986e-05
+    },
+    "historical__D": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 72000,
+      "control_samples": 18000,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 11295,
+        "v_des_normal_axis": 11295
+      },
+      "minimum_raw_energy_J": 8.766822825698184e-05
+    },
+    "stress__D": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 38132,
+      "control_samples": 9533,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 2828,
+        "v_des_normal_axis": 2828
+      },
+      "minimum_raw_energy_J": 0.0009313803062280012
+    },
+    "nohuman-zero__D": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 72000,
+      "control_samples": 18000,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 11295,
+        "v_des_normal_axis": 11295
+      },
+      "minimum_raw_energy_J": 0.0
+    },
+    "nohuman-ample__D": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 72000,
+      "control_samples": 18000,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 11295,
+        "v_des_normal_axis": 11295
+      },
+      "minimum_raw_energy_J": 1.0
+    },
+    "help-then-block__D": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 72000,
+      "control_samples": 18000,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 11295,
+        "v_des_normal_axis": 11295
+      },
+      "minimum_raw_energy_J": 0.00015054411892480302
+    },
+    "help-then-block-repeat__D": {
+      "status": "PASS",
+      "errors": [],
+      "physics_samples": 72000,
+      "control_samples": 18000,
+      "physics_dt_s": 0.00025,
+      "control_dt_s": 0.001,
+      "retained_all_samples": true,
+      "undefined_normal_reference_samples": {
+        "x_des_normal_axis": 11295,
+        "v_des_normal_axis": 11295
+      },
+      "minimum_raw_energy_J": 0.00015054411892480302
+    }
+  },
+  "metric_comparisons": [
+    {
+      "case": "historical__A",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 4.163336342344337e-17,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__A",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 1.3877787807814457e-17,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__D",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 8.326672684688674e-17,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "historical__UF",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 1.249000902703301e-16,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__A",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 3.0531133177191805e-16,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__B",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 1.3877787807814457e-16,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__C",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 1.3877787807814457e-16,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__D",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 6.661338147750939e-16,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "main__UF",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-ample__D",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "nohuman-zero__D",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 1.3552527156068805e-20,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "stress__D",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 2.7755575615628914e-16,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block__D",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "net_outgoing_J",
+      "absolute_difference": 2.7755575615628914e-16,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "gross_outgoing_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "min_substep_energy_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "force_mae_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "force_max_error_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "measured_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "reference_progress_m",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "contact_absence_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "force_rmse_N",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "tangent_rmse_m_s",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "peak_outgoing_power_W",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "metric": "task_work_in_J",
+      "absolute_difference": 0.0,
+      "tolerance": 1e-08
+    }
+  ],
+  "discrepancies": [],
+  "selected_C_D_bytewise_parity": {
+    "t_phys": true,
+    "h": true,
+    "t_control": true,
+    "power_H": true,
+    "work_H": true,
+    "energy_H": true,
+    "energy_R": true,
+    "force_H": true,
+    "velocity_H": true,
+    "point_H": true,
+    "normal_force": true,
+    "present": true,
+    "task_power": true,
+    "task_work": true,
+    "tcp_position": true,
+    "tcp_velocity": true,
+    "x": true,
+    "v": true,
+    "x_des": true,
+    "v_des": true,
+    "force_des": true,
+    "phase": true,
+    "strokes": true,
+    "s_des": true,
+    "tau_exec": true,
+    "tau_nom": true,
+    "tau_previous": true,
+    "alpha": true,
+    "alpha_target": true,
+    "sigma": true,
+    "reserve": true,
+    "reserve_margin": true,
+    "tau_ungoverned": true,
+    "x_ungoverned": true,
+    "orientation": true,
+    "cross_error": true
+  }
+}

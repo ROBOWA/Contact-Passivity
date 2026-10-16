@@ -1,0 +1,24 @@
+{
+  "round": 4,
+  "status": "PASS",
+  "checks": {
+    "final_page10_visually_inspected": true,
+    "all_four_rounds_display_PASS": true,
+    "review_status_VERIFIED": true,
+    "historical_F7_pending_uses_past_tense": true,
+    "fused_word_findings_closed": true,
+    "page10_readable_without_overlap_or_clipping": true,
+    "coverage_gaps_and_limitations_remain_explicit": true
+  },
+  "inspected_image": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/docs/kuka_poc_figures/20261016-41359f2/final/rendered_pages/page-10.png",
+  "artifacts": {
+    "rendered_pages/page-10.png": "40aad6fc91f2a5735abc4e056a6bf2d37b8d5957918bb5bb0d5c25cef06154bd",
+    "report.pdf": "d9065f1838233704e5a0c9227a40df4b115e258c71fc97b7e5ba56ef9a5b9d68",
+    "report.md": "d0bf9284778586e861c5e7f6fc895ba08b05d1e26efd58e85b87d2b4bc9ad383",
+    "review_summary.json": "663019896ee23156fd6bd3c089eee6c4c882927d710a8182c709b0bf42548187"
+  },
+  "previous_findings": "Both page-10 editorial findings from round04_independent_claims.json are closed: normal word/number spacing and explicit historical Round 1 F7 status.",
+  "visual_outcome": "All four review verdicts read PASS. The summaries, coverage table, provenance and reproduction paragraph are legible and fit on page 10.",
+  "scope": "Final-summary closure only. No numerical audit was repeated, and no source or report file was edited.",
+  "unresolved_findings": []
+}
