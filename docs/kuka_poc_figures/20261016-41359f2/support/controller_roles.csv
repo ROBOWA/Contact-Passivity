@@ -1,0 +1,11 @@
+system,paper_or_variant_label,implementation,meaning,accounts,governor,mapping_limit
+2-DOF,C0,C0_nominal,Nominal force/motion controller,none,off,"KUKA UF is the matched nominal reference role, with a different robot/controller"
+2-DOF,C1,C1_whole_port_qp,Whole measured contact-port QP,E_W,off,No KUKA equivalent; offline work is diagnostic only
+2-DOF,C2,C2_residual_qp,Model-aware residual-only QP,E_R,off,No KUKA independent mismatch-residual equivalent
+2-DOF,C3,C3_dual_ledger_qp,Independent human/residual QP and human power row,E_H and E_R,off,No exact KUKA controller equivalent
+2-DOF,C4,C3_dual_ledger_qp,Same QP as 2-DOF C3; only governor enabled,E_H and E_R,on,Legacy C4_dual_ledger_safe_scalar is excluded
+KUKA,UF,OracleFilter(mode=off),Matched unfiltered reference; actual signed accounts logged,E_H=E_R monitored,off,Useful nominal comparison; no enforced energy limit
+KUKA,A,OracleFilter(mode=active),Frozen Stage 1 endpoint joint-torque QP,E_H=E_R endpoints,off,Can violate a physics prefix while endpoints pass
+KUKA,B,EnergyGuard(variant=B),Physics-prefix enforcement and nonlinear replay,E_H=E_R every physics prefix,off,No reserve/governor; may explicitly stop
+KUKA,C,EnergyGuard(variant=C),B plus verified finite-horizon backup reserve and virtual-time governor,E_H=E_R every physics prefix,"on, coupled to reserve/backup",Backup/reaction-path task checks already exist in C
+KUKA,D,EnergyGuard(variant=D),C plus explicit per-stage nonlinear task acceptance and QP task rows,E_H=E_R every physics prefix,"on, same as C",Zero recorded selected-path QP solves in archived D matrix; equality with C is retained

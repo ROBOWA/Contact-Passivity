@@ -1,0 +1,77 @@
+{
+  "status": "PASS",
+  "comparisons": [
+    {
+      "case": "help-then-block__D",
+      "phase": "helping",
+      "metric": "signed_incoming_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block__D",
+      "phase": "helping",
+      "metric": "net_outgoing_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block__D",
+      "phase": "helping",
+      "metric": "gross_outgoing_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block__D",
+      "phase": "blocking",
+      "metric": "signed_incoming_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block__D",
+      "phase": "blocking",
+      "metric": "net_outgoing_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block__D",
+      "phase": "blocking",
+      "metric": "gross_outgoing_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "phase": "helping",
+      "metric": "signed_incoming_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "phase": "helping",
+      "metric": "net_outgoing_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "phase": "helping",
+      "metric": "gross_outgoing_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "phase": "blocking",
+      "metric": "signed_incoming_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "phase": "blocking",
+      "metric": "net_outgoing_J",
+      "absolute_defect": 0.0
+    },
+    {
+      "case": "help-then-block-repeat__D",
+      "phase": "blocking",
+      "metric": "gross_outgoing_J",
+      "absolute_defect": 0.0
+    }
+  ]
+}

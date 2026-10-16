@@ -1,0 +1,149 @@
+{
+  "status": "PASS",
+  "purpose": "Canonical 2-DOF references only; no reference traces or numbers substituted for KUKA outputs",
+  "files": [
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/A_exact_no_human/C0_nominal/log.npz",
+      "sha256": "f2902f0faccb6a178935e234370f29130ef52d87ad27ced61523d4f7ba8b5f7f",
+      "samples": 14000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 0.0,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/A_exact_no_human/C1_whole_port_qp/log.npz",
+      "sha256": "6ca9be6d8a2632cd566dd091cf4390acbd2c5169b308a4052cbf73e1679a8751",
+      "samples": 14000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 0.0,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/A_exact_no_human/C3_dual_ledger_qp/log.npz",
+      "sha256": "6bba2837adefb8b7f558ac9ee154af8689cde82bce75d78837598f1e9fdbfe3d",
+      "samples": 14000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 0.0,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/B_mismatch_no_human/C1_whole_port_qp/log.npz",
+      "sha256": "04696b9ce55d560ebc492637f440714c0625de7b3598bd0ef5ee45a6b70b1786",
+      "samples": 15000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 0.0,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/B_mismatch_no_human/C3_dual_ledger_qp/log.npz",
+      "sha256": "53f84f6efeefc050d9015ac672c8f1d3b9f7c0b45aad7a5152e55b23cd871a4f",
+      "samples": 15000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 0.0,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/C_oracle_blocking/C0_nominal/log.npz",
+      "sha256": "4420bb507a1aab70c43c88f6d4dd4119a220ea76e3f8e5f7cab0dd92a974160f",
+      "samples": 12000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 2.5308736803166826e-17,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/C_oracle_blocking/C2_residual_qp/log.npz",
+      "sha256": "d7786f3325a8fb5897a7e29882d93ae6814081b2dbf2b954d17ef1ffaf51df2d",
+      "samples": 12000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 2.2185546613673472e-17,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/C_oracle_blocking/C3_dual_ledger_qp/log.npz",
+      "sha256": "f86abce29acc8c8da81ccf2ef03ec898c614fb73f019fe45387358214a942a4b",
+      "samples": 12000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 1.2619532661797205e-17,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/D_mismatch_blocking/C3_dual_ledger_qp/log.npz",
+      "sha256": "f3f32f3e15bf112be7d834c2717435fcef8c7d8b52c9908e5ac13bb2951b30cb",
+      "samples": 12000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 2.220446049250313e-16,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/F_helping_blocking/C3_dual_ledger_qp/log.npz",
+      "sha256": "cce6160e6128379e96eaa7f0a995e80536ef03e28c54f5d370201dd465eaca2c",
+      "samples": 14000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 1.3004437816719168e-17,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/governor_compare/C3_dual_ledger_qp/governor_off/log.npz",
+      "sha256": "99edf5ccf6800b28ee33507252aed2cf3b92f98bb39e7cb70f4065f5257925c6",
+      "samples": 12000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 1.2619532661797205e-17,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation/results_passivation_iter2/governor_compare/C3_dual_ledger_qp/governor_on/log.npz",
+      "sha256": "d0f42c6e1e25c284baf427b55b7648b100562c64b82edaa0e1435a31134c0216",
+      "samples": 12000,
+      "dt_s": 0.001,
+      "time_monotonic": true,
+      "time_increment_defect_s": 5.542441505745899e-16,
+      "human_residual_mismatch_identity_defect_W": 1.3257507780663442e-17,
+      "task_target_N": 5.0,
+      "nominal_tangential_speed_m_s": 0.05
+    }
+  ],
+  "checks": {
+    "all12_files_exist": true,
+    "time_monotonic": true,
+    "p_R_equals_p_H_plus_p_delta_to_1e_12W": true,
+    "paper_C4_uses_same_C3_implementation": true
+  },
+  "source_citations": [
+    "paper/README.md:53-58",
+    "mujoco_sliding/experiments.py:466-484",
+    "mujoco_sliding/passivity_qp.py:789-798"
+  ]
+}

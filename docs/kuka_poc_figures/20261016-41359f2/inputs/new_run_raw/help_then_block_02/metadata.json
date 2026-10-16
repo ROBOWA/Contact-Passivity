@@ -1,0 +1,143 @@
+{
+  "commit": "41359f20430c930eec5afaebffa2cfbc482f07da",
+  "branch": "feature/kuka-poc-figures-20261016-41359f2",
+  "dirty": false,
+  "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "source_end_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "case": {
+    "name": "help-then-block",
+    "magnitude": 5.0,
+    "start": 9.5,
+    "ramp": 0.2,
+    "hold": 1.8000000000000012,
+    "direction": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "budget": 0.12,
+    "rate_factor": 1.0,
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "profile": [
+      {
+        "name": "helping",
+        "start": 9.5,
+        "ramp": 0.2,
+        "hold": 0.2,
+        "magnitude": 5.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "name": "blocking",
+        "start": 10.3,
+        "ramp": 0.2,
+        "hold": 1.0,
+        "magnitude": 5.0,
+        "direction": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "envelope_only": true
+  },
+  "variant": "D",
+  "config": {
+    "transition": 0.1,
+    "damping": 40.0,
+    "horizons": [
+      0.02,
+      0.05,
+      0.1,
+      0.25,
+      0.5,
+      1.0,
+      2.0
+    ],
+    "terminal_persistence": 0.02,
+    "terminal_speed": 0.001,
+    "terminal_power": 0.002,
+    "terminal_tool_speed": 0.001,
+    "terminal_angular_speed": 0.01,
+    "energy_margin": 1e-08,
+    "reserve_margin": 1e-05,
+    "force_lower": 7.0,
+    "force_upper": 13.0,
+    "normal_speed": 0.005,
+    "orientation": 0.03490658503988659,
+    "cross_error": 0.003,
+    "task_start": 8.71,
+    "energy_tolerance": 1e-10,
+    "torque_tolerance": 1e-07,
+    "task_tolerance": 1e-07,
+    "eta": 0.02,
+    "retries": 3,
+    "targets": [
+      1.0,
+      0.5,
+      0.0
+    ],
+    "task_weight": 1.0,
+    "rate_factor": 1.0
+  },
+  "duration": 18.0,
+  "versions": {
+    "python": "3.13.5",
+    "mujoco": "3.15.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "osqp": "1.1.3"
+  },
+  "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+  "asset_hashes": {
+    "kuka_table_scene.xml": "918d95d6836c2147",
+    "iiwa14_torque.xml": "b1315d433880f305",
+    "polishing_tool.xml": "62ecf0422cf46708"
+  },
+  "frozen_config_sha256": "63dd644a6d27a789ed1ccb978aaa6991045c4c49f7f493f1bfbb7d5e86e8baa1",
+  "adapter_sha256": "4cb89d0e341a0c70815d3ec20f595eea0047bd078ffbab1d4bb2b5d91ce55936",
+  "profile": [
+    {
+      "name": "helping",
+      "start": 9.5,
+      "ramp": 0.2,
+      "hold": 0.2,
+      "magnitude": 5.0,
+      "direction": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "blocking",
+      "start": 10.3,
+      "ramp": 0.2,
+      "hold": 1.0,
+      "magnitude": 5.0,
+      "direction": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "forecast": "only current measured WORLD force passed to predictor; held through forecasts",
+  "continuous_state": true,
+  "state_resets_after_initialization": 0,
+  "seed": 0,
+  "actual_initial_state_sha256": "7e4b5e203892bee487625c093aa869ab77933c9557a8011d11d8cf51ca2703a8",
+  "runtime_wall_s": 1236.964804999996,
+  "sampling": "pre-integration stage k, post-step signed left-rectangle p_H*h account",
+  "ledger": "uncapped E_H=E_R=.12+sum(p_H*h); no reset across pulses"
+}

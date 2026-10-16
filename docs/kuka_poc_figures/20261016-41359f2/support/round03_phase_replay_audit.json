@@ -1,0 +1,291 @@
+{
+  "status": "PASS",
+  "checks": {
+    "repeated_nontiming_raw_bytewise": true,
+    "help_phase_measured_charging": true,
+    "block_phase_measured_net_discharge": true,
+    "raw_energy_charges_above_initial": true,
+    "same_ledger_history_no_reset": true
+  },
+  "phase_measurements": {
+    "help_then_block_01": {
+      "phases": [
+        {
+          "name": "helping",
+          "window_s": [
+            9.5,
+            10.1
+          ],
+          "physics_samples": 2400,
+          "dt_s": 0.00025,
+          "signed_work_into_robot_J": 0.062228032911125275,
+          "net_outgoing_J": -0.062228032911125275,
+          "gross_outgoing_J": 0.0,
+          "gross_incoming_J": 0.062228032911125275,
+          "energy_before_phase_J": 0.12,
+          "energy_after_phase_J": 0.18222803291112508,
+          "min_power_into_robot_W": 0.0,
+          "max_power_into_robot_W": 0.1721462271468195
+        },
+        {
+          "name": "blocking",
+          "window_s": [
+            10.3,
+            11.700000000000001
+          ],
+          "physics_samples": 5600,
+          "dt_s": 0.00025,
+          "signed_work_into_robot_J": -0.18207748879220073,
+          "net_outgoing_J": 0.18207748879220073,
+          "gross_outgoing_J": 0.18229732623874062,
+          "gross_incoming_J": 0.00021983744653990517,
+          "energy_before_phase_J": 0.18222803291112508,
+          "energy_after_phase_J": 0.00015054411892513657,
+          "min_power_into_robot_W": -0.24117309696926414,
+          "max_power_into_robot_W": 0.006426365587634852
+        }
+      ],
+      "initial_energy_J": 0.12,
+      "peak_raw_energy_J": 0.18222803291112508,
+      "peak_exceeds_initial": true,
+      "final_raw_energy_J": 0.00015054411892513657,
+      "net_outgoing_J": 0.11984945588107547,
+      "gross_outgoing_J": 0.18229732623874065,
+      "force_dot_actual_velocity_max_defect_W": 0.0,
+      "whole_controller_command_correction_ticks": 507,
+      "recorded_selected_qp_timing_ticks": 0,
+      "recorded_selected_gradient_timing_ticks": 0,
+      "backup_status_counts": {
+        "SETTLED": 837,
+        "SETTLED_cached": 1161,
+        "held_zero": 16002
+      },
+      "source_files": {
+        "guard.npz": "4d250d3ccc274bc511b1530944f123089f2dee16bb2738482049adf618952e33",
+        "baseline_log.npz": "446a17d57a56be29b2607e71f0e8f31220e835f1ea6c07126b6c876681792a5c",
+        "metadata.json": "310a5c1229a8c88eee89bbba10b4475d47130e6e3b5ba12f7d9e5f5cb26f0aa2"
+      }
+    },
+    "help_then_block_02": {
+      "phases": [
+        {
+          "name": "helping",
+          "window_s": [
+            9.5,
+            10.1
+          ],
+          "physics_samples": 2400,
+          "dt_s": 0.00025,
+          "signed_work_into_robot_J": 0.062228032911125275,
+          "net_outgoing_J": -0.062228032911125275,
+          "gross_outgoing_J": 0.0,
+          "gross_incoming_J": 0.062228032911125275,
+          "energy_before_phase_J": 0.12,
+          "energy_after_phase_J": 0.18222803291112508,
+          "min_power_into_robot_W": 0.0,
+          "max_power_into_robot_W": 0.1721462271468195
+        },
+        {
+          "name": "blocking",
+          "window_s": [
+            10.3,
+            11.700000000000001
+          ],
+          "physics_samples": 5600,
+          "dt_s": 0.00025,
+          "signed_work_into_robot_J": -0.18207748879220073,
+          "net_outgoing_J": 0.18207748879220073,
+          "gross_outgoing_J": 0.18229732623874062,
+          "gross_incoming_J": 0.00021983744653990517,
+          "energy_before_phase_J": 0.18222803291112508,
+          "energy_after_phase_J": 0.00015054411892513657,
+          "min_power_into_robot_W": -0.24117309696926414,
+          "max_power_into_robot_W": 0.006426365587634852
+        }
+      ],
+      "initial_energy_J": 0.12,
+      "peak_raw_energy_J": 0.18222803291112508,
+      "peak_exceeds_initial": true,
+      "final_raw_energy_J": 0.00015054411892513657,
+      "net_outgoing_J": 0.11984945588107547,
+      "gross_outgoing_J": 0.18229732623874065,
+      "force_dot_actual_velocity_max_defect_W": 0.0,
+      "whole_controller_command_correction_ticks": 507,
+      "recorded_selected_qp_timing_ticks": 0,
+      "recorded_selected_gradient_timing_ticks": 0,
+      "backup_status_counts": {
+        "SETTLED": 837,
+        "SETTLED_cached": 1161,
+        "held_zero": 16002
+      },
+      "source_files": {
+        "guard.npz": "c06f4f0135093880408f5ab29682d045e33ee778fdea7179816bbd1dce07fbc3",
+        "baseline_log.npz": "446a17d57a56be29b2607e71f0e8f31220e835f1ea6c07126b6c876681792a5c",
+        "metadata.json": "fdfe4c9de6e150a6d864434ac0a3e7cffa58bbe9c7e5089739110573113a756d"
+      }
+    }
+  },
+  "repeat_bytewise": {
+    "guard.npz": {
+      "status": "PASS",
+      "compared_fields": 50,
+      "bytewise": {
+        "ctl__predicted_t": true,
+        "ctl__tau_nom": true,
+        "ctl__predicted_prefix": true,
+        "ctl__tau_previous": true,
+        "ctl__cache_hit": true,
+        "ctl__predicted_power": true,
+        "ctl__backup_status": true,
+        "ctl__tau_exec": true,
+        "ctl__energy_after": true,
+        "ctl__tau_ungoverned": true,
+        "ctl__predicted_cross_error": true,
+        "ctl__reserve": true,
+        "ctl__alpha": true,
+        "ctl__predicted_normal_velocity": true,
+        "ctl__predicted_normal_force": true,
+        "ctl__predicted_orientation": true,
+        "ctl__energy_before": true,
+        "ctl__predicted_unexpected": true,
+        "ctl__predicted_present": true,
+        "ctl__actual": true,
+        "ctl__task_work": true,
+        "ctl__min_prefix": true,
+        "ctl__x_ungoverned": true,
+        "ctl__predicted": true,
+        "ctl__predicted_velocity": true,
+        "ctl__alpha_dot": true,
+        "ctl__reserve_margin": true,
+        "ctl__predicted_point": true,
+        "ctl__gross": true,
+        "ctl__alpha_target": true,
+        "ctl__t": true,
+        "ctl__sigma": true,
+        "phys__t": true,
+        "phys__point": true,
+        "phys__velocity": true,
+        "phys__force": true,
+        "phys__power": true,
+        "phys__power_identity": true,
+        "phys__qvel": true,
+        "phys__human_tau": true,
+        "phys__stage": true,
+        "phys__tick": true,
+        "phys__orientation": true,
+        "phys__cross_error": true,
+        "phys__work": true,
+        "phys__energy": true,
+        "phys__normal_force": true,
+        "phys__present": true,
+        "phys__unexpected": true,
+        "phys__torque": true
+      }
+    },
+    "baseline_log.npz": {
+      "status": "PASS",
+      "compared_fields": 69,
+      "bytewise": {
+        "phys__t": true,
+        "phys__q": true,
+        "phys__qd": true,
+        "phys__tcp": true,
+        "phys__tcp_v": true,
+        "phys__tip": true,
+        "phys__present": true,
+        "phys__n_task": true,
+        "phys__n_unexpected": true,
+        "phys__fn_unexpected": true,
+        "phys__F_task": true,
+        "phys__M_task": true,
+        "phys__p_c": true,
+        "phys__v_c": true,
+        "phys__w_tool": true,
+        "phys__tip_v": true,
+        "phys__P_task": true,
+        "phys__P_constraint": true,
+        "phys__dW": true,
+        "phys__ft_raw": true,
+        "phys__ft_grav": true,
+        "phys__ft_corr": true,
+        "phys__a_com": true,
+        "phys__tau_applied": true,
+        "phys__xfrc": true,
+        "phys__control_update": true,
+        "phys__W_cum": true,
+        "phys__ctl_index": true,
+        "ctl__phase": true,
+        "ctl__lost": true,
+        "ctl__w_blend": true,
+        "ctl__w_pos": true,
+        "ctl__t_ft": true,
+        "ctl__ft_raw": true,
+        "ctl__ft_grav": true,
+        "ctl__ft_corr": true,
+        "ctl__f_n": true,
+        "ctl__f_d": true,
+        "ctl__f_cmd": true,
+        "ctl__f_int": true,
+        "ctl__tan_int": true,
+        "ctl__rot_int": true,
+        "ctl__int_scale": true,
+        "ctl__x_d": true,
+        "ctl__v_d": true,
+        "ctl__a_d": true,
+        "ctl__s_d": true,
+        "ctl__z_d": true,
+        "ctl__e_o": true,
+        "ctl__friction_ff": true,
+        "ctl__tau_cmd": true,
+        "ctl__tau_bias": true,
+        "ctl__tau_task": true,
+        "ctl__tau_null": true,
+        "ctl__null_leak": true,
+        "ctl__sat_any": true,
+        "ctl__n_uncertain": true,
+        "ctl__n_lost": true,
+        "ctl__n_reacquired": true,
+        "ctl__n_hold": true,
+        "ctl__search_rate": true,
+        "ctl__stroke_state": true,
+        "ctl__strokes": true,
+        "ctl__t": true,
+        "ctl__tau_ctrl": true,
+        "ctl__x": true,
+        "ctl__v": true,
+        "ctl__tau_applied": true,
+        "ctl__W_interval": true
+      }
+    },
+    "initial_state.npz": {
+      "status": "PASS",
+      "compared_fields": 7,
+      "bytewise": {
+        "plant": true,
+        "controller_blob": true,
+        "energy": true,
+        "previous": true,
+        "base_qfrc": true,
+        "n_steps": true,
+        "n_updates": true
+      }
+    },
+    "final_state.npz": {
+      "status": "PASS",
+      "compared_fields": 8,
+      "bytewise": {
+        "plant": true,
+        "controller_blob": true,
+        "energy": true,
+        "previous": true,
+        "base_qfrc": true,
+        "n_steps": true,
+        "n_updates": true,
+        "counterfactual_blob": true
+      }
+    }
+  },
+  "interpretation": "Positive measured human-point work charges the same uncapped account before blocking. Net and gross differ materially; the net budget does not impose a gross or instantaneous-power bound.",
+  "command_intervention": "507 torque corrections arise in the existing backup/damping policy; zero recorded QP/gradient timing and attempts must not be equated with zero intervention.",
+  "scope": "Recorded QP work only; discarded plans can omit per-solver diagnostics. Runtime measurements are not a real-time guarantee."
+}

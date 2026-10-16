@@ -1,0 +1,29 @@
+{
+  "command": [
+    "/Users/carl/code/contactSimulation/.venv/bin/python",
+    "/Users/carl/code/contactSimulation-poc-20261016-41359f2/scripts/poc_figures_simulate.py",
+    "_case",
+    "--config",
+    "/Users/carl/code/contactSimulation-poc-20261016-41359f2/docs/kuka_poc_figures/20261016-41359f2/support/new_runs_config.json",
+    "--out",
+    "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/fresh_nohuman_D_01",
+    "--name",
+    "fresh_nohuman_D_01"
+  ],
+  "cwd": "/Users/carl/code/contactSimulation-poc-20261016-41359f2",
+  "returncode": 0,
+  "expected_stop_exit": 2,
+  "wall_seconds": 47.78801662498154,
+  "output_directory": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/fresh_nohuman_D_01",
+  "config_sha256": "63dd644a6d27a789ed1ccb978aaa6991045c4c49f7f493f1bfbb7d5e86e8baa1",
+  "stdout": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/fresh_nohuman_D_01.stdout.txt",
+  "stdout_sha256": "98f8eac5f35a8441b0429bdc1b800d678746cf358107a09f746da5169ac2397f",
+  "actual_child_exit": true,
+  "versions": {
+    "python": "3.13.5",
+    "mujoco": "3.15.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "osqp": "1.1.3"
+  }
+}

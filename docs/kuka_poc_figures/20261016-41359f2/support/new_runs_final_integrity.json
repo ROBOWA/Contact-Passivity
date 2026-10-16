@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "source_before_after_equal": true,
+  "numerical_source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "config_before_after_equal": true,
+  "frozen_config_sha256": "63dd644a6d27a789ed1ccb978aaa6991045c4c49f7f493f1bfbb7d5e86e8baa1",
+  "adapter_before_after_equal": true,
+  "adapter_sha256": "4cb89d0e341a0c70815d3ec20f595eea0047bd078ffbab1d4bb2b5d91ce55936",
+  "reproduction_proof_sha256": "af5750adc6d5dcf51835fe0bc50bfcc6b58d07b2ea7a8417c844dc23da530910",
+  "runs": {
+    "help_then_block_01": {
+      "actual_exit": 0,
+      "process_sha256": "0ba3051395a874d2705523ceb9de58190ad5c1dfdea9270b6c272603bad36521",
+      "initial_state_sha256": "7e4b5e203892bee487625c093aa869ab77933c9557a8011d11d8cf51ca2703a8",
+      "final_state_sha256": "135c955596af1c7d694462d782658a0ee90bf24af19306fec60597b9b3764862",
+      "guard_sha256": "4d250d3ccc274bc511b1530944f123089f2dee16bb2738482049adf618952e33",
+      "baseline_sha256": "446a17d57a56be29b2607e71f0e8f31220e835f1ea6c07126b6c876681792a5c",
+      "metadata_sha256": "310a5c1229a8c88eee89bbba10b4475d47130e6e3b5ba12f7d9e5f5cb26f0aa2",
+      "complete": true
+    },
+    "help_then_block_02": {
+      "actual_exit": 0,
+      "process_sha256": "99b7b772277608bae1e9d98af47f269de866c5344e1921edd584dc8127aa1fc4",
+      "initial_state_sha256": "7e4b5e203892bee487625c093aa869ab77933c9557a8011d11d8cf51ca2703a8",
+      "final_state_sha256": "135c955596af1c7d694462d782658a0ee90bf24af19306fec60597b9b3764862",
+      "guard_sha256": "c06f4f0135093880408f5ab29682d045e33ee778fdea7179816bbd1dce07fbc3",
+      "baseline_sha256": "446a17d57a56be29b2607e71f0e8f31220e835f1ea6c07126b6c876681792a5c",
+      "metadata_sha256": "fdfe4c9de6e150a6d864434ac0a3e7cffa58bbe9c7e5089739110573113a756d",
+      "complete": true
+    }
+  },
+  "failed_checker_attempt_preserved": {
+    "status": "new_runs_reproduction_attempt01_status.json",
+    "original_partial": "new_runs_reproduction.json",
+    "copied_partial": "new_runs_reproduction_attempt01_partial.json"
+  },
+  "qp_activity_help": {
+    "solved_ticks": 0,
+    "gradient_ticks": 0,
+    "attempts": 0,
+    "backup_torque_correction_ticks": 507,
+    "max_total_torque_correction_Nm": 52.8080141179791
+  }
+}

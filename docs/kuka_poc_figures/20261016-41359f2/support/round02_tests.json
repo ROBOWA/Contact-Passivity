@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/Users/carl/code/contactSimulation/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_poc_figures_audit.py",
+    "tests/test_oracle_physics.py",
+    "tests/test_recorder_infra.py",
+    "tests/test_timing.py",
+    "tests/test_energy_task_qp.py",
+    "--junitxml=docs/kuka_poc_figures/20261016-41359f2/support/round02_tests.xml"
+  ],
+  "exit_status": 0,
+  "seconds": 32.95773433393333,
+  "counts": {
+    "tests": 26,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  }
+}

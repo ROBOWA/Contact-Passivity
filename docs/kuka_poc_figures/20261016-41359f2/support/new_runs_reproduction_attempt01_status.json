@@ -1,0 +1,9 @@
+{
+  "returncode": 1,
+  "failure": "TypeError: Object of type bool is not JSON serializable (NumPy bool_ from full coverage check)",
+  "phase": "reporting serialization AFTER all numerical/replay assertions passed",
+  "partial": "docs/kuka_poc_figures/20261016-41359f2/support/new_runs_reproduction_attempt01_partial.json",
+  "sha256": "d4841365168bbba5c2ac70c70841bfe40a7bdbbdb898048d3a9926ba1c75f6d9",
+  "correction": "cast full_requested_coverage to Python bool; frozen simulations and scenario adapter unchanged",
+  "final_support": "new_runs_reproduction_02.json"
+}

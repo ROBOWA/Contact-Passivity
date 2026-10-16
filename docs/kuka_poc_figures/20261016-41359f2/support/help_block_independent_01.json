@@ -1,0 +1,876 @@
+{
+  "schema": "kuka-poc-independent-audit-v1",
+  "auditor_sha256": "287793ba6e885c695454088544b7e76088a6bec1c1c237c0c24a9848b3926288",
+  "calculation_scope": "Executed samples only; uncapped raw ledgers; no smoothing, extension or lower clipping",
+  "tolerances": {
+    "account_and_power_identity": 1e-09,
+    "old_metric_comparison": 1e-08,
+    "time_s": 1e-10
+  },
+  "cases": [
+    {
+      "case": "help-then-block",
+      "variant": "D",
+      "source_kind": "full_executed_raw",
+      "metrics": {
+        "human_work_in_J": -0.11984945588107547,
+        "net_outgoing_J": 0.11984945588107547,
+        "gross_outgoing_J": 0.18229732623874065,
+        "gross_incoming_J": 0.06244787035766517,
+        "min_substep_energy_J": 0.00015054411892480302,
+        "final_energy_J": 0.00015054411892480302,
+        "peak_outgoing_power_W": 0.24117309696926414,
+        "min_raw_ledger_including_initial_J": 0.00015054411892480302,
+        "peak_human_force_N": 5.0,
+        "peak_human_point_speed_m_s": 0.04883777566850248,
+        "task_work_in_J": -0.7148093706200318,
+        "task_work_out_net_J": 0.7148093706200318,
+        "minimum_alpha": -4.440892098500626e-16,
+        "pause_s": 0.3449999999998088,
+        "slowed_s": 0.6469999999996414,
+        "governor_ticks": 688,
+        "alpha_recovery_s": 0.045999999995299135,
+        "alpha_first_crossing_recovery_s": 0.045999999995299135,
+        "interventions": 507,
+        "first_intervention_s": 11.079999999996852,
+        "max_change_from_governed_Nm": 0.3850481761925266,
+        "max_total_change_from_ungoverned_Nm": 52.8080141179791,
+        "max_command_step_Nm": 1.1029518457131147,
+        "virtual_time_delay_s": 0.5505800155500324,
+        "case": "help-then-block",
+        "variant": "D",
+        "completed_s": 17.999999999994934,
+        "completion": "PASS",
+        "stop_reason": null,
+        "energy": "PASS",
+        "task_window_start_s": 8.71,
+        "task_window_end_s": 17.999999999994934,
+        "force_target_N": 10.0,
+        "force_mae_N": 0.06348247366959409,
+        "force_rmse_N": 0.1167469030074541,
+        "force_max_error_N": 1.0694599068007342,
+        "force_peak_N": 11.069459906800734,
+        "contact_absence_s": 0.0,
+        "ramp_out_s": 11.5,
+        "release_s": 11.700000000000001,
+        "interaction_complete": true,
+        "force_recovery_s": 0.012999999995376044,
+        "force_recovery_from_rampout_s": 0.2129999999953771,
+        "recovery_hold_s": 0.5,
+        "interaction_point_body": "link5",
+        "interaction_point_local_m": [
+          0.0,
+          0.04,
+          0.12
+        ],
+        "reference_progress_m": 0.22072838907839812,
+        "measured_progress_m": 0.21908484807710965,
+        "completed_strokes": 2,
+        "peak_ref_debt_m": 0.002975615266453603,
+        "terminal_ref_debt_m": 0.0016435410012884677,
+        "peak_abs_reference_error_m": 0.007905559773593418,
+        "tangent_rmse_m_s": 0.006896746070011223,
+        "tangent_mae_m_s": 0.004250682755848553,
+        "tangent_peak_abs_error_m_s": 0.03653318266567089,
+        "tangent_peak_speed_m_s": 0.056023130221919806,
+        "deadline_misses": 18000,
+        "tick_seconds": {
+          "median": 0.00221725000301376,
+          "p95": 0.009366166678955764,
+          "p99": 1.7428679353464374,
+          "max": 5.8232267500134185
+        },
+        "event_records": 1006,
+        "qp_attempt_records": 0,
+        "qp_solves": 0,
+        "qp_successful_solves": 0,
+        "qp_failed_solver_calls": 0,
+        "pre_solver_failure_or_analytic_records": 0,
+        "qp_fallbacks": 0,
+        "qp_status_counts": {},
+        "qp_active_rows": {},
+        "qp_active_row_count": 0,
+        "reserve_candidate_rejections": {
+          "reserve_budget": 256
+        },
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0,
+        "wall_seconds": 1233.266896749963,
+        "realtime_factor": 0.014595380811266776
+      },
+      "checks": {
+        "physics_time_defect_s": 1.1937065919065404e-15,
+        "omitted_physics_samples": 0,
+        "physics_samples": 72000,
+        "physics_dt_s": 0.00025,
+        "initial_unrecorded_samples": 0,
+        "sampling_stage": "x_k kinematics before integration; solved contact at x_k after step2; signed left rectangles",
+        "moment_at_human_port": "none: source applies a force at body-local point, with zero free moment",
+        "undefined_normal_reference_values": {
+          "x_d": 11295,
+          "v_d": 11295,
+          "a_d": 11295,
+          "z_d": 11295
+        },
+        "account_recompute_defect_J": 5.967448757360216e-16,
+        "account_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "generalized_human_power_defect_W": 8.326672684688674e-17,
+        "recorded_work_defect_J": 0.0,
+        "baseline_time_defect_s": 0.0,
+        "force_meter_difference_N": 0.0,
+        "task_work_quadrature_defect_J": 0.0,
+        "single_contact_force_moment_power_defect_W": 5.421010862427522e-20,
+        "task_vs_constraint_power_defect_W": 6.106226635438361e-16,
+        "control_time_defect_s": 5.329070518200751e-15,
+        "control_dt_s": 0.0009999999999994458,
+        "physics_per_control_interval": 4,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "qp_count_scope": "Recorded solver diagnostics, including saved failures. Unlogged discarded candidate QP calls cannot be reconstructed.",
+        "independent_point_kinematics": {
+          "status": "PASS",
+          "samples": [
+            38004,
+            39631,
+            42596,
+            42804,
+            46799
+          ],
+          "scene_path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/assets/kuka_table_scene.xml",
+          "scene_sha256": "918d95d6836c2147e769a1970d5f013da785bf805589d478e364ba98052a9940",
+          "body": "link5",
+          "local_m": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "max_point_difference_m": 0.0,
+          "max_velocity_difference_m_s": 0.0,
+          "max_power_difference_W": 0.0,
+          "tolerance": 1e-10
+        }
+      },
+      "comparison": {
+        "completed_s": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "net_outgoing_J": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "gross_outgoing_J": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "min_substep_energy_J": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "final_energy_J": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "force_mae_N": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "force_max_error_N": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "force_peak_N": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "contact_absence_s": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "reference_progress_m": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "measured_progress_m": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "completed_strokes": {
+          "status": "PASS",
+          "difference": 0,
+          "tolerance": 1e-08
+        },
+        "pause_s": {
+          "status": "PASS",
+          "difference": 1.9123591599168321e-13,
+          "tolerance": 1e-08
+        },
+        "slowed_s": {
+          "status": "PASS",
+          "difference": 3.5860203695392556e-13,
+          "tolerance": 1e-08
+        },
+        "force_recovery_s": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "minimum_alpha": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "interventions": {
+          "status": "PASS",
+          "difference": 0,
+          "tolerance": 1e-08
+        },
+        "governor_ticks": {
+          "status": "PASS",
+          "difference": 0,
+          "tolerance": 1e-08
+        },
+        "virtual_time_delay_s": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "deadline_misses": {
+          "status": "PASS",
+          "difference": 0,
+          "tolerance": 1e-08
+        }
+      },
+      "status": "PASS",
+      "errors": [],
+      "metadata": {
+        "commit": "41359f20430c930eec5afaebffa2cfbc482f07da",
+        "branch": "feature/kuka-poc-figures-20261016-41359f2",
+        "dirty": false,
+        "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+        "source_end_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+        "case": {
+          "name": "help-then-block",
+          "magnitude": 5.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.8000000000000012,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "budget": 0.12,
+          "rate_factor": 1.0,
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "profile": [
+            {
+              "name": "helping",
+              "start": 9.5,
+              "ramp": 0.2,
+              "hold": 0.2,
+              "magnitude": 5.0,
+              "direction": [
+                1.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "name": "blocking",
+              "start": 10.3,
+              "ramp": 0.2,
+              "hold": 1.0,
+              "magnitude": 5.0,
+              "direction": [
+                -1.0,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "envelope_only": true
+        },
+        "variant": "D",
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        },
+        "duration": 18.0,
+        "versions": {
+          "python": "3.13.5",
+          "mujoco": "3.15.0",
+          "numpy": "2.5.4",
+          "scipy": "1.18.1",
+          "osqp": "1.1.3"
+        },
+        "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+        "asset_hashes": {
+          "kuka_table_scene.xml": "918d95d6836c2147",
+          "iiwa14_torque.xml": "b1315d433880f305",
+          "polishing_tool.xml": "62ecf0422cf46708"
+        },
+        "frozen_config_sha256": "63dd644a6d27a789ed1ccb978aaa6991045c4c49f7f493f1bfbb7d5e86e8baa1",
+        "adapter_sha256": "4cb89d0e341a0c70815d3ec20f595eea0047bd078ffbab1d4bb2b5d91ce55936",
+        "profile": [
+          {
+            "name": "helping",
+            "start": 9.5,
+            "ramp": 0.2,
+            "hold": 0.2,
+            "magnitude": 5.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "blocking",
+            "start": 10.3,
+            "ramp": 0.2,
+            "hold": 1.0,
+            "magnitude": 5.0,
+            "direction": [
+              -1.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "forecast": "only current measured WORLD force passed to predictor; held through forecasts",
+        "continuous_state": true,
+        "state_resets_after_initialization": 0,
+        "seed": 0,
+        "actual_initial_state_sha256": "7e4b5e203892bee487625c093aa869ab77933c9557a8011d11d8cf51ca2703a8",
+        "runtime_wall_s": 1233.266896749963,
+        "sampling": "pre-integration stage k, post-step signed left-rectangle p_H*h account",
+        "ledger": "uncapped E_H=E_R=.12+sum(p_H*h); no reset across pulses"
+      },
+      "inputs": {
+        "baseline_log.npz": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_01/baseline_log.npz",
+          "sha256": "446a17d57a56be29b2607e71f0e8f31220e835f1ea6c07126b6c876681792a5c",
+          "bytes": 35684252
+        },
+        "events.json.gz": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_01/events.json.gz",
+          "sha256": "1d3d8eba666ccc318ef9173eefa56949afa622f6b42ea7e61038019daed91f18",
+          "bytes": 265925
+        },
+        "final_state.npz": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_01/final_state.npz",
+          "sha256": "135c955596af1c7d694462d782658a0ee90bf24af19306fec60597b9b3764862",
+          "bytes": 8870
+        },
+        "guard.npz": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_01/guard.npz",
+          "sha256": "4d250d3ccc274bc511b1530944f123089f2dee16bb2738482049adf618952e33",
+          "bytes": 20765553
+        },
+        "initial_state.npz": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_01/initial_state.npz",
+          "sha256": "7e4b5e203892bee487625c093aa869ab77933c9557a8011d11d8cf51ca2703a8",
+          "bytes": 3856
+        },
+        "metadata.json": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_01/metadata.json",
+          "sha256": "310a5c1229a8c88eee89bbba10b4475d47130e6e3b5ba12f7d9e5f5cb26f0aa2",
+          "bytes": 3325
+        },
+        "metrics.json": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_01/metrics.json",
+          "sha256": "1bec79ee082fbd2d9e9d894a20c6708a5699244d612c4112c2e68a9ab244b091",
+          "bytes": 3446
+        }
+      }
+    },
+    {
+      "case": "help-then-block",
+      "variant": "D",
+      "source_kind": "full_executed_raw",
+      "metrics": {
+        "human_work_in_J": -0.11984945588107547,
+        "net_outgoing_J": 0.11984945588107547,
+        "gross_outgoing_J": 0.18229732623874065,
+        "gross_incoming_J": 0.06244787035766517,
+        "min_substep_energy_J": 0.00015054411892480302,
+        "final_energy_J": 0.00015054411892480302,
+        "peak_outgoing_power_W": 0.24117309696926414,
+        "min_raw_ledger_including_initial_J": 0.00015054411892480302,
+        "peak_human_force_N": 5.0,
+        "peak_human_point_speed_m_s": 0.04883777566850248,
+        "task_work_in_J": -0.7148093706200318,
+        "task_work_out_net_J": 0.7148093706200318,
+        "minimum_alpha": -4.440892098500626e-16,
+        "pause_s": 0.3449999999998088,
+        "slowed_s": 0.6469999999996414,
+        "governor_ticks": 688,
+        "alpha_recovery_s": 0.045999999995299135,
+        "alpha_first_crossing_recovery_s": 0.045999999995299135,
+        "interventions": 507,
+        "first_intervention_s": 11.079999999996852,
+        "max_change_from_governed_Nm": 0.3850481761925266,
+        "max_total_change_from_ungoverned_Nm": 52.8080141179791,
+        "max_command_step_Nm": 1.1029518457131147,
+        "virtual_time_delay_s": 0.5505800155500324,
+        "case": "help-then-block",
+        "variant": "D",
+        "completed_s": 17.999999999994934,
+        "completion": "PASS",
+        "stop_reason": null,
+        "energy": "PASS",
+        "task_window_start_s": 8.71,
+        "task_window_end_s": 17.999999999994934,
+        "force_target_N": 10.0,
+        "force_mae_N": 0.06348247366959409,
+        "force_rmse_N": 0.1167469030074541,
+        "force_max_error_N": 1.0694599068007342,
+        "force_peak_N": 11.069459906800734,
+        "contact_absence_s": 0.0,
+        "ramp_out_s": 11.5,
+        "release_s": 11.700000000000001,
+        "interaction_complete": true,
+        "force_recovery_s": 0.012999999995376044,
+        "force_recovery_from_rampout_s": 0.2129999999953771,
+        "recovery_hold_s": 0.5,
+        "interaction_point_body": "link5",
+        "interaction_point_local_m": [
+          0.0,
+          0.04,
+          0.12
+        ],
+        "reference_progress_m": 0.22072838907839812,
+        "measured_progress_m": 0.21908484807710965,
+        "completed_strokes": 2,
+        "peak_ref_debt_m": 0.002975615266453603,
+        "terminal_ref_debt_m": 0.0016435410012884677,
+        "peak_abs_reference_error_m": 0.007905559773593418,
+        "tangent_rmse_m_s": 0.006896746070011223,
+        "tangent_mae_m_s": 0.004250682755848553,
+        "tangent_peak_abs_error_m_s": 0.03653318266567089,
+        "tangent_peak_speed_m_s": 0.056023130221919806,
+        "deadline_misses": 18000,
+        "tick_seconds": {
+          "median": 0.0022254579816944897,
+          "p95": 0.009748106170445607,
+          "p99": 1.748527305896857,
+          "max": 5.713083292008378
+        },
+        "event_records": 1006,
+        "qp_attempt_records": 0,
+        "qp_solves": 0,
+        "qp_successful_solves": 0,
+        "qp_failed_solver_calls": 0,
+        "pre_solver_failure_or_analytic_records": 0,
+        "qp_fallbacks": 0,
+        "qp_status_counts": {},
+        "qp_active_rows": {},
+        "qp_active_row_count": 0,
+        "reserve_candidate_rejections": {
+          "reserve_budget": 256
+        },
+        "qp_max_normalized_violation": 0.0,
+        "qp_logged_row_defect": 0.0,
+        "wall_seconds": 1236.964804999996,
+        "realtime_factor": 0.014551747897140041
+      },
+      "checks": {
+        "physics_time_defect_s": 1.1937065919065404e-15,
+        "omitted_physics_samples": 0,
+        "physics_samples": 72000,
+        "physics_dt_s": 0.00025,
+        "initial_unrecorded_samples": 0,
+        "sampling_stage": "x_k kinematics before integration; solved contact at x_k after step2; signed left rectangles",
+        "moment_at_human_port": "none: source applies a force at body-local point, with zero free moment",
+        "undefined_normal_reference_values": {
+          "x_d": 11295,
+          "v_d": 11295,
+          "a_d": 11295,
+          "z_d": 11295
+        },
+        "account_recompute_defect_J": 5.967448757360216e-16,
+        "account_difference_J": 0.0,
+        "force_velocity_power_defect_W": 0.0,
+        "generalized_human_power_defect_W": 8.326672684688674e-17,
+        "recorded_work_defect_J": 0.0,
+        "baseline_time_defect_s": 0.0,
+        "force_meter_difference_N": 0.0,
+        "task_work_quadrature_defect_J": 0.0,
+        "single_contact_force_moment_power_defect_W": 5.421010862427522e-20,
+        "task_vs_constraint_power_defect_W": 6.106226635438361e-16,
+        "control_time_defect_s": 5.329070518200751e-15,
+        "control_dt_s": 0.0009999999999994458,
+        "physics_per_control_interval": 4,
+        "all_prefix_prediction_defect_J": 0.0,
+        "stage_force_prediction_defect_N": 0.0,
+        "qp_count_scope": "Recorded solver diagnostics, including saved failures. Unlogged discarded candidate QP calls cannot be reconstructed.",
+        "independent_point_kinematics": {
+          "status": "PASS",
+          "samples": [
+            38004,
+            39631,
+            42596,
+            42804,
+            46799
+          ],
+          "scene_path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/assets/kuka_table_scene.xml",
+          "scene_sha256": "918d95d6836c2147e769a1970d5f013da785bf805589d478e364ba98052a9940",
+          "body": "link5",
+          "local_m": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "max_point_difference_m": 0.0,
+          "max_velocity_difference_m_s": 0.0,
+          "max_power_difference_W": 0.0,
+          "tolerance": 1e-10
+        }
+      },
+      "comparison": {
+        "completed_s": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "net_outgoing_J": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "gross_outgoing_J": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "min_substep_energy_J": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "final_energy_J": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "force_mae_N": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "force_max_error_N": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "force_peak_N": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "contact_absence_s": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "reference_progress_m": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "measured_progress_m": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "completed_strokes": {
+          "status": "PASS",
+          "difference": 0,
+          "tolerance": 1e-08
+        },
+        "pause_s": {
+          "status": "PASS",
+          "difference": 1.9123591599168321e-13,
+          "tolerance": 1e-08
+        },
+        "slowed_s": {
+          "status": "PASS",
+          "difference": 3.5860203695392556e-13,
+          "tolerance": 1e-08
+        },
+        "force_recovery_s": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "minimum_alpha": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "interventions": {
+          "status": "PASS",
+          "difference": 0,
+          "tolerance": 1e-08
+        },
+        "governor_ticks": {
+          "status": "PASS",
+          "difference": 0,
+          "tolerance": 1e-08
+        },
+        "virtual_time_delay_s": {
+          "status": "PASS",
+          "difference": 0.0,
+          "tolerance": 1e-08
+        },
+        "deadline_misses": {
+          "status": "PASS",
+          "difference": 0,
+          "tolerance": 1e-08
+        }
+      },
+      "status": "PASS",
+      "errors": [],
+      "metadata": {
+        "commit": "41359f20430c930eec5afaebffa2cfbc482f07da",
+        "branch": "feature/kuka-poc-figures-20261016-41359f2",
+        "dirty": false,
+        "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+        "source_end_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+        "case": {
+          "name": "help-then-block",
+          "magnitude": 5.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.8000000000000012,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "budget": 0.12,
+          "rate_factor": 1.0,
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "profile": [
+            {
+              "name": "helping",
+              "start": 9.5,
+              "ramp": 0.2,
+              "hold": 0.2,
+              "magnitude": 5.0,
+              "direction": [
+                1.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "name": "blocking",
+              "start": 10.3,
+              "ramp": 0.2,
+              "hold": 1.0,
+              "magnitude": 5.0,
+              "direction": [
+                -1.0,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "envelope_only": true
+        },
+        "variant": "D",
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        },
+        "duration": 18.0,
+        "versions": {
+          "python": "3.13.5",
+          "mujoco": "3.15.0",
+          "numpy": "2.5.4",
+          "scipy": "1.18.1",
+          "osqp": "1.1.3"
+        },
+        "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+        "asset_hashes": {
+          "kuka_table_scene.xml": "918d95d6836c2147",
+          "iiwa14_torque.xml": "b1315d433880f305",
+          "polishing_tool.xml": "62ecf0422cf46708"
+        },
+        "frozen_config_sha256": "63dd644a6d27a789ed1ccb978aaa6991045c4c49f7f493f1bfbb7d5e86e8baa1",
+        "adapter_sha256": "4cb89d0e341a0c70815d3ec20f595eea0047bd078ffbab1d4bb2b5d91ce55936",
+        "profile": [
+          {
+            "name": "helping",
+            "start": 9.5,
+            "ramp": 0.2,
+            "hold": 0.2,
+            "magnitude": 5.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "name": "blocking",
+            "start": 10.3,
+            "ramp": 0.2,
+            "hold": 1.0,
+            "magnitude": 5.0,
+            "direction": [
+              -1.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "forecast": "only current measured WORLD force passed to predictor; held through forecasts",
+        "continuous_state": true,
+        "state_resets_after_initialization": 0,
+        "seed": 0,
+        "actual_initial_state_sha256": "7e4b5e203892bee487625c093aa869ab77933c9557a8011d11d8cf51ca2703a8",
+        "runtime_wall_s": 1236.964804999996,
+        "sampling": "pre-integration stage k, post-step signed left-rectangle p_H*h account",
+        "ledger": "uncapped E_H=E_R=.12+sum(p_H*h); no reset across pulses"
+      },
+      "inputs": {
+        "baseline_log.npz": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_02/baseline_log.npz",
+          "sha256": "446a17d57a56be29b2607e71f0e8f31220e835f1ea6c07126b6c876681792a5c",
+          "bytes": 35684252
+        },
+        "events.json.gz": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_02/events.json.gz",
+          "sha256": "2d5ec068cea36a429a07d8a493f1547a8de24840e48ee4b14ced319f66b00f40",
+          "bytes": 265925
+        },
+        "final_state.npz": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_02/final_state.npz",
+          "sha256": "135c955596af1c7d694462d782658a0ee90bf24af19306fec60597b9b3764862",
+          "bytes": 8870
+        },
+        "guard.npz": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_02/guard.npz",
+          "sha256": "c06f4f0135093880408f5ab29682d045e33ee778fdea7179816bbd1dce07fbc3",
+          "bytes": 20768471
+        },
+        "initial_state.npz": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_02/initial_state.npz",
+          "sha256": "7e4b5e203892bee487625c093aa869ab77933c9557a8011d11d8cf51ca2703a8",
+          "bytes": 3856
+        },
+        "metadata.json": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_02/metadata.json",
+          "sha256": "fdfe4c9de6e150a6d864434ac0a3e7cffa58bbe9c7e5089739110573113a756d",
+          "bytes": 3325
+        },
+        "metrics.json": {
+          "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/results/kuka_poc_figures/20261016-41359f2/help_then_block_02/metrics.json",
+          "sha256": "d18eaa81dcf65e469114c2c1090e6a82e5f295da96de29be520f29e3ac2bcf85",
+          "bytes": 3446
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "paired_C_D": {},
+  "status": "PASS",
+  "counts": {
+    "cases": 2,
+    "errors": 0,
+    "passes": 2
+  }
+}

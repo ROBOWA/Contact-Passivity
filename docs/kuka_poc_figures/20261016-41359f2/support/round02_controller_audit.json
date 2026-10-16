@@ -1,0 +1,1747 @@
+{
+  "round": 2,
+  "status": "PASS",
+  "checks": {
+    "matched_nuisance_parameters": true,
+    "bitwise_transparency": true,
+    "all13_C_D_executed_bytewise_identity": true,
+    "independent_actual_point_kinematics": true,
+    "predictor_does_not_query_force_profile": true,
+    "frozen_controller_and_assets_unchanged": true,
+    "focused_tests_real_exit0": true
+  },
+  "source_artifacts": {
+    "matrix_audit_02.json": "150f22c2807d67d291476fd3d318e5c6c627ca8c2e0ea0cef2ef06c2b1b2c160",
+    "controller_pairing_audit.json": "2cdcad504c1ff13f990ea5b7d3d0d1bace1c0eed346a108e5b7dfda6532c87d3",
+    "audit_tests_02.json": "f2641bce4ad362e4621416667f3f600079604ba9d1641499d40efef4d0ad06f2"
+  },
+  "nuisance_pairing": {
+    "status": "PASS",
+    "cases": {
+      "reduced-rate": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "magnitude": 5.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "budget": 0.12,
+          "rate_factor": 0.02,
+          "name": "reduced-rate"
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 0.02
+        }
+      },
+      "stress": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "magnitude": 5.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "budget": 0.001,
+          "rate_factor": 1.0,
+          "name": "stress"
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "new-2": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "name": "new-2",
+          "magnitude": 3.83271503635153,
+          "start": 10.180920433448298,
+          "ramp": 0.247746819425357,
+          "hold": 0.9997667674952464,
+          "direction": [
+            -0.9964042274246122,
+            0.0847267110795742,
+            0.0
+          ],
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "budget": 0.12
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "elbow-ample": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "magnitude": 5.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "body": "link3",
+          "local": [
+            0.02,
+            0.04,
+            0.16
+          ],
+          "budget": 1.0,
+          "rate_factor": 1.0,
+          "name": "elbow-ample"
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "elbow-tight": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "magnitude": 5.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "body": "link3",
+          "local": [
+            0.02,
+            0.04,
+            0.16
+          ],
+          "budget": 0.12,
+          "rate_factor": 1.0,
+          "name": "elbow-tight"
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "new-3": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "name": "new-3",
+          "magnitude": 4.674678789085766,
+          "start": 10.193174441819695,
+          "ramp": 0.2095998950299397,
+          "hold": 0.9152855894145344,
+          "direction": [
+            -0.9911079926811257,
+            0.1330599370343672,
+            0.0
+          ],
+          "body": "link3",
+          "local": [
+            0.02,
+            0.04,
+            0.16
+          ],
+          "budget": 0.12
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "main": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "magnitude": 5.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "budget": 0.12,
+          "rate_factor": 1.0,
+          "name": "main"
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "nohuman-ample": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "magnitude": 0.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "budget": 1.0,
+          "rate_factor": 1.0,
+          "name": "nohuman-ample"
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "historical": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "magnitude": 4.5,
+          "start": 10.1,
+          "ramp": 0.15,
+          "hold": 0.8,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "budget": 0.12,
+          "rate_factor": 1.0,
+          "name": "historical"
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "new-1": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "name": "new-1",
+          "magnitude": 4.681280506285387,
+          "start": 9.934939351352902,
+          "ramp": 0.20540574203531733,
+          "hold": 0.6518109110835791,
+          "direction": [
+            -0.9975429283102776,
+            -0.07005787734549437,
+            0.0
+          ],
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "budget": 0.12
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "nohuman-zero": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "magnitude": 0.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "budget": 0.0,
+          "rate_factor": 1.0,
+          "name": "nohuman-zero"
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "ample": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "magnitude": 5.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "budget": 1.0,
+          "rate_factor": 1.0,
+          "name": "ample"
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      },
+      "assist": {
+        "variants": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "UF"
+        ],
+        "status": "PASS",
+        "checks": {
+          "case": true,
+          "config": true,
+          "duration": true,
+          "forecast": true,
+          "asset_hashes": true,
+          "source_sha256": true,
+          "source_end_sha256": true,
+          "initial_q_qd": true,
+          "source_start_end_match": true
+        },
+        "case": {
+          "magnitude": -5.0,
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "body": "link5",
+          "local": [
+            0.0,
+            0.04,
+            0.12
+          ],
+          "budget": 0.12,
+          "rate_factor": 1.0,
+          "name": "assist"
+        },
+        "config": {
+          "transition": 0.1,
+          "damping": 40.0,
+          "horizons": [
+            0.02,
+            0.05,
+            0.1,
+            0.25,
+            0.5,
+            1.0,
+            2.0
+          ],
+          "terminal_persistence": 0.02,
+          "terminal_speed": 0.001,
+          "terminal_power": 0.002,
+          "terminal_tool_speed": 0.001,
+          "terminal_angular_speed": 0.01,
+          "energy_margin": 1e-08,
+          "reserve_margin": 1e-05,
+          "force_lower": 7.0,
+          "force_upper": 13.0,
+          "normal_speed": 0.005,
+          "orientation": 0.03490658503988659,
+          "cross_error": 0.003,
+          "task_start": 8.71,
+          "energy_tolerance": 1e-10,
+          "torque_tolerance": 1e-07,
+          "task_tolerance": 1e-07,
+          "eta": 0.02,
+          "retries": 3,
+          "targets": [
+            1.0,
+            0.5,
+            0.0
+          ],
+          "task_weight": 1.0,
+          "rate_factor": 1.0
+        }
+      }
+    },
+    "excluded_intentional_differences": [
+      "variant changes filter/governor/reserve/task acceptance as declared; metadata git commits differ while numerical package SHA matches"
+    ],
+    "note": "Within each fixture, cases/configuration/plant assets/current-force forecast/duration/numerical hash/initial q and qdot match for UF/A/B/C/D. This does not turn B-vsD into an isolated governor ablation."
+  },
+  "transparency": {
+    "status": "PASS",
+    "cases": {
+      "nohuman-ample": {
+        "status": "PASS",
+        "variants": {
+          "UF": {
+            "hashes": {
+              "q": "249d56c78328be4e2bc0ae2b119312e042042dc2c85f1d284b837d6d23e81738",
+              "qd": "3824c5c5731b73190df5f5ce1098082f3fb7dc1cbe410f9779109b323e135a55",
+              "tau_applied": "6c7ff3991e99dbf5c9e6bbea218d23ef1a5dc1ab6bb858e05d658c270a56fe87"
+            },
+            "alpha_one": null
+          },
+          "A": {
+            "hashes": {
+              "q": "249d56c78328be4e2bc0ae2b119312e042042dc2c85f1d284b837d6d23e81738",
+              "qd": "3824c5c5731b73190df5f5ce1098082f3fb7dc1cbe410f9779109b323e135a55",
+              "tau_applied": "6c7ff3991e99dbf5c9e6bbea218d23ef1a5dc1ab6bb858e05d658c270a56fe87"
+            },
+            "alpha_one": null
+          },
+          "B": {
+            "hashes": {
+              "q": "249d56c78328be4e2bc0ae2b119312e042042dc2c85f1d284b837d6d23e81738",
+              "qd": "3824c5c5731b73190df5f5ce1098082f3fb7dc1cbe410f9779109b323e135a55",
+              "tau_applied": "6c7ff3991e99dbf5c9e6bbea218d23ef1a5dc1ab6bb858e05d658c270a56fe87"
+            },
+            "alpha_one": true
+          },
+          "C": {
+            "hashes": {
+              "q": "249d56c78328be4e2bc0ae2b119312e042042dc2c85f1d284b837d6d23e81738",
+              "qd": "3824c5c5731b73190df5f5ce1098082f3fb7dc1cbe410f9779109b323e135a55",
+              "tau_applied": "6c7ff3991e99dbf5c9e6bbea218d23ef1a5dc1ab6bb858e05d658c270a56fe87"
+            },
+            "alpha_one": true
+          },
+          "D": {
+            "hashes": {
+              "q": "249d56c78328be4e2bc0ae2b119312e042042dc2c85f1d284b837d6d23e81738",
+              "qd": "3824c5c5731b73190df5f5ce1098082f3fb7dc1cbe410f9779109b323e135a55",
+              "tau_applied": "6c7ff3991e99dbf5c9e6bbea218d23ef1a5dc1ab6bb858e05d658c270a56fe87"
+            },
+            "alpha_one": true
+          }
+        }
+      },
+      "nohuman-zero": {
+        "status": "PASS",
+        "variants": {
+          "UF": {
+            "hashes": {
+              "q": "249d56c78328be4e2bc0ae2b119312e042042dc2c85f1d284b837d6d23e81738",
+              "qd": "3824c5c5731b73190df5f5ce1098082f3fb7dc1cbe410f9779109b323e135a55",
+              "tau_applied": "6c7ff3991e99dbf5c9e6bbea218d23ef1a5dc1ab6bb858e05d658c270a56fe87"
+            },
+            "alpha_one": null
+          },
+          "A": {
+            "hashes": {
+              "q": "249d56c78328be4e2bc0ae2b119312e042042dc2c85f1d284b837d6d23e81738",
+              "qd": "3824c5c5731b73190df5f5ce1098082f3fb7dc1cbe410f9779109b323e135a55",
+              "tau_applied": "6c7ff3991e99dbf5c9e6bbea218d23ef1a5dc1ab6bb858e05d658c270a56fe87"
+            },
+            "alpha_one": null
+          },
+          "B": {
+            "hashes": {
+              "q": "249d56c78328be4e2bc0ae2b119312e042042dc2c85f1d284b837d6d23e81738",
+              "qd": "3824c5c5731b73190df5f5ce1098082f3fb7dc1cbe410f9779109b323e135a55",
+              "tau_applied": "6c7ff3991e99dbf5c9e6bbea218d23ef1a5dc1ab6bb858e05d658c270a56fe87"
+            },
+            "alpha_one": true
+          },
+          "C": {
+            "hashes": {
+              "q": "249d56c78328be4e2bc0ae2b119312e042042dc2c85f1d284b837d6d23e81738",
+              "qd": "3824c5c5731b73190df5f5ce1098082f3fb7dc1cbe410f9779109b323e135a55",
+              "tau_applied": "6c7ff3991e99dbf5c9e6bbea218d23ef1a5dc1ab6bb858e05d658c270a56fe87"
+            },
+            "alpha_one": true
+          },
+          "D": {
+            "hashes": {
+              "q": "249d56c78328be4e2bc0ae2b119312e042042dc2c85f1d284b837d6d23e81738",
+              "qd": "3824c5c5731b73190df5f5ce1098082f3fb7dc1cbe410f9779109b323e135a55",
+              "tau_applied": "6c7ff3991e99dbf5c9e6bbea218d23ef1a5dc1ab6bb858e05d658c270a56fe87"
+            },
+            "alpha_one": true
+          }
+        }
+      },
+      "ample": {
+        "status": "PASS",
+        "variants": {
+          "UF": {
+            "hashes": {
+              "q": "4f2a3dfe5717bdcf68d57f9e3a72c3a98467251a8e6240936daf9ad6f1e2f407",
+              "qd": "2f8a0a5ed2ce936237886917312036367cd97c281559dda0b67ba0809978a19f",
+              "tau_applied": "32f5847f030024e059874d346867145e53887e4020ba7583651af39be61e077f"
+            },
+            "alpha_one": null
+          },
+          "A": {
+            "hashes": {
+              "q": "4f2a3dfe5717bdcf68d57f9e3a72c3a98467251a8e6240936daf9ad6f1e2f407",
+              "qd": "2f8a0a5ed2ce936237886917312036367cd97c281559dda0b67ba0809978a19f",
+              "tau_applied": "32f5847f030024e059874d346867145e53887e4020ba7583651af39be61e077f"
+            },
+            "alpha_one": null
+          },
+          "B": {
+            "hashes": {
+              "q": "4f2a3dfe5717bdcf68d57f9e3a72c3a98467251a8e6240936daf9ad6f1e2f407",
+              "qd": "2f8a0a5ed2ce936237886917312036367cd97c281559dda0b67ba0809978a19f",
+              "tau_applied": "32f5847f030024e059874d346867145e53887e4020ba7583651af39be61e077f"
+            },
+            "alpha_one": true
+          },
+          "C": {
+            "hashes": {
+              "q": "4f2a3dfe5717bdcf68d57f9e3a72c3a98467251a8e6240936daf9ad6f1e2f407",
+              "qd": "2f8a0a5ed2ce936237886917312036367cd97c281559dda0b67ba0809978a19f",
+              "tau_applied": "32f5847f030024e059874d346867145e53887e4020ba7583651af39be61e077f"
+            },
+            "alpha_one": true
+          },
+          "D": {
+            "hashes": {
+              "q": "4f2a3dfe5717bdcf68d57f9e3a72c3a98467251a8e6240936daf9ad6f1e2f407",
+              "qd": "2f8a0a5ed2ce936237886917312036367cd97c281559dda0b67ba0809978a19f",
+              "tau_applied": "32f5847f030024e059874d346867145e53887e4020ba7583651af39be61e077f"
+            },
+            "alpha_one": true
+          }
+        }
+      },
+      "elbow-ample": {
+        "status": "PASS",
+        "variants": {
+          "UF": {
+            "hashes": {
+              "q": "a246cba0528ff8af19059b3aeb9a9375553f70c4589d0b5d908138907fbc5c4f",
+              "qd": "d08b43afeb03a692517947fcbdf5d5564de598fb2d33177bcabffe9c10a098d4",
+              "tau_applied": "4c7e0dd2bc0d92e4a8f7718b2c45e98cc74fd7952826f4b8c9baf6564f08fd4f"
+            },
+            "alpha_one": null
+          },
+          "A": {
+            "hashes": {
+              "q": "a246cba0528ff8af19059b3aeb9a9375553f70c4589d0b5d908138907fbc5c4f",
+              "qd": "d08b43afeb03a692517947fcbdf5d5564de598fb2d33177bcabffe9c10a098d4",
+              "tau_applied": "4c7e0dd2bc0d92e4a8f7718b2c45e98cc74fd7952826f4b8c9baf6564f08fd4f"
+            },
+            "alpha_one": null
+          },
+          "B": {
+            "hashes": {
+              "q": "a246cba0528ff8af19059b3aeb9a9375553f70c4589d0b5d908138907fbc5c4f",
+              "qd": "d08b43afeb03a692517947fcbdf5d5564de598fb2d33177bcabffe9c10a098d4",
+              "tau_applied": "4c7e0dd2bc0d92e4a8f7718b2c45e98cc74fd7952826f4b8c9baf6564f08fd4f"
+            },
+            "alpha_one": true
+          },
+          "C": {
+            "hashes": {
+              "q": "a246cba0528ff8af19059b3aeb9a9375553f70c4589d0b5d908138907fbc5c4f",
+              "qd": "d08b43afeb03a692517947fcbdf5d5564de598fb2d33177bcabffe9c10a098d4",
+              "tau_applied": "4c7e0dd2bc0d92e4a8f7718b2c45e98cc74fd7952826f4b8c9baf6564f08fd4f"
+            },
+            "alpha_one": true
+          },
+          "D": {
+            "hashes": {
+              "q": "a246cba0528ff8af19059b3aeb9a9375553f70c4589d0b5d908138907fbc5c4f",
+              "qd": "d08b43afeb03a692517947fcbdf5d5564de598fb2d33177bcabffe9c10a098d4",
+              "tau_applied": "4c7e0dd2bc0d92e4a8f7718b2c45e98cc74fd7952826f4b8c9baf6564f08fd4f"
+            },
+            "alpha_one": true
+          }
+        }
+      },
+      "assist": {
+        "status": "PASS",
+        "variants": {
+          "UF": {
+            "hashes": {
+              "q": "b0d8e3827d855bbb65bd54c12e9ae1e0f5c0b94964080a16a418b6c0c8890bcf",
+              "qd": "2fb4fca037147983828ac41d6526b11f21b755053d0927993f368e285945ee03",
+              "tau_applied": "3dc1488fda13a063f3b91fcdf369a85b0b5871537a50b2e40ef845b07085801d"
+            },
+            "alpha_one": null
+          },
+          "A": {
+            "hashes": {
+              "q": "b0d8e3827d855bbb65bd54c12e9ae1e0f5c0b94964080a16a418b6c0c8890bcf",
+              "qd": "2fb4fca037147983828ac41d6526b11f21b755053d0927993f368e285945ee03",
+              "tau_applied": "3dc1488fda13a063f3b91fcdf369a85b0b5871537a50b2e40ef845b07085801d"
+            },
+            "alpha_one": null
+          },
+          "B": {
+            "hashes": {
+              "q": "b0d8e3827d855bbb65bd54c12e9ae1e0f5c0b94964080a16a418b6c0c8890bcf",
+              "qd": "2fb4fca037147983828ac41d6526b11f21b755053d0927993f368e285945ee03",
+              "tau_applied": "3dc1488fda13a063f3b91fcdf369a85b0b5871537a50b2e40ef845b07085801d"
+            },
+            "alpha_one": true
+          },
+          "C": {
+            "hashes": {
+              "q": "b0d8e3827d855bbb65bd54c12e9ae1e0f5c0b94964080a16a418b6c0c8890bcf",
+              "qd": "2fb4fca037147983828ac41d6526b11f21b755053d0927993f368e285945ee03",
+              "tau_applied": "3dc1488fda13a063f3b91fcdf369a85b0b5871537a50b2e40ef845b07085801d"
+            },
+            "alpha_one": true
+          },
+          "D": {
+            "hashes": {
+              "q": "b0d8e3827d855bbb65bd54c12e9ae1e0f5c0b94964080a16a418b6c0c8890bcf",
+              "qd": "2fb4fca037147983828ac41d6526b11f21b755053d0927993f368e285945ee03",
+              "tau_applied": "3dc1488fda13a063f3b91fcdf369a85b0b5871537a50b2e40ef845b07085801d"
+            },
+            "alpha_one": true
+          }
+        }
+      }
+    }
+  },
+  "C_D_full_matrix": {
+    "ample": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "assist": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "elbow-ample": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "elbow-tight": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "historical": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "main": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "new-1": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "new-2": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "new-3": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "nohuman-ample": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "nohuman-zero": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "reduced-rate": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    },
+    "stress": {
+      "bitwise_executed_identity": true,
+      "fields": {
+        "physics.t": true,
+        "physics.power": true,
+        "physics.normal_force": true,
+        "physics.energy": true,
+        "physics.force": true,
+        "physics.velocity": true,
+        "control.t": true,
+        "control.tau_exec": true,
+        "control.alpha": true,
+        "control.sigma": true,
+        "reference.t": true,
+        "reference.x": true,
+        "reference.v": true,
+        "reference.x_d": true,
+        "reference.v_d": true
+      }
+    }
+  },
+  "recorded_QP_activity": {
+    "UF": {
+      "qp_solves": 0,
+      "qp_successful_solves": 0,
+      "qp_failed_solver_calls": 0,
+      "qp_attempt_records": 0,
+      "pre_solver_failure_or_analytic_records": 0,
+      "qp_fallbacks": 0,
+      "qp_active_row_count": 0,
+      "completed": 13,
+      "stopped": 0
+    },
+    "A": {
+      "qp_solves": 1354,
+      "qp_successful_solves": 1354,
+      "qp_failed_solver_calls": 0,
+      "qp_attempt_records": 1358,
+      "pre_solver_failure_or_analytic_records": 4,
+      "qp_fallbacks": 1,
+      "qp_active_row_count": 2662,
+      "completed": 9,
+      "stopped": 4
+    },
+    "B": {
+      "qp_solves": 10,
+      "qp_successful_solves": 9,
+      "qp_failed_solver_calls": 1,
+      "qp_attempt_records": 10,
+      "pre_solver_failure_or_analytic_records": 0,
+      "qp_fallbacks": 0,
+      "qp_active_row_count": 16,
+      "completed": 5,
+      "stopped": 8
+    },
+    "C": {
+      "qp_solves": 0,
+      "qp_successful_solves": 0,
+      "qp_failed_solver_calls": 0,
+      "qp_attempt_records": 0,
+      "pre_solver_failure_or_analytic_records": 0,
+      "qp_fallbacks": 0,
+      "qp_active_row_count": 0,
+      "completed": 12,
+      "stopped": 1
+    },
+    "D": {
+      "qp_solves": 0,
+      "qp_successful_solves": 0,
+      "qp_failed_solver_calls": 0,
+      "qp_attempt_records": 0,
+      "pre_solver_failure_or_analytic_records": 0,
+      "qp_fallbacks": 0,
+      "qp_active_row_count": 0,
+      "completed": 12,
+      "stopped": 1
+    }
+  },
+  "source_causality": {
+    "status": "PASS",
+    "predictor_profile_force_calls": [],
+    "finding": "Guard reads its profile at current control time once. Predictor and backup take the current world force vector, fixed body/local point and copied plant/controller snapshot. Forked simulations disable recorder, oracle and external disturbance; the implemented forecast contains no future profile calls.",
+    "scope": "Source inspection and independent current-port raw checks; not a future-force robustness certificate."
+  },
+  "source": {
+    "kuka_table_sim/energy_guard.py": {
+      "sha256": "cf39f5f4a454a60c78cf7b095ff7ac057819f4cdb5b5b56398f5ef61edbb16b3",
+      "evidence": [
+        {
+          "line": 92,
+          "text": "first,attempts,timing=filtered_interval(self.predictor,snapshot,force,target,"
+        },
+        {
+          "line": 103,
+          "text": "raise FilterFailure('reaction_delay_task_or_rate')"
+        },
+        {
+          "line": 119,
+          "text": "self.force=np.asarray(self.pulse.force(t),float) # ONLY real control-boundary measurement"
+        },
+        {
+          "line": 146,
+          "text": "raise FilterFailure('reserve_budget',dict(required=required,available=(self.energy-self.minimum).tolist()))"
+        },
+        {
+          "line": 208,
+          "text": "self.energy+=dw;self.work+=dw;self.gross+=max(0.,-dw)"
+        }
+      ]
+    },
+    "kuka_table_sim/energy_prediction.py": {
+      "sha256": "ab19afd444189094496c40eb6ab3a5b472ee8e87d324077812bce84bea2fc162",
+      "evidence": [
+        {
+          "line": 97,
+          "text": "def interval(self,snapshot,force,target=None,torque=None,damping=0.):"
+        },
+        {
+          "line": 117,
+          "text": "point,vh,th,ph,identity=self.port.apply(d,force,snapshot.base_qfrc)"
+        },
+        {
+          "line": 165,
+          "text": "def backup_rollout(predictor,snapshot,force):"
+        }
+      ]
+    },
+    "kuka_table_sim/energy_state.py": {
+      "sha256": "42ea9d6a9a593c28e426c7813f2162c5931d57496a12dc4639457031dfc82979",
+      "evidence": [
+        {
+          "line": 195,
+          "text": "def fork(self,sim):"
+        },
+        {
+          "line": 202,
+          "text": "out.recorder=out.oracle=out.disturbance=None"
+        }
+      ]
+    },
+    "kuka_table_sim/oracle_physics.py": {
+      "sha256": "4addc9844c2172349ba58407db7edadb819fff94658064b17323767534373f9c",
+      "evidence": [
+        {
+          "line": 71,
+          "text": "def sample(self, data, force):"
+        },
+        {
+          "line": 75,
+          "text": "velocity = self.jac @ data.qvel"
+        },
+        {
+          "line": 77,
+          "text": "power = float(force @ velocity)"
+        },
+        {
+          "line": 84,
+          "text": "# mj_applyFT ADDS to the supplied target. Restore its baseline every substep."
+        },
+        {
+          "line": 85,
+          "text": "mujoco.mj_applyFT(self.model, data, force, np.zeros(3), sample[0],"
+        }
+      ]
+    },
+    "kuka_table_sim/energy_qp.py": {
+      "sha256": "9f4c5cf99025a7144ebd8ba68a141e5e01869e109a86bf7366032f2b8dc113b6",
+      "evidence": []
+    }
+  },
+  "controller_diff": {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "41359f20430c930eec5afaebffa2cfbc482f07da",
+      "--",
+      "kuka_table_sim",
+      "assets"
+    ],
+    "exit_status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "accounting": {
+    "identity": "Both H and R receive the same signed actual point-force work. No independent mismatch residual or upper cap.",
+    "max_account_difference_J": 0.0,
+    "max_point_velocity_difference_m_s": 0.0
+  },
+  "tests": {
+    "command": [
+      "/Users/carl/code/contactSimulation/.venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_poc_figures_audit.py",
+      "--junitxml=docs/kuka_poc_figures/20261016-41359f2/support/audit_tests_02.xml"
+    ],
+    "returncode": 0,
+    "counts": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "status": "PASS"
+  },
+  "findings": [
+    "Recorded attempts and actual solver calls differ: A has four pre-solver infeasible attempts; B includes one primal-infeasible solver call saved in failure diagnostics.",
+    "C/D zero recorded QP calls and bitwise identical executed traces do not establish active task-QP superiority.",
+    "Some discarded reserve/reaction-path plans lose QP attempt/timing diagnostics; zero recorded calls cannot exclude all discarded candidate work.",
+    "Full nominal/zero-budget no-human, ample and assist transparency is bitwise checked; absent A/UF governor signals remain not applicable.",
+    "B versus D changes multiple mechanisms and is an adapted comparison, not a governor-only ablation.",
+    "Offline F3 monitored-port integral includes startup if anchored at t=0; its negative offset must not be attributed exclusively to useful sliding."
+  ],
+  "corrections": {
+    "controller": "No change; frozen sources and constraints preserved.",
+    "report": "Clarify recorded-QP scope, whole-integral startup, real phase anchors, offline versus online status."
+  },
+  "limitations": [
+    "No independently configured mismatch account.",
+    "No finite energy cap, instantaneous human-power bound or gross-work bound.",
+    "No global passivity or real-time certificate.",
+    "Stopped cases have only executed prefixes and no invented recovery."
+  ]
+}

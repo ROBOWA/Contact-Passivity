@@ -1,0 +1,1 @@
+{"case": "nohuman-ample", "variant": "D", "completion": "PASS", "energy": "PASS", "contact": "PASS", "completed_s": 17.999999999994934, "net_outgoing_J": -0.0, "force_max_error_N": 0.04974414942194372, "failure": null}

@@ -1,0 +1,117 @@
+{
+  "variant": "D",
+  "case": "help-then-block",
+  "completed_s": 17.999999999994934,
+  "failure": null,
+  "completion": "PASS",
+  "energy": "PASS",
+  "contact": "PASS",
+  "net_outgoing_J": 0.11984945588107547,
+  "gross_outgoing_J": 0.18229732623874065,
+  "min_substep_energy_J": 0.00015054411892480302,
+  "final_energy_J": 0.00015054411892480302,
+  "force_mae_N": 0.06348247366959409,
+  "force_max_error_N": 1.0694599068007342,
+  "force_peak_N": 11.069459906800734,
+  "contact_absence_s": 0.0,
+  "cross_max_mm": 1.580078893046949,
+  "orientation_max_deg": 0.738331570618553,
+  "reference_progress_m": 0.22072838907839812,
+  "measured_progress_m": 0.21908484807710965,
+  "completed_strokes": 2,
+  "pause_s": 0.34500000000000003,
+  "slowed_s": 0.647,
+  "alpha_recovery_s": 0.045999999995299135,
+  "force_recovery_s": 0.012999999995376044,
+  "minimum_alpha": -4.440892098500626e-16,
+  "failure_count": 0,
+  "torque_bound_residual_Nm": -38.58469712337315,
+  "rate_bound_residual_Nm": -19.975451977914837,
+  "prediction_max_abs_J": 0.0,
+  "power_identity_max_W": 8.326672684688674e-17,
+  "account_independent_recompute_max_J": 5.967448757360216e-16,
+  "wall_seconds": 1236.964804999996,
+  "realtime_factor": 0.014551747897140041,
+  "tick_seconds": {
+    "median": 0.0022254579816944897,
+    "p95": 0.009748106170445607,
+    "p99": 1.748527305896857,
+    "max": 5.713083292008378
+  },
+  "deadline_misses": 18000,
+  "timings": {
+    "seconds_gradient": null,
+    "seconds_backup": {
+      "median": 1.1670784580055624,
+      "p95": 1.688178158015944,
+      "p99": 2.198856687932275,
+      "max": 2.418351541971788
+    },
+    "seconds_qp": null,
+    "seconds_nonlinear": {
+      "median": 0.0009179999469779432,
+      "p95": 0.0013071167864836752,
+      "p99": 0.0017010162957012728,
+      "max": 0.015458042034879327
+    },
+    "seconds_select": {
+      "median": 0.0015843544388189912,
+      "p95": 0.00810268485220148,
+      "p99": 1.7477794104441977,
+      "max": 5.711604750016704
+    }
+  },
+  "interventions": 507,
+  "governor_ticks": 688,
+  "virtual_time_delay_s": 0.5505800155500324,
+  "internal_force_target_range_N": [
+    10.0,
+    10.0
+  ],
+  "fsm_counts": {
+    "n_uncertain": 0,
+    "n_lost": 0,
+    "n_reacquired": 0,
+    "n_hold": 0
+  },
+  "task_window_start_s": 8.71,
+  "progress": "PENDING matched UF reference",
+  "recovery": "PASS",
+  "phase_work": {
+    "task": {
+      "incoming_signed_J": -0.11984945588107546,
+      "outgoing_net_J": 0.11984945588107546,
+      "outgoing_gross_J": 0.18229732623874062,
+      "positive_power_samples": 2634,
+      "negative_power_samples": 5358
+    },
+    "helping": {
+      "incoming_signed_J": 0.062228032911125275,
+      "outgoing_net_J": -0.062228032911125275,
+      "outgoing_gross_J": 0.0,
+      "positive_power_samples": 2396,
+      "negative_power_samples": 0
+    },
+    "between": {
+      "incoming_signed_J": 0.0,
+      "outgoing_net_J": -0.0,
+      "outgoing_gross_J": 0.0,
+      "positive_power_samples": 0,
+      "negative_power_samples": 0
+    },
+    "blocking": {
+      "incoming_signed_J": -0.18207748879220073,
+      "outgoing_net_J": 0.18207748879220073,
+      "outgoing_gross_J": 0.18229732623874062,
+      "positive_power_samples": 238,
+      "negative_power_samples": 5358
+    },
+    "post_release": {
+      "incoming_signed_J": 0.0,
+      "outgoing_net_J": -0.0,
+      "outgoing_gross_J": 0.0,
+      "positive_power_samples": 0,
+      "negative_power_samples": 0
+    }
+  }
+}

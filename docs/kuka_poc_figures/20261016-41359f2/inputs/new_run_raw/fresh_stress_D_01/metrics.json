@@ -1,0 +1,121 @@
+{
+  "variant": "D",
+  "case": "stress",
+  "completed_s": 9.533000000000458,
+  "failure": {
+    "t": 9.533000000000458,
+    "reason": "no_verified_reserve_candidate",
+    "diagnostics": {
+      "rejections": [
+        {
+          "target": 1.0,
+          "reason": "reserve_budget",
+          "diagnostics": {
+            "required": 0.0011359859797960348,
+            "available": [
+              0.0009313803062280018,
+              0.0009313803062280018
+            ]
+          }
+        },
+        {
+          "target": 0.5,
+          "reason": "reserve_budget",
+          "diagnostics": {
+            "required": 0.0010687698171893702,
+            "available": [
+              0.0009313803062280018,
+              0.0009313803062280018
+            ]
+          }
+        },
+        {
+          "target": 0.0,
+          "reason": "reserve_budget",
+          "diagnostics": {
+            "required": 0.0009586507736152706,
+            "available": [
+              0.0009313803062280018,
+              0.0009313803062280018
+            ]
+          }
+        }
+      ]
+    },
+    "seconds_failed_tick": 1.4019487909972668
+  },
+  "completion": "FAIL",
+  "energy": "PASS",
+  "contact": "PASS",
+  "net_outgoing_J": 6.861969377199886e-05,
+  "gross_outgoing_J": 6.861969377199886e-05,
+  "min_substep_energy_J": 0.0009313803062280012,
+  "final_energy_J": 0.0009313803062280012,
+  "force_mae_N": 0.03596928254771133,
+  "force_max_error_N": 0.06601536727481694,
+  "force_peak_N": 10.066015367274817,
+  "contact_absence_s": 0.0,
+  "cross_max_mm": 0.013037919313012576,
+  "orientation_max_deg": 0.2042570533917207,
+  "reference_progress_m": 0.007490573923470107,
+  "measured_progress_m": 0.005362174300645561,
+  "completed_strokes": 0,
+  "pause_s": 0.0,
+  "slowed_s": 0.0,
+  "alpha_recovery_s": null,
+  "force_recovery_s": null,
+  "minimum_alpha": 0.9999564105908996,
+  "failure_count": 1,
+  "torque_bound_residual_Nm": -39.22946120882928,
+  "rate_bound_residual_Nm": -19.99853526711999,
+  "prediction_max_abs_J": 0.0,
+  "power_identity_max_W": 8.673617379884035e-19,
+  "account_independent_recompute_max_J": 7.589415207398531e-19,
+  "wall_seconds": 41.67525204096455,
+  "realtime_factor": 0.22874486735269237,
+  "tick_seconds": {
+    "median": 0.0021715830080211163,
+    "p95": 0.0037418000167235726,
+    "p99": 0.005048918565735222,
+    "max": 1.4562262919498608
+  },
+  "deadline_misses": 9533,
+  "timings": {
+    "seconds_qp": null,
+    "seconds_backup": {
+      "median": 0.44474975002231076,
+      "p95": 0.4944612314633559,
+      "p99": 0.5115944180404768,
+      "max": 0.5141013750107959
+    },
+    "seconds_gradient": null,
+    "seconds_nonlinear": {
+      "median": 0.0009892910020425916,
+      "p95": 0.0017677704454399645,
+      "p99": 0.002343412267509851,
+      "max": 0.014289750019088387
+    },
+    "seconds_select": {
+      "median": 0.0015465830219909549,
+      "p95": 0.0027697082376107567,
+      "p99": 0.0037739515211433245,
+      "max": 1.4554230000358075
+    }
+  },
+  "interventions": 2,
+  "governor_ticks": 2,
+  "virtual_time_delay_s": 2.0721728333228384e-08,
+  "internal_force_target_range_N": [
+    10.0,
+    10.0
+  ],
+  "fsm_counts": {
+    "n_uncertain": 0,
+    "n_lost": 0,
+    "n_reacquired": 0,
+    "n_hold": 0
+  },
+  "task_window_start_s": 8.71,
+  "progress": "PENDING matched UF reference",
+  "recovery": "FAIL"
+}

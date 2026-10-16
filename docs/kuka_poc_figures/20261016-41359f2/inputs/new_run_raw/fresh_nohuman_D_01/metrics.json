@@ -1,0 +1,74 @@
+{
+  "variant": "D",
+  "case": "nohuman-ample",
+  "completed_s": 17.999999999994934,
+  "failure": null,
+  "completion": "PASS",
+  "energy": "PASS",
+  "contact": "PASS",
+  "net_outgoing_J": -0.0,
+  "gross_outgoing_J": 0.0,
+  "min_substep_energy_J": 1.0,
+  "final_energy_J": 1.0,
+  "force_mae_N": 0.01887839203120718,
+  "force_max_error_N": 0.04974414942194372,
+  "force_peak_N": 10.049744149421944,
+  "contact_absence_s": 0.0,
+  "cross_max_mm": 0.06760969553664233,
+  "orientation_max_deg": 0.35291936320281486,
+  "reference_progress_m": 0.24595503602651866,
+  "measured_progress_m": 0.24530055547221402,
+  "completed_strokes": 2,
+  "pause_s": 0.0,
+  "slowed_s": 0.0,
+  "alpha_recovery_s": -2.7284841053187847e-12,
+  "force_recovery_s": -2.7284841053187847e-12,
+  "minimum_alpha": 1.0,
+  "failure_count": 0,
+  "torque_bound_residual_Nm": -38.63063804865856,
+  "rate_bound_residual_Nm": -19.998712201717105,
+  "prediction_max_abs_J": 0.0,
+  "power_identity_max_W": 0.0,
+  "account_independent_recompute_max_J": 0.0,
+  "wall_seconds": 44.14065275003668,
+  "realtime_factor": 0.40778735425429286,
+  "tick_seconds": {
+    "median": 0.002385666943155229,
+    "p95": 0.003391675226157531,
+    "p99": 0.0045700545806903305,
+    "max": 0.022482041968032718
+  },
+  "deadline_misses": 18000,
+  "timings": {
+    "seconds_select": {
+      "median": 0.0016704379813745618,
+      "p95": 0.0024660561699420204,
+      "p99": 0.003432321605505417,
+      "max": 0.018575415946543217
+    },
+    "seconds_nonlinear": {
+      "median": 0.001066708005964756,
+      "p95": 0.0015783584327436968,
+      "p99": 0.0022982641495764232,
+      "max": 0.017179916030727327
+    },
+    "seconds_gradient": null,
+    "seconds_qp": null
+  },
+  "interventions": 0,
+  "governor_ticks": 0,
+  "virtual_time_delay_s": 0.0,
+  "internal_force_target_range_N": [
+    10.0,
+    10.0
+  ],
+  "fsm_counts": {
+    "n_uncertain": 0,
+    "n_lost": 0,
+    "n_reacquired": 0,
+    "n_hold": 0
+  },
+  "task_window_start_s": 8.71,
+  "progress": "PENDING matched UF reference",
+  "recovery": "PASS"
+}

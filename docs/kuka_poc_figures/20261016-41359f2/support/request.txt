@@ -1,0 +1,398 @@
+KUKA STAGE 2 — REPRODUCE THE ORIGINAL 2-DOF PoC RESULT FIGURES
+AND PRODUCE A VERIFIED, RESULTS-FIRST REPORT
+
+Work autonomously through implementation, figure generation, reporting, and
+FOUR documented review -> correction -> revalidation rounds. Do not stop after
+a plan or the first successful run. The deliverable is a reproducible set of
+plots and a PDF report, not a controller redesign.
+
+1. GOAL AND PRESERVATION
+
+Reproduce the scientific questions, panel structure, signal definitions, and
+comparisons of the original planar 2-DOF PoC Figures 3–8 for the CURRENT KUKA
+simulation, wherever the current implementation supports them. Use actual
+KUKA data. Matching the old layout alone is insufficient; matching an old
+conclusion by relabeling a different controller is unacceptable.
+
+Repository: ROBOWA/Contact-Passivity
+Known Stage 2 branch:
+  feature/kuka-energy-reserve-contact-20261015-c5601e5e
+Last reviewed head:
+  41359f20430c930eec5afaebffa2cfbc482f07da
+Archived numerical source:
+  81dffa64109752a9a027975e7b831daa4ff91e86
+Preserved Stage 1:
+  32c4866183b020c50724160749b588f140228db5
+
+Resolve the actual current synchronized Stage 2 head before starting. Record its
+SHA and any differences from this reference. Do not silently switch to main,
+the old proposal branch, or an outdated local checkout.
+
+Read applicable AGENTS.md and repository instructions. Inventory the original
+worktree, including uncommitted/untracked work. Create an isolated new worktree
+and branch such as feature/kuka-poc-figures-<date>-<shortsha>. Leave the original
+worktree, existing branches, controller code, raw results, and reports intact.
+Do not reset, clean, force-push, amend old commits, merge to main, or overwrite
+historical output directories. Use a new output root. Record before/after hashes
+for protected tracked code and evidence; preserve any relevant local-only inputs.
+
+Allowed work:
+- New plot/data adapters, report code, independent audits and focused tests.
+- Minimal optional instrumentation, with demonstrated behavior parity.
+- New opt-in scenario configurations using EXISTING controller capabilities.
+- New paired runs when needed for a valid comparison or missing raw signals.
+
+Keep frozen controller gains, accounting rules, constraints, budgets and safety
+logic unchanged for the baseline. Do not add a new residual definition, energy
+cap, power cap, governor, controller, or model just to complete a figure.
+Record unsupported experiments precisely and finish every supported deliverable.
+A controller defect discovered here must be reported; any proposed algorithmic
+repair belongs in a separately identified follow-up, not hidden in these plots.
+
+2. CANONICAL 2-DOF REFERENCES — READ THESE FIRST
+
+Use the repository sources, not recollection or filenames alone:
+  paper/README.md
+  paper/make_figures.py
+  paper/main.tex
+  paper/results_section.tex
+  mujoco_sliding/experiments.py
+  mujoco_sliding/passivity_qp.py
+  results_passivation_iter2/
+  results_passivation_iter2/governor_compare/
+
+The compiled original report is main(3).pdf if available. It is a 9-page report
+titled "Contact-Model-Aware Selective Passivation: A Proof-of-Concept Study."
+The current KUKA review, if available, is
+Simulation_and_Controller_Review_Stage2.pdf (14 pages, reviewed head 41359f2).
+Neither PDF is needed to run if the repository sources and raw data are present.
+
+CRITICAL LABEL DISTINCTION:
+The final 2-DOF paper defines:
+  C0 = nominal
+  C1 = whole-port QP
+  C2 = residual-only QP
+  C3 = dual-ledger QP, governor OFF
+  C4 = the SAME dual-ledger QP, governor ON
+Paper C3/C4 both use implementation mode C3_dual_ledger_qp with different
+governor settings. The legacy code mode C4_dual_ledger_safe_scalar is a
+different diagnostic and is NOT paper C4.
+
+KUKA Stage 2 defines:
+  UF = matched unfiltered reference
+  A = frozen Stage 1
+  B = physics-prefix enforcement
+  C = B plus reserve/governor
+  D = C plus explicit per-stage task constraints
+
+These two naming systems are not interchangeable. Prefix labels with
+"2-DOF" or "KUKA" whenever ambiguity is possible. In particular, KUKA C versus D
+is NOT the old governor-off/on ablation; B versus D changes multiple mechanisms.
+
+Create a figure crosswalk before plotting. For each original figure list:
+original question, source function/file, scenario, controller semantics, panel
+signals/units, KUKA data sources, and status:
+  exact comparison / adapted comparison / diagnostic only / unsupported.
+Explain each adaptation in one sentence. Never call a different comparison an
+exact reproduction.
+
+3. SIX REQUIRED FIGURE FAMILIES
+
+Preserve the original stacked/shared-time-axis style, clear phase shading,
+legends, threshold labels and event annotations. Use actual KUKA parameters;
+do not copy the old 5 N target, 0.10 W limit, 0.005 J floor, 0.08 J cap,
+interaction times or 2-DOF numerical outcomes into KUKA figures.
+
+F3 — Useful task work and false depletion
+Original: fig3_false_depletion.pdf; A_exact_no_human; C0/C1/C3.
+Panels:
+  (a) whole-port and selective ledgers, including implemented floors
+  (b) normal contact force and its desired value
+  (c) tangential velocity and its desired value
+Annotate first actual intervention using logs.
+KUKA: use nominal/no-human sliding and available matched policies. A whole-port
+energy trace integrated offline is a DIAGNOSTIC, not a closed-loop whole-port
+controller: it cannot demonstrate that such a controller would stop the robot.
+If no actual whole-port baseline exists, state that the false-depletion
+closed-loop comparison is missing, while plotting the supported task-exemption
+behavior and clearly labeled offline work if useful.
+
+F4 — Model mismatch without a human
+Original: fig4_mismatch_residual.pdf; B_mismatch_no_human.
+Panels:
+  (a) E_H and E_R, implemented floors and actual interventions
+  (b) signed mismatch power p_delta and human power p_H
+Use a plant/predictor mismatch only if the existing model and ledger code
+actually support it. Verify plant and predictor parameters are independently
+configured; changing both together is not a mismatch experiment.
+If KUKA R is currently another copy of the human-work account, show/describe
+that limitation honestly. An unchanged R under plant mismatch is not evidence
+that mismatch is accounted for. Do not manufacture a separating E_R curve.
+
+F5 — Blocking: human power, work and energy
+Original: fig5_human_limiting.pdf; C_oracle_blocking; C0/C2/C3.
+Panels:
+  (a) -p_H, positive for robot-to-human output
+  (b) cumulative NET outgoing human work
+  (c) actual raw E_H, with implemented floor
+Use the current matched blocking fixture and available KUKA variants, including
+UF and D and informative existing ablations. Explain which old roles are absent.
+Draw a power-limit line only if that limit is genuinely enforced in this run.
+Show gross outgoing work separately when it differs from net work.
+Mark intervention, pulse ramp-out, pulse end and any premature termination.
+This should be a central figure using complete executed traces.
+
+F6 — Simultaneous model mismatch and human interaction
+Original: fig6_combined_decomposition.pdf; D_mismatch_blocking.
+Panels:
+  (a) E_H and E_R
+  (b) human, mismatch and residual power, with the declared sign convention
+Verify the implemented identity p_R = p_H + p_delta when that definition exists.
+Use separate curves rather than a stacked area if signed terms would mislead.
+Distinguish actual online accounting from retrospective diagnostic decomposition.
+If R = H in the current code, make that equality and missing mismatch mechanism
+explicit. Do not claim a dual-account benefit from coincident curves.
+
+F7 — Helping followed by blocking
+Original: fig7_charge_discharge.pdf; F_helping_blocking.
+Panels:
+  (a) E_H with actual implemented floor/cap, if any
+  (b) signed p_H or -p_H, with clearly labeled helping/blocking phases
+If only separate helping and blocking runs exist, create one continuous
+help-then-block scenario through the existing force-profile interface. Preserve
+state, ledger and controller history throughout; never splice independent runs.
+Retain the baseline configuration and freeze the new profile before evaluation.
+If a finite cap is not implemented, show the uncapped behavior and say so.
+Do not add clipping or a cap just to resemble the old plot.
+Use measured power to assess charging/discharging, not force direction alone.
+
+F8 — Complete blocking and release behavior / governor
+Original: fig8_governor.pdf; governor_compare.
+Six panels, retaining the complete interaction AND recovery:
+  (a) human force magnitude and any actual trigger/state changes
+  (b) actual along-path position, governed reference, and original time-indexed
+      reference when available; distinguish diagnostic reference from online input
+  (c) actual tangential velocity and governed velocity
+  (d) actual tangential command, if that physical signal exists
+  (e) normal-force error F_n - F_n_des
+  (f) E_H and E_R
+The KUKA decision variable is joint torque. If there is no true scalar tangential
+command, replace panel (d) with joint-torque intervention (N m), state the change,
+and do not infer a unique Cartesian force from a redundant torque vector.
+A governor-off/on claim requires paired runs differing ONLY in that setting.
+If the reserve policy cannot be separated from its governor, present an adapted
+interaction/recovery comparison and explain the coupled changes.
+Measure reference debt, peak velocity, command change, force-error peak, minimum
+energy, pause and sustained recovery using explicit fixed windows.
+Mark ramp-out onset and full force removal separately. The old plot measured
+release from ramp-out onset; do not silently compare that with a new pulse-end
+definition. Label any reference-anchor differences in the current implementation.
+
+All six families must be addressed in the crosswalk and report. Generate actual
+data plots for every supported family and supported subset. For unavailable
+signals, say "not logged" or "not implemented," never substitute zeros. A missing
+capability belongs in a compact gap table, not a fabricated or empty result plot.
+Reuse complete verified logs; rerun only when necessary. Do not generate cosmetic
+duplicates to meet a figure count.
+
+4. CURRENT KUKA EVIDENCE AND KNOWN LIMITS TO CHECK
+
+Start with:
+  docs/energy_guard_stage2/20261015-c5601e5e/final_02/
+  report.md, cases.json, metrics.json, acceptance.json
+  raw/<case>__<variant>/trace.npz
+  extension_main_D_01/ and extension_historical_D_01/
+  validation.json and validation.npz
+Find the actual controller/predictor/guard/QP source and current CLI; do not invent
+commands or assume report prose supersedes executable code.
+
+At the last reviewed freeze:
+- H and R received the SAME actual human work, with equal main budgets 0.12 J.
+  There was no finite E_max cap or independently demonstrated mismatch ledger.
+- D had zero recorded QP solves across the 13-case matrix; C and D coincided.
+  This supports the reserve/governor more directly than the extra QP task rows.
+- Main D maintained contact and completed; the tiny-budget stress stopped.
+- Physics/control periods were 0.25 ms / 1 ms of simulated time.
+- The known human force acted on link5 or link3, NOT necessarily the TCP.
+- The 10 N task-contact target is separate from the human interaction port.
+- Backup rollouts held the currently measured human force. They did not receive
+  the future scripted pulse.
+- A 1 ms simulation control interval did not imply real-time computation.
+
+Treat these as reference findings to verify, not values to hard-code. Report any
+differences at the current head. Do not claim global robot passivity, general
+robustness, a certified model-error bound, a human force cap, or physical
+emergency-stop behavior from these plots.
+
+Add a small KUKA-specific supplement only where needed:
+energy available versus braking reserve; alpha target versus actual alpha;
+ordered task progress and equal-progress completion time; whole-controller
+timing versus the 1 ms deadline; completion/stop and constraint-active counts.
+Prioritize the six original scientific questions over miscellaneous charts.
+
+5. DATA CONTRACT AND NUMERICAL HONESTY
+
+Each plotted curve must resolve to source commit, case/config, raw file/hash,
+signal, transformation, evaluation window, sampling stage and units.
+Store this in a machine-readable manifest. Distinguish existing archived data,
+fresh re-simulation, offline diagnostic, rejected shadow rollout and unexecuted
+prediction. Never plot a rejected candidate as the robot's executed trajectory.
+
+Compute human power at the ACTUAL application point:
+  p_H = F_H dot v_H,  v_H = J_H(q) qdot
+Include moment power when the implemented wrench has a moment. Use consistent
+frames and the velocity dual to the wrench. Do not use TCP velocity for a
+forearm force or subtract untransformed wrenches at different points.
+
+State whether the task predictor conditions on human force/location or uses a
+nominal no-human counterfactual. Document the implemented choice; do not silently
+change it or certify a diagnostic as the proposal's residual account.
+
+Use stage-coherent physics increments and the recorder's actual quadrature:
+  W_H,in = sum(dW_H)
+  W_H,out,net = -sum(dW_H)
+  W_H,out,gross = sum(max(-dW_H, 0))
+For an uncapped ledger, E_H = E_H,0 + W_H,in. With a real upper cap, reproduce the
+per-step update and track discarded charging work; do not apply a cap only to
+the final integrated sum. A net budget is not a gross-work bound when recharge
+occurs. Never lower-clamp raw energy or hide negative prefixes.
+
+Check time monotonicity, actual dt, sampling stage, dropped samples, array
+lengths, non-finite values and complete interaction coverage before computing.
+Do not integrate decimated data as though it were the full physics trace.
+Every stopped run ends at its actual final sample; no padding, extrapolation or
+invented post-stop recovery. Compare common windows and report full-run outcomes
+separately. No last-sample reuse beyond termination.
+
+No smoothing for extrema, acceptance, energy or violation metrics. If the old
+50 ms display mean is retained for mismatch power, show raw data faintly,
+label the display-only filter and keep all checks on raw samples. Preserve
+events and extrema when rendering dense curves. Avoid inherited axis limits
+that conceal KUKA spikes. Explicitly mark zooms and broken axes.
+
+Use identical configurations for causal ablations except the declared factor.
+Freeze new scenario configurations and analysis windows before final evaluation.
+Do not tune budgets, gains or timing to obtain a desired ordering. A failed,
+inactive or identical comparison is a valid result and must remain visible.
+
+6. FOUR MANDATORY REVIEW–CORRECTION–REVALIDATION ROUNDS
+
+First implement the pipeline and generate an initial report. THEN complete
+rounds 1, 2, 3 and 4. Each round must include:
+  inspect -> record concrete findings -> fix justified issues ->
+  regenerate affected figures/report -> rerun affected checks -> record outcome.
+If no correction is needed, record the checks and evidence for "no change."
+Do not manufacture edits. Four script launches or four assurances are not four
+review rounds. Reuse frozen raw logs where appropriate; four full expensive
+simulation-matrix reruns are not required.
+
+ROUND 1 — Source, semantics and data integrity
+Check every original-to-KUKA mapping; the C4 naming trap; units/frames/signs;
+time alignment and quadrature; ledger floor/cap semantics; stopped runs and
+missing signals. Independently recompute every displayed headline metric from
+raw data without calling the plotting helper being checked. Compare against
+existing metrics with declared, justified tolerances. Fix adapters and labels.
+
+ROUND 2 — Controller meaning and fair comparisons
+Audit actual configurations and source for each comparison. Verify equality
+of nuisance parameters, correct human contact-point velocity, causal forecasts,
+online versus offline status, and whether QP constraints actually activate.
+Count QP solves, interventions, fallback/stop reasons and active rows.
+Check that optional logging leaves controller behavior unchanged.
+Run focused meaningful tests for identified risks, including a known-sign work
+case, a short negative energy prefix and early-termination handling if relevant.
+Use real subprocess exit status and structured test counts. Never declare tests
+passed by searching stdout for "passed" and absence of "failed"; that misses
+errors, collection failures and timeouts.
+
+ROUND 3 — Reproduction and physical/numerical spot checks
+Freshly reproduce representative cases: the main blocking run, a no-human
+reference, and any newly introduced help-then-block or valid mismatch scenario.
+Repeat at least one new or materially instrumented representative run with the
+same frozen settings to check reproducibility.
+Exercise an existing explicit-stop case and verify it stays a stop in the report.
+If equivalent checked fresh runs already exist for an unchanged commit/config/
+environment, cite that evidence and focus compute on genuinely new cases.
+Compare the independent recomputation with the regenerated report numbers.
+Run a targeted timestep/alignment or work-meter check when needed by a concrete
+remaining discrepancy. Do not change the baseline to make the check pass.
+Record versions, seeds, initial states, runtime and tolerances. If a run cannot
+finish, retain its logs and mark the missing evidence; do not substitute a claim.
+
+ROUND 4 — Final artifacts and adversarial claim audit
+Run the complete figure/metrics/PDF build from a clean new output directory using
+only the documented inputs and commands. Render EVERY PDF page and inspect the
+images: legibility, plot size, overlapping labels, units, legends, clipped peaks,
+page breaks, thresholds, source notes and consistency with numeric tables.
+Check every main conclusion against raw evidence. In particular:
+  identical H/R does not establish mismatch accounting;
+  zero QP solves does not establish active-QP superiority;
+  a signed-energy limit does not establish a peak power/force or gross-work limit;
+  stopped trials are not successful completions;
+  differing governor/reserve policies are not an isolated governor ablation.
+Fix discrepancies, regenerate and revalidate affected outputs. If round 4 changes
+code or calculations, rerun all checks invalidated by that change before sealing
+the final artifacts. Do not end with an untested last-minute edit.
+
+Keep reviews/round_01.md ... round_04.md with:
+artifact/source identifiers, commands, exit status, tests/counts, findings,
+changes, pre/post metrics where relevant, remaining limitations and final verdict.
+Use machine-readable review results as well. Overall "verified" requires all
+four completed rounds and no unresolved error in reported data or claims.
+A correct report may conclude that an experiment is unsupported or a controller
+failed. Distinguish report correctness from scientific success.
+
+7. REPORT AND OUTPUT REQUIREMENTS
+
+Write the report in English. Make it results-first and visually informative:
+- About 8–12 pages, extending only if needed for readable plots.
+- At most one page of setup/controller context.
+- Original-to-KUKA mapping and a compact controller-role table.
+- The six figure families above, with 2–4 sentences per figure:
+  what was run, what the traces show, and what that supports or does not support.
+- Quantitative tables: force RMSE/MAE/peak error, tangential tracking, reference
+  debt/recovery, min raw ledger, net/gross human work, peak human-directed power,
+  task progress/completion, stops, QP activity and runtime as available.
+- A concise proposal-coverage table: demonstrated / partially tested /
+  missing. Separate actual current behavior from follow-up proposals.
+- Four-round review summary and unresolved limitations.
+Do not turn the report into a long background review or paste test logs into
+the main narrative. Use supporting appendices for provenance.
+
+Recommended new root:
+  docs/kuka_poc_figures/<date>-<source_sha>/
+Deliver:
+  report.pdf
+  report.md or report.tex (editable source)
+  figure_crosswalk.csv
+  figures/*.pdf (vector where possible) and *.png
+  plot_data/*.csv or *.npz with named signals/units
+  metrics.csv and metrics.json
+  manifest.json (source/config/input hashes, versions, commands, windows)
+  reviews/round_01.md ... round_04.md and review_summary.json
+  reproducibility instructions
+  raw logs or exact preserved existing-log references plus new-run logs
+
+Implement a single documented entry point that regenerates metrics, all figures
+and the PDF from preserved logs. Keep simulation generation separate, with a
+documented command for missing/new raw runs. Verify the actual commands work.
+Record the source commit and output hashes without assuming PDF bytes are
+deterministic if timestamps or build metadata vary.
+
+Preserve all original results. Commit the new work on the isolated branch if
+the environment permits. If this session already authorizes publishing that
+branch, push it without force; otherwise leave the completed local commit
+reviewable and report its branch/SHA. Do not merge, publish externally or send
+messages to other people.
+
+Final response must state:
+1. The report path and figure directory.
+2. Which original figures were exactly reproduced, adapted or unsupported,
+   and why; include any required model/controller follow-up.
+3. The main numerical findings, including failures and inactive comparisons.
+4. Evidence that all FOUR rounds completed: fixes/checks and remaining issues.
+5. Reproduction command, branch, commit and preservation check.
+
+Do the work now. Do not stop after proposing this workflow, and do not present
+an unsupported comparison as completed merely to satisfy the plot checklist.
+

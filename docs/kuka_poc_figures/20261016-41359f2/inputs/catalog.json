@@ -1,0 +1,126 @@
+{
+  "cases": [
+    {
+      "key": "main__UF",
+      "folder": "main__UF",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "main__A",
+      "folder": "main__A",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "main__B",
+      "folder": "main__B",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "main__C",
+      "folder": "main__C",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "main__D",
+      "folder": "main__D",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "historical__UF",
+      "folder": "historical__UF",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "historical__A",
+      "folder": "historical__A",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "historical__D",
+      "folder": "historical__D",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "stress__D",
+      "folder": "stress__D",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "nohuman-zero__D",
+      "folder": "nohuman-zero__D",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "nohuman-ample__D",
+      "folder": "nohuman-ample__D",
+      "source_kind": "archived executed simulation"
+    },
+    {
+      "key": "help-then-block__D",
+      "folder": "help-then-block__D",
+      "source_kind": "fresh continuous help-then-block executed simulation"
+    },
+    {
+      "key": "help-then-block-repeat__D",
+      "folder": "help-then-block-repeat__D",
+      "source_kind": "fresh continuous help-then-block executed simulation"
+    }
+  ],
+  "extensions": {
+    "main": {
+      "source": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/repeat_main_D_01",
+      "reference": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/main/main/UF",
+      "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+      "commit": "f3b729833dc93faedc503664bb0559b2abca57d9",
+      "achieved_18s_UF_amount": true,
+      "extra_physical_time_s": 0.6679999999981234,
+      "requested_until_s": 20.0,
+      "reference_amount_m": 0.24529383431831936,
+      "measured_amount_m": 0.3004753096439511,
+      "completed_strokes": 3,
+      "energy_start_J": [
+        0.0004091799947276076,
+        0.0004091799947276076
+      ],
+      "energy_final_J": [
+        0.0004091799947276076,
+        0.0004091799947276076
+      ],
+      "wall_seconds": 12.450520084006712
+    },
+    "historical": {
+      "source": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D",
+      "reference": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/UF",
+      "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+      "commit": "64045a9a772b69b1851113761d88bb92af8ce1b1",
+      "achieved_18s_UF_amount": true,
+      "extra_physical_time_s": 0.5459999999975409,
+      "requested_until_s": 20.0,
+      "reference_amount_m": 0.24529420740319513,
+      "measured_amount_m": 0.3004699348651144,
+      "completed_strokes": 3,
+      "energy_start_J": [
+        0.00013055358846319567,
+        0.00013055358846319567
+      ],
+      "energy_final_J": [
+        0.00013055358846319567,
+        0.00013055358846319567
+      ],
+      "wall_seconds": 12.535169708076864
+    }
+  },
+  "source_stage2_head": "41359f20430c930eec5afaebffa2cfbc482f07da",
+  "analysis": {
+    "task_start_s": 8.71,
+    "nominal_end_s": 18.0,
+    "original_force_target_N": 10.0,
+    "recovery_force_band_N": 0.5,
+    "recovery_alpha": 0.95,
+    "recovery_duration_s": 0.5,
+    "common_window_policy": "[8.71, earliest actual executed end) within each matched case",
+    "archived_metric_tolerance": 1e-08,
+    "independent_metric_tolerance": 1e-08
+  },
+  "note": "No controller imports or modifications. Every retained executed trace is complete."
+}

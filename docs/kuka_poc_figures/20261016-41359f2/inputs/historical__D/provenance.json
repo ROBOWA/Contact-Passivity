@@ -1,0 +1,364 @@
+{
+  "source_kind": "archived executed simulation",
+  "original_directory": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D",
+  "source_files": {
+    "baseline_log.npz": {
+      "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D/baseline_log.npz",
+      "sha256": "91fe1f2ca59247dddaac8d9eec33185f7b299ca089ee739720b8e2c22abc95b2",
+      "bytes": 35636381
+    },
+    "events.json.gz": {
+      "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D/events.json.gz",
+      "sha256": "d234190b6c5ce2ba2b2337e3b0a669982d4e474cba46f116a88690e38791ac0b",
+      "bytes": 106962
+    },
+    "final_state.npz": {
+      "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D/final_state.npz",
+      "sha256": "b18e22c2c9387364886a29762f2543200d16e155cdd45ab7b2207876caf4a702",
+      "bytes": 8860
+    },
+    "guard.npz": {
+      "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D/guard.npz",
+      "sha256": "c970cd4686fbff2a53d7065947d14b2140df17e994a6bb44fc0263ba8007c134",
+      "bytes": 20466973
+    },
+    "metadata.json": {
+      "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D/metadata.json",
+      "sha256": "a60ef10c956220717d6e957bb1ebf9a517fda6aab2128dc2f7e445b018691892",
+      "bytes": 1880
+    },
+    "metrics.json": {
+      "path": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/final_matrix_01/historical/historical/D/metrics.json",
+      "sha256": "dacdef97a310a57125a3058912e554e2a5c810b2ea8c7a851d03ecfd1b526942",
+      "bytes": 2403
+    }
+  },
+  "metadata": {
+    "commit": "f3b729833dc93faedc503664bb0559b2abca57d9",
+    "branch": "feature/kuka-energy-reserve-contact-20261015-c5601e5e",
+    "dirty": false,
+    "source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+    "source_end_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+    "case": {
+      "magnitude": 4.5,
+      "start": 10.1,
+      "ramp": 0.15,
+      "hold": 0.8,
+      "direction": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "body": "link5",
+      "local": [
+        0.0,
+        0.04,
+        0.12
+      ],
+      "budget": 0.12,
+      "rate_factor": 1.0,
+      "name": "historical"
+    },
+    "variant": "D",
+    "config": {
+      "transition": 0.1,
+      "damping": 40.0,
+      "horizons": [
+        0.02,
+        0.05,
+        0.1,
+        0.25,
+        0.5,
+        1.0,
+        2.0
+      ],
+      "terminal_persistence": 0.02,
+      "terminal_speed": 0.001,
+      "terminal_power": 0.002,
+      "terminal_tool_speed": 0.001,
+      "terminal_angular_speed": 0.01,
+      "energy_margin": 1e-08,
+      "reserve_margin": 1e-05,
+      "force_lower": 7.0,
+      "force_upper": 13.0,
+      "normal_speed": 0.005,
+      "orientation": 0.03490658503988659,
+      "cross_error": 0.003,
+      "task_start": 8.71,
+      "energy_tolerance": 1e-10,
+      "torque_tolerance": 1e-07,
+      "task_tolerance": 1e-07,
+      "eta": 0.02,
+      "retries": 3,
+      "targets": [
+        1.0,
+        0.5,
+        0.0
+      ],
+      "task_weight": 1.0,
+      "rate_factor": 1.0
+    },
+    "duration": 18.0,
+    "forecast": "current measured world force vector held throughout each complete rollout",
+    "versions": {
+      "python": "3.13.5",
+      "mujoco": "3.15.0",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "osqp": "1.1.3"
+    },
+    "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+    "asset_hashes": {
+      "kuka_table_scene.xml": "918d95d6836c2147",
+      "iiwa14_torque.xml": "b1315d433880f305",
+      "polishing_tool.xml": "62ecf0422cf46708"
+    }
+  },
+  "baseline_metadata": {
+    "commit": "f3b729833dc93faedc503664bb0559b2abca57d9",
+    "branch": "feature/kuka-energy-reserve-contact-20261015-c5601e5e",
+    "dirty": true,
+    "mujoco": "3.15.0",
+    "numpy": "2.5.4",
+    "python": "3.13.5",
+    "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+    "timestep": 0.00025,
+    "control_period": 0.001,
+    "control_interval": 4,
+    "n_physics_steps": 72000,
+    "n_control_updates": 18000,
+    "controller": "GovernedController",
+    "config": {
+      "force_desired": 10.0,
+      "approach_speed": 0.05,
+      "creep_speed": 0.005,
+      "creep_distance": 0.01,
+      "contact_threshold": 1.0,
+      "contact_samples": 3,
+      "release_threshold": 0.2,
+      "release_time": 0.3,
+      "force_ramp_time": 1.0,
+      "kp_force": 0.5,
+      "ki_force": 5.0,
+      "integral_limit": 10.0,
+      "normal_damping": 40.0,
+      "motion_freq_hz": 4.0,
+      "motion_zeta": 1.0,
+      "rotation_freq_hz": 6.0,
+      "ki_tangential": 300.0,
+      "tangential_integral_limit": 5.0,
+      "ki_rotation": 300.0,
+      "rotation_integral_limit": 20.0,
+      "friction_ff": 0.0,
+      "friction_ff_speed": 0.005,
+      "friction_viscous_ff": 80.0,
+      "slide_distance": 0.1,
+      "slide_direction": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "slide_speed": 0.05,
+      "slide_cycles": 0,
+      "slide_dwell": 0.0,
+      "slide_start_delay": 1.0,
+      "posture_freq_hz": 1.0,
+      "posture_zeta": 1.0,
+      "lambda_reg": 0.001,
+      "max_penetration": 0.01,
+      "deficit_threshold": 1.0,
+      "deficit_fraction": 0.5,
+      "deficit_samples": 10,
+      "search_creep_distance": 0.002,
+      "search_lag_hold": 0.0005,
+      "search_lag_max": 0.003,
+      "search_gate_freq": 30.0,
+      "mode_blend_time": 0.1,
+      "integral_taper_time": 0.5,
+      "recovery_stop_time": 0.6,
+      "recovery_speed_max": 0.05,
+      "recovery_accel_max": 0.3,
+      "search_time_max": 4.0,
+      "search_distance_max": 0.03,
+      "search_floor_dwell": 0.5
+    },
+    "model_file_sha256": {
+      "kuka_table_scene.xml": "918d95d6836c2147",
+      "iiwa14_torque.xml": "b1315d433880f305",
+      "polishing_tool.xml": "62ecf0422cf46708"
+    },
+    "integrator": "mjINT_IMPLICITFAST",
+    "cone": "mjCONE_ELLIPTIC",
+    "gravity": [
+      0.0,
+      0.0,
+      -9.81
+    ],
+    "pair_solreffriction": [
+      [
+        0.5,
+        1.0
+      ]
+    ],
+    "tool_mass": 0.5,
+    "torque_limit": [
+      320.0,
+      320.0,
+      176.0,
+      176.0,
+      110.0,
+      40.0,
+      40.0
+    ],
+    "unexpected_pairs": {},
+    "conventions": {
+      "row": "one physics evaluation: step starting at t_k with state x_k; every field is from that evaluation",
+      "work": "dW = P*dt, left-endpoint rectangle; P = sum F_c.v_p + M_c.omega, environment on robot, signed",
+      "force_sign": "F_task, ft_corr, f_n: force of the environment ON the tool; +z (table normal) = pressing",
+      "ft_sample": "control update at t_k consumes the sample of the step that started at t_k - dt (t_ft)",
+      "torque": "tau_ctrl is constant during the control interval; tau_applied is MuJoCo actuator_force per substep"
+    },
+    "saved_stride": 1,
+    "saved_window": null,
+    "saved_float32": false
+  },
+  "archived_metrics": {
+    "variant": "D",
+    "case": "historical",
+    "completed_s": 17.999999999994934,
+    "failure": null,
+    "completion": "PASS",
+    "energy": "PASS",
+    "contact": "PASS",
+    "net_outgoing_J": 0.11986944641153696,
+    "gross_outgoing_J": 0.11992659644995116,
+    "min_substep_energy_J": 8.766822825698184e-05,
+    "final_energy_J": 0.0001305535884630199,
+    "force_mae_N": 0.05259115548333381,
+    "force_max_error_N": 1.0452901084388202,
+    "force_peak_N": 11.04529010843882,
+    "contact_absence_s": 0.0,
+    "cross_max_mm": 1.2386161490870693,
+    "orientation_max_deg": 0.6812378580486532,
+    "reference_progress_m": 0.2208617433305784,
+    "measured_progress_m": 0.21920175981393292,
+    "completed_strokes": 2,
+    "pause_s": 0.446,
+    "slowed_s": 0.623,
+    "alpha_recovery_s": 0.05799999999643646,
+    "force_recovery_s": 0.07799999999638985,
+    "minimum_alpha": -1.1102230246251565e-15,
+    "failure_count": 0,
+    "torque_bound_residual_Nm": -38.60453925690826,
+    "rate_bound_residual_Nm": -19.974999423079932,
+    "prediction_max_abs_J": 0.0,
+    "power_identity_max_W": 8.326672684688674e-17,
+    "account_independent_recompute_max_J": 3.920475055707584e-16,
+    "wall_seconds": 1069.0490694160108,
+    "realtime_factor": 0.016837393637906435,
+    "tick_seconds": {
+      "median": 0.004444999562110752,
+      "p95": 0.008573796070413663,
+      "p99": 2.619311621953966,
+      "max": 8.050289875012822
+    },
+    "deadline_misses": 18000,
+    "timings": {
+      "seconds_qp": null,
+      "seconds_gradient": null,
+      "seconds_select": {
+        "median": 0.0031345415045507252,
+        "p95": 0.006976978463353586,
+        "p99": 2.6162278131628387,
+        "max": 8.048416166100651
+      },
+      "seconds_nonlinear": {
+        "median": 0.0019172710017301142,
+        "p95": 0.003093583189183846,
+        "p99": 0.0037903587857726915,
+        "max": 0.25944337504915893
+      },
+      "seconds_backup": {
+        "median": 1.697115729446523,
+        "p95": 2.6567954893340353,
+        "p99": 3.3440668168116825,
+        "max": 3.834054333041422
+      }
+    },
+    "interventions": 523,
+    "governor_ticks": 668,
+    "virtual_time_delay_s": 0.5471912006349982,
+    "internal_force_target_range_N": [
+      10.0,
+      10.0
+    ],
+    "fsm_counts": {
+      "n_uncertain": 0,
+      "n_lost": 0,
+      "n_reacquired": 0,
+      "n_hold": 0
+    },
+    "task_window_start_s": 8.71,
+    "progress": "PASS",
+    "recovery": "PASS",
+    "progress_ratio_to_UF": 0.8936279504294469,
+    "reference_progress_ratio_to_UF": 0.8979760971707255
+  },
+  "sample_policy": "all executed physics and control samples; no decimation or smoothing",
+  "units": {
+    "t_phys": "s; start of physics interval",
+    "h": "s",
+    "t_control": "s; command boundary",
+    "power_H": "W; into robot",
+    "work_H": "J; signed left rectangle",
+    "energy_H": "J; after executed physics increment",
+    "energy_R": "J; after executed physics increment",
+    "force_H": "N; world; actual application point",
+    "velocity_H": "m/s; world; actual application point",
+    "point_H": "m; world",
+    "normal_force": "N; world +z force ON tool",
+    "present": "bool",
+    "task_power": "W; actual tool/table material-point wrench power",
+    "task_work": "J; signed left rectangle",
+    "tcp_position": "m; world; pre-integration",
+    "tcp_velocity": "m/s; world; pre-integration",
+    "x": "m; world; control-boundary TCP",
+    "v": "m/s; world; control-boundary TCP",
+    "x_des": "m; online governed reference",
+    "v_des": "m/s; online governed reference",
+    "force_des": "N; internal online target; original task target remains 10 N",
+    "phase": "controller code",
+    "strokes": "completed reference strokes",
+    "s_des": "m",
+    "tau_exec": "N m; complete held joint torque",
+    "tau_nom": "N m; governed nominal joint torque",
+    "tau_previous": "N m",
+    "alpha": "dimensionless",
+    "alpha_target": "dimensionless",
+    "sigma": "s; virtual time",
+    "reserve": "J; unexecuted current-held-force backup prediction",
+    "reserve_margin": "J",
+    "tau_ungoverned": "N m; nominal counterfactual on actual state; diagnostic",
+    "x_ungoverned": "m; counterfactual reference on actual state; diagnostic",
+    "orientation": "rad",
+    "cross_error": "m",
+    "tick_seconds": "wall s; whole successful control tick"
+  },
+  "stage": "t_phys is x_k; powers evaluated coherently at x_k; energy is AFTER P_k*h; energy curves plotted at t_phys+h; references and command at t_control",
+  "raw_signal_map": {
+    "power_H": "guard.phys__power",
+    "work_H": "guard.phys__work or power*h",
+    "energy_H": "guard.phys__energy[:,0] or prefix_energy[:,0]",
+    "energy_R": "guard.phys__energy[:,1] or prefix_energy[:,1]",
+    "force_H": "guard.phys__force",
+    "velocity_H": "guard.phys__velocity",
+    "task_power": "baseline.phys__P_task",
+    "task_work": "baseline.phys__dW",
+    "normal_force": "guard.phys__normal_force",
+    "x": "baseline.ctl__x",
+    "v": "baseline.ctl__v",
+    "x_des": "baseline.ctl__x_d",
+    "v_des": "baseline.ctl__v_d"
+  },
+  "output_sha256": "2a7ac77a950e74a24c8c34548fd0662d3abe5c85817824cbb0c8b178ec608b4d"
+}

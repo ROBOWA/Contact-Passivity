@@ -1,0 +1,42 @@
+{
+  "t": 9.533000000000458,
+  "reason": "no_verified_reserve_candidate",
+  "diagnostics": {
+    "rejections": [
+      {
+        "target": 1.0,
+        "reason": "reserve_budget",
+        "diagnostics": {
+          "required": 0.0011359859797960348,
+          "available": [
+            0.0009313803062280018,
+            0.0009313803062280018
+          ]
+        }
+      },
+      {
+        "target": 0.5,
+        "reason": "reserve_budget",
+        "diagnostics": {
+          "required": 0.0010687698171893702,
+          "available": [
+            0.0009313803062280018,
+            0.0009313803062280018
+          ]
+        }
+      },
+      {
+        "target": 0.0,
+        "reason": "reserve_budget",
+        "diagnostics": {
+          "required": 0.0009586507736152706,
+          "available": [
+            0.0009313803062280018,
+            0.0009313803062280018
+          ]
+        }
+      }
+    ]
+  },
+  "seconds_failed_tick": 2.0330772090237588
+}

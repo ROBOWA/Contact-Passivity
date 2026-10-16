@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/Users/carl/code/contactSimulation/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_poc_figures_audit.py",
+    "--junitxml=docs/kuka_poc_figures/20261016-41359f2/support/audit_tests_01.xml"
+  ],
+  "returncode": 0,
+  "counts": {
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "status": "PASS"
+}

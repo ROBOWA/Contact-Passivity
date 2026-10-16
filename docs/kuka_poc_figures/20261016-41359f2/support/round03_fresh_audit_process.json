@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/Users/carl/code/contactSimulation/.venv/bin/python",
+    "scripts/poc_figures_audit.py",
+    "--case",
+    "results/kuka_poc_figures/20261016-41359f2/help_then_block_01",
+    "--case",
+    "results/kuka_poc_figures/20261016-41359f2/help_then_block_02",
+    "--case",
+    "results/kuka_poc_figures/20261016-41359f2/fresh_nohuman_D_01",
+    "--case",
+    "results/kuka_poc_figures/20261016-41359f2/fresh_stress_D_01",
+    "--out",
+    "docs/kuka_poc_figures/20261016-41359f2/support/round03_fresh_audit.json"
+  ],
+  "returncode": 0,
+  "status": "PASS"
+}

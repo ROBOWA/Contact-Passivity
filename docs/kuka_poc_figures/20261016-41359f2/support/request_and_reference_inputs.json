@@ -1,0 +1,25 @@
+{
+  "inputs": [
+    {
+      "path": "/Users/carl/Downloads/kuka_poc_plots_four_rounds_agent_prompt.txt",
+      "role": "User-authorized task specification",
+      "sha256": "81237c87644ce525ba020a052c38c6bf406ff0cdf464d8edce3efa99b0568e1c",
+      "bytes": 21814
+    },
+    {
+      "path": "/Users/carl/Downloads/Simulation_and_Controller_Review_Stage2.pdf",
+      "role": "Existing Stage2 review; read for context; no figures/data substituted",
+      "sha256": "c2f3477d35175544a348b555475cffee4356e798df8881e83bd2ad0f09dca4da",
+      "bytes": 3128587
+    },
+    {
+      "path": "/Users/carl/code/contactSimulation-poc-20261016-41359f2/paper/main.pdf",
+      "role": "Canonical original compiled paper; source tree is authoritative",
+      "sha256": "eef2d3c564be84958b56766711147195e1f88977dcf828717c07777a6b7cbdab",
+      "bytes": 423816
+    }
+  ],
+  "main_parenthesized_3_pdf": "not present at /Users/carl/Downloads/main(3).pdf",
+  "starting_sync_head": "41359f20430c930eec5afaebffa2cfbc482f07da",
+  "difference_from_prompt_reference": "none"
+}

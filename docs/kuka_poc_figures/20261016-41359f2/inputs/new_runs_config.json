@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "frozen_before_evaluation": true,
+  "source": {
+    "commit": "41359f20430c930eec5afaebffa2cfbc482f07da",
+    "branch": "feature/kuka-poc-figures-20261016-41359f2",
+    "dirty": false
+  },
+  "numerical_source_sha256": "3662a23fbcf913f4047e66361072808c75f98465dacf763d3136b13700cec80b",
+  "numerical_source_commit": "81dffa64109752a9a027975e7b831daa4ff91e86",
+  "adapter_sha256": "4cb89d0e341a0c70815d3ec20f595eea0047bd078ffbab1d4bb2b5d91ce55936",
+  "versions": {
+    "python": "3.13.5",
+    "mujoco": "3.15.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "osqp": "1.1.3"
+  },
+  "seed": 0,
+  "seed_semantics": "deterministic fixtures; no stochastic inputs",
+  "duration_s": 18.0,
+  "variant": "D",
+  "budget_J": 0.12,
+  "body": "link5",
+  "local_m": [
+    0.0,
+    0.04,
+    0.12
+  ],
+  "guard": {
+    "transition": 0.1,
+    "damping": 40.0,
+    "horizons": [
+      0.02,
+      0.05,
+      0.1,
+      0.25,
+      0.5,
+      1.0,
+      2.0
+    ],
+    "terminal_persistence": 0.02,
+    "terminal_speed": 0.001,
+    "terminal_power": 0.002,
+    "terminal_tool_speed": 0.001,
+    "terminal_angular_speed": 0.01,
+    "energy_margin": 1e-08,
+    "reserve_margin": 1e-05,
+    "force_lower": 7.0,
+    "force_upper": 13.0,
+    "normal_speed": 0.005,
+    "orientation": 0.03490658503988659,
+    "cross_error": 0.003,
+    "task_start": 8.71,
+    "energy_tolerance": 1e-10,
+    "torque_tolerance": 1e-07,
+    "task_tolerance": 1e-07,
+    "eta": 0.02,
+    "retries": 3,
+    "targets": [
+      1.0,
+      0.5,
+      0.0
+    ],
+    "task_weight": 1.0,
+    "rate_factor": 1.0
+  },
+  "forecast": "only current measured WORLD force passed to predictor; held through forecasts",
+  "ledger": "uncapped E_H=E_R=.12+sum(p_H*h); no reset across pulses",
+  "profile": [
+    {
+      "name": "helping",
+      "start": 9.5,
+      "ramp": 0.2,
+      "hold": 0.2,
+      "magnitude": 5.0,
+      "direction": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "blocking",
+      "start": 10.3,
+      "ramp": 0.2,
+      "hold": 1.0,
+      "magnitude": 5.0,
+      "direction": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "analysis_windows_s": {
+    "task": [
+      8.71,
+      18.0
+    ],
+    "helping": [
+      9.5,
+      10.1
+    ],
+    "between": [
+      10.1,
+      10.3
+    ],
+    "blocking": [
+      10.3,
+      11.7
+    ],
+    "post_release": [
+      11.7,
+      18.0
+    ]
+  },
+  "allowed_runs": [
+    "help_then_block_01",
+    "help_then_block_02",
+    "fresh_nohuman_D_01",
+    "fresh_stress_D_01",
+    "fresh_main_D_01"
+  ]
+}
