@@ -119,7 +119,8 @@ class Figures:
         a[0].axhline(0,color='k',lw=.6);a[0].set_ylabel('Energy (J)');a[0].legend(loc='lower left',fontsize=7)
         self.line(a[1],f,key,d['t_phys'],d['normal_force'],'Actual task-contact force',
                   ['normal_force'],'identity','N',color=COLORS['D'])
-        a[1].axhline(10,color='k',ls='--',lw=.7,label='Original 10 N target');a[1].set_ylabel('Normal force (N)');a[1].legend(loc='upper right')
+        a[1].axhline(10,color='k',ls='--',lw=.7,label='Original 10 N target');a[1].set_ylabel('Normal force (N)')
+        a[1].legend(loc='lower center',bbox_to_anchor=(.5,1.01),ncols=2)
         shown=d['normal_force'][(d['t_phys']>=8.71-1e-9)&(d['t_phys']<18)]
         lo=min(10.,float(shown.min()));hi=max(10.,float(shown.max()));pad=max(.005,(hi-lo)*.15)
         a[1].set_ylim(lo-pad,hi+pad) # all extrema in the explicitly displayed task window
@@ -143,7 +144,7 @@ class Figures:
         self.line(a[1],f,key,d['t_phys'],d['power_H'],'Actual p_H = F_H dot v_H (into robot)',
                   ['power_H','force_H','velocity_H'],'identity; actual link5 material point, world coordinates','W',color=COLORS['D'])
         a[1].axhline(0,color='k',lw=.5);a[1].set_ylabel('Human power (W)');a[1].legend(loc='lower right')
-        a[0].text(.02,.15,'Plant/predictor mismatch: not independently configured\np_delta and mismatch-aware residual: not implemented',
+        a[0].text(.40,.55,'Plant/predictor mismatch: not independently configured\np_delta and mismatch-aware residual: not implemented',
                   transform=a[0].transAxes,fontsize=8,bbox=dict(facecolor='white',alpha=.8,edgecolor='none'))
         self.phase(a,key);self.save(fig,f,a)
 
@@ -226,6 +227,8 @@ class Figures:
             ax.yaxis.label.set_size(10)
             ax.tick_params(labelsize=9)
         for ax in a[1:]:ax.legend(loc='upper right',fontsize=8.5,ncols=2)
+        a[1].legend(loc='lower center',bbox_to_anchor=(.5,1.01),fontsize=8.5,ncols=2)
+        a[3].legend(loc='lower center',bbox_to_anchor=(.5,1.01),fontsize=8.5,ncols=3)
         a[3].text(.02,.08,'Panel (d) replaces the absent scalar Cartesian command',transform=a[3].transAxes,fontsize=7,
                     bbox=dict(facecolor='white',alpha=.7,edgecolor='none'))
         self.phase(a,key);self.save(fig,f,a)

@@ -1,7 +1,7 @@
 {
   "round": 3,
   "verdict": "PASS",
-  "summary": "Main exact-source repeat reused; fresh no-human/stop and two continuous help-block runs verified. All597headline and30common-window comparisons pass; charging coverage and torque mapping corrected.",
+  "summary": "Reused exact-source main repeat and fresh no-human, stop and repeated continuous runs verified; 597 headline and 30 common-window checks passed. Charging coverage and torque mapping corrected.",
   "artifacts": {
     "corrected_build": "build_round03_02",
     "report_sha256": "c425fe9f3a44077ce8e6bd3dd988cb6045ca17a843d6af4d80cbdd590e96b92f",

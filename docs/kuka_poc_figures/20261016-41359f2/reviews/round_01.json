@@ -1,7 +1,7 @@
 {
   "round": 1,
   "verdict": "PASS",
-  "summary": "Canonical mapping and independent full-resolution metrics verified; corrected elapsed-zero timestamps, curve status/display domains and PDF legibility. F7 remains explicitly pending fresh runs in this draft.",
+  "summary": "Canonical mapping and independent raw metrics passed; elapsed-zero timestamps, curve provenance and PDF legibility corrected. F7 was pending at this round and completed in Round 3.",
   "artifacts": {
     "initial": "build_initial_03",
     "corrected": "build_round01_03",

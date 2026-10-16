@@ -1,7 +1,7 @@
 {
   "round": 2,
   "verdict": "PASS",
-  "summary": "13 matched fixture configurations and5transparent fixture families verified;26focused tests pass. F3 startup diagnostic and release-anchor labels corrected; controller unchanged.",
+  "summary": "All 13 matched fixtures and five transparent fixture families verified; 26 focused tests passed. F3 startup accounting and release-anchor labels corrected.",
   "artifacts": {
     "controller_audit": "support/round02_controller_audit.json",
     "tests": "support/round02_tests.json",
