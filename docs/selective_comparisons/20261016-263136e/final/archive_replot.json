@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "checks": {
+    "fig3_exact.png": true,
+    "fig4_mismatch.png": true,
+    "fig5_human.png": true,
+    "fig6_combined.png": true,
+    "fig7_charge.png": true,
+    "fig8_governor.png": true,
+    "fig9_help_recovery.png": true,
+    "fig10_forearm.png": true,
+    "fig11_starved.png": true
+  },
+  "samples": "Full-rate float64 compact archive; pixel-identical published PNGs"
+}

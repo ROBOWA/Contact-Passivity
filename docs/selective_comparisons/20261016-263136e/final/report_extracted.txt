@@ -1,0 +1,829 @@
+KUKA selective comparisons — PARTIAL                                                                     16 October 2026
+
+
+Selective accounting and matched governor comparisons
+20/32 trials completed; stopped trials remain in the ﬁgures. In the primary TCP block, K4 completed 18 s, reduced net
+human output by 60.9% relative to K0, and reached 0.148221 W peak human output. Its maximum 10 N force error was
+1.647 N and contact absence was 0.00000 s. It achieved 87.3% of K0 measured progress in the same 18 s. K3 stopped
+at 10.754 s; this supports a completion beneﬁt for the governor on this ﬁxture, not a measured K3 post-release recovery
+peak.
+Both K3 and K4 complete the helping/blocking case. From its 11.7 s release through 18 s, K3/K4 peak x speed is
+0.056434/0.064006 m/s and maximum 10 N force error is 0.113279/1.416587 N. K4 reduces post-release reference debt
+from 18.303 to 13.370 mm and gross human output from 0.123659 to 0.081788 J, but increases those recovery peaks.
+The reference paper’s smoother-recovery claim is therefore not reproduced by this governor adaptation.
+These are new closed-loop KUKA comparisons inspired by the previous 2-DOF reference. K0 nominal; K1 whole
+monitored port; K2 residual only; K3 H/R plus human peak power, governor OFF; K4 identical K3 QP, governor ON.
+The actual plant and nominal 10 N controller are unchanged. A separate contact model evaluates predicted task work
+at each actual state. Only its explicit tip/table tangential friction changes (1 versus .20). Seven joint torques and a
+virtual reference clock adapt the reference architecture; they are not its original two-variable Cartesian controller or
+spatial-anchor governor.
+
+
+                                Mode     Protected accounts     Human peak     Governor
+                                K0       monitored only         none           oﬀ
+                                K1       whole W                none           oﬀ
+                                K2       residual R             none           oﬀ
+                                K3       H and R                .15 W          oﬀ
+                                K4       same K3 QP             .15 W          on
+
+
+This is deterministic simulation evidence, not a mathematical proof of general safety or reproduction of the reference
+paper’s numerical results. Prediction uses true-plant dynamics with current measured force held for 1 ms; the task
+model alone is mismatched. The terminal human guard assumes force increments no greater than 60 N/s times 1 ms.
+Finite-diﬀerence rows are checked by fresh nonlinear rollouts; stopped cases expose solver, nonlinear acceptance, or local
+feasibility limits. No veriﬁed fallback, hardware execution, continuous-time certiﬁcate, or universal task-preservation
+claim is made. Gross outgoing energy is not bounded by a net-work account. K3/K4 have no Stage 2 reserve/backup
+or hard contact-quality constraints.
+Parameters and audit. H/R/W initial=(.12,.30,.30) J; caps=(.15,.30,.30) J; ﬂoors=0; CBF rate=5/s; safe-energy
+oﬀset=25 microjoules. Four .25 ms physics steps per held 1 ms torque. Central FD=.02 Nm, task weight=1, hard rows
+and nonlinear acceptance. K4 pauses after an H-triggered intervention and resumes below .02 N measured force, with .1
+s clock transitions. Independent raw-array audit: PASS; regression suite: 91 tests, 0 failures, 0 errors. An audit PASS
+checks implementation consistency; stopped trials remain failures to complete.
+Provenance. Source commit dfc09dfcb402. Source SHA256: b98d443a9e4b0acf376dd5ba02f0cb2f
+2e0b5a1fca5ac9f5d1bee90c3ecf319b. Frozen design/conﬁguration, raw data, audit and reproduction commands ac-
+company this PDF.
+
+
+
+
+                                                            1
+KUKA selective comparisons — PARTIAL                                                                   16 October 2026
+
+
+All primary comparisons
+
+                  Case Mode/end s         H net J min H J min R J Peak W Force err N Loss s QPs
+                  A     K0/18.000      -0.00000     0.12           0.3   0.0000     0.05 0.0000    0
+                  A     K1 STOP/12.541 -0.00000     0.12           0.3   0.0000     1.85 0.0000 3229
+                  A     K2/18.000      -0.00000     0.12           0.3   0.0000     0.05 0.0000    0
+                  A     K3/18.000      -0.00000     0.12           0.3   0.0000     0.05 0.0000    0
+                  A     K4/18.000      -0.00000     0.12           0.3   0.0000     0.05 0.0000    0
+                  B     K0/18.000      -0.00000     0.12       0.06704   0.0000     0.05 0.0000    0
+                  B     K1 STOP/12.541 -0.00000     0.12        0.2149   0.0000     1.85 0.0000 3229
+                  B     K2/18.000      -0.00000     0.12       0.06704   0.0000     0.05 0.0000    0
+                  B     K3/18.000      -0.00000     0.12       0.06704   0.0000     0.05 0.0000    0
+                  B     K4/18.000      -0.00000     0.12       0.06704   0.0000     0.05 0.0000    0
+                  C     K0/18.000       0.18743 -0.06743        0.1126   0.2951     0.14 0.0000    0
+                  C     K1 STOP/10.624 0.13225 -0.01225         0.1678   0.2651     3.07 0.0000 214
+                  C     K2/18.000       0.18743 -0.06743        0.1126   0.2951     0.14 0.0000    0
+                  C     K3 STOP/10.754 0.10917 0.01083          0.1908   0.1482    14.75 0.0000 588
+                  C     K4/18.000       0.07321 0.04679         0.2268   0.1482     1.65 0.0000   40
+
+
+A: exact/no human; B: mismatch/no human; C: TCP block; D: mismatch plus TCP block; E: forearm block; F: help
+then block; S: starved H. Force error is measured relative to the original 10 N target over the available 8.71 s onward
+window. Totals from stopped preﬁxes must not be read as complete-run savings. Negative unprotected account values
+remain visible.
+A_exact_nohuman/K1: stopped at 12.541 s: nonlinear_retries_exhausted.
+B_mismatch_nohuman/K1: stopped at 12.541 s: nonlinear_retries_exhausted.
+C_blocking/K1: stopped at 10.624 s: solver_failure.
+C_blocking/K3: stopped at 10.754 s: nonlinear_retries_exhausted.
+
+
+
+
+                                                           2
+KUKA selective comparisons — PARTIAL                                                                   16 October 2026
+
+
+Remaining comparisons and challenge
+
+                 Case Mode/end s         H net J   min H J min R J Peak W Force err N Loss s QPs
+                 D     K0/18.000       0.18743 -0.06743        -0.2145   0.2951     0.14 0.0000    0
+                 D     K1 STOP/10.624 0.13225 -0.01225          0.1379   0.2651     3.07 0.0000 214
+                 D     K2 STOP/10.752 0.17110    -0.0511       0.07536   0.2951     0.20 0.0000   48
+                 D     K3 STOP/10.754 0.10917 0.01083           0.1839   0.1482    14.75 0.0000 588
+                 D     K4 STOP/14.948 0.07321 0.04679          0.01367   0.1482     1.65 0.0000 153
+                 E     K0/18.000       0.24162   -0.1216       0.05838   0.2389     0.40 0.0000    0
+                 E     K1 STOP/10.335 0.13227 -0.01227          0.1677   0.2442     3.02 0.0000 242
+                 E     K2/18.000       0.24162   -0.1216       0.05838   0.2389     0.40 0.0000    0
+                 E     K3 STOP/10.232 0.08897 0.03103            0.211   0.1482     5.08 0.0000 655
+                 E     K4/18.000       0.03914 0.07605          0.2561   0.1482     0.93 0.0000   10
+                 F     K0/18.000       0.02531 0.01173          0.1617   0.1899     0.25 0.0000    0
+                 F     K1 STOP/13.715 0.02213     0.0149        0.1649   0.1899     3.87 0.0000 3721
+                 F     K2/18.000       0.02531 0.01173          0.1617   0.1899     0.25 0.0000    0
+                 F     K3/18.000       0.01069 0.02634          0.1763   0.1482     0.29 0.0000 383
+                 F     K4/18.000      -0.03118 0.06821          0.2182   0.1482     1.42 0.0000   31
+                 S     K3 STOP/10.363 0.00094 5.566e-05         0.2991   0.0041    17.48 0.0000 1263
+                 S     K4/18.000      -0.06573 0.000683         0.2938   0.0291    11.05 0.0000   60
+
+
+A: exact/no human; B: mismatch/no human; C: TCP block; D: mismatch plus TCP block; E: forearm block; F: help
+then block; S: starved H. Force error is measured relative to the original 10 N target over the available 8.71 s onward
+window. Totals from stopped preﬁxes must not be read as complete-run savings. Negative unprotected account values
+remain visible.
+D_combined/K1: stopped at 10.624 s: solver_failure.
+D_combined/K2: stopped at 10.752 s: nonlinear_retries_exhausted.
+D_combined/K3: stopped at 10.754 s: nonlinear_retries_exhausted.
+D_combined/K4: stopped at 14.948 s: nonlinear_retries_exhausted.
+E_forearm_block/K1: stopped at 10.335 s: solver_failure.
+E_forearm_block/K3: stopped at 10.232 s: nonlinear_retries_exhausted.
+F_help_block/K1: stopped at 13.715 s: nonlinear_retries_exhausted.
+S_starved/K3: stopped at 10.363 s: nonlinear_retries_exhausted.
+
+
+
+
+                                                           3
+KUKA selective comparisons — PARTIAL                                                                                                               16 October 2026
+
+
+F3 adaptation: predictable task work and whole-port depletion
+
+                                           F3 adaptation: predictable task work and whole-port depletion
+                                     K0          K1            K2   K3   K4                                       0.30
+
+                          0.2
+                                                                                                                  0.25
+
+
+
+
+Whole-port account [J]                                                                     Residual account [J]
+                                                                                                                  0.20
+                          0.0
+
+                                                                                                                  0.15
+                         −0.2
+                                                                                                                  0.10
+
+
+                         −0.4                                                                                     0.05
+
+
+                                                                                                                  0.00
+
+                                10        12              14        16        18                                         10   12              14      16       18
+                                               Time [s]                                                                            Time [s]
+
+                         0.10
+                                                                                                           11.75
+
+                                                                                                           11.50
+                         0.08
+
+
+
+
+   TCP x progress [m]                                                              Normal force [N]
+                                                                                                           11.25
+                         0.06
+                                                                                                           11.00
+
+                         0.04                                                                              10.75
+
+                                                                                                           10.50
+                         0.02
+                                                                                                           10.25
+
+                         0.00                                                                              10.00
+
+                                10        12              14        16        18                                         10   12              14      16       18
+                                               Time [s]                                                                            Time [s]
+
+Exact model, no human. K2/K3/K4 should be transparent; K1 accounts for ordinary task work. Crosses and dotted
+lines mark explicit stops, never zero-padded continuations.
+K0: COMPLETE, end 18.000 s; net/gross H output -0.000000/0.000000 J; min H/R 0.12/0.3 J; peak H 0.000000 W;
+measured progress 0.2453 m; QP attempts 0.
+K1: STOP, end 12.541 s; net/gross H output -0.000000/0.000000 J; min H/R 0.12/0.3 J; peak H 0.000000 W; measured
+progress 0.0939 m; QP attempts 3229.
+K2: COMPLETE, end 18.000 s; net/gross H output -0.000000/0.000000 J; min H/R 0.12/0.3 J; peak H 0.000000 W;
+measured progress 0.2453 m; QP attempts 0.
+K3: COMPLETE, end 18.000 s; net/gross H output -0.000000/0.000000 J; min H/R 0.12/0.3 J; peak H 0.000000 W;
+measured progress 0.2453 m; QP attempts 0.
+K4: COMPLETE, end 18.000 s; net/gross H output -0.000000/0.000000 J; min H/R 0.12/0.3 J; peak H 0.000000 W;
+measured progress 0.2453 m; QP attempts 0.
+
+
+
+
+                                                                                   4
+KUKA selective comparisons — PARTIAL                                                                                                                       16 October 2026
+
+
+F4 adaptation: task-model mismatch without human input
+
+                                                              F4 adaptation: task-model mismatch without human input
+                                                                                                                          0.30
+                                        0.14
+                                                                                                                          0.25
+                                        0.12
+
+
+
+
+                    Human account [J]                                                              Residual account [J]
+                                        0.10                                                                              0.20
+
+                                        0.08
+                                                    K0           K1            K2   K3   K4                               0.15
+                                        0.06
+                                                                                                                          0.10
+                                        0.04
+                                                                                                                          0.05
+                                        0.02
+
+                                        0.00                                                                              0.00
+
+                                               10        12               14        16        18                                 10   12              14      16       18
+                                                               Time [s]                                                                    Time [s]
+
+                                        0.00
+                                                                                                                          0.10
+
+
+
+
+Task-model mismatch power [W]
+                                −0.02                                                                                     0.08
+
+
+
+
+                                                                                                   TCP x progress [m]
+                                                                                                                          0.06
+                                −0.04
+
+                                                                                                                          0.04
+
+                                −0.06
+                                                                                                                          0.02
+
+
+                                −0.08                                                                                     0.00
+
+                                               10        12               14        16        18                                 10   12              14      16       18
+                                                               Time [s]                                                                    Time [s]
+
+Actual friction remains 1; nominal pair friction is .20. Nonzero residual power with zero human power establishes
+independent accounting. It does not establish robustness to unknown plant dynamics.
+K0: COMPLETE, end 18.000 s; net/gross H output -0.000000/0.000000 J; min H/R 0.12/0.0670424 J; peak H 0.000000
+W; measured progress 0.2453 m; QP attempts 0.
+K1: STOP, end 12.541 s; net/gross H output -0.000000/0.000000 J; min H/R 0.12/0.214862 J; peak H 0.000000 W;
+measured progress 0.0939 m; QP attempts 3229.
+K2: COMPLETE, end 18.000 s; net/gross H output -0.000000/0.000000 J; min H/R 0.12/0.0670424 J; peak H 0.000000
+W; measured progress 0.2453 m; QP attempts 0.
+K3: COMPLETE, end 18.000 s; net/gross H output -0.000000/0.000000 J; min H/R 0.12/0.0670424 J; peak H 0.000000
+W; measured progress 0.2453 m; QP attempts 0.
+K4: COMPLETE, end 18.000 s; net/gross H output -0.000000/0.000000 J; min H/R 0.12/0.0670424 J; peak H 0.000000
+W; measured progress 0.2453 m; QP attempts 0.
+
+
+
+
+                                                                                               5
+KUKA selective comparisons — PARTIAL                                                                                                                          16 October 2026
+
+
+F5 adaptation: dedicated human energy and peak-power protection
+
+                                               F5 adaptation: dedicated human energy and peak-power protection
+                           0.30                K0       K1       K2      K3      K4                                  0.15
+
+                           0.25
+
+
+
+
+Human outgoing power [W]
+                                                                                                                     0.10
+
+
+
+
+                                                                                      Human account [J]
+                           0.20
+
+                                                                                                                     0.05
+                           0.15
+
+
+                           0.10
+                                                                                                                     0.00
+
+                           0.05
+                                                                                                            −0.05
+                           0.00
+
+                                  9.5   10.0   10.5      11.0    11.5   12.0   12.5                                         9.5   10.0   10.5      11.0    11.5   12.0   12.5
+                                                      Time [s]                                                                                  Time [s]
+
+                           0.30                                                                                      25.0
+
+                                                                                                                     22.5
+                           0.25
+
+
+
+
+Residual account [J]
+                                                                                                                     20.0
+
+
+
+
+                                                                                                  Normal force [N]
+                           0.20
+                                                                                                                     17.5
+                           0.15
+                                                                                                                     15.0
+                           0.10
+                                                                                                                     12.5
+                           0.05
+                                                                                                                     10.0
+
+                           0.00
+                                                                                                                      7.5
+                                  9.5   10.0   10.5      11.0    11.5   12.0   12.5                                         9.5   10.0   10.5      11.0    11.5   12.0   12.5
+                                                      Time [s]                                                                                  Time [s]
+
+All modes use the same 5 N TCP block. K3/K4 enforce the .15 W human peak bound and H/R rows. K2 has the larger
+residual budget and no separate H constraint. Compare completion as well as safe preﬁxes.
+K0: COMPLETE, end 18.000 s; net/gross H output 0.187435/0.187435 J; min H/R -0.067435/0.112565 J; peak H
+0.295100 W; measured progress 0.2455 m; QP attempts 0.
+K1: STOP, end 10.624 s; net/gross H output 0.132250/0.132250 J; min H/R -0.01225/0.16775 J; peak H 0.265072 W;
+measured progress 0.0331 m; QP attempts 214.
+K2: COMPLETE, end 18.000 s; net/gross H output 0.187435/0.187435 J; min H/R -0.067435/0.112565 J; peak H
+0.295100 W; measured progress 0.2455 m; QP attempts 0.
+K3: STOP, end 10.754 s; net/gross H output 0.109175/0.109175 J; min H/R 0.0108255/0.190825 J; peak H 0.148221
+W; measured progress 0.0286 m; QP attempts 588.
+K4: COMPLETE, end 18.000 s; net/gross H output 0.073209/0.073209 J; min H/R 0.0467912/0.226791 J; peak H
+0.148221 W; measured progress 0.2143 m; QP attempts 40.
+
+
+
+
+                                                                                      6
+KUKA selective comparisons — PARTIAL                                                                                                                                      16 October 2026
+
+
+F6 adaptation: simultaneous human input and task-model mismatch
+
+                                                        F6 adaptation: simultaneous human input and task-model mismatch
+                                       0.30                     K0       K2    K3        K4                                        0.00
+
+                                       0.25                                                                                 −0.05
+
+
+
+
+            Human outgoing power [W]
+                                                                                                   Mismatch power [W]
+                                       0.20                                                                                 −0.10
+
+                                                                                                                            −0.15
+                                       0.15
+
+                                                                                                                            −0.20
+                                       0.10
+
+                                                                                                                            −0.25
+                                       0.05
+                                                                                                                            −0.30
+                                       0.00
+
+                                              10   11   12   13    14    15   16    17        18                                          10   11   12   13    14    15     16   17   18
+                                                              Time [s]                                                                                    Time [s]
+
+                                       0.15                                                                                         0.3
+
+
+                                                                                                                                    0.2
+                                       0.10
+
+
+
+
+Human account [J]                                                                                           Residual account [J]
+                                                                                                                                    0.1
+                                       0.05
+
+                                                                                                                                    0.0
+
+                                       0.00
+                                                                                                                                   −0.1
+
+                           −0.05
+                                                                                                                                   −0.2
+
+                                              10   11   12   13    14    15   16    17        18                                          10   11   12   13    14    15     16   17   18
+                                                              Time [s]                                                                                    Time [s]
+
+At every executed sample, pR=pH+(pT-pT_hat). H and R have independently initialized budgets. The cap is applied
+separately to each account; the raw reconstruction checks both identities.
+K0: COMPLETE, end 18.000 s; net/gross H output 0.187435/0.187435 J; min H/R -0.067435/-0.214466 J; peak H
+0.295100 W; measured progress 0.2455 m; QP attempts 0.
+K2: STOP, end 10.752 s; net/gross H output 0.171101/0.171101 J; min H/R -0.0511006/0.0753639 J; peak H 0.295100
+W; measured progress 0.0411 m; QP attempts 48.
+K3: STOP, end 10.754 s; net/gross H output 0.109175/0.109175 J; min H/R 0.0108255/0.183927 J; peak H 0.148221
+W; measured progress 0.0286 m; QP attempts 588.
+K4: STOP, end 14.948 s; net/gross H output 0.073209/0.073209 J; min H/R 0.0467912/0.0136669 J; peak H 0.148221
+W; measured progress 0.1452 m; QP attempts 153.
+
+
+
+
+                                                                                                   7
+KUKA selective comparisons — PARTIAL                                                                                                                               16 October 2026
+
+
+F7 adaptation: helping, upper-cap saturation, then blocking
+
+                                                               F7 adaptation: helping, upper-cap saturation, then blocking
+                                     0.2
+                                                                                                                        0.14
+                                     0.1
+
+
+
+
+Human outgoing power [W]
+                                                                                                                        0.12
+
+
+
+
+                                                                                                    Human account [J]
+                                     0.0                                                                                0.10
+
+                                                                                                                        0.08
+                                    −0.1
+                                                                                                                        0.06
+
+                                    −0.2                                                                                0.04
+
+                                                                                                                        0.02
+                                    −0.3
+                                                                   K0         K2      K3      K4                        0.00
+
+                                           9.5   10.0   10.5   11.0    11.5    12.0   12.5   13.0                              9.5   10.0   10.5   11.0    11.5   12.0   12.5   13.0
+                                                                Time [s]                                                                            Time [s]
+
+                                    0.08
+                                                                                                                        11.0
+
+
+
+
+    Discarded H charging work [J]
+                                    0.06                                                                                10.5
+
+
+
+
+                                                                                                    Normal force [N]
+                                                                                                                        10.0
+                                    0.04
+
+                                                                                                                         9.5
+
+                                    0.02
+                                                                                                                         9.0
+
+
+                                    0.00
+                                                                                                                         8.5
+                                           9.5   10.0   10.5   11.0    11.5    12.0   12.5   13.0                              9.5   10.0   10.5   11.0    11.5   12.0   12.5   13.0
+                                                                Time [s]                                                                            Time [s]
+
+One continuous trial: helping starts at 9.5 s, blocking at 10.3 s. H charges only to .15 J; discarded charging is explicitly
+logged. Net outgoing work and gross outgoing work are distinct.
+K0: COMPLETE, end 18.000 s; net/gross H output 0.025306/0.138273 J; min H/R 0.0117267/0.161727 J; peak H
+0.189865 W; measured progress 0.2456 m; QP attempts 0.
+K2: COMPLETE, end 18.000 s; net/gross H output 0.025306/0.138273 J; min H/R 0.0117267/0.161727 J; peak H
+0.189865 W; measured progress 0.2456 m; QP attempts 0.
+K3: COMPLETE, end 18.000 s; net/gross H output 0.010692/0.123659 J; min H/R 0.0263407/0.176341 J; peak H
+0.148221 W; measured progress 0.2455 m; QP attempts 383.
+K4: COMPLETE, end 18.000 s; net/gross H output -0.031180/0.081788 J; min H/R 0.068212/0.218212 J; peak H
+0.148221 W; measured progress 0.2187 m; QP attempts 31.
+
+
+
+
+                                                                                                    8
+KUKA selective comparisons — PARTIAL                                                                                                                                                                       16 October 2026
+
+
+F8 adaptation: matched K3/K4, governor OFF/ON
+
+                                                                                     F8 adaptation: matched K3/K4, governor OFF/ON
+                                                          1.0                                                                                                        30
+
+                                                                                                                                                                     25
+
+
+
+
+                            Reference clock speed alpha                                                               Reference minus TCP x [mm]
+                                                          0.8
+                                                                                                                                                                     20
+
+                                                          0.6                                                                                                        15
+
+                                                                                                                                                                     10
+                                                          0.4
+                                                                                                                                                                      5
+
+                                                                                                                                                                      0
+                                                          0.2
+                                                                                                                                                                     −5
+
+                                                          0.0                                     K3        K4
+                                                                                                                                                         −10
+                                                                10   11   12   13      14   15   16    17        18                                                       10   11   12   13      14   15     16   17   18
+                                                                                 Time [s]                                                                                                  Time [s]
+
+                                                  0.08
+                                                                                                                                                                     30
+                                                  0.06
+
+
+
+
+Human-point x speed [m/s]                                                                                                               Joint correction norm [Nm]
+                                                                                                                                                                     25
+                                                  0.04
+                                                                                                                                                                     20
+                                                  0.02
+                                                                                                                                                                     15
+                                                  0.00
+                                                                                                                                                                     10
+                               −0.02
+                                                                                                                                                                      5
+                               −0.04
+
+                                                                                                                                                                      0
+                               −0.06
+                                                                10   11   12   13      14   15   16    17        18                                                       10   11   12   13      14   15     16   17   18
+                                                                                 Time [s]                                                                                                  Time [s]
+
+K3/K4 share the QP, bounds, budgets and model; only the reference-clock governor changes. A stopped K3 trace cannot
+establish a post-release catch-up peak. Joint correction is not a reconstructed Cartesian command.
+K3: STOP, end 10.754 s; net/gross H output 0.109175/0.109175 J; min H/R 0.0108255/0.190825 J; peak H 0.148221
+W; measured progress 0.0286 m; QP attempts 588.
+K4: COMPLETE, end 18.000 s; net/gross H output 0.073209/0.073209 J; min H/R 0.0467912/0.226791 J; peak H
+0.148221 W; measured progress 0.2143 m; QP attempts 40.
+
+
+
+
+                                                                                                                  9
+KUKA selective comparisons — PARTIAL                                                                                                                                                         16 October 2026
+
+
+Matched governor comparison through helping and blocking
+
+                                                                               Matched governor comparison through helping and blocking
+                                                          1.0                                                                                         20
+
+
+
+
+                            Reference clock speed alpha                                                                 Reference minus TCP x [mm]
+                                                          0.8                                                                                         15
+
+
+                                                                                                                                                      10
+                                                          0.6
+
+                                                                                                                                                       5
+                                                          0.4
+                                                                                                                                                       0
+
+                                                          0.2
+                                                                                                                                                      −5
+
+
+                                                          0.0                                      K3        K4
+                                                                                                                                                     −10
+                                                                10   11   12    13      14   15   16    17        18                                        10   11   12   13      14   15     16   17   18
+                                                                                  Time [s]                                                                                   Time [s]
+
+
+                                                  0.06                                                                                               11.0
+
+
+
+
+Human-point x speed [m/s]
+                                                  0.04
+                                                                                                                                                     10.5
+
+
+
+
+                                                                                                                       Normal force [N]
+                                                  0.02
+                                                                                                                                                     10.0
+                                                  0.00
+                                                                                                                                                      9.5
+                               −0.02
+
+                                                                                                                                                      9.0
+                               −0.04
+
+
+                               −0.06                                                                                                                  8.5
+                                                                10   11   12    13      14   15   16    17        18                                        10   11   12   13      14   15     16   17   18
+                                                                                  Time [s]                                                                                   Time [s]
+
+Both trials complete. After the 11.7 s release, K3/K4 peak x speeds are .056434/.064006 m/s and force errors
+.113279/1.416587 N. The governor reduces human output and reference debt but worsens these recovery peaks.
+K3: COMPLETE, end 18.000 s; net/gross H output 0.010692/0.123659 J; min H/R 0.0263407/0.176341 J; peak H
+0.148221 W; measured progress 0.2455 m; QP attempts 383.
+K4: COMPLETE, end 18.000 s; net/gross H output -0.031180/0.081788 J; min H/R 0.068212/0.218212 J; peak H
+0.148221 W; measured progress 0.2187 m; QP attempts 31.
+
+
+
+
+                                                                                                                  10
+KUKA selective comparisons — PARTIAL                                                                                                                                         16 October 2026
+
+
+Second human port: forearm rather than TCP
+
+                                                                       Second human port: forearm rather than TCP
+                            0.25                                                                                                     0.15
+                                                     K0      K1          K2     K3        K4
+
+
+                            0.20
+
+
+
+
+Human outgoing power [W]
+                                                                                                                                     0.10
+
+
+
+
+                                                                                                    Human account [J]
+                            0.15                                                                                                     0.05
+
+
+                            0.10                                                                                                     0.00
+
+
+                            0.05                                                                                           −0.05
+
+
+                                                                                                                           −0.10
+                            0.00
+
+
+                                           10   11   12   13      14      15   16    17        18                                           10   11   12   13      14   15     16   17   18
+                                                            Time [s]                                                                                         Time [s]
+
+                                      13
+                                                                                                                                     0.10
+                                      12
+                                                                                                                                     0.08
+                                      11
+
+
+
+
+                   Normal force [N]                                                                             TCP x progress [m]
+                                      10
+                                                                                                                                     0.06
+                                      9
+
+                                      8                                                                                              0.04
+
+                                      7
+                                                                                                                                     0.02
+                                      6
+
+                                      5                                                                                              0.00
+
+                                           10   11   12   13      14      15   16    17        18                                           10   11   12   13      14   15     16   17   18
+                                                            Time [s]                                                                                         Time [s]
+
+Same world-ﬁxed blocking pulse at link5 local (0,.04,.12) m. Human power uses that actual moving point Jacobian, not
+TCP velocity.
+K0: COMPLETE, end 18.000 s; net/gross H output 0.241623/0.241623 J; min H/R -0.121623/0.0583767 J; peak H
+0.238858 W; measured progress 0.2453 m; QP attempts 0.
+K1: STOP, end 10.335 s; net/gross H output 0.132274/0.132274 J; min H/R -0.0122744/0.167726 J; peak H 0.244181
+W; measured progress 0.0359 m; QP attempts 242.
+K2: COMPLETE, end 18.000 s; net/gross H output 0.241623/0.241623 J; min H/R -0.121623/0.0583767 J; peak H
+0.238858 W; measured progress 0.2453 m; QP attempts 0.
+K3: STOP, end 10.232 s; net/gross H output 0.088968/0.088968 J; min H/R 0.0310318/0.211032 J; peak H 0.148201
+W; measured progress 0.0329 m; QP attempts 655.
+K4: COMPLETE, end 18.000 s; net/gross H output 0.039143/0.043966 J; min H/R 0.076052/0.256052 J; peak H
+0.148201 W; measured progress 0.2037 m; QP attempts 10.
+
+
+
+
+                                                                                                    11
+KUKA selective comparisons — PARTIAL                                                                                                                                                        16 October 2026
+
+
+Small-budget challenge: H initialized at .001 J
+
+                                                                                      Small-budget challenge: H initialized at .001 J
+                                                 0.15
+                                                                                                                                            0.14
+
+
+
+
+Human outgoing power [W]
+                                                 0.10                                                                                       0.12
+
+
+
+
+                                                                                                                      Human account [J]
+                                                 0.05                                                                                       0.10
+
+                                                                                                                                            0.08
+                                                 0.00
+                                                                                                                                            0.06
+
+                              −0.05                                                                                                         0.04
+
+
+                              −0.10                                                                                                         0.02
+
+                                                                                                  K3        K4                              0.00
+
+                                                               10   11   12   13      14   15   16     17        18                                        10   11   12   13      14   15     16   17   18
+                                                                                Time [s]                                                                                    Time [s]
+
+                                                         1.0
+
+                                                                                                                                                      25
+
+
+
+
+                           Reference clock speed alpha
+                                                         0.8
+
+                                                                                                                                                      20
+
+
+
+
+                                                                                                                                   Normal force [N]
+                                                         0.6
+
+                                                                                                                                                      15
+                                                         0.4
+
+                                                                                                                                                      10
+                                                         0.2
+
+                                                                                                                                                      5
+                                                         0.0
+
+                                                               10   11   12   13      14   15   16     17        18                                        10   11   12   13      14   15     16   17   18
+                                                                                Time [s]                                                                                    Time [s]
+
+Only the initial H budget changes. Explicit failures are retained with complete pre-action and failure snapshots; no
+safe-fallback or viability guarantee is inferred.
+K3: STOP, end 10.363 s; net/gross H output 0.000939/0.001011 J; min H/R 5.56623e-05/0.299056 J; peak H 0.004108
+W; measured progress 0.0058 m; QP attempts 1263.
+K4: COMPLETE, end 18.000 s; net/gross H output -0.065725/0.006546 J; min H/R 0.000682986/0.293771 J; peak H
+0.029066 W; measured progress 0.2009 m; QP attempts 60.
+
+
+
+
+                                                                                                                 12
+KUKA selective comparisons — PARTIAL                                                                     16 October 2026
+
+
+Which reference claims are supported?
+F3: avoid charging predictable task work. K1 ﬁrst ﬁlters at 10.927 s and stops at 12.541 s (nonlin-
+ear_retries_exhausted); K2/K3/K4 match nominal bitwise. This is accounting/ﬁlter evidence, not proof of unavoidable
+physical infeasibility.
+F4: model error appears separately. No-human mismatch gives maximum |pR-pH|=0.084082 W and minimum
+R=0.067042 J; H remains .12 J. No residual intervention is required in this ﬁnite window.
+F5: dedicated human protection. Residual-only K2 reaches H=-0.067435 J and 0.295100 W peak output. K4
+completes with H=0.046791 J minimum and peak 0.148221 W. K3 only demonstrates a protected preﬁx.
+F6: simultaneous human and mismatch. Executed power decomposition is independently checked for every mode.
+Completion and task quality must be read separately from that accounting identity.
+F7: bounded bidirectional charging. K4 helping/blocking discards 0.082968 J of H charging at the .15 J cap; ﬁnal
+H=0.068212 J. Net H output=-0.031180 J, gross=0.081788 J.
+F8: governor changes recovery. K3/K4 have identical pre-governor trajectories and constraints. Primary K3 stops
+before release. Both K3 and K4 complete the helping/blocking case. From its 11.7 s release through 18 s, K3/K4
+peak x speed is 0.056434/0.064006 m/s and maximum 10 N force error is 0.113279/1.416587 N. K4 reduces post-release
+reference debt from 18.303 to 13.370 mm and gross human output from 0.123659 to 0.081788 J, but increases those
+recovery peaks. The reference paper’s smoother-recovery claim is therefore not reproduced by this governor adaptation.
+This is deterministic simulation evidence, not a mathematical proof of general safety or reproduction of the reference
+paper’s numerical results. Prediction uses true-plant dynamics with current measured force held for 1 ms; the task
+model alone is mismatched. The terminal human guard assumes force increments no greater than 60 N/s times 1 ms.
+Finite-diﬀerence rows are checked by fresh nonlinear rollouts; stopped cases expose solver, nonlinear acceptance, or local
+feasibility limits. No veriﬁed fallback, hardware execution, continuous-time certiﬁcate, or universal task-preservation
+claim is made. Gross outgoing energy is not bounded by a net-work account. K3/K4 have no Stage 2 reserve/backup
+or hard contact-quality constraints.
+
+
+
+
+                                                           13
+

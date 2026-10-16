@@ -1,0 +1,98 @@
+{
+  "commit": "dfc09dfcb402cdc99dd8138d5d71f0c6e8ea205e",
+  "branch": "feature/kuka-selective-comparisons-20261016-263136e",
+  "dirty": false,
+  "source_sha256": "b98d443a9e4b0acf376dd5ba02f0cb2f2e0b5a1fca5ac9f5d1bee90c3ecf319b",
+  "case": {
+    "body": "link5",
+    "local": [
+      0.0,
+      0.04,
+      0.12
+    ],
+    "nominal_friction": 1.0,
+    "duration": 18.0,
+    "pulses": [
+      {
+        "start": 9.5,
+        "ramp": 0.2,
+        "hold": 1.0,
+        "magnitude": 5.0,
+        "direction": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "name": "E_forearm_block"
+  },
+  "mode": "K0",
+  "config": {
+    "initial": [
+      0.12,
+      0.3,
+      0.3
+    ],
+    "caps": [
+      0.15,
+      0.3,
+      0.3
+    ],
+    "floors": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "peak_human_W": 0.15,
+    "barrier_rate": 5.0,
+    "safe_energy_J": 2.5e-05,
+    "force_rate_N_s": 60.0,
+    "governor_transition_s": 0.1,
+    "release_force_N": 0.02,
+    "eta_Nm": 0.02,
+    "retries": 3,
+    "energy_guard_J": 1e-10,
+    "power_guard_W": 1e-07,
+    "energy_tolerance_J": 1e-10,
+    "power_tolerance_W": 1e-07,
+    "torque_tolerance_Nm": 1e-07,
+    "task_weight": 1.0
+  },
+  "duration": 18.0,
+  "versions": {
+    "python": "3.13.5",
+    "mujoco": "3.15.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "osqp": "1.1.3"
+  },
+  "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+  "plant_friction": [
+    1.0,
+    1.0,
+    0.005,
+    0.0001,
+    0.0001
+  ],
+  "nominal_friction": [
+    1.0,
+    1.0,
+    0.005,
+    0.0001,
+    0.0001
+  ],
+  "nominal_task_parameter_hash": "e368dc8cfdd175cb20839a8a8c32ab73ef653cf5389d1f378aa94c4426d40274",
+  "forecast": "current measured force only; true-plant dynamics oracle",
+  "account_order": [
+    "H",
+    "R",
+    "W"
+  ],
+  "source_end_sha256": "b98d443a9e4b0acf376dd5ba02f0cb2f2e0b5a1fca5ac9f5d1bee90c3ecf319b",
+  "asset_hashes": {
+    "kuka_table_scene.xml": "918d95d6836c2147",
+    "iiwa14_torque.xml": "b1315d433880f305",
+    "polishing_tool.xml": "62ecf0422cf46708"
+  }
+}

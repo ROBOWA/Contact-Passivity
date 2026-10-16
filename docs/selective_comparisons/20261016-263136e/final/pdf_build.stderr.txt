@@ -1,0 +1,5 @@
+warning: report.tex:42: Underfull \hbox (badness 10000) in paragraph at lines 38--42
+warning: report.tex:71: Underfull \hbox (badness 10000) in paragraph at lines 63--71
+warning: report.tex:42: Underfull \hbox (badness 10000) in paragraph at lines 38--42
+warning: report.tex:71: Underfull \hbox (badness 10000) in paragraph at lines 63--71
+warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details.

@@ -1,0 +1,47 @@
+{
+  "status": "COMPARISONS_COMPLETE_RESEARCH_PARTIAL",
+  "numerical_revision": "dfc09dfcb402cdc99dd8138d5d71f0c6e8ea205e",
+  "implementation_audit": "PASS",
+  "baseline_regression": "PASS",
+  "preservation": "PASS",
+  "tests": {
+    "tests": 91,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "trials": {
+    "total": 32,
+    "completed": 20,
+    "stopped": 12,
+    "all_complete": false
+  },
+  "main_K4": {
+    "complete": true,
+    "net_H_outgoing_J": 0.07320876180649173,
+    "peak_H_outgoing_W": 0.14822124447831586,
+    "force_max_error_N": 1.6467288555749473
+  },
+  "combined_K4": {
+    "complete": false,
+    "stopped_s": 14.947999999987838
+  },
+  "matched_governor_construction": "PASS",
+  "uniform_smoother_recovery": "NOT_SUPPORTED",
+  "archive_replot": "PASS",
+  "pdf": {
+    "pages": 13,
+    "compile_exit_code": 0,
+    "rendered_pages": 13,
+    "visual_check": "opening page, tables, all nine figures and reference-claims page checked; no clipped content or overfull boxes"
+  },
+  "final_report": "/Users/carl/code/contactSimulation-selective-20261016-263136e/docs/selective_comparisons/20261016-263136e/final/report.pdf",
+  "control_tree_changes": [
+    "A\tkuka_table_sim/selective_execution.py",
+    "A\tkuka_table_sim/selective_experiments.py",
+    "A\tkuka_table_sim/selective_ports.py",
+    "A\tkuka_table_sim/selective_prediction.py",
+    "A\tkuka_table_sim/selective_qp.py"
+  ],
+  "all_existing_control_files_unchanged": true
+}

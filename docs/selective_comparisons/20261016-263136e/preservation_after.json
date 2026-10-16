@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "errors": [],
+  "worktrees": 3,
+  "mutable_refs": [
+    "refs/heads/feature/kuka-selective-comparisons-20261016-263136e"
+  ],
+  "files": 4417,
+  "bytes": 14241995578
+}

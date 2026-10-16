@@ -1,0 +1,29 @@
+{
+  "reference": "paper/main.pdf and paper/results_section.tex",
+  "comparisons": [
+    {
+      "claim": "F3: avoid charging predictable task work",
+      "evidence": "K1 first filters at 10.927 s and stops at 12.541 s (nonlinear_retries_exhausted); K2/K3/K4 match nominal bitwise. This is accounting/filter evidence, not proof of unavoidable physical infeasibility."
+    },
+    {
+      "claim": "F4: model error appears separately",
+      "evidence": "No-human mismatch gives maximum |pR-pH|=0.084082 W and minimum R=0.067042 J; H remains .12 J. No residual intervention is required in this finite window."
+    },
+    {
+      "claim": "F5: dedicated human protection",
+      "evidence": "Residual-only K2 reaches H=-0.067435 J and 0.295100 W peak output. K4 completes with H=0.046791 J minimum and peak 0.148221 W. K3 only demonstrates a protected prefix."
+    },
+    {
+      "claim": "F6: simultaneous human and mismatch",
+      "evidence": "Executed power decomposition is independently checked for every mode. Completion and task quality must be read separately from that accounting identity."
+    },
+    {
+      "claim": "F7: bounded bidirectional charging",
+      "evidence": "K4 helping/blocking discards 0.082968 J of H charging at the .15 J cap; final H=0.068212 J. Net H output=-0.031180 J, gross=0.081788 J."
+    },
+    {
+      "claim": "F8: governor changes recovery",
+      "evidence": "K3/K4 have identical pre-governor trajectories and constraints. Primary K3 stops before release, so its post-release peak is unavailable; this comparison establishes K4 completion on this fixture, not the reference paper's numerical recovery reduction."
+    }
+  ]
+}

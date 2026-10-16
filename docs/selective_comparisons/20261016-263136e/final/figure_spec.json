@@ -1,0 +1,306 @@
+[
+  {
+    "filename": "fig3_exact",
+    "case": "A_exact_nohuman",
+    "fields": [
+      [
+        "EW",
+        "Whole-port account [J]"
+      ],
+      [
+        "ER",
+        "Residual account [J]"
+      ],
+      [
+        "x",
+        "TCP x progress [m]"
+      ],
+      [
+        "Fn",
+        "Normal force [N]"
+      ]
+    ],
+    "title": "F3 adaptation: predictable task work and whole-port depletion",
+    "window": [
+      8.5,
+      18
+    ],
+    "modes": [
+      "K0",
+      "K1",
+      "K2",
+      "K3",
+      "K4"
+    ],
+    "caption": "Exact model, no human. K2/K3/K4 should be transparent; K1 accounts for ordinary task work. Crosses and dotted lines mark explicit stops, never zero-padded continuations."
+  },
+  {
+    "filename": "fig4_mismatch",
+    "case": "B_mismatch_nohuman",
+    "fields": [
+      [
+        "EH",
+        "Human account [J]"
+      ],
+      [
+        "ER",
+        "Residual account [J]"
+      ],
+      [
+        "Pdelta",
+        "Task-model mismatch power [W]"
+      ],
+      [
+        "x",
+        "TCP x progress [m]"
+      ]
+    ],
+    "title": "F4 adaptation: task-model mismatch without human input",
+    "window": [
+      8.5,
+      18
+    ],
+    "modes": [
+      "K0",
+      "K1",
+      "K2",
+      "K3",
+      "K4"
+    ],
+    "caption": "Actual friction remains 1; nominal pair friction is .20. Nonzero residual power with zero human power establishes independent accounting. It does not establish robustness to unknown plant dynamics."
+  },
+  {
+    "filename": "fig5_human",
+    "case": "C_blocking",
+    "fields": [
+      [
+        "Pout",
+        "Human outgoing power [W]"
+      ],
+      [
+        "EH",
+        "Human account [J]"
+      ],
+      [
+        "ER",
+        "Residual account [J]"
+      ],
+      [
+        "Fn",
+        "Normal force [N]"
+      ]
+    ],
+    "title": "F5 adaptation: dedicated human energy and peak-power protection",
+    "window": [
+      9.2,
+      12.7
+    ],
+    "modes": [
+      "K0",
+      "K1",
+      "K2",
+      "K3",
+      "K4"
+    ],
+    "caption": "All modes use the same 5 N TCP block. K3/K4 enforce the .15 W human peak bound and H/R rows. K2 has the larger residual budget and no separate H constraint. Compare completion as well as safe prefixes."
+  },
+  {
+    "filename": "fig6_combined",
+    "case": "D_combined",
+    "fields": [
+      [
+        "Pout",
+        "Human outgoing power [W]"
+      ],
+      [
+        "Pdelta",
+        "Mismatch power [W]"
+      ],
+      [
+        "EH",
+        "Human account [J]"
+      ],
+      [
+        "ER",
+        "Residual account [J]"
+      ]
+    ],
+    "title": "F6 adaptation: simultaneous human input and task-model mismatch",
+    "window": [
+      9.2,
+      18
+    ],
+    "modes": [
+      "K0",
+      "K2",
+      "K3",
+      "K4"
+    ],
+    "caption": "At every executed sample, pR=pH+(pT-pT_hat). H and R have independently initialized budgets. The cap is applied separately to each account; the raw reconstruction checks both identities."
+  },
+  {
+    "filename": "fig7_charge",
+    "case": "F_help_block",
+    "fields": [
+      [
+        "Pout",
+        "Human outgoing power [W]"
+      ],
+      [
+        "EH",
+        "Human account [J]"
+      ],
+      [
+        "discard",
+        "Discarded H charging work [J]"
+      ],
+      [
+        "Fn",
+        "Normal force [N]"
+      ]
+    ],
+    "title": "F7 adaptation: helping, upper-cap saturation, then blocking",
+    "window": [
+      9.2,
+      13.2
+    ],
+    "modes": [
+      "K0",
+      "K2",
+      "K3",
+      "K4"
+    ],
+    "caption": "One continuous trial: helping starts at 9.5 s, blocking at 10.3 s. H charges only to .15 J; discarded charging is explicitly logged. Net outgoing work and gross outgoing work are distinct."
+  },
+  {
+    "filename": "fig8_governor",
+    "case": "C_blocking",
+    "fields": [
+      [
+        "alpha",
+        "Reference clock speed alpha"
+      ],
+      [
+        "debt",
+        "Reference minus TCP x [mm]"
+      ],
+      [
+        "vx",
+        "Human-point x speed [m/s]"
+      ],
+      [
+        "correction",
+        "Joint correction norm [Nm]"
+      ]
+    ],
+    "title": "F8 adaptation: matched K3/K4, governor OFF/ON",
+    "window": [
+      9.2,
+      18
+    ],
+    "modes": [
+      "K3",
+      "K4"
+    ],
+    "caption": "K3/K4 share the QP, bounds, budgets and model; only the reference-clock governor changes. A stopped K3 trace cannot establish a post-release catch-up peak. Joint correction is not a reconstructed Cartesian command."
+  },
+  {
+    "filename": "fig9_help_recovery",
+    "case": "F_help_block",
+    "fields": [
+      [
+        "alpha",
+        "Reference clock speed alpha"
+      ],
+      [
+        "debt",
+        "Reference minus TCP x [mm]"
+      ],
+      [
+        "vx",
+        "Human-point x speed [m/s]"
+      ],
+      [
+        "Fn",
+        "Normal force [N]"
+      ]
+    ],
+    "title": "Matched governor comparison through helping and blocking",
+    "window": [
+      9.2,
+      18
+    ],
+    "modes": [
+      "K3",
+      "K4"
+    ],
+    "caption": "Both trials complete. After the 11.7 s release, K3/K4 peak x speeds are .056434/.064006 m/s and force errors .113279/1.416587 N. The governor reduces human output and reference debt but worsens these recovery peaks."
+  },
+  {
+    "filename": "fig10_forearm",
+    "case": "E_forearm_block",
+    "fields": [
+      [
+        "Pout",
+        "Human outgoing power [W]"
+      ],
+      [
+        "EH",
+        "Human account [J]"
+      ],
+      [
+        "Fn",
+        "Normal force [N]"
+      ],
+      [
+        "x",
+        "TCP x progress [m]"
+      ]
+    ],
+    "title": "Second human port: forearm rather than TCP",
+    "window": [
+      9.2,
+      18
+    ],
+    "modes": [
+      "K0",
+      "K1",
+      "K2",
+      "K3",
+      "K4"
+    ],
+    "caption": "Same world-fixed blocking pulse at link5 local (0,.04,.12) m. Human power uses that actual moving point Jacobian, not TCP velocity."
+  },
+  {
+    "filename": "fig11_starved",
+    "case": "S_starved",
+    "fields": [
+      [
+        "Pout",
+        "Human outgoing power [W]"
+      ],
+      [
+        "EH",
+        "Human account [J]"
+      ],
+      [
+        "alpha",
+        "Reference clock speed alpha"
+      ],
+      [
+        "Fn",
+        "Normal force [N]"
+      ]
+    ],
+    "title": "Small-budget challenge: H initialized at .001 J",
+    "window": [
+      9.2,
+      18
+    ],
+    "modes": [
+      "K3",
+      "K4"
+    ],
+    "caption": "Only the initial H budget changes. Explicit failures are retained with complete pre-action and failure snapshots; no safe-fallback or viability guarantee is inferred."
+  }
+]

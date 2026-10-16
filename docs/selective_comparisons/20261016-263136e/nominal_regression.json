@@ -1,0 +1,67 @@
+{
+  "reference": "/Users/carl/code/contactSimulation-stage2-20261015-c5601e5e/results/energy_guard_stage2/20261015-c5601e5e/frozen_reproduction/no-human/baseline_log.npz",
+  "reference_commit": "32c4866183b020c50724160749b588f140228db5",
+  "new": "results/selective/final/A_exact_nohuman/K0/baseline_log.npz",
+  "checks": {
+    "phys__q": {
+      "bitwise_equal": true,
+      "finite_mask_equal": true,
+      "max_abs_finite": 0.0,
+      "samples": 72000,
+      "undefined_entries": 0
+    },
+    "phys__qd": {
+      "bitwise_equal": true,
+      "finite_mask_equal": true,
+      "max_abs_finite": 0.0,
+      "samples": 72000,
+      "undefined_entries": 0
+    },
+    "phys__tau_applied": {
+      "bitwise_equal": true,
+      "finite_mask_equal": true,
+      "max_abs_finite": 0.0,
+      "samples": 72000,
+      "undefined_entries": 0
+    },
+    "phys__F_task": {
+      "bitwise_equal": true,
+      "finite_mask_equal": true,
+      "max_abs_finite": 0.0,
+      "samples": 72000,
+      "undefined_entries": 0
+    },
+    "phys__P_task": {
+      "bitwise_equal": true,
+      "finite_mask_equal": true,
+      "max_abs_finite": 0.0,
+      "samples": 72000,
+      "undefined_entries": 0
+    },
+    "ctl__x": {
+      "bitwise_equal": true,
+      "finite_mask_equal": true,
+      "max_abs_finite": 0.0,
+      "samples": 18000,
+      "undefined_entries": 0
+    },
+    "ctl__x_d": {
+      "bitwise_equal": true,
+      "finite_mask_equal": true,
+      "max_abs_finite": 0.0,
+      "samples": 18000,
+      "undefined_entries": 11295
+    },
+    "ctl__f_n": {
+      "bitwise_equal": true,
+      "finite_mask_equal": true,
+      "max_abs_finite": 0.0,
+      "samples": 18000,
+      "undefined_entries": 0
+    }
+  },
+  "status": "PASS",
+  "note": "Trajectory reference entries before trajectory initialization are undefined NaNs in both logs; byte comparison includes them, and finite-mask equality is checked separately.",
+  "reference_file_sha256": "94d7958d872973a41aa776b04ac0746218540c5b86d0c6cb20c5c8a87edc26dc",
+  "new_file_sha256": "d6ff256e2d2c4580892f863a208e9a171781e8d67710ee3ed285b1339a61bbeb"
+}

@@ -1,0 +1,261 @@
+{
+  "A_exact_nohuman": {
+    "common_end_s": 12.540999999993447,
+    "modes": {
+      "K0": {
+        "net_H_outgoing_J": -0.0,
+        "gross_H_outgoing_J": 0.0,
+        "peak_H_outgoing_W": 0.0,
+        "force_max_error_N": 0.04816487099745359,
+        "contact_absent_s": 0.0
+      },
+      "K1": {
+        "net_H_outgoing_J": -0.0,
+        "gross_H_outgoing_J": 0.0,
+        "peak_H_outgoing_W": 0.0,
+        "force_max_error_N": 1.8544115245390849,
+        "contact_absent_s": 0.0
+      },
+      "K2": {
+        "net_H_outgoing_J": -0.0,
+        "gross_H_outgoing_J": 0.0,
+        "peak_H_outgoing_W": 0.0,
+        "force_max_error_N": 0.04816487099745359,
+        "contact_absent_s": 0.0
+      },
+      "K3": {
+        "net_H_outgoing_J": -0.0,
+        "gross_H_outgoing_J": 0.0,
+        "peak_H_outgoing_W": 0.0,
+        "force_max_error_N": 0.04816487099745359,
+        "contact_absent_s": 0.0
+      },
+      "K4": {
+        "net_H_outgoing_J": -0.0,
+        "gross_H_outgoing_J": 0.0,
+        "peak_H_outgoing_W": 0.0,
+        "force_max_error_N": 0.04816487099745359,
+        "contact_absent_s": 0.0
+      }
+    }
+  },
+  "B_mismatch_nohuman": {
+    "common_end_s": 12.540999999993447,
+    "modes": {
+      "K0": {
+        "net_H_outgoing_J": -0.0,
+        "gross_H_outgoing_J": 0.0,
+        "peak_H_outgoing_W": 0.0,
+        "force_max_error_N": 0.04816487099745359,
+        "contact_absent_s": 0.0
+      },
+      "K1": {
+        "net_H_outgoing_J": -0.0,
+        "gross_H_outgoing_J": 0.0,
+        "peak_H_outgoing_W": 0.0,
+        "force_max_error_N": 1.8544115245390849,
+        "contact_absent_s": 0.0
+      },
+      "K2": {
+        "net_H_outgoing_J": -0.0,
+        "gross_H_outgoing_J": 0.0,
+        "peak_H_outgoing_W": 0.0,
+        "force_max_error_N": 0.04816487099745359,
+        "contact_absent_s": 0.0
+      },
+      "K3": {
+        "net_H_outgoing_J": -0.0,
+        "gross_H_outgoing_J": 0.0,
+        "peak_H_outgoing_W": 0.0,
+        "force_max_error_N": 0.04816487099745359,
+        "contact_absent_s": 0.0
+      },
+      "K4": {
+        "net_H_outgoing_J": -0.0,
+        "gross_H_outgoing_J": 0.0,
+        "peak_H_outgoing_W": 0.0,
+        "force_max_error_N": 0.04816487099745359,
+        "contact_absent_s": 0.0
+      }
+    }
+  },
+  "C_blocking": {
+    "common_end_s": 10.623999999997915,
+    "modes": {
+      "K0": {
+        "net_H_outgoing_J": 0.13436383877896446,
+        "gross_H_outgoing_J": 0.13436383877896446,
+        "peak_H_outgoing_W": 0.28490931883428294,
+        "force_max_error_N": 0.13442109663145452,
+        "contact_absent_s": 0.0
+      },
+      "K1": {
+        "net_H_outgoing_J": 0.1322499895794324,
+        "gross_H_outgoing_J": 0.1322499895794324,
+        "peak_H_outgoing_W": 0.26507236625774344,
+        "force_max_error_N": 3.0685789130707253,
+        "contact_absent_s": 0.0
+      },
+      "K2": {
+        "net_H_outgoing_J": 0.13436383877896446,
+        "gross_H_outgoing_J": 0.13436383877896446,
+        "peak_H_outgoing_W": 0.28490931883428294,
+        "force_max_error_N": 0.13442109663145452,
+        "contact_absent_s": 0.0
+      },
+      "K3": {
+        "net_H_outgoing_J": 0.09945486847849969,
+        "gross_H_outgoing_J": 0.09945486847849969,
+        "peak_H_outgoing_W": 0.14822124447831586,
+        "force_max_error_N": 1.7430243994669272,
+        "contact_absent_s": 0.0
+      },
+      "K4": {
+        "net_H_outgoing_J": 0.07116302626726227,
+        "gross_H_outgoing_J": 0.07116302626726227,
+        "peak_H_outgoing_W": 0.14822124447831586,
+        "force_max_error_N": 1.4604851412307767,
+        "contact_absent_s": 0.0
+      }
+    }
+  },
+  "D_combined": {
+    "common_end_s": 10.623999999997915,
+    "modes": {
+      "K0": {
+        "net_H_outgoing_J": 0.13436383877896446,
+        "gross_H_outgoing_J": 0.13436383877896446,
+        "peak_H_outgoing_W": 0.28490931883428294,
+        "force_max_error_N": 0.13442109663145452,
+        "contact_absent_s": 0.0
+      },
+      "K1": {
+        "net_H_outgoing_J": 0.1322499895794324,
+        "gross_H_outgoing_J": 0.1322499895794324,
+        "peak_H_outgoing_W": 0.26507236625774344,
+        "force_max_error_N": 3.0685789130707253,
+        "contact_absent_s": 0.0
+      },
+      "K2": {
+        "net_H_outgoing_J": 0.13436383877896446,
+        "gross_H_outgoing_J": 0.13436383877896446,
+        "peak_H_outgoing_W": 0.28490931883428294,
+        "force_max_error_N": 0.13442109663145452,
+        "contact_absent_s": 0.0
+      },
+      "K3": {
+        "net_H_outgoing_J": 0.09945486847849969,
+        "gross_H_outgoing_J": 0.09945486847849969,
+        "peak_H_outgoing_W": 0.14822124447831586,
+        "force_max_error_N": 1.7430243994669272,
+        "contact_absent_s": 0.0
+      },
+      "K4": {
+        "net_H_outgoing_J": 0.07116302626726227,
+        "gross_H_outgoing_J": 0.07116302626726227,
+        "peak_H_outgoing_W": 0.14822124447831586,
+        "force_max_error_N": 1.4604851412307767,
+        "contact_absent_s": 0.0
+      }
+    }
+  },
+  "E_forearm_block": {
+    "common_end_s": 10.231999999998829,
+    "modes": {
+      "K0": {
+        "net_H_outgoing_J": 0.1079747005389103,
+        "gross_H_outgoing_J": 0.1079747005389103,
+        "peak_H_outgoing_W": 0.22135735600705247,
+        "force_max_error_N": 0.39730622217540734,
+        "contact_absent_s": 0.0
+      },
+      "K1": {
+        "net_H_outgoing_J": 0.10798102562069788,
+        "gross_H_outgoing_J": 0.10798102562069788,
+        "peak_H_outgoing_W": 0.22328647457040787,
+        "force_max_error_N": 0.39730622217540734,
+        "contact_absent_s": 0.0
+      },
+      "K2": {
+        "net_H_outgoing_J": 0.1079747005389103,
+        "gross_H_outgoing_J": 0.1079747005389103,
+        "peak_H_outgoing_W": 0.22135735600705247,
+        "force_max_error_N": 0.39730622217540734,
+        "contact_absent_s": 0.0
+      },
+      "K3": {
+        "net_H_outgoing_J": 0.08896821608159396,
+        "gross_H_outgoing_J": 0.08896821608159396,
+        "peak_H_outgoing_W": 0.14820097879849317,
+        "force_max_error_N": 5.082009738801873,
+        "contact_absent_s": 0.0
+      },
+      "K4": {
+        "net_H_outgoing_J": 0.043827884681020425,
+        "gross_H_outgoing_J": 0.043827884681020425,
+        "peak_H_outgoing_W": 0.14820097879849317,
+        "force_max_error_N": 0.9304169892682204,
+        "contact_absent_s": 0.0
+      }
+    }
+  },
+  "F_help_block": {
+    "common_end_s": 13.714999999990711,
+    "modes": {
+      "K0": {
+        "net_H_outgoing_J": 0.025305762185366065,
+        "gross_H_outgoing_J": 0.13827327863049146,
+        "peak_H_outgoing_W": 0.18986466802096963,
+        "force_max_error_N": 0.2470228076598513,
+        "contact_absent_s": 0.0
+      },
+      "K1": {
+        "net_H_outgoing_J": 0.022127998790267042,
+        "gross_H_outgoing_J": 0.13509551523539245,
+        "peak_H_outgoing_W": 0.18986466802096963,
+        "force_max_error_N": 3.8741317457249558,
+        "contact_absent_s": 0.0
+      },
+      "K2": {
+        "net_H_outgoing_J": 0.025305762185366065,
+        "gross_H_outgoing_J": 0.13827327863049146,
+        "peak_H_outgoing_W": 0.18986466802096963,
+        "force_max_error_N": 0.2470228076598513,
+        "contact_absent_s": 0.0
+      },
+      "K3": {
+        "net_H_outgoing_J": 0.010691803765440057,
+        "gross_H_outgoing_J": 0.12365932021056546,
+        "peak_H_outgoing_W": 0.14822124565043646,
+        "force_max_error_N": 0.294716016556702,
+        "contact_absent_s": 0.0
+      },
+      "K4": {
+        "net_H_outgoing_J": -0.031179547310077722,
+        "gross_H_outgoing_J": 0.08178796913504767,
+        "peak_H_outgoing_W": 0.1482212454953371,
+        "force_max_error_N": 1.4165869700257545,
+        "contact_absent_s": 0.0
+      }
+    }
+  },
+  "S_starved": {
+    "common_end_s": 10.362999999998523,
+    "modes": {
+      "K3": {
+        "net_H_outgoing_J": 0.0009386052213833226,
+        "gross_H_outgoing_J": 0.0010106593247404452,
+        "peak_H_outgoing_W": 0.0041084353825714464,
+        "force_max_error_N": 17.481096683738752,
+        "contact_absent_s": 0.0
+      },
+      "K4": {
+        "net_H_outgoing_J": -0.06853008191830898,
+        "gross_H_outgoing_J": 0.00031701396591383773,
+        "peak_H_outgoing_W": 0.00410891561125145,
+        "force_max_error_N": 11.047403528437322,
+        "contact_absent_s": 0.0
+      }
+    }
+  }
+}

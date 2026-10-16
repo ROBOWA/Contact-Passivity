@@ -1,0 +1,23 @@
+{
+  "audit_status": "PASS",
+  "runs": 32,
+  "completed": 20,
+  "source_commit": "dfc09dfcb402cdc99dd8138d5d71f0c6e8ea205e",
+  "source_sha256": [
+    "b98d443a9e4b0acf376dd5ba02f0cb2f2e0b5a1fca5ac9f5d1bee90c3ecf319b"
+  ],
+  "pdf_exit_code": 0,
+  "root": "/Users/carl/code/contactSimulation-selective-20261016-263136e/results/selective/final",
+  "raw_account_sampling": "full 0.25 ms, float64; control arrays full 1 ms",
+  "figures": [
+    "fig3_exact",
+    "fig4_mismatch",
+    "fig5_human",
+    "fig6_combined",
+    "fig7_charge",
+    "fig8_governor",
+    "fig9_help_recovery",
+    "fig10_forearm",
+    "fig11_starved"
+  ]
+}
