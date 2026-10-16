@@ -48,7 +48,7 @@ class Layout:
         text(38,18,f'KUKA iiwa  |  {run.mode}: {NAMES[int(run.mode[1])]}','title')
         text(40,72,'Recorded simulation  |  Normal speed (1x)  |  TCP blocking')
         x=1415;y=125;t=frame['time'];force=float(np.linalg.norm(frame['force']))
-        if force>.02:phase='HUMAN FORCE ACTIVE';color='#c51c76'
+        if force>.02 or 9.5<=t<=10.9:phase='HUMAN FORCE ACTIVE';color='#c51c76'
         elif t>10.9:phase='CONTINUED SLIDING';color='#087f6a'
         else:phase='BEFORE INTERACTION';color='#526278'
         d.rounded_rectangle((int((x-10)*s),int(y*s),int(1890*s),int((y+55)*s)),radius=int(10*s),fill=color)
