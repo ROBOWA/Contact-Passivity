@@ -1,0 +1,192 @@
+{
+  "config": {
+    "initial": [
+      0.12,
+      0.3,
+      0.3
+    ],
+    "caps": [
+      0.15,
+      0.3,
+      0.3
+    ],
+    "floors": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "peak_human_W": 0.15,
+    "barrier_rate": 5.0,
+    "safe_energy_J": 2.5e-05,
+    "force_rate_N_s": 60.0,
+    "governor_transition_s": 0.1,
+    "release_force_N": 0.02,
+    "eta_Nm": 0.02,
+    "retries": 3,
+    "energy_guard_J": 1e-10,
+    "power_guard_W": 1e-07,
+    "energy_tolerance_J": 1e-10,
+    "power_tolerance_W": 1e-07,
+    "torque_tolerance_Nm": 1e-07,
+    "task_weight": 1.0
+  },
+  "scenarios": {
+    "A_exact_nohuman": {
+      "body": "sphere_tool",
+      "local": [
+        0.0,
+        0.0,
+        0.137
+      ],
+      "nominal_friction": 1.0,
+      "duration": 18.0,
+      "pulses": [],
+      "name": "A_exact_nohuman"
+    },
+    "B_mismatch_nohuman": {
+      "body": "sphere_tool",
+      "local": [
+        0.0,
+        0.0,
+        0.137
+      ],
+      "nominal_friction": 0.2,
+      "duration": 18.0,
+      "pulses": [],
+      "name": "B_mismatch_nohuman"
+    },
+    "C_blocking": {
+      "body": "sphere_tool",
+      "local": [
+        0.0,
+        0.0,
+        0.137
+      ],
+      "nominal_friction": 1.0,
+      "duration": 18.0,
+      "pulses": [
+        {
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "magnitude": 5.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "name": "C_blocking"
+    },
+    "D_combined": {
+      "body": "sphere_tool",
+      "local": [
+        0.0,
+        0.0,
+        0.137
+      ],
+      "nominal_friction": 0.2,
+      "duration": 18.0,
+      "pulses": [
+        {
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "magnitude": 5.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "name": "D_combined"
+    },
+    "E_forearm_block": {
+      "body": "link5",
+      "local": [
+        0.0,
+        0.04,
+        0.12
+      ],
+      "nominal_friction": 1.0,
+      "duration": 18.0,
+      "pulses": [
+        {
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "magnitude": 5.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "name": "E_forearm_block"
+    },
+    "F_help_block": {
+      "body": "sphere_tool",
+      "local": [
+        0.0,
+        0.0,
+        0.137
+      ],
+      "nominal_friction": 1.0,
+      "duration": 18.0,
+      "pulses": [
+        {
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 0.2,
+          "magnitude": 5.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "start": 10.3,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "magnitude": 5.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "name": "F_help_block"
+    },
+    "S_starved": {
+      "body": "sphere_tool",
+      "local": [
+        0.0,
+        0.0,
+        0.137
+      ],
+      "nominal_friction": 1.0,
+      "duration": 18.0,
+      "pulses": [
+        {
+          "start": 9.5,
+          "ramp": 0.2,
+          "hold": 1.0,
+          "magnitude": 5.0,
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "initial_H": 0.001,
+      "name": "S_starved"
+    }
+  },
+  "starting_revision": "263136e22d721e1e72ec7325c71647ce4167a6d4"
+}
