@@ -1,0 +1,37 @@
+{
+  "case": "C_blocking",
+  "mode": "K4",
+  "source_root": "/Users/carl/code/contactSimulation-selective-20261016-263136e/results/selective/long60",
+  "source_hashes": {
+    "baseline_log.npz": "fe93d5fa3c50cbb1875d56cfc0e3478977fbae2b904731f129d9e9f7fd892b17",
+    "selective.npz": "991dfe011fa389f1fbbfc68cbf5e39ec3d11f4036571a623db49c8aa3c2a0e47",
+    "metadata.json": "8ebd9b4ed09cc6e8f09e5948613534a58981874e07fbbbbecc4b84eabd2e5ece",
+    "metrics.json": "6c5dddbf5c1349ca109c3689ec84056bac1b550872033aee4ef69023a8fb7321"
+  },
+  "source_commit": "e73a86162d824e854244c9844ee84ca5d6a059a8",
+  "numerical_source_sha256": "b98d443a9e4b0acf376dd5ba02f0cb2f2e0b5a1fca5ac9f5d1bee90c3ecf319b",
+  "start_s": 0.0,
+  "end_s": 60.0,
+  "normal_speed": true,
+  "fps": 30,
+  "frames": 1800,
+  "size": [
+    1920,
+    1080
+  ],
+  "encoding": "H.264 / yuv420p / CRF20 / faststart / no audio",
+  "ffmpeg_version": "ffmpeg version 7.1 Copyright (c) 2000-2024 the FFmpeg developers",
+  "video_sha256": "86ab98ac6610505440a9691df42dc4fa18e92c0916f6dad34cef7ede0b73f053",
+  "frame_pose_sequence_sha256": "ece217fa164b1181593d8cc2ea2d41b6bf3ed30fb29f84df43206df303e09558",
+  "decode_exit_code": 0,
+  "decoded_frames": 1800,
+  "decode_seconds": 60.0,
+  "render_wall_seconds": 62.95082754199393,
+  "sampling": "Actual recorded left samples; no pose interpolation, no controller or integration calls",
+  "force_arrow_display_offset_m": [
+    0.0,
+    0.0,
+    0.06
+  ],
+  "force_arrow_leader": "Thin line links raised illustration to the actual force application point"
+}
