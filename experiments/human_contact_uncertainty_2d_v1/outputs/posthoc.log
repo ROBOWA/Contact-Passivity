@@ -1,0 +1,38 @@
+[posthoc_robust] 25/800 episodes, 40s, errors=0
+[posthoc_robust] 50/800 episodes, 77s, errors=0
+[posthoc_robust] 75/800 episodes, 116s, errors=0
+[posthoc_robust] 100/800 episodes, 160s, errors=0
+[posthoc_robust] 125/800 episodes, 219s, errors=0
+[posthoc_robust] 150/800 episodes, 277s, errors=0
+[posthoc_robust] 175/800 episodes, 324s, errors=0
+[posthoc_robust] 200/800 episodes, 371s, errors=0
+[posthoc_robust] 225/800 episodes, 417s, errors=0
+[posthoc_robust] 250/800 episodes, 466s, errors=0
+[posthoc_robust] 275/800 episodes, 513s, errors=0
+[posthoc_robust] 300/800 episodes, 558s, errors=0
+[posthoc_robust] 325/800 episodes, 603s, errors=0
+[posthoc_robust] 350/800 episodes, 648s, errors=0
+[posthoc_robust] 375/800 episodes, 693s, errors=0
+[posthoc_robust] 400/800 episodes, 740s, errors=0
+[posthoc_robust] 425/800 episodes, 785s, errors=0
+[posthoc_robust] 450/800 episodes, 827s, errors=0
+[posthoc_robust] 475/800 episodes, 868s, errors=0
+[posthoc_robust] 500/800 episodes, 907s, errors=0
+[posthoc_robust] 525/800 episodes, 947s, errors=0
+[posthoc_robust] 550/800 episodes, 986s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[posthoc_robust] 575/800 episodes, 1024s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[posthoc_robust] 600/800 episodes, 1064s, errors=0
+[posthoc_robust] 625/800 episodes, 1100s, errors=0
+[posthoc_robust] 650/800 episodes, 1135s, errors=0
+[posthoc_robust] 675/800 episodes, 1170s, errors=0
+[posthoc_robust] 700/800 episodes, 1205s, errors=0
+[posthoc_robust] 725/800 episodes, 1237s, errors=0
+[posthoc_robust] 750/800 episodes, 1272s, errors=0
+[posthoc_robust] 775/800 episodes, 1304s, errors=0
+[posthoc_robust] 800/800 episodes, 1331s, errors=0

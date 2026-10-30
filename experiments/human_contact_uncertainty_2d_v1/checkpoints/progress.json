@@ -1,0 +1,16 @@
+{
+ "updated_utc": "2026-10-30T13:10:00Z",
+ "stage": "complete",
+ "done": [
+  "inspection, decision log, formulation (+PDF), literature mapping, references",
+  "deterministic plant/contact/accounts, independent auditor, 14 math tests",
+  "GP data, frozen predictors, offline held-out evaluation",
+  "smoke debugging (seeds 0-29) with three design fixes before freezing",
+  "frozen suite main_v1: main 4000, infeasible 150, ablations/sweep/refinement 3040, calibration forks 200 episodes",
+  "post-hoc robust bias bound (freeze posthoc_v1) on fresh seeds 300-349 (800 episodes)",
+  "single-process timing, figures, animation (GIF+MP4), report (+PDF), manifest"
+ ],
+ "deferred": ["P4 reference adaptation", "joint gain inference", "human inertia", "multi-contact/unknown link",
+              "sigma points", "closed-loop naive-GP planner", "braking reserve", "real-time implementation",
+              "certified probabilistic claims", "online calibration monitor for the structured GP"]
+}

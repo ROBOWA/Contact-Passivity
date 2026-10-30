@@ -8,3 +8,5 @@ results_passivation*/
 .venv/
 *.egg-info/
 .pytest_cache/
+# Local historical backups retained during repository consolidation.
+archives/

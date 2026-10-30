@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import platform
+import shlex
 import importlib.metadata
 import numpy as np
 from poc_figures_data import load_case,compute,validate,sha,write_json
@@ -106,7 +107,9 @@ def build(a):
     review_summary=dict(completed_rounds=len(reviews),rounds=reviews,
                         status='VERIFIED' if len(reviews)==4 and all(r['verdict']=='PASS' for r in reviews) else 'IN REVIEW')
     write_json(a.out/'review_summary.json',review_summary)
-    command='PYTHONDONTWRITEBYTECODE=1 /Users/carl/code/contactSimulation/.venv/bin/python scripts/kuka_poc_figures.py --inputs '+str(a.inputs)+' --out NEW_OUTPUT --reviews '+str(a.reviews)
+    command_args=[sys.executable,'scripts/kuka_poc_figures.py','--inputs',str(a.inputs),'--out','NEW_OUTPUT']
+    if a.reviews is not None:command_args.extend(['--reviews',str(a.reviews)])
+    command='PYTHONDONTWRITEBYTECODE=1 '+shlex.join(command_args)
     context=dict(source_commit=cat['source_stage2_head'],current_commit=git('rev-parse','HEAD'),
         branch=git('branch','--show-current'),build_command=command,review_rounds=reviews,
         matrix_counts=audit,common_window_metrics=common,common_window_end_s=end,

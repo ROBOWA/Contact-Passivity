@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "repository": "/Users/carl/code/contactPassivity",
+  "branch": "main",
+  "latest_development_commit": "5e792cf7157449a9806c9c3aeb6e3b5464780b3a",
+  "checks": {
+    "regression_suite": {
+      "command": ".venv/bin/pytest -q",
+      "passed": 97,
+      "duration_seconds": 80.61
+    },
+    "preservation_integrity": {
+      "command": ".venv/bin/python scripts/verify_consolidation.py",
+      "source_records": 6619,
+      "status": "PASS",
+      "evidence": "verification_final.json"
+    },
+    "verifier_corruption_detection": {
+      "status": "PASS",
+      "evidence": "verifier_smoke.json"
+    },
+    "nominal_25_second_simulation": {
+      "status": "PASS",
+      "maximum_force_error_N": 0.0498,
+      "contact_loss_events": 0
+    },
+    "selective_recording": {
+      "case": "C_blocking",
+      "mode": "K4",
+      "samples": 72000,
+      "outcome": "COMPLETE"
+    },
+    "git_connectivity": "PASS",
+    "dependency_check": "PASS",
+    "git_worktrees_remaining": 1,
+    "old_project_directories_remaining": 0,
+    "numerical_controller_asset_test_changes": []
+  },
+  "local_changes": [
+    "README and project description updated",
+    "historical data merged and preserved",
+    "portable report build command",
+    "consolidation manifest and verifier"
+  ],
+  "remote_pushed": false
+}

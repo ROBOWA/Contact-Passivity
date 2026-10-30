@@ -1,0 +1,9 @@
+ M .gitignore
+ M README.md
+ M pyproject.toml
+ M scripts/kuka_poc_figures.py
+?? docs/consolidation/
+?? experiments/
+?? human_port_ecbh_workflow_20261029.json
+?? scripts/verify_consolidation.py
+?? taskref_ecb_workflow_20261029.json

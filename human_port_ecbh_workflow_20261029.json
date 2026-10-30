@@ -1,0 +1,1359 @@
+{
+  "workflow_id": "human-port-ecbh-20261029",
+  "formulation": "human-port-ecbh-repair03",
+  "stage": "EXTERNAL_REVIEW_EXTRACTION_V3",
+  "gates": {
+    "A": "PASS_CONDITIONAL_FORMULATION",
+    "B": "PASS_NUMERICAL_ENVELOPE",
+    "C": "PASS_NUMERICAL_ENVELOPE",
+    "D2_pilot": "PENDING"
+  },
+  "MPC": "D2_SIX_PILOTS_COMPLETE_PENDING_INDEPENDENT_REVIEW",
+  "KUKA_implementation": "C_ONE_STEP_REVIEWED_OFFLINE_ONLY",
+  "legacy_workflow": "taskref-ecb-20261029",
+  "legacy_head": "2e01e11f539eb3cd7092ed5f6f2d5cce45cf7697",
+  "legacy_pointer": "/Users/carl/code/contactPassivity/taskref_ecb_workflow_20261029.json",
+  "request_id": "overnight-review-extract-20261030-v3",
+  "task_id": null,
+  "turn_id": null,
+  "bridge_receipt": "5f7794c2-74b2-4257-ab1f-65b01eff2382",
+  "worktree": "/Users/carl/code/contactPassivity/results/worktrees/human-port-ecbh-20261029",
+  "branch": "research/human-port-ecbh-20261029",
+  "completed": [
+    "versioned r4 taxonomy;zero-floor and empirical reserve distinct",
+    "atomic checkpoint plus finally export/recovery,unfinished intervals not executed",
+    "27targeted tests passed;initial old-label assertion failure retained",
+    "exact6legacyfixture groups x4methods,allbounded and audited",
+    "two raw-array-exact r3validation comparisons and10source-identical functions",
+    "saved sustainedRbrake independently checked at0floorand8microJ",
+    "complete source/config/audit packet and allrawdata retained"
+  ],
+  "pending": [
+    "Independent review of evidence and corrected native demos",
+    "Full MP4 bridge extraction later;no external upload",
+    "D2 gate pending;negative evidence review-ready;no tuning required",
+    "Final report pending,<=12pages"
+  ],
+  "updated_utc": "2026-10-30T10:07:46.450446+00:00",
+  "head": "b42695394329c45cb598eb2f8566f396c228b27b",
+  "request_text": "NEW narrowly scoped Ec+NET BH 2D MPC implementation and SIX-PILOT task, workflow human-port-ecbh-20261029. This is a NEW separately reviewed proposal, NOT replay or indirect execution of rejected legacy Ec+BU D request. project research/session01a17f69-c054-77e2-bb55-6c71162f80e1/root /Users/carl/code/contactPassivity/worktree results/worktrees/human-port-ecbh-20261029. User explicitly authorized autonomous development-review loop and later finite-horizon 2D/KUKA study conditional on new gates and reconciliation. Read local instructions and current manifests. No extra agents unless explicitly allowed by applicable instructions.\n\nPREREQUISITE REVIEW/RECONCILIATION by external ChatGPT reviewer:\nRead full retained readiness final123149..123150; task8f9e2e8c-87a7-4e25-aa94-1342bd7a3251 turn01a18abd-6bf7-7d20-8887-6507b183e0d8 authoritatively COMPLETED. Verify clean reported HEAD7d73a5cfd7357aafa9297b1e7fed1b55e3ac2b2d. C_REVIEW_DECISION hashfaf570797416901e9c8edfb7f9db96a5739f482c266b12aa880ea4a44f45b738; MPC_RECONCILIATION hash2d026069a3c8af5ce7c582dd6c024f17dd7a0a66b038b96ee41052ba38112eec; MPC_PLAN hash78b1c5c05f1f8a43d68e356025d1aa42d75ff4523c112a2da221eb2b859cccde.\nA=PASS_CONDITIONAL_FORMULATION, B and C=PASS_NUMERICAL_ENVELOPE strictly bounded offline. Existing review records specify exact accepted assumptions/failures; not universal feasibility/continuous safety/realtime. New C decision is recorded durably, not transferred from legacy Ec+BU.\nOld request chatgpt-taskref-ecb-20261029-d-mpc-950180ea-v1 remains immutable and unexecuted. Exact available rejection reason: \"available records still mark C pending, conditional D scope not established.\" Evidence is surviving user-supplied report/legacy record unchanged from commit11803a581ec9d205de858ef8c15abe73c5c066b4; original automatic-review payload/full dispatch unavailable. No successful old receipt/task/turn/execution recorded; do not claim exhaustive service-log knowledge.\nReviewer reconciliation: cited C-pending condition now resolved by NEW independent Ec+BH C review; conditional scope now explicitly established BELOW as 2D-only six pilots with independent stop gate. Historical rejection is not erased; documentation did not itself grant approval. This NEW submission must pass normal current tool approval; any new rejection is binding, no circumvention/retry under different text/IDs to bypass it. Record this reconciliation and exact evidence limits. MPC status may become implementation/pilot RUNNING only on actual accepted dispatch; never claim MPC accepted numerically before review.\n\nAUTHORIZED SCOPE NOW:\nImplement versioned finite-horizon 2D Ec+netBH atop inspected accepted human_port_ecbh_r4 physical/accounting model. Preserve r4/C01/C02 and all frozen evidence. No KUKA MPC, no full32-row matrix, no additional horizons/ablations yet. Implement matched horizonN=1 andN=5 held-current-force pilots plus unit tests and review packet. Stop after six pilots or a bounded structural blocker.\nUse dt=.01, existing physical integration h=.0005 and fixture-specific r4 overrides EXACTLY. Inspect actual fixtures before allocating; do not assume all have same Ec0 if sustained uses override. Within each fixture, identical initial state/Ec/BH/gains/limits/reference/causal information/cost/reserve across N1/N5. Freeze complete common config and overrides before runs.\nThree fixtures: sustained nohuman, active conservative-budget obstruction/release, actual loss/recontact. Two horizons each = SIX pilots. Existing one-step/nominal frozen evidence may be referenced as legacy baseline, clearly distinguish solverN1 from priorone-step; no claim horizon superiority without controlled evidence.\nImplement first-action receding-horizon execution, full predicted controller state (integrator,progress,previousinput), exact common nominal reference logic without mutating actual controller during hypothetical rollout. Current measured force/set only, held across predicted horizon; no future plant force/script/release time in selector. Existing reference phase schedule may be known equally to all horizons. No future credited work or predicted human recharge settled into actual accounts.\nCommon objective sum(dt/2*(||(u-u_nom)/scale||\u00b2)),scale existing(15,2.5)N,lambda_s=0, no terminalset constraint. Explicitly finite-horizon heuristic. No new task-integrity BU, no force field, no tracking authorization credit gate. Future impedance/relaxation model, smoothing and terminalbrake ablations remain in plan ONLY until pilot review.\nSingle-shooting bounded SLSQP with shifted warmstart, limitediterations/evaluations. Keep objective/constraints same acrossN. Validate all predicted interval/substep prefixes, actuator magnitude/rate and domain, Ec and conservativeBH; initial/final as well. Physicalzero floors vs8microJ empirical reserve vsoptionalshaping distinct. Apply same hierarchy to both horizons. Clearly define/check fallback if horizon infeasible: independently validated current one-step backup permitted as explicitly logged fallback, not successful MPC solution. Nonconverged feasible candidates require independent validation/provenance; never call optimizer success. Expose objective, residuals, active constraints, future constraint failures and fraction of first actions from actual optimized sequence versus fallback. N1 equivalence tests where expected, disclose legitimate differences.\nRetain actual total executed actuator work after all saturation/compensation/filter, executed-command antiwindup and fresh actual rollout/account audit. Core Ecdot=cT+etaDR-Pa,cT<=actualDT,V=SR+ST+Ec-Emin,BH NOT inV. Outward pH=-fH\u00b7vH; net signed recharge only. Separate true/measured/conservative ledgers; no resets/clipping/elastic/human/predicted/numerical residual refunds. Conditional force/velocity support bound exact assumptions explicit; finite scenarios not reachable tube. Invalid model/prediction may violate actual accounts: log and halt, don't erase execution or claim safety.\n\nBOUNDS AND TESTS:\nAt most six pilot attempts, each <=60s wall and1s per selection with coherent committed-prefix checkpoints, whole pilot/audit task compute<=30min. One bounded corrective code iteration for implementation bugs permitted; preserve failed attempts and identify reruns separately, no tuning sweeps or gain/budget/tolerance loosening. If limits yield incomplete runs, audit prefixes and return reproducible blocker; don't extend time to force mission success.\nMeaningful tests: signs/units, nofuturetruthaccess, predictive controller-state isolation, horizonprefix violations despite feasible endpoint, executed-power/antiwindup, input rate across horizon, N1 objective/constraints, nonconverged/fallback provenance, interrupted-prefix persistence. Do not repeat unchanged physical tests without reason.\nRecord true/measured/safe raw+independent reconstructedEc/BH minima and allowance, WHnet/positive, actual/model/creditedDT, physical/storage/V residuals, force ALL/D/Q/WIPE raw RMS/peak/slew/variation with flight included, progress/recovery/postreleaseovershoot, solver mean/p95/p99/max vsdt, fallbackfraction, violation/timeout classification. Useful completion+recovery required for mission; no-stop-forever success. Do not require benefits fromN5 to fabricate them. No realtime/continuoussafety/recursivefeasibility/asymptotic/arbitraryhumanrecovery claims.\nReturn bounded evidence for INDEPENDENT PILOT REVIEW before further experiments or KUKA. Full new key MPC/predictor/constraint/acceptance/runner accounting source in FINAL plus exact unchanged physical/auditor hashes, complete compact six-row config/outcome table including failures, exact tests/commits/reproduce commands. Durable versioned packet in git-backed worktree. No giant repeated historical prose/newPDF necessary. Root/workflow manifests record this exact dispatch/request_id chatgpt-human-port-ecbh-20261030-d2-pilot-v1, prior known readiness IDs above, current IDs only real receipt; new D2 pilot gate PENDING. Local isolated code/simulation/tests/docs/localcommits only. No hardware,push/merge,publication/externalmessages,purchases,OS/permissionchanges,destructivereset. Preserve all old acceptance limits/history.\n\n[MANIPULATION_BRIDGE_RECEIPT:552c5386-7c5c-4547-b677-bf97fe8de4bb]\n",
+  "supersedes_for_future_development": "taskref-ecb-20261029;legacy evidence and MPC rejection history retained unchanged",
+  "freeze": "docs/human_port_ecbh/d2_pilot_v1/freeze.json",
+  "numerical_source_sha256": "649e0c8d05e45d568390ef7f21231856114996ebdc733dc65c08cf6af2204e25",
+  "pilot_evidence": {
+    "nominal_WH_J": 0.0937500010116081,
+    "P_WH_J": 0.022934209894882845,
+    "BH0_J": 0.025,
+    "P_mission_complete": true,
+    "P_raw_min_Ec_BH": [
+      0.09212460750226603,
+      0.0020657901051099672
+    ]
+  },
+  "corrective_iteration": "shared normal-preserving input cost scale(15,2.5) replaces(15,25);independent force domain12.8N replaces20N;no budget/tolerance/gain changes;pre-repair freeze/results retained",
+  "bound_session_id": "01a17f69-c054-77e2-bb55-6c71162f80e1",
+  "counts": {
+    "primary_groups": 6,
+    "matched_primary_runs": 24,
+    "validation_runs": 2,
+    "coherent_checkpoints": 26,
+    "source_snapshots": 26,
+    "targeted_tests": 27,
+    "missions_completed": 17,
+    "credit_invalid_diagnostics": 3,
+    "physical_identity_ok": 26
+  },
+  "report": "docs/human_port_ecbh/review04/REPORT.md",
+  "summary": "docs/human_port_ecbh/review04/packet.json",
+  "MPC_dispatch_status": "NEW_2D_SCOPE_COMPLETED;NO_REJECTION_RECEIVED;FURTHER_EXECUTION_STOPPED",
+  "legacy_rejected_request_id": "chatgpt-taskref-ecb-20261029-d-mpc-950180ea-v1",
+  "C_start_requires": "SATISFIED_BY_PRIOR_EXPLICIT_DISPATCH_AND_CURRENT_EXTERNAL_REVIEW;historical prerequisites retained",
+  "source_provenance": {
+    "effective_reviewed_baselines": {
+      "human_port_ecbh_r4": "ff1e0514e231b01daf7b7b7af1111bc05f510a7c3fc565e3e172674f961e6bd7",
+      "human_port_kuka": "eba2ed94902a44aa22ac270ec897a0efbb15466070f467cdf2a0b06b6a95e336",
+      "human_port_kuka_c02": "a10b3a8c02cc425f1ec36fd10b03cebe35174fa80da7d3410daf4bb1a789aed3"
+    },
+    "C02_numerical_commit": "13b657106165b5a35209f1b5e5cc17bc9fd0654b",
+    "C02_review_record": "docs/human_port_ecbh/mpc_readiness/review01/C_REVIEW_DECISION.md",
+    "historical_values": "administrative_state_history;frozen evidence is unchanged"
+  },
+  "source_commit": "6592e7bc527cc269d7479c6dfd423b976e98f30b",
+  "freeze_sha256": "fe00ea517cb5cc2af16032c45d63d36d73a3deaf40058d1e66a5740ca9e79338",
+  "unresolved": [
+    "8microJempiricalreserve remains extra restriction,not0physicalfloor",
+    "Finite scenarios andDOP/RK samples not certifiedreachable/continuous/recursivefeasibility",
+    "MismatchRactualpositiveaccountreservefailuresretained",
+    "Low-both andRtimeoutprefixes are incomplete missions,notsafephysicalstops",
+    "Overcreditdiagnosticcreditinvalid;positiveaccounts do notestablishtheorem",
+    "Cooperativeofflinewallbudgets canoverrunoneoperation;notrealtime",
+    "R3refinementsreused forunchangedphysics,not newtimeout-policyconvergence"
+  ],
+  "worktree_clean": true,
+  "bundle": "docs/human_port_ecbh/delivery/repair03-review.zip",
+  "bundle_sha256": "cb3cf38d4fdc0e85073bff2387f363b8d7ffff630078542ecf1fec0603c39cf5",
+  "request_history": [
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261029-ab-v1",
+      "request_text": "NEW USER-AUTHORIZED FORMULATION MIGRATION: Ec + BH, human-interaction-focused passivity. Workflow human-port-ecbh-20261029.\nThe user explicitly requests: \"\u597d\u7684\uff0c\u4e0b\u9762\u8fdb\u884c\u4e00\u4e2a\u66f4\u65b0\uff0c\u628a\u6574\u4f53\u6362\u6210\u6211\u4eec\u521a\u8ba8\u8bba\u7684\u8d26\u6237\uff0c\u5e76\u4fdd\u7559human account\". This supersedes the previous Ec+BU mainline. Implement, test and document the new formulation; do not merely rename ledgers. This is a one-step formulation/PoC migration, NOT the previously rejected MPC dispatch. Do not implement/run MPC in this task.\n\nCONTEXT AND PRESERVATION:\nResearch root /Users/carl/code/contactPassivity; bound session 01a17f69-c054-77e2-bb55-6c71162f80e1.\nPrior isolated worktree /Users/carl/code/contactPassivity/results/worktrees/taskref-ecb-20261029, branch research/taskref-ecb-20261029. Last verified clean HEAD 2e01e11f539eb3cd7092ed5f6f2d5cce45cf7697; prior documentation task a1f05344-664c-4896-a5fe-261bd2330604 / turn 01a188ea-e6ee-7230-bfe8-abf23cfd5ad4 completed. Old AB and C are PASS_NUMERICAL_ENVELOPE only, active KUKA policy not timestep-converged; offline only. Preserve all old code/results/reports and failures as legacy evidence. Make a new isolated branch/worktree from verified prior HEAD, or equivalently separate versioned implementation with no overwrite of frozen evidence. Keep unrelated main/proposal work untouched.\nLocal coding/simulation/tests/plots/docs/local commits authorized. No hardware, push/merge, external messaging/publication, purchases, permission/OS changes or destructive reset.\n\nNEW MATHEMATICAL SPEC:\nFocus paper on human-port passivity during sustained manipulation. Robot + passive task environment/object form composite system; task contact is internal. Let outward pH=-fH^T vH (include wrench moment/angular power and sum human contacts when applicable), Pa=actual executed total actuator mechanical power after saturation/all compensation/filter. SRdot=Pa-pH-pT-DR; STdot=pT-DT. Nonnegative physically justified storage SR, ST and physical DR, DT>=0; separate any other external input ports. Unknown model residual is NOT automatically human interaction.\nCore controller resource: Ecdot=cT+eta DR-Pa, Ec>=Emin, 0<=eta<=1, 0<=cT<=DT. Exact-known-contact ideal cT=DT. In uncertain model case use justified lower bound cT=max(0,DhatT-epsilonD), or another derived conservative rule; explicitly state if bound is assumed vs certified vs empirical. Damping already included in Pa is not separately physical DR. No refund of elastic storage increase, predicted human work, arbitrary predicted task work, integrator residual, or unexplained energy. V=SR+ST+Ec-Emin gives Vdot=-pH-(DT-cT)-(1-eta)DR<=-pH. Show continuous theorem and discrete work-integral equivalent with errors/conditions.\nHuman account: BHdot=-pH, BH>=0 (or EH with documented floor equivalent). Default NET human budget: human input replenishes BH; no automatic resets, time refill or task-dissipation refund to BH. Report positive/gross human output separately. Optional gross-only BHdot=-[pH]+ is a labeled ablation, not the default. Distinct bounds WHnet<=BH0 and WHnet<=V0; simultaneous bound is min(BH0,V0). BH is an extra ledger constraint, NOT independently additive physical storage, do not add BH to V or claim two separate physical energy supplies. Accurate prediction of human power does not exempt it.\nRemove BU and unauthorized-task-work shaping from the core proposed filter/objective/success gate. Preserve legacy BU implementation/results for comparison only. Task path/position/normal-force references continue driving nominal controller. Hard force/speed/workspace/joint/torque/rate/domain constraints remain independently declared and checked. No tight tracking-error authorization gate is needed for core dissipation reimbursement. Model-domain gating for validity is allowed if explicit and conservative, not a disguised task-integrity tank.\nPrediction still includes causal current human force/generalized disturbance estimate and held-force assumption; human power accounting must have sign/point/Jacobian consistency. Separate true plant input used by auditor from controller measurement/estimate in mismatch tests; no oracle future force. If ideal sensing only, label assumption. Continuous accounting identity alone does not ensure discrete budget feasibility; no guaranteed arbitrary-human recovery, real-time, continuous safety or recursive feasibility claims.\n\nSTAGED EXECUTION OF THIS TASK:\nA. Write complete new formulation/spec and map old/new guarantees, units, ports/storage, measurement assumptions, budget resets/caps policy, controller-filter ordering and robust-credit issue. Record workflow migration and exact dispatch; establish new A/B/C gates PENDING, never transfer old acceptance to new accounts.\nB. Implement and independently audit NEW 2D one-step formulation. Reuse audited physical model/infrastructure where sound, implement Ec and BH throughout filter, predictor, execution, logging, independent auditor, tests, report and entrypoints. Inspect legacy code before reuse. Candidate acceptance must check both budgets at substep/prefix and actual input/domain bounds; fresh execution audits, no clipping. Clearly disclose reserve shaping vs hard-floor rejection and all solver failures. Proper executed-command antiwindup; meaningful finish and recovery.\nFreeze matched N (nominal observes accounts), P (Ec+BH), Ec-only ablation, and no-task-reimbursement+BH comparator with same actuator accounting, initial physical state, Ec/BH allocations, references, human information, limits and cost. This clean ablation isolates reimbursement. Legacy external-whole-port comparator may be supplementary with its distinct storage/bound clearly stated, not mislabeled the new actuator-resource ablation.\nRequired useful experiments: sustained nohuman wiping showing reimbursement benefit over sufficiently long task; obstruction/release with SMALL explicit BH where nominal violates human budget but P intervenes, recovers and completes while satisfying BOTH Ec and BH; assisting human, normal/oblique disturbances, elastic loading/unloading, actual loss/recontact; low Ec and low BH separately and together to distinguish constraints; friction/contact-model mismatch including overestimated dissipation, conservative-credit comparison and transparent assumptions. Include causal human-estimate error diagnostic if feasible, otherwise explicitly mark unresolved and ideal-sensing-only.\nReport independent WHnet/WHpositive, Ec/BH raw and reconstructed minima with uncertainty; V inequality residual and physical robot/task balance; credited actual/model/lower-bound dissipation; active constraint and same-state nominal margin; progress, postrelease recovery, RAW contact force RMS/peak/slew/variation with explicit windows and all-time loss included, q/v/torque modification, solver time distribution vs control dt. Preserve every failed/exploratory run and no-stop-forever success. At least 3 integration refinements in representative active-human-budget and contact-transition cases; distinguish energy audit convergence from active-policy convergence. Do not demand artificial zero-floor triggers; disclosed reserve activation is fine, but need matched counterfactual meaningful BH benefit.\nC. Prepare precise KUKA migration plan (same Ec+BH, link point/wrench powers, raw-force audit, EE/forearm/upper-arm and tangent/normal/oblique disturbances), but STOP for independent review after new A+B evidence packet. The user authorized overall KUKA migration; follow-up will dispatch C after new A+B review. Do not start KUKA matrix or MPC in this task.\n\nDELIVERABLES:\nImplement and run A+B, provide readable report + source, concise plots and actual source excerpts/compact complete outcome tables inline in final reply for independent reviewer. Render/inspect report if PDF generated. Include exact source/config hashes, local commits, reproducible commands, independent audit and meaningful test outputs, failure classification and unresolved assumptions. Do not claim success from own summary alone or hide failures through looser tolerances/budgets. Avoid overlong unbounded tuning: return a complete reproducible structural blocker if necessary.\nKeep artifacts in git-backed research worktree. Update a NEW root pointer /Users/carl/code/contactPassivity/human_port_ecbh_workflow_20261029.json plus new worktree workflow_progress.json, linking legacy pointer without destroying history. Store user decision, formulation version, migration map, stage and PENDING independent gates, exact request_id chatgpt-human-port-ecbh-20261029-ab-v1; task_id/turn_id null unless learned from actual receipt (never guess). Original taskref workflow superseded for future development, retained for evidence. Old MPC approval-rejection history preserved; no indirect execution of it.\nReturn after A+B evidence ready for independent review; concise current-status update before long experiments.\n\n[MANIPULATION_BRIDGE_RECEIPT:e033f6fe-44ce-43f0-9986-42f202f4961a]\n",
+      "bridge_receipt": "e033f6fe-44ce-43f0-9986-42f202f4961a",
+      "task_id": "e033f6fe-44ce-43f0-9986-42f202f4961a",
+      "turn_id": "01a1892a-d237-7680-ab09-1bb4c684315e",
+      "status": "AUTHORITATIVELY_COMPLETED_NOT_INDEPENDENTLY_ACCEPTED"
+    },
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261029-repair03-v1",
+      "task_id": "2056963b-8abf-497f-8060-c04b3f34c324",
+      "turn_id": "01a1897c-73d8-7270-801a-1cfbc93dd650",
+      "bridge_receipt": "2056963b-8abf-497f-8060-c04b3f34c324",
+      "request_file": "docs/human_port_ecbh/repair03/REQUEST.md",
+      "request_sha256": "be2a49517f9911a37bb28e5db3e6e5913f3e65275aed316047d3a027d762ac81",
+      "status": "AUTHORITATIVELY_COMPLETED_NOT_INDEPENDENTLY_ACCEPTED",
+      "id_origin": "current user dispatch"
+    },
+    {
+      "request_id": null,
+      "request_id_status": "not supplied",
+      "task_id": "6b7b931d-8184-49b5-868c-e41c0b0c3302",
+      "turn_id": "01a189c1-1552-7590-a0d3-58683931740b",
+      "bridge_receipt": "6b7b931d-8184-49b5-868c-e41c0b0c3302",
+      "request_text": "Independent-review evidence retrieval for completed repair03. User authorized continued development-review loop. ONLY bounded read-only source/config/evidence extraction plus durable review record/receipt-ID metadata updates, no new numerical implementation, no reruns, no KUKA or MPC. project research/session01a17f69-c054-77e2-bb55-6c71162f80e1 root /Users/carl/code/contactPassivity worktree results/worktrees/human-port-ecbh-20261029.\nRepair03 completed exact task2056963b-8abf-497f-8060-c04b3f34c324 turn01a1897c-73d8-7270-801a-1cfbc93dd650; reported cleanHEAD5a5d698498d799cd4824fc3832b3b0cf6956127f. Reviewer read full final message event70275 but bridge had retention gap63656..68278; full underlying source/config/auditor evidence therefore still missing. All gates PENDING. Do not self-approve.\nReturn a compact review packet through actual command outputs, bounded chunks (each <10000 chars) and final reply, containing:\n1) verified git HEAD/status; complete exact numbered current core.py,filter.py,verify.py,run.py,audit.py from human_port_ecbh_r3, each hash. Avoid command truncation, chunk by lines. Do not reprint huge reports.\n2) full freeze config common/defaults and per-fixture overrides; source/config hashes; exact test XML summary and data_qa summary; complete compact 41-row audit table including method,mission,physical/ledger/domain/enforced/safe/order/force-set flags,credit-validity,raw/reconstructed Ec/safeBH/trueBH minima,allowance,failreason. Include all supplemental/refinement flags.\n3) Key review concern: 8microJ reserve is an additional empirical implementation restriction, not a true mandatory physical constraint. Expose exact initial/prefix/end enforcement and failure classification code and complete lowBH diagnostic outputs. Do not claim global infeasibility or successful recovery. Clarify if dropping optional shaping but retaining new reserve only partially resolves original issue; identify bounded next repair options without implementing them.\n4) No-reimbursement clean comparator coverage: exact frozen costs/gains/limits/budgets and selection hierarchy equality; why its earlier reserve stop is not physical necessity. Keep failure evidence.\n5) Show conditional LE bound derivation including global minimum of piecewise gravity+unilateral spring potential on allowed domain; confirm it uses correct V/Ec and no human. Show moving-starved bound assumptions.\n6) State whether review02 friction/normal/elastic/low-both regressions are actually validated with r3 code or merely inherited; no silent transfer of gates. Provide exact file paths/hashes for preserved diagnostics.\nStore this request text and actual known previous repair task/turn IDs in root/workflow manifests without guessing this task IDs (receipt if available). Preserve prior artifacts, no hardware/push/merge/publication/destructive actions. Return quickly; do not use time on new PDFs or duplicate tests. This is evidence retrieval, not independent acceptance.\n\n[MANIPULATION_BRIDGE_RECEIPT:6b7b931d-8184-49b5-868c-e41c0b0c3302]",
+      "review_record": "docs/human_port_ecbh/review03/independent_review_retrieval_6b7b931d.json",
+      "review_record_sha256": "6e2ecf24c7f11d80d7f7f52863ab0aaf5768e40414729254e86df43c495bf66f",
+      "status": "AUTHORITATIVELY_COMPLETED_NOT_INDEPENDENTLY_ACCEPTED"
+    },
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261029-repair04-v1",
+      "request_text": "Continue authorized Ec+netBH development/review loop: bounded repair04 coverage and failure-taxonomy closure, NOT KUKA or MPC. projectresearch/session01a17f69-c054-77e2-bb55-6c71162f80e1/root /Users/carl/code/contactPassivity/worktree results/worktrees/human-port-ecbh-20261029. Read local instructions/current files. Evidence task6b7b931d-8184-49b5-868c-e41c0b0c3302 turn01a189c1-1552-7590-a0d3-58683931740b authoritatively COMPLETED. Last HEAD5a5d698498d799cd4824fc3832b3b0cf6956127f with legitimate uncommitted workflow_progress.json and independent_review_retrieval_6b7b931d.json; preserve them. Prior repair task2056963b-8abf-497f-8060-c04b3f34c324 turn01a1897c-73d8-7270-801a-1cfbc93dd650 completed. All gates PENDING.\nReviewer read final evidence72917; confirms partial fallback repair, new empirical8microJ reserve not physical floor, missing r3 full regressions. LE conditional energy bound is algebraically consistent; it is not audit of interrupted run. No need repeat same experiments unchanged.\n1. Versioned limited code change: separate physical Ec/BH/domain/input violations, empirical reserve shortfalls, prediction-vs-execution mismatch, optimizer nonconvergence, and no independently verified candidate. Do not classify reserve-only shortfall as physical account violation; do not classify brake-only check as global feasibility. Preserve old labels/evidence in migration map. Keep physical zero floors,8microJ reserve,tolerances,gains,costs,budgets unchanged for matched primary runs. A policy-halt is not safe physical stopping. Do not add new tracking/BU logic or relax constraints.\n2. Make interrupted/timed-out runs preserve actual executed prefix, events, metadata, termination reason and auditability (periodic checkpoints and exception/finally handling or equivalent); controller selection may have a bounded wall budget with explicit timeout status for offline tests, not real-time claim. Ensure no unexecuted command/state is recorded as executed. Add meaningful targeted tests for reserve-only vs physical failure, no-action classification, and interrupted-prefix persistence. Avoid new algorithm tuning or force-success attempts.\n3. Close missing r3 coverage on current version using exact review02 fixture parameters and explicitly freeze matched N/P/Ec-only/no-reimbursement groups: friction-aware model, overestimated dissipation invalid diagnostic and conservative-credit counterpart; pure-normal human disturbance; compression-free elastic cycle; combined lowEc/lowBH. All use same new failure taxonomy and hierarchy within fixtures. Preserve incomplete/violating cases, no gate from legacy outcomes. Keep runs bounded with checkpointed status; no prolonged unbounded low-resource NLP. TinyEc full impossible mission need not be repeated solely to rediscover analytic bound. Demonstrate new checkpoint/timeout audit on one bounded low-resource fixture.\n4. Focused saved-state zero-floor diagnostic for sustained R at4.56s: independently assess rejected brake with reserve=0 for diagnostic only (no primary budget/tolerance change). Its runtime minEc7.976594microJ vs8microJ reserve does NOT show resource exhaustion. Compare physically checked vs implementation-rejected status, no claim of recursive feasibility or continued mission. LowBH existing121-grid/candidate-specific continuation proof can be reused; do not retune.\n5. Validate changed control/account behavior on one existing active conservative-biased P fixture plus actual loss/recontact if execution logic changes; use existing refinements if unchanged physics and demonstrate equivalence, avoid blanket reruns. Report independent actuator/physical/storage/credit/true-measured-safe ledgers, full compact coverage and success/failure table, raw-force quality and timings.\n6. Final review evidence must be accessible despite bounded bridge retention (both prior evidence requests lost command events before review). Include COMPLETE current core/filter/verify/run/audit source text in FINAL reply, compact but exact, with source hashes; omit bulky repeated historical prose and121-row grid. Include full freeze/common-config and case overrides, compact audit flags/minima/credit validity/termination table and test totals. Do not merely reference inaccessible local files. Keep final focused enough to fit while preserving all source. Also store complete source/config/audit packet durably in versioned review04 files. Return complete bounded evidence, not self-approval.\nCore remains Ecdot=cT+etaDR-Pa,cT<=actualDT,V=SR+ST+Ec-Emin,BH not inV,explicit outward true/measured/safe human net work,signed recharge,conditional uncertainty-set containment, finite scenario predictions NOT certified reachable tube; no oracle.\nLocal isolated code/tests/sim/docs/commits authorized; no hardware,push/merge,publication/external messaging,permission changes/destructive resets,additional agents unless local instructions explicitly authorize. Keep old artifacts immutable. Update root/workflow manifests with this exact request text/request_id chatgpt-human-port-ecbh-20261029-repair04-v1 and exact prior known IDs above; no guessed current turn. All A/B/C remain PENDING until independent review, KUKA plan-only and MPC unstarted with old block unreconciled. Return after bounded coverage/taxonomy evidence is ready; no new PDF necessary in this iteration.\n\n[MANIPULATION_BRIDGE_RECEIPT:b7b64ab8-d201-4dd2-8acd-990dc16f14d6]",
+      "task_id": "b7b64ab8-d201-4dd2-8acd-990dc16f14d6",
+      "turn_id": "01a18a13-e467-7163-a920-877c33a28443",
+      "bridge_receipt": "b7b64ab8-d201-4dd2-8acd-990dc16f14d6",
+      "status": "COMPLETED_EXTERNAL_AB_REVIEW_ACCEPTED_WITH_LIMITS"
+    },
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261029-c-kuka-v1",
+      "request_text": "Proceed with separately authorized Stage C KUKA ONE-STEP Ec+NET BH migration, workflow human-port-ecbh-20261029. NOT MPC. Research root /Users/carl/code/contactPassivity, bound session01a17f69-c054-77e2-bb55-6c71162f80e1. Read local instructions and manifests. Exact repair04 taskb7b64ab8-d201-4dd2-8acd-990dc16f14d6 turn01a18a13-e467-7163-a920-877c33a28443 COMPLETED. Clean reportedHEAD d163dff0abf229d610e454ced51d8f0d60b862a5, numerical commite64a8987859b511c5c09e3e5e70dc41b5ad12a4a, packageff1e0514e231b01daf7b7b7af1111bc05f510a7c3fc565e3e172674f961e6bd7,freezec754696166fbc0adf921fd1c4e238564ff1d1d818d9b1863be43c0a4941e3781. Verify HEAD/status before local changes; preserve legitimate changes and all legacy/review02/03/04 results.\n\nINDEPENDENT REVIEW DECISION by ChatGPT reviewer,2026-10-29:\nRead full final event88414 including COMPLETE current core/filter/verify/run/audit sources, full freeze+case overrides,26-row audit table and exact equal-array CB/recontact validation. Read earlier review03 full outcome tables/refinement evidence and review-evidence final72917. A=PASS_CONDITIONAL_FORMULATION; B=PASS_NUMERICAL_ENVELOPE (bounded OFFLINE PoC only). Record review evidence and scope in versioned reviewer decision plus root/workflow manifests; this is an external reviewer decision, not agent self-approval. C remains PENDING. Source command retention gap72920..86420 exists but full final includes source needed for review.\nAccepted scope: explicit composite storage and reliable dissipation credit conditional on exact passive contact law/valid mu interval; separate net human ledger including conservative force-set support, exact state/velocity, causal held measured force; no oracle. Nominal-vs-P benefit and recovery demonstrated; independent Hermite/Gauss energy audit, sampled RK prefixes/DOP fallback verification and representative refinements support numerical envelope. New missing full missions covered with retained invalid-overcredit diagnostics.27tests;26 audited nonempty prefixes; active CB/recontact raw arrays identical to r3 so numerical refinement evidence retained for unchanged physics.\nNON-ACCEPTED/retained limitations:8microJ reserve empirical and can reject physical-feasible samples; lowEc/lowBH/combined cases incomplete or timed out; zero-floor sustained R brake independently feasible one interval,not proof of continuation; no realtime/continuous invariance/recursive feasibility/robust reachable tube/asymptotic stability/arbitrary-human recovery claims. Finite scenarios are not a certificate. Invalid sensing bounds/overcredit remain failures. Offline policy halts aren't safe physical stops. No need force these cases to success or endlessly rerun. Checkpoint only sim committed full intervals; no hardware implication.\nNo MPC permission reconciliation is made by this decision: old rejection remains recorded, MPC UNSTARTED. Do not implement horizon optimization as a workaround.\n\nSTAGE C IMPLEMENTATION:\nUse new isolated/versioned KUKA Ec+BH modules/results and frozen configs, preserving legacy taskref Ec+BU KUKA evidence and 2D code. Inspect old plant/controller/accounting before reuse, not rename ledgers. Keep physical/task references nominal; BU/unauthorized tracking accounting removed from core. No force-field reference. Start with complete physical boundary and zero-input/passive energy checks before matrix; stop with bounded structural blocker if model energy cannot be reconciled.\npH outward=-sum(FH^T v_point+MH^T omega), correct body-local/world transformations and point offsets; cross-check wrench power equals generalized tauH^T qdot for EACH EE/forearm/upperarm contact and combined contacts if supported. Explicitly separate true auditor force from causal sensed estimate. Actual Pa is total executed actuator mechanical work AFTER saturation/rate/filter/all compensation, including any modeled actuator gear effects; no hidden bias/gravity/damping drive. SR includes kinetic and appropriately referenced nonnegative gravitational/robot elastic storage over declared domain; ST passive contact storage. Handle MuJoCo friction/contact/constraint numerical dissipation explicitly: do not refund unaccounted residual or guessed solver loss. Contact power decomposition and recoverable storage cannot be silently assumed exact; derive passive contact law and auditable actualDT (or conservative lower credit) with documented supported assumptions.\nEc dot=cT+etaDR-Pa,0<=cT<=actualDT; DR only physical damping not double-counted feedback damping. V=SR+ST+Ec-Emin,BH NOT added. Human net budget signed recharge only, no task credit/reset/timefill. Net/gross output separate. Conservative human ledger uses stated calibrated current wrench/force uncertainty and exact/assumed velocity (separate velocity error if supported); negative upper power may recharge. Conditional algebraic accounting != robust dynamic feasibility. No true future force in selector. Finite held-force scenarios labeled empirical.\nSelection ordering magnitude/rate limits -> one-step modification -> executed-command antiwindup; BOTH budget+domain checks at sampled prefixes; fresh actual execution audit no clipping/refill. Physical floor violations, reserve-only shortfalls,prediction discrepancy,nonconvergence,no-candidate,timeouts distinct, all incomplete runs preserved/checkpointed. Empirical numerical reserves declared independently from theorem; calibrate only to stated numerical evidence, no tuning to hide failures. Same reserve/hierarchy/cost/info for matched controllers. No safe-stop claim from abort.\n\nBOUNDED EXPERIMENT PLAN:\nFirst freeze N nominal-observes,P Ec+BH,E Ec-only,R no-task-credit+BH matched costs/gains/initial state/allocations/input limits/causal info; legacy whole-port only supplementary labeled different boundary. Keep KUKA task meaningfully nonzero sustained contact wiping, raw force quality and progress/recovery requirements explicit before tuning.\nRun staged small matrix: sustained nohuman task long enough to expose reimbursement utility; EE tangent obstruction/release with explicit smallBH (nominal exceeds,P interventions/completion/recovery while BOTH budgets satisfied); assisting input showing net recharge; normal+oblique; forearm and upperarm human point tests tangent/normal/oblique (bounded selection of useful representative cases with coverage table); elastic load/unload and actual separation/recontact. Matched at least main sustained+active-human fixtures and meaningful body-point comparisons. Include no-oracle biased sensing valid-bound vs naive diagnostic and intentionally invalid-bound; conservative dissipation vs overcredit diagnostic if feasible. Low-resource boundary need only reproducible audit+classification,not forced completion.\nAt least3 integration refinements on representative active-human and true separation/recontact; separate physical energy convergence from discrete active-policy convergence. If activepolicy fails convergence state it and limit envelope; don't transfer old KUKA acceptance. Actual unconstrained raw contact force ALL/D/Q/WIPE populations incl loss,peak/RMS/slew/variation; no smoothing to pass thresholds. Evaluate release progress,recovery,velocity overshoot,joint/torque/rate modifications and solver residuals. Runtime mean/p95/p99/max vsdt; keep offline and bounded wall budgets with coherent partial snapshots. No hardware.\nDo not spend unlimited time tuning. Inspect model first, stage bounded pilots then frozen matched comparisons; report structural blockers honestly. If complete C evidence cannot be obtained within reasonable bounded work, return exact blocker and partial reproducer for review.\n\nDELIVERABLE:\nVersioned C spec, port/frame map, exact source/config/commit hashes, source excerpts for Pa,contact storage/dissipation,cT,true/safeBH,prefix/fallback/antiwindup,independent auditor and sign/Jacobian tests; complete compact outcome/config table with all failures and assumptions. No repetitive giant narrative. Ensure FINAL includes complete key accounting/auditor source and exact control ordering so retained final message permits independent review (bridge deletes old events); store full reproducible packet in git-backed worktree. A readable report/plots if useful; no need final consolidated report until C reviewed. No self-approve C. Return after bounded C evidence or structural blocker.\nUpdate root pointer /Users/carl/code/contactPassivity/human_port_ecbh_workflow_20261029.json and worktree workflow_progress.json with reviewer A/B decision scope, C stage PENDING/RUNNING, exact dispatch request_id chatgpt-human-port-ecbh-20261029-c-kuka-v1 and above known prior task/turn; current task/turn only from actual receipt,never guess. Preserve all old rejection/history. Local code/simulation/tests/docs/local commits authorized; no hardware,push/merge,publication/external messaging,purchases,OS/permission changes,destructive reset; no extra agents unless applicable local instructions explicitly authorize.\n\n[MANIPULATION_BRIDGE_RECEIPT:7e8c2f0d-b211-49ee-87dc-895eb1b253a5]\n",
+      "task_id": null,
+      "turn_id": null,
+      "bridge_receipt": "7e8c2f0d-b211-49ee-87dc-895eb1b253a5"
+    },
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261030-mpc-readiness-v1",
+      "task_id": null,
+      "turn_id": null,
+      "bridge_receipt": "8f9e2e8c-87a7-4e25-aa94-1342bd7a3251",
+      "request_text": "Record independent Stage C review and reconcile MPC prerequisites; documentation/read-only planning task ONLY, NO MPC implementation or simulations. Workflow human-port-ecbh-20261029, project research, session01a17f69-c054-77e2-bb55-6c71162f80e1, root /Users/carl/code/contactPassivity, worktree results/worktrees/human-port-ecbh-20261029. Read applicable local instructions/current manifests; preserve all prior evidence and legitimate edits. No extra agents unless local instructions explicitly authorize.\nC02 task f06ee7b4-27ff-4319-b2bd-a3787f3dab08 / turn01a18a7b-b578-7080-a93b-1246f5d97d7a authoritatively COMPLETED. Reviewer read retained final item119743..119746 reconstructed exactly (44108 characters), including COMPLETE physics.py/control.py/run.py, changed auditor constructor, unchanged selector/verifier hashes, native asset declarations, full frozen overrides, all21 outcomes and refinements; history gap104680..117751 recorded, no claim command evidence read. Verify reported cleanHEAD68680d4a6e5cede3d83fdd12a83b84ca2cf6a6ce, numerical13b657106165b5a35209f1b5e5cc17bc9fd0654b, packagea10b3a8c02cc425f1ec36fd10b03cebe35174fa80da7d3410daf4bb1a789aed3, freeze656a275f474833d4a06bb9960d3765650e731f9fd441622bc23bddf4e1d40d7a. Prior C01 full final104673 accounting/selector/verifier/auditor and36row/refinement review remains supporting evidence.\n\nEXTERNAL INDEPENDENT REVIEW DECISION by ChatGPT reviewer, 2026-10-30 UTC:\nA remains PASS_CONDITIONAL_FORMULATION; B remains PASS_NUMERICAL_ENVELOPE; C now PASS_NUMERICAL_ENVELOPE, strictly bounded OFFLINE PoC, not universal controller acceptance.\nC scope combines frozen C01 calibrated body-point/sensing and active/transition evidence with C02 corrected conservative-friction variant. In C02, mu_ff=max(0,model_mu-mu_error_bound) yields nonnegative residual instantaneous friction under valid interval; actual held-command work audited. All21 nonempty attempts physical/ledger/sampled-domain pass,21 tests; valid conservative mismatch all4 matched methods mission/force pass (P WIPE RMS .087901153 vs prior .91409991). Active P net work .023824802657 vsN/E .090066972693 withBH0 .025, minBH .00117519734,209mods,.427s recovery; actual postreleasevy .08849546 vsref .045 disclosed. Eleven common trajectories exactly match C01, notably active4 andtransition2; existing active/recontact3h evidence applies to unchanged trajectories. Conservative3h energy residual decreases. C02 changed auditor initialization aligns physical model; actual actuator power, zero hidden inputs, sphere material point/moment and center-speed distinction reviewed.\nRetained limits: explicit passive compliant contact with native MuJoCo constraints disabled, nonnegative storage only declared COM domain, exact state/velocity, scalar causal held-wrench calibration sets, no additive-error dynamic coverage or reachable enclosure, sampled RK/DOP numerical verification only. 50microJ empirical reserve, optional shaping, prediction discrepancy, account audit uncertainty all retained. Active reserve shaping is not hardfloor activation. Sustained R stops selection timeout with positiveEc and shaped-brake hierarchy; independent saved-state nominal/brake one interval physically feasible, NO global funding-necessity or infeasibility claim. Ec0.7 sensitivity is not matched allocation proof; .580381458J is recorded nominal trajectory actuator-work requirement only. Invalid overcredit failures remain including R account UNKNOWN at7.73microJ vs51.7microJ allowance. C01 invalid sensing sets remain failures despite sometimes positive accounts. No general active-policy convergence, realtime, continuous safety, recursive feasibility, safe physical halt, asymptotic stability or arbitrary-human recovery. Bodypoint dynamic outcomes not claimed newly executed in C02; sources identical physics and unchanged nominal formula when bound0.\nThis is an external reviewer decision, NOT self-approval. Record precise scope/evidence in versioned review record and root/workflow manifests. Do not overwrite old pending history or failures.\n\nMPC PREREQUISITE RECONCILIATION (NO EXECUTION IN THIS TASK):\nUser broad scope authorizes later 2D/KUKA finite-horizon study but explicitly requires new A/B/C independent gates and explicit reconciliation of old approval block. Inspect durable actual rejection/history for request chatgpt-taskref-ecb-20261029-d-mpc-950180ea-v1. Quote exact available reason, identify missing original conditions, compare against current Ec+BH accepted gates; distinguish recovered authoritative record vs prior summaries. Confirm no prior D receipt/execution. Keep old rejected dispatch immutable; never replay or execute it indirectly. Write a concrete reconciliation record stating what conditions are now evidenced, any unresolved approval condition, and whether a NEW separately reviewable Ec+BH MPC proposal can be submitted. Do not claim a documentation record itself grants tool approval. If original record unavailable, state precisely what evidence exists rather than fabricating it.\n\nPrepare bounded NEW MPC plan only for subsequent reviewer dispatch: 2D first then KUKA after 2D review; Ec+NET BH same physical boundary/actual actuator work and independent audit. Candidate finite horizon includes causal held human estimate vs explicitly parameterized causal impedance/relaxation prediction; same costs/constraints/current information across horizons, explicit terminal policies, smoothness ablations and no-oracle mismatch diagnostics; no hidden future force or task-integrity BU. Predefine modest horizons, bounded compute/experiment budget, frozen matched nominal/one-step/MPC baselines, actual prefix/account audit, checkpointed incomplete runs and failure taxonomy. Clarify what known wrench/contact uncertainty permits conditional accounting vs unproved dynamic robustness. No recursive-feasibility proof claims. Propose active-human/recovery/true separation cases, human/contact mismatch, raw force populations and timings. Avoid full matrices before pilots. Identify any actual unresolved blocker and stop there.\n\nDeliver compact exact review/reconciliation/plan text inline in FINAL, exact record paths and hashes/local commit, verified status; no numerical source changes/reruns or new PDF. Update rootpointer /Users/carl/code/contactPassivity/human_port_ecbh_workflow_20261029.json and workflow_progress.json with above known C02 IDs and request_id chatgpt-human-port-ecbh-20261030-mpc-readiness-v1 plus this exact dispatch. Current task/turn null unless actual receipt obtained. MPC stays UNSTARTED throughout this task. Only local read/docs/metadata/local commit authorized; no hardware,push/merge,publication/external messages,purchases,OS/permission changes,destructive reset. Return promptly for independent review.\n\n[MANIPULATION_BRIDGE_RECEIPT:8f9e2e8c-87a7-4e25-aa94-1342bd7a3251]\n",
+      "scope": "documentation/read-only planning only"
+    }
+  ],
+  "prior_reviews": {
+    "review02": {
+      "head": "6a5ea419f7a22d1273904f1b7698c301d2c5efc4",
+      "source_sha256": "56f737be5e4c06c3246a4212879b97893160ee3763a75b564d01d14bf08f994b",
+      "report": "docs/human_port_ecbh/review02/REPORT.pdf",
+      "summary": "docs/human_port_ecbh/review02/summary.json",
+      "counts": {
+        "final_primary_rows": 64,
+        "matched_fixtures": 16,
+        "executed_primary_physics_ledger_domain_true": 62,
+        "primary_no_execution": 2,
+        "P_supported_positive_envelope_complete": 10,
+        "refinement_extra_runs": 4,
+        "refinement_total_levels": 6,
+        "pre_repair_completed_audits": 49,
+        "pre_repair_writer_failure": 1,
+        "all_recorded_run_attempts": 129,
+        "tests_passed": 15,
+        "pdf_pages": 38,
+        "pdf_word_boxes": 7157,
+        "pdf_overflows": 0
+      },
+      "gates": {
+        "A": "PENDING",
+        "B": "PENDING",
+        "C": "PENDING"
+      }
+    },
+    "review02_completion_summary": {
+      "completed": [
+        "new formulation and old/new map",
+        "new Ec/BH plant/predictor/filter/executed settlement/auditor",
+        "15 targeted tests",
+        "64 final matched rows",
+        "6 refinement levels including2 reusedbase+4new",
+        "4independentODEspotchecks at3steps",
+        "bounded oblique correction and all failures retained",
+        "fundedR sensitivity",
+        "readable PDF/raw plots/render QA",
+        "precise KUKA plan only"
+      ],
+      "counts": {
+        "final_primary_rows": 64,
+        "matched_fixtures": 16,
+        "executed_primary_physics_ledger_domain_true": 62,
+        "primary_no_execution": 2,
+        "P_supported_positive_envelope_complete": 10,
+        "refinement_extra_runs": 4,
+        "refinement_total_levels": 6,
+        "pre_repair_completed_audits": 49,
+        "pre_repair_writer_failure": 1,
+        "all_recorded_run_attempts": 129,
+        "tests_passed": 15,
+        "pdf_pages": 38,
+        "pdf_word_boxes": 7157,
+        "pdf_overflows": 0
+      },
+      "report": "docs/human_port_ecbh/review03/REPORT.pdf",
+      "summary": "docs/human_port_ecbh/review02/summary.json",
+      "freeze": "docs/human_port_ecbh/freeze02/freeze.json",
+      "numerical_source_sha256": "56f737be5e4c06c3246a4212879b97893160ee3763a75b564d01d14bf08f994b",
+      "source_commit": "a08abca45c7d7db09993ccc2bc640e8b653080a5",
+      "bundle": "docs/human_port_ecbh/review02/delivery_bundle.zip",
+      "bundle_sha256": "24291fdc231d84674c8799fc885c765f169ce3e2df5ecfd66adae16aff91339d",
+      "head": "6a5ea419f7a22d1273904f1b7698c301d2c5efc4"
+    },
+    "repair03_before_repair04": {
+      "counts": {
+        "planned_primary": 44,
+        "audited_primary": 41,
+        "fully_matched_fixtures": 10,
+        "extra_refinement_runs": 4,
+        "supplementary": 2,
+        "pilots": 3,
+        "audited_total": 50,
+        "source_snapshots_verified": 51,
+        "interrupted_without_audited_prefix": 1,
+        "not_started": 2,
+        "targeted_tests": 22
+      },
+      "report": "docs/human_port_ecbh/review03/REPORT.pdf",
+      "summary": "docs/human_port_ecbh/review03/review_packet.json",
+      "source_commit": "5d23635134f39bc211e791585552b919d86c5132",
+      "numerical_source_sha256": "fc778719e16e2795d0fcc4df18bab62d246925d7896ee0e0e42740e9cc95da85",
+      "freeze": "docs/human_port_ecbh/repair03/freeze/freeze.json",
+      "source_provenance": {
+        "numerical_commit": "5d23635134f39bc211e791585552b919d86c5132",
+        "package_sha256": "fc778719e16e2795d0fcc4df18bab62d246925d7896ee0e0e42740e9cc95da85",
+        "source_hashes": "docs/human_port_ecbh/review03/source_hashes.json",
+        "all_run_hashes": "docs/human_port_ecbh/review03/provenance.json",
+        "config_match_count": 10,
+        "all_snapshots_match": true,
+        "scope": "50auditrecords plus1interruptedattempt;2notstartedhavenosnapshot"
+      },
+      "independent_review_evidence_record": "docs/human_port_ecbh/review03/independent_review_retrieval_6b7b931d.json"
+    }
+  },
+  "repair_module": "human_port_ecbh_r3",
+  "report_sha256": "2b5062c5f288d279c6dff92cbb873cf94181aaa691eec1f733638e97c6b79007",
+  "actual_HEAD_pointer": "/Users/carl/code/contactPassivity/human_port_ecbh_workflow_20261029.json",
+  "prior_task_authoritatively_completed": {
+    "request_id": "chatgpt-human-port-ecbh-20261030-mpc-readiness-v1",
+    "task_id": "8f9e2e8c-87a7-4e25-aa94-1342bd7a3251",
+    "turn_id": "01a18abd-6bf7-7d20-8887-6507b183e0d8",
+    "status": "AUTHORITATIVELY_COMPLETED"
+  },
+  "authoritative_completion_history": [
+    {
+      "task_id": "e033f6fe-44ce-43f0-9986-42f202f4961a",
+      "turn_id": "01a1892a-d237-7680-ab09-1bb4c684315e",
+      "origin": "latest user dispatch"
+    },
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261029-repair03-v1",
+      "task_id": "2056963b-8abf-497f-8060-c04b3f34c324",
+      "turn_id": "01a1897c-73d8-7270-801a-1cfbc93dd650",
+      "status": "AUTHORITATIVELY_COMPLETED_NOT_INDEPENDENTLY_ACCEPTED",
+      "origin": "current user dispatch"
+    },
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261029-c02-v1",
+      "task_id": "f06ee7b4-27ff-4319-b2bd-a3787f3dab08",
+      "turn_id": "01a18a7b-b578-7080-a93b-1246f5d97d7a",
+      "status": "AUTHORITATIVELY_COMPLETED",
+      "origin": "current explicit user dispatch"
+    },
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261030-mpc-readiness-v1",
+      "task_id": "8f9e2e8c-87a7-4e25-aa94-1342bd7a3251",
+      "turn_id": "01a18abd-6bf7-7d20-8887-6507b183e0d8",
+      "status": "AUTHORITATIVELY_COMPLETED"
+    },
+    {
+      "task_id": "a18ee899-850d-4ef8-b089-34754ec58a8d",
+      "turn_id": "01a18bda-a3e1-72a3-a59d-46801c4fe0df",
+      "request_id": "overnight-presentation-quality-20261030-v1",
+      "status": "AUTHORITATIVELY_COMPLETED",
+      "HEAD": "588bd7960e80ffeac9edc168bbd44f72cb0f1f1f"
+    },
+    {
+      "task_id": "e7bf9df2-6e72-4fe7-a755-951c75369cd9",
+      "turn_id": "01a18c31-0027-77d0-b056-cb2e29ea231f",
+      "request_id": "overnight-presentation-quality-20261030-v2",
+      "status": "AUTHORITATIVELY_COMPLETED",
+      "HEAD": "b15fd9cb549b2bf8812eca9e5ec35ebf778ccd5d"
+    }
+  ],
+  "request_id_status": "No explicit request_id in current dispatch;actual bridge receipt stored,not substituted as request_id",
+  "independent_review_evidence_record": "docs/human_port_ecbh/review03/independent_review_retrieval_6b7b931d.json",
+  "independent_review_evidence_sha256": "6e2ecf24c7f11d80d7f7f52863ab0aaf5768e40414729254e86df43c495bf66f",
+  "head_semantics": "Actual clean evidence HEAD after bounded six-pilot completion",
+  "worktree_status": "",
+  "repair04_source": "human_port_ecbh_r4",
+  "complete_source": "docs/human_port_ecbh/review04/SOURCE_CONFIG.md",
+  "independent_decision_history": [
+    {
+      "origin": "user-supplied external ChatGPT reviewer",
+      "reviewed_head": "d163dff0abf229d610e454ced51d8f0d60b862a5",
+      "A": "PASS_CONDITIONAL_FORMULATION",
+      "B": "PASS_NUMERICAL_ENVELOPE",
+      "C": "PENDING",
+      "evidence_events": [
+        88414,
+        72917
+      ],
+      "scope_file": "docs/human_port_ecbh/kuka_v1/REVIEW_DECISION.md"
+    },
+    {
+      "origin": "External ChatGPT reviewer supplied by user;not agent self-approval or new independent raw execution",
+      "date_UTC": "2026-10-30",
+      "A": "PASS_CONDITIONAL_FORMULATION",
+      "B": "PASS_NUMERICAL_ENVELOPE",
+      "C": "PASS_NUMERICAL_ENVELOPE",
+      "reviewed_HEAD": "68680d4a6e5cede3d83fdd12a83b84ca2cf6a6ce",
+      "numerical_commit": "13b657106165b5a35209f1b5e5cc17bc9fd0654b",
+      "package_sha256": "a10b3a8c02cc425f1ec36fd10b03cebe35174fa80da7d3410daf4bb1a789aed3",
+      "freeze_sha256": "656a275f474833d4a06bb9960d3765650e731f9fd441622bc23bddf4e1d40d7a",
+      "reviewed_retained_items": [
+        119743,
+        119744,
+        119745,
+        119746
+      ],
+      "retained_characters": 44108,
+      "history_gap": [
+        104680,
+        117751
+      ],
+      "missing_command_events_claimed_read": false,
+      "C01_supporting_final": 104673,
+      "record": "docs/human_port_ecbh/mpc_readiness/review01/C_REVIEW_DECISION.md",
+      "scope": "C01 calibrated body-point/sensing and unchanged active/transition evidence plus C02 valid conservative-friction variant;strict bounded OFFLINE numerical envelope only"
+    }
+  ],
+  "independent_AB_decision": "docs/human_port_ecbh/kuka_v1/REVIEW_DECISION.md",
+  "C_stage": "EXTERNALLY_ACCEPTED_BOUNDED_NUMERICAL_ENVELOPE",
+  "kuka_v1": {
+    "source_commit": "5294fdb9d5e57cfa466c6646de8cb48cffbc1fc8",
+    "source_sha256": "eba2ed94902a44aa22ac270ec897a0efbb15466070f467cdf2a0b06b6a95e336",
+    "freeze": "docs/human_port_ecbh/kuka_v1/freeze.json",
+    "freeze_sha256": "4db4e23ab33b5e7a6b53b4b8da4a791f9471f833fc05a72be132bf255b3452d3",
+    "planned_runs": 36,
+    "planned_refinements_extra": 4,
+    "physical_tests": 17,
+    "results": "results/human_port_kuka",
+    "stage_gate": "PASS_NUMERICAL_ENVELOPE_AS_COMPONENT_OF_COMBINED_C_SCOPE",
+    "primary_attempts": 36,
+    "nonempty_primary_prefixes": 35,
+    "extra_refinement_runs": 4,
+    "audited_pilots": 5,
+    "retained_writer_failures": 3,
+    "evidence": "docs/human_port_ecbh/kuka_v1/review01/README.md",
+    "packet": "docs/human_port_ecbh/kuka_v1/review01/packet.json",
+    "source": "docs/human_port_ecbh/kuka_v1/review01/SOURCE_CONFIG.md",
+    "audit_table": "docs/human_port_ecbh/kuka_v1/review01/audit_table.json",
+    "data_qa": "docs/human_port_ecbh/kuka_v1/review01/data_qa.json",
+    "qa_flags": {
+      "mission_complete": {
+        "True": 32,
+        "False": 4,
+        "None": 0
+      },
+      "physical_identity_ok": {
+        "True": 35,
+        "False": 0,
+        "None": 1
+      },
+      "ledger_ok": {
+        "True": 35,
+        "False": 0,
+        "None": 1
+      },
+      "domain_ok": {
+        "True": 35,
+        "False": 0,
+        "None": 1
+      },
+      "prefix_consistent": {
+        "True": 35,
+        "False": 0,
+        "None": 1
+      },
+      "account_ok": {
+        "True": 29,
+        "False": 6,
+        "None": 1
+      },
+      "safe_ok": {
+        "True": 29,
+        "False": 6,
+        "None": 1
+      },
+      "enforced_ok": {
+        "True": 23,
+        "False": 0,
+        "None": 13
+      },
+      "quality_ok": {
+        "True": 32,
+        "False": 3,
+        "None": 1
+      },
+      "credit_valid": {
+        "True": 34,
+        "False": 1,
+        "None": 1
+      },
+      "force_set_contains_true": {
+        "True": 34,
+        "False": 1,
+        "None": 1
+      },
+      "safe_order_ok": {
+        "True": 34,
+        "False": 1,
+        "None": 1
+      }
+    },
+    "completed_gates": [
+      "physical boundary/passive/Jacobian checks",
+      "frozen 36-run bounded matrix",
+      "three-step active and actual recontact refinements",
+      "independent physical quadrature and DOP spots",
+      "coherent checkpoint/source/config provenance",
+      "readable plots/recorded-state animation"
+    ],
+    "pending_gates": [],
+    "blockers": [
+      "Model-mismatch conservative-credit and overcredit missions/quiet force fail",
+      "Sustained R local selection timeout with positive account",
+      "Low-resource no verified action; no global infeasibility result",
+      "Invalid calibration invalidates conservative guarantee",
+      "Offline numerical policy; no continuous/reachable/recursive certificate"
+    ],
+    "animation": "docs/human_port_ecbh/kuka_v1/review01/figures/active_recorded.gif",
+    "runtime_label": "OFFLINE; actual control dt5ms; many selections exceed10ms",
+    "scope": "agent-generated numerical evidence; no self-approval or new raw independent reviewer execution",
+    "evidence_commit": "60d4771f465e46a69ee4f4d27ce453e012ec9ab5",
+    "gate_scope": "Historical C01 evidence combined with C02 correction;old failed outcomes unchanged"
+  },
+  "current_formulation": "human-port-ecbh-kuka-c02",
+  "actual_HEAD": "06e2bff03b73e2772542e506303a342aa0b62141",
+  "dispatch_history": [
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261029-c-kuka-v1",
+      "task_id": "7e8c2f0d-b211-49ee-87dc-895eb1b253a5",
+      "turn_id": "01a18a41-a835-7ac3-8e82-8a02fdfb1881",
+      "bridge_receipt": "7e8c2f0d-b211-49ee-87dc-895eb1b253a5",
+      "request_text": "Proceed with separately authorized Stage C KUKA ONE-STEP Ec+NET BH migration, workflow human-port-ecbh-20261029. NOT MPC. Research root /Users/carl/code/contactPassivity, bound session01a17f69-c054-77e2-bb55-6c71162f80e1. Read local instructions and manifests. Exact repair04 taskb7b64ab8-d201-4dd2-8acd-990dc16f14d6 turn01a18a13-e467-7163-a920-877c33a28443 COMPLETED. Clean reportedHEAD d163dff0abf229d610e454ced51d8f0d60b862a5, numerical commite64a8987859b511c5c09e3e5e70dc41b5ad12a4a, packageff1e0514e231b01daf7b7b7af1111bc05f510a7c3fc565e3e172674f961e6bd7,freezec754696166fbc0adf921fd1c4e238564ff1d1d818d9b1863be43c0a4941e3781. Verify HEAD/status before local changes; preserve legitimate changes and all legacy/review02/03/04 results.\n\nINDEPENDENT REVIEW DECISION by ChatGPT reviewer,2026-10-29:\nRead full final event88414 including COMPLETE current core/filter/verify/run/audit sources, full freeze+case overrides,26-row audit table and exact equal-array CB/recontact validation. Read earlier review03 full outcome tables/refinement evidence and review-evidence final72917. A=PASS_CONDITIONAL_FORMULATION; B=PASS_NUMERICAL_ENVELOPE (bounded OFFLINE PoC only). Record review evidence and scope in versioned reviewer decision plus root/workflow manifests; this is an external reviewer decision, not agent self-approval. C remains PENDING. Source command retention gap72920..86420 exists but full final includes source needed for review.\nAccepted scope: explicit composite storage and reliable dissipation credit conditional on exact passive contact law/valid mu interval; separate net human ledger including conservative force-set support, exact state/velocity, causal held measured force; no oracle. Nominal-vs-P benefit and recovery demonstrated; independent Hermite/Gauss energy audit, sampled RK prefixes/DOP fallback verification and representative refinements support numerical envelope. New missing full missions covered with retained invalid-overcredit diagnostics.27tests;26 audited nonempty prefixes; active CB/recontact raw arrays identical to r3 so numerical refinement evidence retained for unchanged physics.\nNON-ACCEPTED/retained limitations:8microJ reserve empirical and can reject physical-feasible samples; lowEc/lowBH/combined cases incomplete or timed out; zero-floor sustained R brake independently feasible one interval,not proof of continuation; no realtime/continuous invariance/recursive feasibility/robust reachable tube/asymptotic stability/arbitrary-human recovery claims. Finite scenarios are not a certificate. Invalid sensing bounds/overcredit remain failures. Offline policy halts aren't safe physical stops. No need force these cases to success or endlessly rerun. Checkpoint only sim committed full intervals; no hardware implication.\nNo MPC permission reconciliation is made by this decision: old rejection remains recorded, MPC UNSTARTED. Do not implement horizon optimization as a workaround.\n\nSTAGE C IMPLEMENTATION:\nUse new isolated/versioned KUKA Ec+BH modules/results and frozen configs, preserving legacy taskref Ec+BU KUKA evidence and 2D code. Inspect old plant/controller/accounting before reuse, not rename ledgers. Keep physical/task references nominal; BU/unauthorized tracking accounting removed from core. No force-field reference. Start with complete physical boundary and zero-input/passive energy checks before matrix; stop with bounded structural blocker if model energy cannot be reconciled.\npH outward=-sum(FH^T v_point+MH^T omega), correct body-local/world transformations and point offsets; cross-check wrench power equals generalized tauH^T qdot for EACH EE/forearm/upperarm contact and combined contacts if supported. Explicitly separate true auditor force from causal sensed estimate. Actual Pa is total executed actuator mechanical work AFTER saturation/rate/filter/all compensation, including any modeled actuator gear effects; no hidden bias/gravity/damping drive. SR includes kinetic and appropriately referenced nonnegative gravitational/robot elastic storage over declared domain; ST passive contact storage. Handle MuJoCo friction/contact/constraint numerical dissipation explicitly: do not refund unaccounted residual or guessed solver loss. Contact power decomposition and recoverable storage cannot be silently assumed exact; derive passive contact law and auditable actualDT (or conservative lower credit) with documented supported assumptions.\nEc dot=cT+etaDR-Pa,0<=cT<=actualDT; DR only physical damping not double-counted feedback damping. V=SR+ST+Ec-Emin,BH NOT added. Human net budget signed recharge only, no task credit/reset/timefill. Net/gross output separate. Conservative human ledger uses stated calibrated current wrench/force uncertainty and exact/assumed velocity (separate velocity error if supported); negative upper power may recharge. Conditional algebraic accounting != robust dynamic feasibility. No true future force in selector. Finite held-force scenarios labeled empirical.\nSelection ordering magnitude/rate limits -> one-step modification -> executed-command antiwindup; BOTH budget+domain checks at sampled prefixes; fresh actual execution audit no clipping/refill. Physical floor violations, reserve-only shortfalls,prediction discrepancy,nonconvergence,no-candidate,timeouts distinct, all incomplete runs preserved/checkpointed. Empirical numerical reserves declared independently from theorem; calibrate only to stated numerical evidence, no tuning to hide failures. Same reserve/hierarchy/cost/info for matched controllers. No safe-stop claim from abort.\n\nBOUNDED EXPERIMENT PLAN:\nFirst freeze N nominal-observes,P Ec+BH,E Ec-only,R no-task-credit+BH matched costs/gains/initial state/allocations/input limits/causal info; legacy whole-port only supplementary labeled different boundary. Keep KUKA task meaningfully nonzero sustained contact wiping, raw force quality and progress/recovery requirements explicit before tuning.\nRun staged small matrix: sustained nohuman task long enough to expose reimbursement utility; EE tangent obstruction/release with explicit smallBH (nominal exceeds,P interventions/completion/recovery while BOTH budgets satisfied); assisting input showing net recharge; normal+oblique; forearm and upperarm human point tests tangent/normal/oblique (bounded selection of useful representative cases with coverage table); elastic load/unload and actual separation/recontact. Matched at least main sustained+active-human fixtures and meaningful body-point comparisons. Include no-oracle biased sensing valid-bound vs naive diagnostic and intentionally invalid-bound; conservative dissipation vs overcredit diagnostic if feasible. Low-resource boundary need only reproducible audit+classification,not forced completion.\nAt least3 integration refinements on representative active-human and true separation/recontact; separate physical energy convergence from discrete active-policy convergence. If activepolicy fails convergence state it and limit envelope; don't transfer old KUKA acceptance. Actual unconstrained raw contact force ALL/D/Q/WIPE populations incl loss,peak/RMS/slew/variation; no smoothing to pass thresholds. Evaluate release progress,recovery,velocity overshoot,joint/torque/rate modifications and solver residuals. Runtime mean/p95/p99/max vsdt; keep offline and bounded wall budgets with coherent partial snapshots. No hardware.\nDo not spend unlimited time tuning. Inspect model first, stage bounded pilots then frozen matched comparisons; report structural blockers honestly. If complete C evidence cannot be obtained within reasonable bounded work, return exact blocker and partial reproducer for review.\n\nDELIVERABLE:\nVersioned C spec, port/frame map, exact source/config/commit hashes, source excerpts for Pa,contact storage/dissipation,cT,true/safeBH,prefix/fallback/antiwindup,independent auditor and sign/Jacobian tests; complete compact outcome/config table with all failures and assumptions. No repetitive giant narrative. Ensure FINAL includes complete key accounting/auditor source and exact control ordering so retained final message permits independent review (bridge deletes old events); store full reproducible packet in git-backed worktree. A readable report/plots if useful; no need final consolidated report until C reviewed. No self-approve C. Return after bounded C evidence or structural blocker.\nUpdate root pointer /Users/carl/code/contactPassivity/human_port_ecbh_workflow_20261029.json and worktree workflow_progress.json with reviewer A/B decision scope, C stage PENDING/RUNNING, exact dispatch request_id chatgpt-human-port-ecbh-20261029-c-kuka-v1 and above known prior task/turn; current task/turn only from actual receipt,never guess. Preserve all old rejection/history. Local code/simulation/tests/docs/local commits authorized; no hardware,push/merge,publication/external messaging,purchases,OS/permission changes,destructive reset; no extra agents unless applicable local instructions explicitly authorize.\n\n[MANIPULATION_BRIDGE_RECEIPT:7e8c2f0d-b211-49ee-87dc-895eb1b253a5]\n",
+      "head": "60d4771f465e46a69ee4f4d27ce453e012ec9ab5",
+      "C_stage": "EVIDENCE_READY_PENDING_INDEPENDENT_REVIEW",
+      "completion": "authoritative current user instruction;C pending"
+    },
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261029-c02-v1",
+      "task_id": "f06ee7b4-27ff-4319-b2bd-a3787f3dab08",
+      "turn_id": "01a18a7b-b578-7080-a93b-1246f5d97d7a",
+      "bridge_receipt": "f06ee7b4-27ff-4319-b2bd-a3787f3dab08",
+      "request_text": "Continue authorized StageC KUKA Ec+netBH bounded repair/review iteration C02. NOT MPC. root /Users/carl/code/contactPassivity;worktree results/worktrees/human-port-ecbh-20261029;session01a17f69-c054-77e2-bb55-6c71162f80e1 projectresearch. Prior C task7e8c2f0d-b211-49ee-87dc-895eb1b253a5 turn01a18a41-a835-7ac3-8e82-8a02fdfb1881 authoritatively COMPLETED. HEADreported60d4771f465e46a69ee4f4d27ce453e012ec9ab5 numerical5294fdb9d5e57cfa466c6646de8cb48cffbc1fc8 packageeba2ed94902a44aa22ac270ec897a0efbb15466070f467cdf2a0b06b6a95e336 freeze4db4e23ab33b5e7a6b53b4b8da4a791f9471f833fc05a72be132bf255b3452d3. Verify local status/instructions first;preserve ALL C01 and legacy/2D evidence. A/B accepted only prior bounded scope;C PENDING.\nReviewer read full final104673 including actual point/contact/rhs/account functions,complete selector/verify/auditor,36row table and3-level refinements. Positive evidence active P WHnet .023824802657 vsN/E .090066972693,209mods,recovery.427s; valid conservative sensing and bodypoint missions. No C acceptance yet. Remaining substantive issues: conservative friction mismatch violates task/quiet-force quality, sustained R stops wall-time with positiveEc and many brakes, missing full forward/controller/run/asset initialization evidence. Do not present these failures as physical impossibility.\n1) Diagnose nominal friction mismatch analytically and from saved trajectories. Hypothesis in C01 narrative: measured-velocity model friction cancellation can act as excess/negative damping when modelmu>.actualmu. Inspect exact force/controller equation, decompose commanded tangential work and actual dissipative work; identify if hypothesis is correct, plus normal-force coupling. No oracle plantmu in controller. Propose and implement at most ONE justified small nominal-control variant (e.g. reference-based bounded feedforward or damping-preserving compensation if appropriate), keeping originalC01 frozen. If changing nominal controller, SAME variant/gains/costs/allocations/limits/uncertainty info across matched N/P/E/R; freeze before runs. No hidden retuning or looser force thresholds/budgets, no force field/BU. If structural failure persists after bounded attempt, report it and exact applicable envelope rather than tune indefinitely.\n2) Matched focused experiments for changed nominal variant: conservative mismatch and invalid overcredit diagnostic; main active-human obstruction and sustained nominal/P/E/R; verify nominal BH violation still meaningful and P completes/recovery/true+safeEcBH. Reuse unchanged C01 body-point calibration tests with exact source equivalence, but do not claim dynamic policy outcomes transfer blindly. If no nominal variant warranted, retain failures with derivation and skip redundant matrices.\n3) No-credit sustained comparator must not rely on wall-time abort as evidence of funding necessity. Independently examine saved R trajectory and rejected/selected brakes around wall limit: accounts/prefix/domain/force quality, why progress stalls, exact optimization status. Bound one continuation/diagnostic attempt with checkpoints, no endless sim. Provide a separate funded-R allocation sensitivity if useful, clearly NOT matched proof. Derive a conditional minimum required task work only if justified by fixed path/contact conditions and physical storage; no blanket physical-impossibility claim from current data. Correct plot/report wording to demonstrated task performance and solver/resource limits.\n4) Close review evidence: FINAL reply must contain COMPLETE current physics.py (including Config,model constructor,forward,actuator/constraint/energy setup),control.py,run.py and exact asset relevant declarations for motor gear/gain/bias,damping,gravity,armature/springs/constraints,plus changed selector/auditor portions with hashes and explicit unchanged hashes. Auditor native model assumptions should match physics; clarify fixed physical sphere geometry and tangent material-velocity/moment power at p+r vs center. Verify pH/Jacobian/moment sign tests and no hidden applied inputs/bias actuator forces. Show complete final config overrides andcompact full new outcomes,all failures,raw/independent minima/residuals/credit validity/raw force/recovery/overshoot/runtime. Full final needed because command events expire; durable packet in git-backed review02.\n5) Current domain aggregator: runtime EE speed is TCP center jp@dq; verify uses Auditor velocity(TCPcenter), contact material velocity differs. State precisely separate bounds and consistent use. C01 uses sampled runtime domain in auditor; do not claim independent continuous domain validation. Existing finite-scenario support only conditional scalar calibration, no additive-error scenario coverage; retain limits.\n6) Tests appropriate to change; at least active+transition regression if controller changed, representative3 h refinement only if numerical/active-policy change warrants,not blanket duplicate runs. Preserve checkpointed timeouts and partials. Bounded offline, no realtime/reachability/recursive-feasibility/continuous-safety claims. No horizon optimization/MPC. C stays PENDING and oldMPCblock unreconciled until separate review.\nLocal simulation/code/tests/docs/commits authorized, no hardware/push/merge/publication/external messages/purchases/OS changes/destructive reset;no extra agents unless local instructions authorize. Update root/workflow manifests with exact C01 known task/turn and new request_id chatgpt-human-port-ecbh-20261029-c02-v1 and this exact text,current IDs only actual receipt. Return after bounded evidence ready or structural blocker.\n\n[MANIPULATION_BRIDGE_RECEIPT:f06ee7b4-27ff-4319-b2bd-a3787f3dab08]\n",
+      "head": "68680d4a6e5cede3d83fdd12a83b84ca2cf6a6ce",
+      "C_stage": "C02_EVIDENCE_READY_PENDING_INDEPENDENT_REVIEW",
+      "status": "AUTHORITATIVELY_COMPLETED",
+      "origin": "current explicit user dispatch"
+    },
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261030-mpc-readiness-v1",
+      "task_id": "8f9e2e8c-87a7-4e25-aa94-1342bd7a3251",
+      "turn_id": "01a18abd-6bf7-7d20-8887-6507b183e0d8",
+      "status": "AUTHORITATIVELY_COMPLETED",
+      "request_text": "Record independent Stage C review and reconcile MPC prerequisites; documentation/read-only planning task ONLY, NO MPC implementation or simulations. Workflow human-port-ecbh-20261029, project research, session01a17f69-c054-77e2-bb55-6c71162f80e1, root /Users/carl/code/contactPassivity, worktree results/worktrees/human-port-ecbh-20261029. Read applicable local instructions/current manifests; preserve all prior evidence and legitimate edits. No extra agents unless local instructions explicitly authorize.\nC02 task f06ee7b4-27ff-4319-b2bd-a3787f3dab08 / turn01a18a7b-b578-7080-a93b-1246f5d97d7a authoritatively COMPLETED. Reviewer read retained final item119743..119746 reconstructed exactly (44108 characters), including COMPLETE physics.py/control.py/run.py, changed auditor constructor, unchanged selector/verifier hashes, native asset declarations, full frozen overrides, all21 outcomes and refinements; history gap104680..117751 recorded, no claim command evidence read. Verify reported cleanHEAD68680d4a6e5cede3d83fdd12a83b84ca2cf6a6ce, numerical13b657106165b5a35209f1b5e5cc17bc9fd0654b, packagea10b3a8c02cc425f1ec36fd10b03cebe35174fa80da7d3410daf4bb1a789aed3, freeze656a275f474833d4a06bb9960d3765650e731f9fd441622bc23bddf4e1d40d7a. Prior C01 full final104673 accounting/selector/verifier/auditor and36row/refinement review remains supporting evidence.\n\nEXTERNAL INDEPENDENT REVIEW DECISION by ChatGPT reviewer, 2026-10-30 UTC:\nA remains PASS_CONDITIONAL_FORMULATION; B remains PASS_NUMERICAL_ENVELOPE; C now PASS_NUMERICAL_ENVELOPE, strictly bounded OFFLINE PoC, not universal controller acceptance.\nC scope combines frozen C01 calibrated body-point/sensing and active/transition evidence with C02 corrected conservative-friction variant. In C02, mu_ff=max(0,model_mu-mu_error_bound) yields nonnegative residual instantaneous friction under valid interval; actual held-command work audited. All21 nonempty attempts physical/ledger/sampled-domain pass,21 tests; valid conservative mismatch all4 matched methods mission/force pass (P WIPE RMS .087901153 vs prior .91409991). Active P net work .023824802657 vsN/E .090066972693 withBH0 .025, minBH .00117519734,209mods,.427s recovery; actual postreleasevy .08849546 vsref .045 disclosed. Eleven common trajectories exactly match C01, notably active4 andtransition2; existing active/recontact3h evidence applies to unchanged trajectories. Conservative3h energy residual decreases. C02 changed auditor initialization aligns physical model; actual actuator power, zero hidden inputs, sphere material point/moment and center-speed distinction reviewed.\nRetained limits: explicit passive compliant contact with native MuJoCo constraints disabled, nonnegative storage only declared COM domain, exact state/velocity, scalar causal held-wrench calibration sets, no additive-error dynamic coverage or reachable enclosure, sampled RK/DOP numerical verification only. 50microJ empirical reserve, optional shaping, prediction discrepancy, account audit uncertainty all retained. Active reserve shaping is not hardfloor activation. Sustained R stops selection timeout with positiveEc and shaped-brake hierarchy; independent saved-state nominal/brake one interval physically feasible, NO global funding-necessity or infeasibility claim. Ec0.7 sensitivity is not matched allocation proof; .580381458J is recorded nominal trajectory actuator-work requirement only. Invalid overcredit failures remain including R account UNKNOWN at7.73microJ vs51.7microJ allowance. C01 invalid sensing sets remain failures despite sometimes positive accounts. No general active-policy convergence, realtime, continuous safety, recursive feasibility, safe physical halt, asymptotic stability or arbitrary-human recovery. Bodypoint dynamic outcomes not claimed newly executed in C02; sources identical physics and unchanged nominal formula when bound0.\nThis is an external reviewer decision, NOT self-approval. Record precise scope/evidence in versioned review record and root/workflow manifests. Do not overwrite old pending history or failures.\n\nMPC PREREQUISITE RECONCILIATION (NO EXECUTION IN THIS TASK):\nUser broad scope authorizes later 2D/KUKA finite-horizon study but explicitly requires new A/B/C independent gates and explicit reconciliation of old approval block. Inspect durable actual rejection/history for request chatgpt-taskref-ecb-20261029-d-mpc-950180ea-v1. Quote exact available reason, identify missing original conditions, compare against current Ec+BH accepted gates; distinguish recovered authoritative record vs prior summaries. Confirm no prior D receipt/execution. Keep old rejected dispatch immutable; never replay or execute it indirectly. Write a concrete reconciliation record stating what conditions are now evidenced, any unresolved approval condition, and whether a NEW separately reviewable Ec+BH MPC proposal can be submitted. Do not claim a documentation record itself grants tool approval. If original record unavailable, state precisely what evidence exists rather than fabricating it.\n\nPrepare bounded NEW MPC plan only for subsequent reviewer dispatch: 2D first then KUKA after 2D review; Ec+NET BH same physical boundary/actual actuator work and independent audit. Candidate finite horizon includes causal held human estimate vs explicitly parameterized causal impedance/relaxation prediction; same costs/constraints/current information across horizons, explicit terminal policies, smoothness ablations and no-oracle mismatch diagnostics; no hidden future force or task-integrity BU. Predefine modest horizons, bounded compute/experiment budget, frozen matched nominal/one-step/MPC baselines, actual prefix/account audit, checkpointed incomplete runs and failure taxonomy. Clarify what known wrench/contact uncertainty permits conditional accounting vs unproved dynamic robustness. No recursive-feasibility proof claims. Propose active-human/recovery/true separation cases, human/contact mismatch, raw force populations and timings. Avoid full matrices before pilots. Identify any actual unresolved blocker and stop there.\n\nDeliver compact exact review/reconciliation/plan text inline in FINAL, exact record paths and hashes/local commit, verified status; no numerical source changes/reruns or new PDF. Update rootpointer /Users/carl/code/contactPassivity/human_port_ecbh_workflow_20261029.json and workflow_progress.json with above known C02 IDs and request_id chatgpt-human-port-ecbh-20261030-mpc-readiness-v1 plus this exact dispatch. Current task/turn null unless actual receipt obtained. MPC stays UNSTARTED throughout this task. Only local read/docs/metadata/local commit authorized; no hardware,push/merge,publication/external messages,purchases,OS/permission changes,destructive reset. Return promptly for independent review.\n\n[MANIPULATION_BRIDGE_RECEIPT:8f9e2e8c-87a7-4e25-aa94-1342bd7a3251]\n"
+    }
+  ],
+  "kuka_c02": {
+    "source_commit": "13b657106165b5a35209f1b5e5cc17bc9fd0654b",
+    "source_sha256": "a10b3a8c02cc425f1ec36fd10b03cebe35174fa80da7d3410daf4bb1a789aed3",
+    "freeze": "docs/human_port_ecbh/kuka_c02/freeze.json",
+    "freeze_sha256": "656a275f474833d4a06bb9960d3765650e731f9fd441622bc23bddf4e1d40d7a",
+    "gate": "PASS_NUMERICAL_ENVELOPE",
+    "planned_primary": 18,
+    "sensitivity": 1,
+    "extra_refinements": 2,
+    "diagnostic": "one saved C01 R interval per candidate;not mission continuation",
+    "evidence": "docs/human_port_ecbh/kuka_c02/review02/README.md",
+    "packet": "docs/human_port_ecbh/kuka_c02/review02/packet.json",
+    "source": "docs/human_port_ecbh/kuka_c02/review02/SOURCE_CONFIG.md",
+    "tables": "docs/human_port_ecbh/kuka_c02/review02/TABLES.md",
+    "primary_attempts": 18,
+    "total_mission_attempts": 21,
+    "sensitivity_attempts": 1,
+    "tests_passed": 21,
+    "source_equivalent_common_C01_arrays": 11,
+    "flags": {
+      "mission_complete": {
+        "True": 16,
+        "False": 5,
+        "None": 0
+      },
+      "account_ok": {
+        "True": 18,
+        "False": 2,
+        "None": 1
+      },
+      "credit_valid": {
+        "True": 18,
+        "False": 3,
+        "None": 0
+      },
+      "quality_ok": {
+        "True": 16,
+        "False": 5,
+        "None": 0
+      },
+      "physical_identity_ok": {
+        "True": 21,
+        "False": 0,
+        "None": 0
+      },
+      "ledger_ok": {
+        "True": 21,
+        "False": 0,
+        "None": 0
+      },
+      "domain_ok": {
+        "True": 21,
+        "False": 0,
+        "None": 0
+      }
+    },
+    "stage": "EXTERNALLY_REVIEWED_BOUNDED_ENVELOPE",
+    "pending_gates": [],
+    "retained_failures": [
+      "Sustained R wall-limited partial mission, positive budgets;not physical impossibility",
+      "Overcredit N/P/E invalid credit and mission/force failures",
+      "Overcredit R actual empirical reserve shortfall with positive raw Ec but uncertain independent account flag;point-model prediction discrepancy",
+      "All C01/legacy/2D failures preserved"
+    ],
+    "no_claims": [
+      "real-time",
+      "continuous safety/domain invariance",
+      "recursive feasibility",
+      "robust reachable tube",
+      "arbitrary human recovery",
+      "safe physical stopping after policy halt"
+    ],
+    "evidence_commit": "68680d4a6e5cede3d83fdd12a83b84ca2cf6a6ce",
+    "external_review_record": "docs/human_port_ecbh/mpc_readiness/review01/C_REVIEW_DECISION.md"
+  },
+  "administrative_state_history": [
+    {
+      "at": "2026-10-30T03:10:30.786156+00:00",
+      "reason": "Supplied external C review;preserve prior pending/administrative fields",
+      "values": {
+        "stage": "C_KUKA_ONE_STEP",
+        "gates": {
+          "A": "PASS_CONDITIONAL_FORMULATION",
+          "B": "PASS_NUMERICAL_ENVELOPE",
+          "C": "PENDING"
+        },
+        "pending": [
+          "independentA+Breview;allnewgatesPENDING",
+          "KUKAplanonly,separatefollowuprequired",
+          "MPCunstarted,oldapprovalblockunreconciled"
+        ],
+        "C_stage": "C02_EVIDENCE_READY_PENDING_INDEPENDENT_REVIEW",
+        "MPC_dispatch_status": "OLD_REJECTION_UNRECONCILED_NO_INDIRECT_EXECUTION",
+        "C_start_requires": "new independent A+B review and explicit follow-up dispatch",
+        "source_commit": "e64a8987859b511c5c09e3e5e70dc41b5ad12a4a",
+        "numerical_source_sha256": "ff1e0514e231b01daf7b7b7af1111bc05f510a7c3fc565e3e172674f961e6bd7",
+        "freeze": "docs/human_port_ecbh/repair04/freeze.json",
+        "freeze_sha256": "c754696166fbc0adf921fd1c4e238564ff1d1d818d9b1863be43c0a4941e3781",
+        "source_provenance": {
+          "numerical_commit": "e64a8987859b511c5c09e3e5e70dc41b5ad12a4a",
+          "package_sha256": "ff1e0514e231b01daf7b7b7af1111bc05f510a7c3fc565e3e172674f961e6bd7",
+          "run_hashes": "docs/human_port_ecbh/review04/provenance.json",
+          "source_and_configs": "docs/human_port_ecbh/review04/SOURCE_CONFIG.md",
+          "all26_snapshots_match": true,
+          "six_groups_exact_original_parameters": true
+        },
+        "kuka_v1": {
+          "source_commit": "5294fdb9d5e57cfa466c6646de8cb48cffbc1fc8",
+          "source_sha256": "eba2ed94902a44aa22ac270ec897a0efbb15466070f467cdf2a0b06b6a95e336",
+          "freeze": "docs/human_port_ecbh/kuka_v1/freeze.json",
+          "freeze_sha256": "4db4e23ab33b5e7a6b53b4b8da4a791f9471f833fc05a72be132bf255b3452d3",
+          "planned_runs": 36,
+          "planned_refinements_extra": 4,
+          "physical_tests": 17,
+          "results": "results/human_port_kuka",
+          "stage_gate": "PASS_NUMERICAL_ENVELOPE_AS_COMPONENT_OF_COMBINED_C_SCOPE",
+          "primary_attempts": 36,
+          "nonempty_primary_prefixes": 35,
+          "extra_refinement_runs": 4,
+          "audited_pilots": 5,
+          "retained_writer_failures": 3,
+          "evidence": "docs/human_port_ecbh/kuka_v1/review01/README.md",
+          "packet": "docs/human_port_ecbh/kuka_v1/review01/packet.json",
+          "source": "docs/human_port_ecbh/kuka_v1/review01/SOURCE_CONFIG.md",
+          "audit_table": "docs/human_port_ecbh/kuka_v1/review01/audit_table.json",
+          "data_qa": "docs/human_port_ecbh/kuka_v1/review01/data_qa.json",
+          "qa_flags": {
+            "mission_complete": {
+              "True": 32,
+              "False": 4,
+              "None": 0
+            },
+            "physical_identity_ok": {
+              "True": 35,
+              "False": 0,
+              "None": 1
+            },
+            "ledger_ok": {
+              "True": 35,
+              "False": 0,
+              "None": 1
+            },
+            "domain_ok": {
+              "True": 35,
+              "False": 0,
+              "None": 1
+            },
+            "prefix_consistent": {
+              "True": 35,
+              "False": 0,
+              "None": 1
+            },
+            "account_ok": {
+              "True": 29,
+              "False": 6,
+              "None": 1
+            },
+            "safe_ok": {
+              "True": 29,
+              "False": 6,
+              "None": 1
+            },
+            "enforced_ok": {
+              "True": 23,
+              "False": 0,
+              "None": 13
+            },
+            "quality_ok": {
+              "True": 32,
+              "False": 3,
+              "None": 1
+            },
+            "credit_valid": {
+              "True": 34,
+              "False": 1,
+              "None": 1
+            },
+            "force_set_contains_true": {
+              "True": 34,
+              "False": 1,
+              "None": 1
+            },
+            "safe_order_ok": {
+              "True": 34,
+              "False": 1,
+              "None": 1
+            }
+          },
+          "completed_gates": [
+            "physical boundary/passive/Jacobian checks",
+            "frozen 36-run bounded matrix",
+            "three-step active and actual recontact refinements",
+            "independent physical quadrature and DOP spots",
+            "coherent checkpoint/source/config provenance",
+            "readable plots/recorded-state animation"
+          ],
+          "pending_gates": [],
+          "blockers": [
+            "Model-mismatch conservative-credit and overcredit missions/quiet force fail",
+            "Sustained R local selection timeout with positive account",
+            "Low-resource no verified action; no global infeasibility result",
+            "Invalid calibration invalidates conservative guarantee",
+            "Offline numerical policy; no continuous/reachable/recursive certificate"
+          ],
+          "animation": "docs/human_port_ecbh/kuka_v1/review01/figures/active_recorded.gif",
+          "runtime_label": "OFFLINE; actual control dt5ms; many selections exceed10ms",
+          "scope": "agent-generated numerical evidence; no self-approval or new raw independent reviewer execution",
+          "evidence_commit": "60d4771f465e46a69ee4f4d27ce453e012ec9ab5",
+          "gate_scope": "Historical C01 evidence combined with C02 correction;old failed outcomes unchanged"
+        },
+        "kuka_c02": {
+          "source_commit": "13b657106165b5a35209f1b5e5cc17bc9fd0654b",
+          "source_sha256": "a10b3a8c02cc425f1ec36fd10b03cebe35174fa80da7d3410daf4bb1a789aed3",
+          "freeze": "docs/human_port_ecbh/kuka_c02/freeze.json",
+          "freeze_sha256": "656a275f474833d4a06bb9960d3765650e731f9fd441622bc23bddf4e1d40d7a",
+          "gate": "PASS_NUMERICAL_ENVELOPE",
+          "planned_primary": 18,
+          "sensitivity": 1,
+          "extra_refinements": 2,
+          "diagnostic": "one saved C01 R interval per candidate;not mission continuation",
+          "evidence": "docs/human_port_ecbh/kuka_c02/review02/README.md",
+          "packet": "docs/human_port_ecbh/kuka_c02/review02/packet.json",
+          "source": "docs/human_port_ecbh/kuka_c02/review02/SOURCE_CONFIG.md",
+          "tables": "docs/human_port_ecbh/kuka_c02/review02/TABLES.md",
+          "primary_attempts": 18,
+          "total_mission_attempts": 21,
+          "sensitivity_attempts": 1,
+          "tests_passed": 21,
+          "source_equivalent_common_C01_arrays": 11,
+          "flags": {
+            "mission_complete": {
+              "True": 16,
+              "False": 5,
+              "None": 0
+            },
+            "account_ok": {
+              "True": 18,
+              "False": 2,
+              "None": 1
+            },
+            "credit_valid": {
+              "True": 18,
+              "False": 3,
+              "None": 0
+            },
+            "quality_ok": {
+              "True": 16,
+              "False": 5,
+              "None": 0
+            },
+            "physical_identity_ok": {
+              "True": 21,
+              "False": 0,
+              "None": 0
+            },
+            "ledger_ok": {
+              "True": 21,
+              "False": 0,
+              "None": 0
+            },
+            "domain_ok": {
+              "True": 21,
+              "False": 0,
+              "None": 0
+            }
+          },
+          "stage": "EXTERNALLY_REVIEWED_BOUNDED_ENVELOPE",
+          "pending_gates": [],
+          "retained_failures": [
+            "Sustained R wall-limited partial mission, positive budgets;not physical impossibility",
+            "Overcredit N/P/E invalid credit and mission/force failures",
+            "Overcredit R actual empirical reserve shortfall with positive raw Ec but uncertain independent account flag;point-model prediction discrepancy",
+            "All C01/legacy/2D failures preserved"
+          ],
+          "no_claims": [
+            "real-time",
+            "continuous safety/domain invariance",
+            "recursive feasibility",
+            "robust reachable tube",
+            "arbitrary human recovery",
+            "safe physical stopping after policy halt"
+          ],
+          "evidence_commit": "68680d4a6e5cede3d83fdd12a83b84ca2cf6a6ce",
+          "external_review_record": "docs/human_port_ecbh/mpc_readiness/review01/C_REVIEW_DECISION.md"
+        }
+      }
+    },
+    {
+      "reason": "New explicitly authorized 2D six-pilot dispatch;not legacy replay",
+      "values": {
+        "stage": "MPC_READINESS_DOCUMENTATION_ONLY",
+        "MPC": "UNSTARTED",
+        "D_execution": {
+          "status": "BLOCKED_PENDING_NEW_ECBH_DISPATCH_AND_APPROVAL_RECONCILIATION",
+          "allowed": false,
+          "proposal_ready_for_review": true,
+          "legacy_rejected_request_id": "chatgpt-taskref-ecb-20261029-d-mpc-950180ea-v1",
+          "legacy_rejected_request_immutable": true,
+          "successful_task_id": null,
+          "successful_turn_id": null,
+          "successful_receipt": null,
+          "current_task_scope": "documentation/read-only planning only"
+        },
+        "MPC_dispatch_status": "NEW_PROPOSAL_READY_EXECUTION_BLOCKED_PENDING_NEW_DISPATCH_AND_APPROVAL_RECONCILIATION",
+        "request_id": "chatgpt-human-port-ecbh-20261030-mpc-readiness-v1"
+      }
+    },
+    {
+      "reason": "Six-pilot authorization completed;stop pending independent review",
+      "values": {
+        "stage": "D2_IMPLEMENTATION_SIX_PILOTS",
+        "MPC": "D2_IMPLEMENTATION_RUNNING",
+        "D_execution": {
+          "allowed": true,
+          "scope": "new 2D implementation and at most six N1/N5 held-force pilot attempts only",
+          "legacy_request_executed": false,
+          "approval_evidence": "explicit new user dispatch;current tool calls accepted;no separate approval-service receipt asserted",
+          "normal_current_rejection_binding": true,
+          "KUKA_MPC": "UNSTARTED",
+          "full_matrix_allowed": false
+        },
+        "source_commit": "13b657106165b5a35209f1b5e5cc17bc9fd0654b",
+        "numerical_source_sha256": "a10b3a8c02cc425f1ec36fd10b03cebe35174fa80da7d3410daf4bb1a789aed3",
+        "freeze": "docs/human_port_ecbh/kuka_c02/freeze.json",
+        "freeze_sha256": "656a275f474833d4a06bb9960d3765650e731f9fd441622bc23bddf4e1d40d7a"
+      }
+    }
+  ],
+  "independent_C_review": {
+    "origin": "External ChatGPT reviewer supplied by user;not agent self-approval or new independent raw execution",
+    "date_UTC": "2026-10-30",
+    "A": "PASS_CONDITIONAL_FORMULATION",
+    "B": "PASS_NUMERICAL_ENVELOPE",
+    "C": "PASS_NUMERICAL_ENVELOPE",
+    "reviewed_HEAD": "68680d4a6e5cede3d83fdd12a83b84ca2cf6a6ce",
+    "numerical_commit": "13b657106165b5a35209f1b5e5cc17bc9fd0654b",
+    "package_sha256": "a10b3a8c02cc425f1ec36fd10b03cebe35174fa80da7d3410daf4bb1a789aed3",
+    "freeze_sha256": "656a275f474833d4a06bb9960d3765650e731f9fd441622bc23bddf4e1d40d7a",
+    "reviewed_retained_items": [
+      119743,
+      119744,
+      119745,
+      119746
+    ],
+    "retained_characters": 44108,
+    "history_gap": [
+      104680,
+      117751
+    ],
+    "missing_command_events_claimed_read": false,
+    "C01_supporting_final": 104673,
+    "record": "docs/human_port_ecbh/mpc_readiness/review01/C_REVIEW_DECISION.md",
+    "scope": "C01 calibrated body-point/sensing and unchanged active/transition evidence plus C02 valid conservative-friction variant;strict bounded OFFLINE numerical envelope only"
+  },
+  "D_execution": {
+    "allowed": false,
+    "status": "SIX_PILOT_SCOPE_COMPLETE_STOPPED_PENDING_INDEPENDENT_REVIEW",
+    "completed_attempts": 6,
+    "further_execution_requires_new_dispatch": true,
+    "legacy_request_executed": false,
+    "KUKA_MPC": "OUT_OF_SCOPE_NOT_STARTED",
+    "scope": "existing2D MPC results only;no new experiments in consolidation"
+  },
+  "MPC_readiness": {
+    "record": "docs/human_port_ecbh/mpc_readiness/review01/MPC_RECONCILIATION.md",
+    "plan": "docs/human_port_ecbh/mpc_readiness/review01/MPC_PLAN.md",
+    "verification": "docs/human_port_ecbh/mpc_readiness/review01/verification.json",
+    "record_sha256": {
+      "MPC_PLAN.md": "78b1c5c05f1f8a43d68e356025d1aa42d75ff4523c112a2da221eb2b859cccde",
+      "MPC_RECONCILIATION.md": "2d026069a3c8af5ce7c582dd6c024f17dd7a0a66b038b96ee41052ba38112eec",
+      "REQUEST.md": "e1e707573b589b7dc4a97580736764cbcc45ef35409d6c1a36514dff3e605418",
+      "C_REVIEW_DECISION.md": "faf570797416901e9c8edfb7f9db96a5739f482c266b12aa880ea4a44f45b738"
+    },
+    "old_rejection_reason": "available records still mark C pending, conditional D scope not established.",
+    "original_rejection_payload_available": false,
+    "C_pending_condition": "EVIDENTIALLY_RESOLVED_BY_EXTERNAL_REVIEW",
+    "new_D_scope": "PROPOSED_FOR_REVIEW_NOT_APPROVED",
+    "new_execution_dispatch_required": true,
+    "approval_not_granted_by_documentation": true,
+    "implementation": "UNSTARTED",
+    "numerical_changes": 0,
+    "new_tests": 0,
+    "new_simulations": 0,
+    "new_rendering": 0,
+    "documentation_commit": "7d73a5cfd7357aafa9297b1e7fed1b55e3ac2b2d"
+  },
+  "d2_pilot": {
+    "freeze": "docs/human_port_ecbh/d2_pilot_v1/freeze.json",
+    "source_sha256": "649e0c8d05e45d568390ef7f21231856114996ebdc733dc65c08cf6af2204e25",
+    "freeze_sha256": "fe00ea517cb5cc2af16032c45d63d36d73a3deaf40058d1e66a5740ca9e79338",
+    "gate": "PENDING",
+    "attempt_cap": 6,
+    "task_id": null,
+    "turn_id": null,
+    "stage": "EVIDENCE_READY",
+    "source_commit": "6592e7bc527cc269d7479c6dfd423b976e98f30b",
+    "attempts": 6,
+    "reruns": 0,
+    "post_pilot_numerical_changes": 0,
+    "tests_passed": 12,
+    "mission_complete": 5,
+    "flags": {
+      "mission_complete": {
+        "True": 5,
+        "False": 1,
+        "None": 0
+      },
+      "physical_identity_ok": {
+        "True": 6,
+        "False": 0,
+        "None": 0
+      },
+      "ledger_reconstruction_ok": {
+        "True": 6,
+        "False": 0,
+        "None": 0
+      },
+      "account_constraints_ok": {
+        "True": 6,
+        "False": 0,
+        "None": 0
+      },
+      "safe_account_constraints_ok": {
+        "True": 6,
+        "False": 0,
+        "None": 0
+      },
+      "domain_input_ok": {
+        "True": 6,
+        "False": 0,
+        "None": 0
+      },
+      "force_quality_ok": {
+        "True": 6,
+        "False": 0,
+        "None": 0
+      },
+      "credit_validity": {
+        "True": 6,
+        "False": 0,
+        "None": 0
+      }
+    },
+    "batch_wall_s": 194.5145644589793,
+    "report": "docs/human_port_ecbh/d2_pilot_v1/review01/README.md",
+    "packet": "docs/human_port_ecbh/d2_pilot_v1/review01/packet.json",
+    "source": "docs/human_port_ecbh/d2_pilot_v1/review01/SOURCE_CONFIG.md",
+    "tables": "docs/human_port_ecbh/d2_pilot_v1/review01/TABLES.md",
+    "failure_record": "docs/human_port_ecbh/d2_pilot_v1/review01/failure_record.json",
+    "evidence_commit": "b42695394329c45cb598eb2f8566f396c228b27b"
+  },
+  "KUKA_MPC": "OUT_OF_SCOPE_NOT_STARTED",
+  "scope_history": [
+    {
+      "updated_utc": "2026-10-30T08:03:45.548354+00:00",
+      "previous_MPC_scope": null,
+      "previous_KUKA_MPC": "UNSTARTED",
+      "reason": "User restricts MPC to2D only;no KUKA MPC"
+    }
+  ],
+  "MPC_scope": "2D_ONLY",
+  "KUKA_MPC_allowed": false,
+  "consolidation_recovery": {
+    "request_id": null,
+    "task_id": null,
+    "turn_id": null,
+    "bridge_receipt": "29d764de-4cce-4cda-9ff0-0bfbc1d48fb5",
+    "request_text": "Previous evidence consolidation task05d33f5e-36ab-4e52-a1bf-217662e37381/turn01a18bcf-970c-7033-9aeb-d6bb98fe08e5 is authoritative FAILED; last delivered event134219 only commentary. Continue with a SMALL recovery task, no simulations or source changes. Latest user scope: MPC 2D ONLY, no KUKA MPC; overall PDF <10 pages being authored by ChatGPT. Return <=8000 chars FINAL promptly: (1) failure reason if known/current clean HEAD and exact r4 numerical commit, (2) record 2D-only scope in workflow docs if not already done, (3) concise 2D nominal vs conservative-biased P and sustained P vs no-reimbursement metrics from r3/r4, explain equivalence provenance, (4) any correction to C02/D2 results currently reported, (5) optional ONLY 12 sampled rows each for 2D and KUKA obstruction: time, WH_nominal, WH_P, BH_P, force_P; otherwise skip. Include source paths. Do not print entire source/large packets or create large report. We already retrieved full r4 REPORT.md, C02 README, D2 README and final/source. Need concise missing evidence only; no new tests.\n\n[MANIPULATION_BRIDGE_RECEIPT:29d764de-4cce-4cda-9ff0-0bfbc1d48fb5]",
+    "previous_failed_task": {
+      "task_id": "05d33f5e-36ab-4e52-a1bf-217662e37381",
+      "turn_id": "01a18bcf-970c-7033-9aeb-d6bb98fe08e5",
+      "status": "AUTHORITATIVELY_FAILED",
+      "cause": "unknown from available records"
+    },
+    "scope_record": "docs/human_port_ecbh/consolidation_recovery01.md",
+    "evidence": "docs/human_port_ecbh/consolidation_recovery01.json",
+    "new_simulations": 0,
+    "new_tests": 0,
+    "numerical_source_changes": 0
+  },
+  "report_page_limit": 12,
+  "quality_loop01": {
+    "receipt": "a18ee899-850d-4ef8-b089-34754ec58a8d",
+    "task_id": "a18ee899-850d-4ef8-b089-34754ec58a8d",
+    "turn_id": "01a18bda-a3e1-72a3-a59d-46801c4fe0df",
+    "request_id": "overnight-presentation-quality-20261030-v1",
+    "request_file": "docs/human_port_ecbh/quality_loop01/REQUEST.txt",
+    "exact_instruction": "USER-AUTHORIZED OVERNIGHT QUALITY LOOP, 2026-10-30. User explicitly asks: keep looping with agent about EXISTING simulation every hour, issue correction tasks, ensure genuine moving/completed robot tasks and human forces at different positions/directions, concise informative plots, a good demo video for EACH experimental block, presentation-ready results, then final comprehensive report <13 pages starting from original formulation PDF. Latest final report limit is <=12 pages (supersedes earlier <10). MPC stays 2D ONLY; KUKA MPC excluded. No new Gaussian/learning research scope in this worktree.\n\nSession research/01a17f69-c054-77e2-bb55-6c71162f80e1, root /Users/carl/code/contactPassivity. Continue isolated results/worktrees/human-port-ecbh-20261029, branch research/human-port-ecbh-20261029, or an isolated child worktree if needed. Inspect local instructions/current state before edits; do not overwrite unrelated work. Last verified clean HEAD788a7a12f4646170b85aebc9707488b59e6a2473 (scope/evidence consolidation). Prior consolidation tasks05d33f5e-36ab-4e52-a1bf-217662e37381 and29d764de-4cce-4cda-9ff0-0bfbc1d48fb5 authoritatively FAILED although extraction/docs commands succeeded; failure cause unknown. Bridge connected, session systemError after prior terminal failure. If this turn runs, keep final output small and checkpoint progress to avoid huge final-message failures. No runtime/policy/service modifications or repeated same failing operation.\n\nTHIS FIRST ITERATION: establish quality matrix, check strongest existing results against raw artifacts/source, repair substantive integrity/coverage gaps, run bounded targeted validations, begin production demos. Return a compact checkpoint/evidence packet for external hourly review; do not wait for an hour boundary to make progress. Aim <=45 min compute in this iteration, <=60s per one-step run/120s per 2D MPC run unless a clearly justified offline timing experiment is recorded; preserve and audit every timed-out prefix. No unbounded sweep or tuning until success. Separate each fix and matched before/after source/config.\n\nBLOCKS (one polished video per block, clips may show several cases):\nB1 2D one-step sustained task and matched nominal/Ec-only/proposed/no-reimbursement comparisons.\nB2 2D robustness: valid/invalid human sensing bounds, valid/invalid dissipation credit, normal/oblique/assisting/obstructing interaction, actual loss/recontact and low-budget failures.\nB3 KUKA one-step interaction across actual EE/forearm/upper-arm BODY POINTS and multiple directions; completed articulated motion.\nB4 KUKA one-step contact-model mismatch, conservative compensation and sustained no-reimbursement comparison.\nB5 2D MPC N1/N5 comparison and compute/fallback limitation, including honest incomplete outcome; targeted speed/fallback repair is allowed after source review, not required to fabricate benefit.\nDo not expand KUKA to MPC. Preserve old legacy and failed runs. Final report should include 1-2pages formulation evolution, current assumptions/key equations, experimental setup/coverage, matched outcomes and concise figures, limitations, reproducibility and demo index; <=12 pages total including references.\n\nQUALITY CONTRACT:\n1 Actual dynamic motion: integrate applied forces/torques, not kinematically overwrite q/x or animate desired trajectory. Audit actual q/dq/TCP/contact-point velocities, distance along task, completion/time/terminal settling and motion during interaction/recovery. A stationary robot with positive accounts is not task success. Verify disabled actuators/static body or pause/timeout cannot masquerade as completion. Measured travel vs commanded progress distinct. A visually replayed animation must map to raw executed state/time.\n2 Human coverage: KUKA at least EE, forearm, upper arm; tangential opposing/assisting, normal pressing/lifting where meaningful, oblique. Build explicit position x direction coverage table, force onset/ramp/duration/magnitude, frame, body ID/local point/world trajectory. Do not count wrench/Jacobian unit tests as dynamic missions. At least two genuinely different nonzero-work link locations in active-budget missions, plus normal/oblique dynamic coverage; unsupported or infeasible combinations disclosed. A 2D point mass cannot show contact-location effects: do not fake them. Use KUKA to substantiate spatial variation. Input applied once, correct Jacobian and moment arm, full f\u00b7v plus moment\u00b7omega, compare generalized-power identity. Human port accounts refer to actual material point velocity.\n3 Matched comparisons: same initial physical state, budgets, reference, physical model, sensing information and limits within each fixture. No future-force/release oracle. Baseline violations shown, not clipped; proposed interventions must be causal and recover when feasible. Distinguish Ec/BH budgets from reserve/shaping. Changes to gains/force thresholds/budgets/constraints must be disclosed as separate sensitivity, never silently loosened for pass.\n4 Independent energy auditor: actual total executed actuator work including compensation/saturation; true, measured and conservative human accounts separate; finite valid force/velocity bounds required. Physical R/T storage/dissipation, credit<=actual DT under its declared lower-bound assumption; no elastic/human/predicted/numerical error refund, no negative clipping/reset/time refills. Nonnegative Ec and BH jointly; BH NOT added to V. Record raw/reconstructed minima, allowance, audit residual and true inequality violation. Failures retained. No claim real time/continuous invariance/recursive feasibility/unconditional safety.\n5 Statistical honesty: full mission vs prefix, repeated steps vs independent trials, raw force ALL vs WIPE masks, positive vs net human work, disturbance/recovery windows, progress and speed/force overshoot, solver percentiles vs dt, fallback fraction. Cases must be selected before outcome, not just prettiest success. Important failures get a concise panel/demo segment.\n6 Plots: one question per figure, consistent colors/units/limits for matched methods, clear disturbance/release shading, budget lines, actual progress and contact force, no 10-line spaghetti or redundant panels. Preserve raw traces in artifact data; displayed downsampling must retain extrema or mark selected-sample status. No smoothing that hides violations. Label all-time vs masked RMS. Use 4-6 core multipanel figures in final report.\n7 Videos: deterministic render of SAVED EXECUTED states, not desired trajectory. Native simulated robot/environment geometry, stable camera with clear motion/path; human force arrows at correct body point/direction (scale legend), reference vs actual trail, simulation time and playback speed, tiny synced panels actual progress/Fn/Ec/BH/W_H (true/safe labeled). Same-time side-by-side nominal/P where helpful, readable at 1080p, ideally 20-60s per block; show onset, intervention, release/recovery and mission end. Clearly mark incomplete/timeout and terminate last actual frame; never invent continued dynamics. Use no generated imagery. Inspect start/mid/end and event frames plus actual decoded motion/frame count, duration/fps, no blank/missing meshes; no freeze-loop passed as moving robot. MP4 H264 if available plus compact preview; preserve scripts+run IDs+frame-to-log mapping and hashes. Good visual quality without claiming offline computation is realtime. User-facing videos must eventually be transferred to ChatGPT; local Mac paths alone aren't delivery. Prepare compact assets and a supported transfer method; do not push/publish externally without approval.\n8 Review: durable inventory/status identifies every block READY/NEEDS_REPAIR/FAILED with evidence and unresolved assumptions. Do not self-promote a new independent acceptance gate. Source, config, raw, auditor, figures, video must share exact run IDs. At end final<=6000chars: commits, run table, failures, completed visual checks, artifact paths+sizes and next concrete correction. Full evidence on disk.\n\nORIGINAL PDF NOW ACTUALLY READ BY CHATGPT: Library project copy \"Contact_Passivity (1).pdf\", libfile_5591a2b2b2f481919205cd2d9d096189, uploaded2026-09-07, 6pages, title \"Contact-Model-Aware Selective Passivation / Predictive Project Formulation for Surface-Sliding Manipulation\". Use as evolution starting point, not the Oct29 Ec+BH PDF. Contents:\n- inward-positive physical port convention p_i=f_i^T v_i.\n- tau_R=tau_ext-J_T^T fhat_T_nom=J_T^T fDelta+J_H^T f_H.\n- \u0394W_R=\u0394W_Delta+\u0394W_H; nominal task work \u222bfhat_T_nom^T v_T dt exempted from both protected accounts.\n- E_i,k+1=min(E_i,max,E_i,k+\u0394W_i_actual), i=R,H, no lower clipping; two NESTED constraints, not additive storage.\n- candidate constant command but evolving contact dynamics; predicted \u0394W_i gradients; affine robust lower bound \u0394Wactual_i>=\u0394What_lin_i-eps_i; min-modification task-space QP, trust region, torque/rate constraints.\n- theorem selectively bounds residual and human output separately, explicitly NOT whole-system passivity for all measured external forces; human-blind nominal task model, valid work bound, actual-work settlement, feasibility and bounded onset/impulse conditions.\nMap to current outward-positive pH=-fH\u00b7vH, composite robot+passive environment SR+ST, actuator resource Ecdot=cT+eta DR-Pa with reliable cT<=DT, V=SR+ST+Ec-Emin, Vdot<=-pH, separate NET BHdot=-pH. This is a substantive change from exempting predicted contact WORK to reimbursing INTERNAL DISSIPATION, not a rename. Explain any intermediate Ec+BU task-authorization approach as historical and superseded, sourced to local frozen docs only. Do not call residual=human or justify human-work exemption by predictability. Note BH alone, if truly implemented/nonnegative, also gives a conditional port budget/storage inequality; do not claim both ledgers necessary for any passivity proof. Novelty vs literature is not established by simulations.\n\nEXISTING EVIDENCE anchors: r4 module e64a8987859b, frozen-run source1a80dfb7e977; r3 a5894af7b291; C02 numerical13b657106165; D2 numerical6592e7bc527c, evidenceb42695394329. B/C accepted bounded offline only, D2 PENDING. 2D conservative biased matched N WH=.08021710565 vs P=.02029834196 J, BH0=.025; KUKA N=.09006697269 vs P=.02382480266; do not mix earlier .09375 baseline into biased fixture. D2 N5 active incomplete2.35s,70fallbacks/235, no horizon benefit. Existing 9page interim summary is not final deliverable for this new scope.\n\nAuthorized local isolated implementation, reruns, evidence review, plots/videos/docs and local commits; no hardware,push/merge,external messages/publication,purchases,permission/OS changes,destructive reset. Leave separate projects untouched. Record new request and exact bridge IDs if available in root/workflow manifests; never invent IDs. Persist this instruction and quality matrix.\n\n[MANIPULATION_BRIDGE_RECEIPT:a18ee899-850d-4ef8-b089-34754ec58a8d]\n",
+    "started_from_HEAD": "788a7a12f4646170b85aebc9707488b59e6a2473",
+    "status": "READY_FOR_EXTERNAL_REVIEW",
+    "independent_gates_unchanged": true,
+    "no_KUKA_MPC": true,
+    "report_max_pages": 12,
+    "updated_utc": "2026-10-30T08:36:51.806315+00:00",
+    "checkpoint": "docs/human_port_ecbh/quality_loop01/CHECKPOINT.md",
+    "packet": "docs/human_port_ecbh/quality_loop01/checkpoint.json",
+    "quality_matrix": {
+      "B1": {
+        "status": "READY",
+        "evidence": "matched r3 N/E/P/R sustained plus r4 raw-identical P active",
+        "limits": [
+          "R reserve/policy halt is not global infeasibility",
+          "r3 N/R are retained r3 evidence,not newly run r4"
+        ]
+      },
+      "B2": {
+        "status": "READY",
+        "evidence": "valid/invalid sensing and credit;normal,oblique,assist,loss/recontact,low-resource failures all shown",
+        "limits": [
+          "invalid assumptions remain failed diagnostics",
+          "low-budget prefixes are incomplete,not safe physical stops"
+        ]
+      },
+      "B3": {
+        "status": "READY",
+        "evidence": "C01 EE/forearm/upper-arm dynamics plus four C02 lifting/link-assistance supplements",
+        "limits": [
+          "supplemental cases pending external review",
+          "C01 bodypoint dynamic outcomes are not claimed rerun in C02",
+          "not a full Cartesian point/direction/force sweep"
+        ]
+      },
+      "B4": {
+        "status": "READY",
+        "evidence": "C01/C02 declared variant,valid/invalid credit and matched sustained P/R plus funded-R sensitivity",
+        "limits": [
+          "R positive-account timeout retained",
+          "higher Ec funded-R is a separate sensitivity"
+        ]
+      },
+      "B5": {
+        "status": "NEEDS_REPAIR",
+        "evidence": "six D2 pilots,5 complete;videos show active N5 prefix ending2.35s",
+        "limits": [
+          "no horizon advantage",
+          "70/235 active N5 fallbacks",
+          "gate pending;no KUKA MPC"
+        ]
+      }
+    },
+    "new_dynamic_attempts": 4,
+    "numerical_controller_changes": 0,
+    "new_tests": {
+      "file": "tests02.xml",
+      "passed": 8,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "inventory": {
+      "records": 134,
+      "nonempty_runs": 131,
+      "empty_noexecution": 3,
+      "checks": 658,
+      "failed_checks": [],
+      "KUKA_dynamic_human_runs": 33
+    },
+    "video_files": [
+      {
+        "block": "B1",
+        "path": "docs/human_port_ecbh/quality_loop01/media/B1.mp4",
+        "bytes": 2742859,
+        "seconds": 28.0,
+        "frames": 560,
+        "fps": 20,
+        "sha256": "cf80981d33ad3a96cf66af13fc989d4cbc926ee4902cf73c93d773fdb9197f16",
+        "frame_map": "docs/human_port_ecbh/quality_loop01/media/B1_frame_map.json",
+        "frame_map_sha256": "e49db2dadc3f989f3e06cd32ac6b00745a25ebdb82d8ec3378d0d8cb33d41a86",
+        "decoded_QA": "docs/human_port_ecbh/quality_loop01/media/decoded/B1.json",
+        "preview": "docs/human_port_ecbh/quality_loop01/media/B1_preview.jpg",
+        "delivery": "LOCAL_ONLY;not transferred",
+        "under_tool_10MiB_limit": true
+      },
+      {
+        "block": "B2",
+        "path": "docs/human_port_ecbh/quality_loop01/media/B2.mp4",
+        "bytes": 3585681,
+        "seconds": 31.0,
+        "frames": 620,
+        "fps": 20,
+        "sha256": "c7481e2b6f5e80004d10fb4b28d680932965067b345339eb7d0ce351e9440697",
+        "frame_map": "docs/human_port_ecbh/quality_loop01/media/B2_frame_map.json",
+        "frame_map_sha256": "3e1860bfa078dc2d02ec043ac5c87f39d74baa026c968f11f2422ffb1c1705c8",
+        "decoded_QA": "docs/human_port_ecbh/quality_loop01/media/decoded/B2.json",
+        "preview": "docs/human_port_ecbh/quality_loop01/media/B2_preview.jpg",
+        "delivery": "LOCAL_ONLY;not transferred",
+        "under_tool_10MiB_limit": true
+      },
+      {
+        "block": "B3",
+        "path": "docs/human_port_ecbh/quality_loop01/media/B3_review_complete.mp4",
+        "bytes": 10054024,
+        "seconds": 40.0,
+        "frames": 800,
+        "fps": 20,
+        "sha256": "55efc8a5cd63c4dfb7077c3af97fb1f36bee50f9ad05c04e6ead734c9b267485",
+        "frame_map": "docs/human_port_ecbh/quality_loop01/media/B3_review_complete_frame_map.json",
+        "frame_map_sha256": "a95fe878b10a4418da9a4c7c12e2f4504fdfe70467c547b1cbf676995c535566",
+        "decoded_QA": "docs/human_port_ecbh/quality_loop01/media/decoded/B3_review_complete.json",
+        "preview": "docs/human_port_ecbh/quality_loop01/media/B3_preview.jpg",
+        "delivery": "LOCAL_ONLY;not transferred",
+        "under_tool_10MiB_limit": true
+      },
+      {
+        "block": "B4",
+        "path": "docs/human_port_ecbh/quality_loop01/media/B4.mp4",
+        "bytes": 7080745,
+        "seconds": 28.0,
+        "frames": 560,
+        "fps": 20,
+        "sha256": "ea4e65c51391341d52402a3808e043acd6b5006db41593a1ad6e5591b00badfa",
+        "frame_map": "docs/human_port_ecbh/quality_loop01/media/B4_frame_map.json",
+        "frame_map_sha256": "3b3a65ebd25ab9e240ee0836dd5fda3a463350cc454d9a87412171dda413b20c",
+        "decoded_QA": "docs/human_port_ecbh/quality_loop01/media/decoded/B4.json",
+        "preview": "docs/human_port_ecbh/quality_loop01/media/B4_preview.jpg",
+        "delivery": "LOCAL_ONLY;not transferred",
+        "under_tool_10MiB_limit": true
+      },
+      {
+        "block": "B5",
+        "path": "docs/human_port_ecbh/quality_loop01/media/B5.mp4",
+        "bytes": 2344669,
+        "seconds": 24.0,
+        "frames": 480,
+        "fps": 20,
+        "sha256": "806b926d0055d8988c6996c85b5eeb94d823d923e3e66f88c3bc87d0799050bc",
+        "frame_map": "docs/human_port_ecbh/quality_loop01/media/B5_frame_map.json",
+        "frame_map_sha256": "e74706044a7d7d5e1c06ff40f8fbf0feda6bf3e81619b8c4ec19596794ee50ee",
+        "decoded_QA": "docs/human_port_ecbh/quality_loop01/media/decoded/B5.json",
+        "preview": "docs/human_port_ecbh/quality_loop01/media/B5_preview.jpg",
+        "delivery": "LOCAL_ONLY;not transferred",
+        "under_tool_10MiB_limit": true
+      }
+    ],
+    "code_checkpoint_HEAD": "5626b8cc5cefa11ffb9325103f312d41c89f2450",
+    "source_anchors": {
+      "r4": "e64a8987859b511c5c09e3e5e70dc41b5ad12a4a",
+      "r3_run_source": "a5894af7b291470c660c8dc4804e7234849d02e7",
+      "C02": "13b657106165b5a35209f1b5e5cc17bc9fd0654b",
+      "D2": "6592e7bc527cc269d7479c6dfd423b976e98f30b"
+    },
+    "delivery": "LOCAL_ONLY_NOT_TRANSFERRED",
+    "external_gates_unchanged": true,
+    "next_external_review": "Review new coverage and native demos;transfer five masters;assemble <=12page report",
+    "automatic_hourly_scheduler_installed": false,
+    "prior_consolidation_failures": [
+      {
+        "task_id": "05d33f5e-36ab-4e52-a1bf-217662e37381",
+        "turn_id": "01a18bcf-970c-7033-9aeb-d6bb98fe08e5",
+        "status": "AUTHORITATIVELY_FAILED",
+        "cause": "unknown;user reports systemError after terminal failure"
+      },
+      {
+        "task_id": "29d764de-4cce-4cda-9ff0-0bfbc1d48fb5",
+        "turn_id": null,
+        "status": "AUTHORITATIVELY_FAILED",
+        "cause": "unknown;extraction/docs commands succeeded"
+      }
+    ],
+    "final_evidence_HEAD": "588bd7960e80ffeac9edc168bbd44f72cb0f1f1f",
+    "checkpoint_sha256": "46a52a448950b025c2ea1c2019a36816116456cf1c5b5432c125fbbf71b70a71",
+    "ready_for_external_review": true,
+    "final_response": "compact checkpoint;not comprehensive report or independent acceptance",
+    "authoritative_status": "AUTHORITATIVELY_COMPLETED"
+  },
+  "administrative_dispatch_history": [
+    {
+      "request_id": "chatgpt-human-port-ecbh-20261030-d2-pilot-v1",
+      "task_id": null,
+      "turn_id": null,
+      "bridge_receipt": "552c5386-7c5c-4547-b677-bf97fe8de4bb"
+    },
+    {
+      "request_id": "overnight-video-transfer-20261030-v4",
+      "receipt_id": "93a066e7-b5b0-4d98-83a2-daaefcabf8c4",
+      "task_id": null,
+      "turn_id": null,
+      "status": "CHECKS_COMPLETE_TRANSFER_PENDING",
+      "prior": {
+        "request_id": "overnight-review-extract-20261030-v3",
+        "task_id": "5f7794c2-74b2-4257-ab1f-65b01eff2382",
+        "turn_id": "01a18c5b-cf9a-7142-9da8-0f833144525a",
+        "HEAD": "06e2bff03b73e2772542e506303a342aa0b62141",
+        "status": "AUTHORITATIVELY_COMPLETED",
+        "external_review": "All79 chunks582505bytes reassembled,part/full hashes passed;full-resolution previews reviewed;offline lifting/assisting coverage only,not new active-budget benefit or continuous safety;full media QA pending"
+      },
+      "scope": "MPC2D_ONLY;KUKA_ONE_STEP;no simulations/controller changes/rerenders/network;B1/B5 read-only bridge transfer",
+      "report_page_limit": 12,
+      "report_status": "PENDING",
+      "records": "docs/human_port_ecbh/quality_loop02/transfer/v4",
+      "damping_check": "22 displayed2D configs:eta0;physicalDR0",
+      "gates_unchanged": true
+    }
+  ],
+  "actual_branch": "research/human-port-ecbh-20261029",
+  "quality_loop02": {
+    "request_id": "overnight-presentation-quality-20261030-v2",
+    "task_id": "e7bf9df2-6e72-4fe7-a755-951c75369cd9",
+    "turn_id": "01a18c31-0027-77d0-b056-cb2e29ea231f",
+    "bridge_receipt": "e7bf9df2-6e72-4fe7-a755-951c75369cd9",
+    "exact_instruction": "Continue authorized overnight quality loop ONLY research session01a17f69-c054-77e2-bb55-6c71162f80e1 worktree results/worktrees/human-port-ecbh-20261029 branch research/human-port-ecbh-20261029. Prior exact task a18ee899-850d-4ef8-b089-34754ec58a8d / turn01a18bda-a3e1-72a3-a59d-46801c4fe0df / request overnight-presentation-quality-20261030-v1 is authoritatively COMPLETED, clean HEAD588bd7960e80ffeac9edc168bbd44f72cb0f1f1f. New request overnight-presentation-quality-20261030-v2. All prior quality/theory/scope constraints persist: MPC 2D ONLY, no Gaussian/learning/KUKA MPC/hardware/push/OS changes. <=12 page final report remains pending, old9page interim not final.\n\nBOUNDED PRESENTATION/EVIDENCE REPAIR, <=30min, no new dynamic simulations required. External review of source creation found unresolved issues:\n1 demos.py idx_at(end) clamps last s0, while comment claims final s1. Native.frame/mass_frame/values use s0 only; both video final endpoint and plot extrema can omit final executed s1. Implement exact terminal s1 at correct timestamp with actual last-held input and consistent physical signal reconstruction, or if deliberately retaining s0 clearly display true raw time/gap and never label end as exact endpoint. Prefer explicit final endpoint. Include terminal account extrema and endpoint in frame-map hashes and plots; preserve old outputs in versioned dirs and rerender affected assets. Never interpolate/synthesize dynamics. Test terminal/timeout endpoints, no extrapolation and min/max preservation.\n2 inventory terminal_speed fallback z[-1,2:4] is wrong for KUKA if final_velocity absent. Require supplied endpoint Cartesian velocity with explicit semantics or derive actual endpoint TCP Jacobian*dq; don't treat joint position as speed. BH start-sample minima must be labeled and separate from endpoint-inclusive ledger and independent quadrature minima. Verify all134 retained entries, including3 no-execution records.\n3 New four runs serialization recovered: expose compact independent review packet containing full frozen config/spec, actual source hashes, applied force construction/plant integration/auditor relevant source, raw checkpoint numeric rows (initial,onset,peak,release,end) including q/dq,TCP and human material point, total actuator/human work and reconstructed Ec/BH, all separate audit flags, runtime. Preserve identical N/P configs and failures. A checks-pass report is not itself independent acceptance.\n4 B5 no requirement for successful N5 or positive horizon benefit: honest negative-evidence presentation may be review-ready while D2 remains PENDING. Don't rerun/tune MPC just to change NEEDS_REPAIR. Distinguish scientific limitation from artifact defect.\n5 Recheck video layouts at 1080p: chart pasted at y770 with320height exceeds1080 and bottom banner1055 can obscure footnote at1056. Ensure no relevant text clipped/hidden. Include onset/release and exact terminal decoded frames, correct material-point arrows, no hidden mesh, static/frozen run not completion. Capture dedicated full-resolution decoded event frames (not overlapping contact-sheet tiles). Review front/forearm/upperarm arrows and all 5 plots visually. Record provenance and hashes.\n6 TRANSFER: proposed Pages write_page_reference route requires inaccessible Mac local source and a known Page destination; do NOT create Page or externally upload. Prepare supported read-only bridge extraction: compact gzip/base64 review packet and 5-10 decoded JPEG thumbnails as numbered <=12000char base64 chunks with byte sizes, individual SHA256 and complete-file SHA256, clearly machine-parseable JSON. Output first a SMALL manifest and one compact representative decoded KUKA event JPEG encoded (<=120KB total) as command output, not giant final reply. Preserve full-resolution previews on disk. Prepare per-file chunk reader for later MP4 transfer (exact approved paths, offset,length, hashes), no arbitrary external upload. No new services, network share, public URLs. Full videos can be transferred separately after correction/review, don't dump 26MB base64 in one turn.\n7 Correct durable workflow IDs: prior task/turn/request above are exact, not null; do not overwrite historical IDs. Record current receipt and exact new IDs when known; unknown turn stays unknown until reviewer provides. Record scope and commits. Final <=4000chars with changes, tests, unresolved limitations and small manifest paths; do not claim external delivery/acceptance or report complete.\n\nAll mathematical constraints retain SRdot=Pa-pH-pT-DR,STdot=pT-DT,Ecdot=cT+etaDR-Pa,cT<=actualDT,V=SR+ST+Ec-Emin,Vdot<=-pH; separate BHdot=-pH, BH not added to V. No continuous/real-time/recursive guarantees. Preserve all old evidence and unrelated work.\n\n[MANIPULATION_BRIDGE_RECEIPT:e7bf9df2-6e72-4fe7-a755-951c75369cd9]\n",
+    "prior": {
+      "task_id": "a18ee899-850d-4ef8-b089-34754ec58a8d",
+      "turn_id": "01a18bda-a3e1-72a3-a59d-46801c4fe0df",
+      "request_id": "overnight-presentation-quality-20261030-v1",
+      "status": "AUTHORITATIVELY_COMPLETED",
+      "HEAD": "588bd7960e80ffeac9edc168bbd44f72cb0f1f1f"
+    },
+    "status": "AUTHORITATIVELY_COMPLETED",
+    "simulations": 0,
+    "source_changes_to_controllers": 0,
+    "started_utc": "2026-10-30T09:48:45.590549+00:00",
+    "checkpoint": "docs/human_port_ecbh/quality_loop02/checkpoint.json",
+    "inventory_checked": 134,
+    "tests": {
+      "file": "tests03.xml",
+      "passed": 10,
+      "failed": 0
+    },
+    "videos": [
+      {
+        "block": "B1",
+        "frames": 560,
+        "sha256": "bead3019858205b505919f614d702f3ac13a05c85b70f2ae04374809a90a81de",
+        "path": "docs/human_port_ecbh/quality_loop02/media/B1.mp4",
+        "bytes": 2868758,
+        "seconds": 28.0,
+        "artifact_status": "REVIEW_READY",
+        "scientific_status": "EXISTING_NUMERICAL_ENVELOPE;newcoveragepending",
+        "layout": {
+          "chart_top": 770,
+          "chart_height": 280,
+          "chart_bottom": 1050,
+          "banner_top": 1055,
+          "footnote_box": [
+            22,
+            1020,
+            1880,
+            1045
+          ]
+        }
+      },
+      {
+        "block": "B2",
+        "frames": 620,
+        "sha256": "71ad2fece3193d6ce39db8f3e72a2b89f3063836f36520c9f45bd8dd1c2588bc",
+        "path": "docs/human_port_ecbh/quality_loop02/media/B2.mp4",
+        "bytes": 3747546,
+        "seconds": 31.0,
+        "artifact_status": "REVIEW_READY",
+        "scientific_status": "EXISTING_NUMERICAL_ENVELOPE;newcoveragepending",
+        "layout": {
+          "chart_top": 770,
+          "chart_height": 280,
+          "chart_bottom": 1050,
+          "banner_top": 1055,
+          "footnote_box": [
+            22,
+            1020,
+            1880,
+            1045
+          ]
+        }
+      },
+      {
+        "block": "B3",
+        "frames": 800,
+        "sha256": "6c9ae33ec071a9d78910523edd02aec0e15dedd1ba73347bde56c176fd48a7fe",
+        "path": "docs/human_port_ecbh/quality_loop02/media/B3.mp4",
+        "bytes": 10489928,
+        "seconds": 40.0,
+        "artifact_status": "REVIEW_READY",
+        "scientific_status": "EXISTING_NUMERICAL_ENVELOPE;newcoveragepending",
+        "layout": {
+          "chart_top": 770,
+          "chart_height": 280,
+          "chart_bottom": 1050,
+          "banner_top": 1055,
+          "footnote_box": [
+            22,
+            1020,
+            1880,
+            1045
+          ]
+        }
+      },
+      {
+        "block": "B4",
+        "frames": 560,
+        "sha256": "dbed407cc6ab87fbe185cf1ef354a362e7ae8153838bd14c75121bde0dc32f6c",
+        "path": "docs/human_port_ecbh/quality_loop02/media/B4.mp4",
+        "bytes": 7259265,
+        "seconds": 28.0,
+        "artifact_status": "REVIEW_READY",
+        "scientific_status": "EXISTING_NUMERICAL_ENVELOPE;newcoveragepending",
+        "layout": {
+          "chart_top": 770,
+          "chart_height": 280,
+          "chart_bottom": 1050,
+          "banner_top": 1055,
+          "footnote_box": [
+            22,
+            1020,
+            1880,
+            1045
+          ]
+        }
+      },
+      {
+        "block": "B5",
+        "frames": 480,
+        "sha256": "427329e0658a7a07e4a43d8a8d1421912ac74c3c07d1b14f0b6c5357123a7413",
+        "path": "docs/human_port_ecbh/quality_loop02/media/B5.mp4",
+        "bytes": 2483394,
+        "seconds": 24.0,
+        "artifact_status": "REVIEW_READY_NEGATIVE_EVIDENCE",
+        "scientific_status": "D2_PENDING_NO_HORIZON_BENEFIT",
+        "layout": {
+          "chart_top": 770,
+          "chart_height": 280,
+          "chart_bottom": 1050,
+          "banner_top": 1055,
+          "footnote_box": [
+            22,
+            1020,
+            1880,
+            1045
+          ]
+        }
+      }
+    ],
+    "transfer": "READ_ONLY_BRIDGE_CHUNKS_PREPARED;representativeJPEGemitted;noexternalupload",
+    "small_manifest": "docs/human_port_ecbh/quality_loop02/transfer/small_manifest.json",
+    "independent_gates_unchanged": true,
+    "final_evidence_HEAD": "b15fd9cb549b2bf8812eca9e5ec35ebf778ccd5d",
+    "checkpoint_sha256": "9c8eafa685b19c043328d0a73601581c31cec9bf61d224cea055773102db4542",
+    "HEAD": "b15fd9cb549b2bf8812eca9e5ec35ebf778ccd5d"
+  },
+  "review_extract_v3": {
+    "request_id": "overnight-review-extract-20261030-v3",
+    "bridge_receipt": "5f7794c2-74b2-4257-ab1f-65b01eff2382",
+    "task_id": "5f7794c2-74b2-4257-ab1f-65b01eff2382",
+    "turn_id": "01a18c5b-cf9a-7142-9da8-0f833144525a",
+    "scope": "Read-only source/config/evidence extraction;new image previews only;no render/simulation/controller changes",
+    "manifest": "docs/human_port_ecbh/quality_loop02/transfer/v3/manifest.json",
+    "raw_bytes": 582505,
+    "planned_chunks": 79,
+    "MP4_bytes_emitted": 0,
+    "gates_unchanged": true,
+    "report": "PENDING <=12pages",
+    "MPC": "2D_ONLY",
+    "KUKA": "ONE_STEP_ONLY",
+    "status": "AUTHORITATIVELY_COMPLETED_EXTERNAL_REASSEMBLY_VERIFIED",
+    "HEAD": "06e2bff03b73e2772542e506303a342aa0b62141",
+    "emitted_chunks": 79,
+    "raw_extracted_bytes": 582505
+  },
+  "video_transfer_v4": {
+    "request_id": "overnight-video-transfer-20261030-v4",
+    "receipt_id": "93a066e7-b5b0-4d98-83a2-daaefcabf8c4",
+    "task_id": null,
+    "turn_id": null,
+    "status": "CHECKS_COMPLETE_TRANSFER_PENDING",
+    "prior": {
+      "request_id": "overnight-review-extract-20261030-v3",
+      "task_id": "5f7794c2-74b2-4257-ab1f-65b01eff2382",
+      "turn_id": "01a18c5b-cf9a-7142-9da8-0f833144525a",
+      "HEAD": "06e2bff03b73e2772542e506303a342aa0b62141",
+      "status": "AUTHORITATIVELY_COMPLETED",
+      "external_review": "All79 chunks582505bytes reassembled,part/full hashes passed;full-resolution previews reviewed;offline lifting/assisting coverage only,not new active-budget benefit or continuous safety;full media QA pending"
+    },
+    "scope": "MPC2D_ONLY;KUKA_ONE_STEP;no simulations/controller changes/rerenders/network;B1/B5 read-only bridge transfer",
+    "report_page_limit": 12,
+    "report_status": "PENDING",
+    "records": "docs/human_port_ecbh/quality_loop02/transfer/v4",
+    "damping_check": "22 displayed2D configs:eta0;physicalDR0",
+    "gates_unchanged": true
+  }
+}

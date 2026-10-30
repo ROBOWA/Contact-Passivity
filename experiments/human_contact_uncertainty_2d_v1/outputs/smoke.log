@@ -1,0 +1,66 @@
+[smoke] 25/1200 episodes, 12s, errors=0
+[smoke] 50/1200 episodes, 24s, errors=0
+[smoke] 75/1200 episodes, 51s, errors=0
+[smoke] 100/1200 episodes, 86s, errors=0
+[smoke] 125/1200 episodes, 119s, errors=0
+[smoke] 150/1200 episodes, 151s, errors=0
+[smoke] 175/1200 episodes, 189s, errors=0
+[smoke] 200/1200 episodes, 233s, errors=0
+[smoke] 225/1200 episodes, 275s, errors=0
+[smoke] 250/1200 episodes, 317s, errors=0
+[smoke] 275/1200 episodes, 352s, errors=0
+[smoke] 300/1200 episodes, 391s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[smoke] 325/1200 episodes, 438s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[smoke] 350/1200 episodes, 479s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[smoke] 375/1200 episodes, 526s, errors=0
+[smoke] 400/1200 episodes, 572s, errors=0
+[smoke] 425/1200 episodes, 614s, errors=0
+[smoke] 450/1200 episodes, 657s, errors=0
+[smoke] 475/1200 episodes, 697s, errors=0
+[smoke] 500/1200 episodes, 714s, errors=0
+[smoke] 525/1200 episodes, 741s, errors=0
+[smoke] 550/1200 episodes, 773s, errors=0
+[smoke] 575/1200 episodes, 806s, errors=0
+[smoke] 600/1200 episodes, 835s, errors=0
+[smoke] 625/1200 episodes, 864s, errors=0
+[smoke] 650/1200 episodes, 897s, errors=0
+[smoke] 675/1200 episodes, 932s, errors=0
+[smoke] 700/1200 episodes, 963s, errors=0
+[smoke] 725/1200 episodes, 989s, errors=0
+[smoke] 750/1200 episodes, 1003s, errors=0
+[smoke] 775/1200 episodes, 1024s, errors=0
+[smoke] 800/1200 episodes, 1043s, errors=0
+[smoke] 825/1200 episodes, 1064s, errors=0
+[smoke] 850/1200 episodes, 1084s, errors=0
+[smoke] 875/1200 episodes, 1101s, errors=0
+[smoke] 900/1200 episodes, 1122s, errors=0
+[smoke] 925/1200 episodes, 1145s, errors=0
+[smoke] 950/1200 episodes, 1164s, errors=0
+[smoke] 975/1200 episodes, 1172s, errors=0
+[smoke] 1000/1200 episodes, 1176s, errors=0
+[smoke] 1025/1200 episodes, 1179s, errors=0
+[smoke] 1050/1200 episodes, 1183s, errors=0
+[smoke] 1075/1200 episodes, 1188s, errors=0
+[smoke] 1100/1200 episodes, 1192s, errors=0
+[smoke] 1125/1200 episodes, 1196s, errors=0
+[smoke] 1150/1200 episodes, 1200s, errors=0
+[smoke] 1175/1200 episodes, 1206s, errors=0
+[smoke] 1200/1200 episodes, 1214s, errors=0

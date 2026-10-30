@@ -1,0 +1,29 @@
+[smoke2] 25/270 episodes, 42s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[smoke2] 50/270 episodes, 86s, errors=0
+[smoke2] 75/270 episodes, 139s, errors=0
+[smoke2] 100/270 episodes, 186s, errors=0
+[smoke2] 125/270 episodes, 220s, errors=0
+[smoke2] 150/270 episodes, 260s, errors=0
+[smoke2] 175/270 episodes, 296s, errors=0
+[smoke2] 200/270 episodes, 317s, errors=0
+[smoke2] 225/270 episodes, 339s, errors=0
+[smoke2] 250/270 episodes, 364s, errors=0
+[smoke2] 270/270 episodes, 380s, errors=0

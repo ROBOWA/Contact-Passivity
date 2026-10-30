@@ -1,40 +1,56 @@
-# KUKA iiwa14 table scene (MuJoCo)
+# Contact Passivity — MuJoCo experiments
 
-**Oracle joint-torque QP experiment:** [report and acceptance evidence](docs/oracle_joint_qp/report.md),
-[中文摘要](docs/oracle_joint_qp/morning_summary_zh.md). The optional implementation
-uses the same nominal controller/plant, a known forearm force point, isolated
-MuJoCo predictions and seven joint torque corrections. Shadow/replay and a
-specific active net-energy limit are validated; contact preservation and some
-held-out active cases fail, so the overall delivery is explicitly **partial**.
+The unified working folder is **`/Users/carl/code/contactPassivity`**. Local
+`main` includes the latest development revision, `5e792cf` (2026-10-16), and
+all preceding KUKA stages. Full experiment outputs from the four former
+worktrees are under `results/`; the independent historical backup is under
+`archives/preservation/`. See the [consolidation record and integrity check](docs/consolidation/20261027/README.md).
+
+The current KUKA model is a torque-controlled LBR iiwa 14 with a spherical
+polishing tool and force/torque sensor. Its baseline controller approaches the
+table, regulates 10 N normal force, slides and recovers from contact loss.
+The following experimental layers share this baseline and remain selectable:
+
+| Stage | Entry point | Evidence |
+| --- | --- | --- |
+| Nominal contact controller | `python -m kuka_table_sim.scenarios nominal` | [Baseline repairs](docs/baseline_repair/before_after.md) |
+| Stage 1 oracle joint-torque QP | `python -m kuka_table_sim.oracle_experiments` | [Partial result](docs/oracle_joint_qp/report.md), [中文摘要](docs/oracle_joint_qp/morning_summary_zh.md) |
+| Stage 2 energy reserve, governor and task constraints | `python -m kuka_table_sim.energy_experiments` | [Stage 2 report and explicit trial outcomes](docs/energy_guard_stage2/20261015-c5601e5e/final_02/report.md) |
+| Stage 2 figures and reporting | `python scripts/kuka_poc_figures.py` | [PoC report](docs/kuka_poc_figures/20261016-41359f2/final/report.md) |
+| Latest selective comparisons K0–K4 | `python -m kuka_table_sim.selective_experiments` | [Partial result: 20/32 trials completed](docs/selective_comparisons/20261016-263136e/final/report.md) |
+
+Stage 2 and K0–K4 are distinct controller families: K3/K4 do not include the
+Stage 2 reserve/backup or hard contact-quality constraints. Their reports retain
+failed and stopped trials and state the limits of each result.
 
 ```bash
-python -m kuka_table_sim.oracle_experiments case --name resistance --mode active --budget .12 --task-weight 1 --out results/oracle/single
-python -m kuka_table_sim.oracle_experiments matrix --out results/oracle/final
+cd /Users/carl/code/contactPassivity
+source .venv/bin/activate
+python -m pytest -q
+
+# New trials require NEW output folders; retained historical runs stay intact.
+python -m kuka_table_sim.energy_experiments case --case main --variant D --out results/new_stage2_main_D
+python -m kuka_table_sim.selective_experiments case --case C_blocking --mode K4 --out results/new_selective_C_K4
+
+# Check or replay the preserved selective recordings without rerunning physics.
+python scripts/selective_viewer.py --case C_blocking --mode K4 --check
+mjpython scripts/selective_viewer.py --case C_blocking --mode K4
+
+# Recheck preserved historical source, data and backups after consolidation.
+python scripts/verify_consolidation.py
 ```
 
 Install the optional solver/plot dependencies with `pip install -e '.[oracle,test]'`
-or use the pinned `requirements.txt`. Failed trials exit 2 and preserve logs/state;
-the matrix continues through its remaining cases. See the report for full reproduction.
-
-Milestone 1 of the contact-passivity simulation rebuild: a KUKA LBR iiwa 14
-standing above a stationary table in MuJoCo, driven by seven joint-torque
-actuators. The spherical polishing tool from the MEAM 6230 Panda project is
-mounted on the flange, with a force/torque (FT) sensor at its base. Two
-controllers are provided: a gravity-compensated joint PD hold, and an
-operational-space **force controller** that approaches the table, holds a
-constant normal force from the FT reading, slides back and forth along a chosen
-direction, and recovers from contact loss. A stage-coherent recorder logs the
-contact force, tool motion and signed contact work for a later shadow
-predictor. There is no object, energy tank, QP, predictor or hardware
-interface yet.
+or use the pinned `requirements.txt`. Failed trials preserve logs/state and exit 2.
+The sections below document the shared model, baseline controller and measurement
+chain in detail.
 
 ![KUKA iiwa14 above the table](docs/kuka_table_scene.png)
 
-**Previous research work** (planar sliding PoC, Franka Panda selective
-passivation, paper sources, results) lives on the `proposal` branch. It is still
-present in this branch's history and tree (`mujoco_sliding/`, `mujoco_panda/`,
-`paper*/`, `results*/`), but nothing here imports it and its original
-`requirements.txt` is the one on `proposal`.
+**Earlier backends and papers** remain under `mujoco_sliding/`, `mujoco_panda/`,
+`paper*/` and `results*/`. They use different robot models and are kept alongside
+the current KUKA package. Their original dependency file remains on `proposal`;
+the root installation and default tests target KUKA.
 
 ## Installation
 
@@ -45,10 +61,10 @@ viewer launches and exits cleanly). `mj_fullM` changed signature between
 those releases; `holding.full_mass_matrix` handles both.
 
 ```bash
-git clone git@github.com:ROBOWA/Contact-Passivity.git && cd Contact-Passivity
+git clone git@github.com:ROBOWA/Contact-Passivity.git contactPassivity && cd contactPassivity
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt        # pinned, tested versions (matplotlib: plots only, pytest: tests only)
-python -m pytest -q                    # 50 tests, about 70 s
+python -m pytest -q                    # current KUKA regression suite
 ```
 
 Robot meshes and the MJCF are vendored under `assets/kuka_iiwa_14/`, so no

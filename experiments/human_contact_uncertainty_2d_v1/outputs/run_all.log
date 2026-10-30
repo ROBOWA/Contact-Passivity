@@ -1,0 +1,624 @@
+changed core files: none
+[main] 25/4000 episodes, 16s, errors=0
+[main] 50/4000 episodes, 33s, errors=0
+[main] 75/4000 episodes, 51s, errors=0
+[main] 100/4000 episodes, 69s, errors=0
+[main] 125/4000 episodes, 83s, errors=0
+[main] 150/4000 episodes, 103s, errors=0
+[main] 175/4000 episodes, 124s, errors=0
+[main] 200/4000 episodes, 145s, errors=0
+[main] 225/4000 episodes, 212s, errors=0
+[main] 250/4000 episodes, 278s, errors=0
+[main] 275/4000 episodes, 343s, errors=0
+[main] 300/4000 episodes, 407s, errors=0
+[main] 325/4000 episodes, 454s, errors=0
+[main] 350/4000 episodes, 517s, errors=0
+[main] 375/4000 episodes, 580s, errors=0
+[main] 400/4000 episodes, 641s, errors=0
+[main] 425/4000 episodes, 687s, errors=0
+[main] 450/4000 episodes, 740s, errors=0
+[main] 475/4000 episodes, 795s, errors=0
+[main] 500/4000 episodes, 849s, errors=0
+[main] 525/4000 episodes, 897s, errors=0
+[main] 550/4000 episodes, 940s, errors=0
+[main] 575/4000 episodes, 994s, errors=0
+[main] 600/4000 episodes, 1048s, errors=0
+[main] 625/4000 episodes, 1108s, errors=0
+[main] 650/4000 episodes, 1155s, errors=0
+[main] 675/4000 episodes, 1212s, errors=0
+[main] 700/4000 episodes, 1272s, errors=0
+[main] 725/4000 episodes, 1330s, errors=0
+[main] 750/4000 episodes, 1384s, errors=0
+[main] 775/4000 episodes, 1434s, errors=0
+[main] 800/4000 episodes, 1491s, errors=0
+[main] 825/4000 episodes, 1537s, errors=0
+[main] 850/4000 episodes, 1583s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[main] 875/4000 episodes, 1621s, errors=0
+[main] 900/4000 episodes, 1670s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[main] 925/4000 episodes, 1720s, errors=0
+[main] 950/4000 episodes, 1769s, errors=0
+[main] 975/4000 episodes, 1816s, errors=0
+[main] 1000/4000 episodes, 1855s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[main] 1025/4000 episodes, 1915s, errors=0
+[main] 1050/4000 episodes, 1973s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[main] 1075/4000 episodes, 2033s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[main] 1100/4000 episodes, 2085s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[main] 1125/4000 episodes, 2132s, errors=0
+[main] 1150/4000 episodes, 2188s, errors=0
+[main] 1175/4000 episodes, 2243s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[main] 1200/4000 episodes, 2299s, errors=0
+[main] 1225/4000 episodes, 2342s, errors=0
+[main] 1250/4000 episodes, 2394s, errors=0
+[main] 1275/4000 episodes, 2444s, errors=0
+[main] 1300/4000 episodes, 2496s, errors=0
+[main] 1325/4000 episodes, 2548s, errors=0
+[main] 1350/4000 episodes, 2591s, errors=0
+[main] 1375/4000 episodes, 2640s, errors=0
+[main] 1400/4000 episodes, 2694s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[main] 1425/4000 episodes, 2747s, errors=0
+[main] 1450/4000 episodes, 2793s, errors=0
+[main] 1475/4000 episodes, 2846s, errors=0
+[main] 1500/4000 episodes, 2901s, errors=0
+[main] 1525/4000 episodes, 2955s, errors=0
+[main] 1550/4000 episodes, 3001s, errors=0
+[main] 1575/4000 episodes, 3054s, errors=0
+[main] 1600/4000 episodes, 3100s, errors=0
+[main] 1625/4000 episodes, 3117s, errors=0
+[main] 1650/4000 episodes, 3135s, errors=0
+[main] 1675/4000 episodes, 3151s, errors=0
+[main] 1700/4000 episodes, 3168s, errors=0
+[main] 1725/4000 episodes, 3204s, errors=0
+[main] 1750/4000 episodes, 3240s, errors=0
+[main] 1775/4000 episodes, 3275s, errors=0
+[main] 1800/4000 episodes, 3310s, errors=0
+[main] 1825/4000 episodes, 3340s, errors=0
+[main] 1850/4000 episodes, 3375s, errors=0
+[main] 1875/4000 episodes, 3411s, errors=0
+[main] 1900/4000 episodes, 3447s, errors=0
+[main] 1925/4000 episodes, 3483s, errors=0
+[main] 1950/4000 episodes, 3522s, errors=0
+[main] 1975/4000 episodes, 3565s, errors=0
+[main] 2000/4000 episodes, 3605s, errors=0
+[main] 2025/4000 episodes, 3636s, errors=0
+[main] 2050/4000 episodes, 3663s, errors=0
+[main] 2075/4000 episodes, 3695s, errors=0
+[main] 2100/4000 episodes, 3727s, errors=0
+[main] 2125/4000 episodes, 3764s, errors=0
+[main] 2150/4000 episodes, 3800s, errors=0
+[main] 2175/4000 episodes, 3835s, errors=0
+[main] 2200/4000 episodes, 3872s, errors=0
+[main] 2225/4000 episodes, 3909s, errors=0
+[main] 2250/4000 episodes, 3943s, errors=0
+[main] 2275/4000 episodes, 3976s, errors=0
+[main] 2300/4000 episodes, 4013s, errors=0
+[main] 2325/4000 episodes, 4056s, errors=0
+[main] 2350/4000 episodes, 4093s, errors=0
+[main] 2375/4000 episodes, 4135s, errors=0
+[main] 2400/4000 episodes, 4171s, errors=0
+[main] 2425/4000 episodes, 4188s, errors=0
+[main] 2450/4000 episodes, 4205s, errors=0
+[main] 2475/4000 episodes, 4223s, errors=0
+[main] 2500/4000 episodes, 4239s, errors=0
+[main] 2525/4000 episodes, 4261s, errors=0
+[main] 2550/4000 episodes, 4283s, errors=0
+[main] 2575/4000 episodes, 4305s, errors=0
+[main] 2600/4000 episodes, 4327s, errors=0
+[main] 2625/4000 episodes, 4343s, errors=0
+[main] 2650/4000 episodes, 4363s, errors=0
+[main] 2675/4000 episodes, 4384s, errors=0
+[main] 2700/4000 episodes, 4405s, errors=0
+[main] 2725/4000 episodes, 4426s, errors=0
+[main] 2750/4000 episodes, 4448s, errors=0
+[main] 2775/4000 episodes, 4472s, errors=0
+[main] 2800/4000 episodes, 4496s, errors=0
+[main] 2825/4000 episodes, 4517s, errors=0
+[main] 2850/4000 episodes, 4534s, errors=0
+[main] 2875/4000 episodes, 4555s, errors=0
+[main] 2900/4000 episodes, 4574s, errors=0
+[main] 2925/4000 episodes, 4596s, errors=0
+[main] 2950/4000 episodes, 4618s, errors=0
+[main] 2975/4000 episodes, 4638s, errors=0
+[main] 3000/4000 episodes, 4659s, errors=0
+[main] 3025/4000 episodes, 4679s, errors=0
+[main] 3050/4000 episodes, 4698s, errors=0
+[main] 3075/4000 episodes, 4716s, errors=0
+[main] 3100/4000 episodes, 4737s, errors=0
+[main] 3125/4000 episodes, 4761s, errors=0
+[main] 3150/4000 episodes, 4785s, errors=0
+[main] 3175/4000 episodes, 4811s, errors=0
+[main] 3200/4000 episodes, 4829s, errors=0
+[main] 3225/4000 episodes, 4834s, errors=0
+[main] 3250/4000 episodes, 4837s, errors=0
+[main] 3275/4000 episodes, 4841s, errors=0
+[main] 3300/4000 episodes, 4844s, errors=0
+[main] 3325/4000 episodes, 4848s, errors=0
+[main] 3350/4000 episodes, 4853s, errors=0
+[main] 3375/4000 episodes, 4857s, errors=0
+[main] 3400/4000 episodes, 4861s, errors=0
+[main] 3425/4000 episodes, 4866s, errors=0
+[main] 3450/4000 episodes, 4871s, errors=0
+[main] 3475/4000 episodes, 4875s, errors=0
+[main] 3500/4000 episodes, 4880s, errors=0
+[main] 3525/4000 episodes, 4884s, errors=0
+[main] 3550/4000 episodes, 4888s, errors=0
+[main] 3575/4000 episodes, 4893s, errors=0
+[main] 3600/4000 episodes, 4897s, errors=0
+[main] 3625/4000 episodes, 4901s, errors=0
+[main] 3650/4000 episodes, 4906s, errors=0
+[main] 3675/4000 episodes, 4910s, errors=0
+[main] 3700/4000 episodes, 4914s, errors=0
+[main] 3725/4000 episodes, 4918s, errors=0
+[main] 3750/4000 episodes, 4922s, errors=0
+[main] 3775/4000 episodes, 4927s, errors=0
+[main] 3800/4000 episodes, 4931s, errors=0
+[main] 3825/4000 episodes, 4936s, errors=0
+[main] 3850/4000 episodes, 4940s, errors=0
+[main] 3875/4000 episodes, 4944s, errors=0
+[main] 3900/4000 episodes, 4948s, errors=0
+[main] 3925/4000 episodes, 4953s, errors=0
+[main] 3950/4000 episodes, 4957s, errors=0
+[main] 3975/4000 episodes, 4961s, errors=0
+[main] 4000/4000 episodes, 4965s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[infeasible] 25/150 episodes, 55s, errors=0
+[infeasible] 50/150 episodes, 106s, errors=0
+[infeasible] 75/150 episodes, 146s, errors=0
+[infeasible] 100/150 episodes, 173s, errors=0
+[infeasible] 125/150 episodes, 186s, errors=0
+[infeasible] 150/150 episodes, 191s, errors=0
+[abl_time] 25/450 episodes, 53s, errors=0
+[abl_time] 50/450 episodes, 101s, errors=0
+[abl_time] 75/450 episodes, 151s, errors=0
+[abl_time] 100/450 episodes, 197s, errors=0
+[abl_time] 125/450 episodes, 242s, errors=0
+[abl_time] 150/450 episodes, 287s, errors=0
+[abl_time] 175/450 episodes, 333s, errors=0
+[abl_time] 200/450 episodes, 379s, errors=0
+[abl_time] 225/450 episodes, 420s, errors=0
+[abl_time] 250/450 episodes, 467s, errors=0
+[abl_time] 275/450 episodes, 511s, errors=0
+[abl_time] 300/450 episodes, 559s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[abl_time] 325/450 episodes, 606s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[abl_time] 350/450 episodes, 655s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[abl_time] 375/450 episodes, 703s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[abl_time] 400/450 episodes, 749s, errors=0
+[abl_time] 425/450 episodes, 798s, errors=0
+[abl_time] 450/450 episodes, 841s, errors=0
+[abl_beta] 25/600 episodes, 55s, errors=0
+[abl_beta] 50/600 episodes, 110s, errors=0
+[abl_beta] 75/600 episodes, 163s, errors=0
+[abl_beta] 100/600 episodes, 216s, errors=0
+[abl_beta] 125/600 episodes, 255s, errors=0
+[abl_beta] 150/600 episodes, 307s, errors=0
+[abl_beta] 175/600 episodes, 363s, errors=0
+[abl_beta] 200/600 episodes, 417s, errors=0
+[abl_beta] 225/600 episodes, 456s, errors=0
+[abl_beta] 250/600 episodes, 509s, errors=0
+[abl_beta] 275/600 episodes, 563s, errors=0
+[abl_beta] 300/600 episodes, 616s, errors=0
+[abl_beta] 325/600 episodes, 670s, errors=0
+[abl_beta] 350/600 episodes, 708s, errors=0
+[abl_beta] 375/600 episodes, 763s, errors=0
+[abl_beta] 400/600 episodes, 818s, errors=0
+[abl_beta] 425/600 episodes, 878s, errors=0
+[abl_beta] 450/600 episodes, 924s, errors=0
+[abl_beta] 475/600 episodes, 983s, errors=0
+[abl_beta] 500/600 episodes, 1045s, errors=0
+[abl_beta] 525/600 episodes, 1104s, errors=0
+[abl_beta] 550/600 episodes, 1162s, errors=0
+[abl_beta] 575/600 episodes, 1207s, errors=0
+[abl_beta] 600/600 episodes, 1264s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[abl_filter] 25/200 episodes, 14s, errors=0
+[abl_filter] 50/200 episodes, 28s, errors=0
+[abl_filter] 75/200 episodes, 42s, errors=0
+[abl_filter] 100/200 episodes, 56s, errors=0
+[abl_filter] 125/200 episodes, 69s, errors=0
+[abl_filter] 150/200 episodes, 80s, errors=0
+[abl_filter] 175/200 episodes, 85s, errors=0
+[abl_filter] 200/200 episodes, 89s, errors=0
+[abl_residual] 25/200 episodes, 59s, errors=0
+[abl_residual] 50/200 episodes, 113s, errors=0
+[abl_residual] 75/200 episodes, 167s, errors=0
+[abl_residual] 100/200 episodes, 220s, errors=0
+[abl_residual] 125/200 episodes, 259s, errors=0
+[abl_residual] 150/200 episodes, 312s, errors=0
+[abl_residual] 175/200 episodes, 365s, errors=0
+[abl_residual] 200/200 episodes, 412s, errors=0
+[abl_credit_exact] 25/200 episodes, 20s, errors=0
+[abl_credit_exact] 50/200 episodes, 39s, errors=0
+[abl_credit_exact] 75/200 episodes, 92s, errors=0
+[abl_credit_exact] 100/200 episodes, 139s, errors=0
+[abl_credit_exact] 125/200 episodes, 155s, errors=0
+[abl_credit_exact] 150/200 episodes, 172s, errors=0
+[abl_credit_exact] 175/200 episodes, 194s, errors=0
+[abl_credit_exact] 200/200 episodes, 216s, errors=0
+[abl_credit_conservative] 25/200 episodes, 21s, errors=0
+[abl_credit_conservative] 50/200 episodes, 39s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[abl_credit_conservative] 75/200 episodes, 100s, errors=0
+[abl_credit_conservative] 100/200 episodes, 153s, errors=0
+[abl_credit_conservative] 125/200 episodes, 168s, errors=0
+[abl_credit_conservative] 150/200 episodes, 185s, errors=0
+[abl_credit_conservative] 175/200 episodes, 215s, errors=0
+[abl_credit_conservative] 200/200 episodes, 242s, errors=0
+[abl_credit_invalid] 25/200 episodes, 19s, errors=0
+[abl_credit_invalid] 50/200 episodes, 37s, errors=0
+[abl_credit_invalid] 75/200 episodes, 88s, errors=0
+[abl_credit_invalid] 100/200 episodes, 131s, errors=0
+[abl_credit_invalid] 125/200 episodes, 147s, errors=0
+[abl_credit_invalid] 150/200 episodes, 165s, errors=0
+[abl_credit_invalid] 175/200 episodes, 183s, errors=0
+[abl_credit_invalid] 200/200 episodes, 202s, errors=0
+[sweep_s-0.15_u0.01] 25/90 episodes, 49s, errors=0
+[sweep_s-0.15_u0.01] 50/90 episodes, 97s, errors=0
+[sweep_s-0.15_u0.01] 75/90 episodes, 121s, errors=0
+[sweep_s-0.15_u0.01] 90/90 episodes, 133s, errors=0
+[sweep_s-0.15_u0.03] 25/90 episodes, 47s, errors=0
+[sweep_s-0.15_u0.03] 50/90 episodes, 93s, errors=0
+[sweep_s-0.15_u0.03] 75/90 episodes, 116s, errors=0
+[sweep_s-0.15_u0.03] 90/90 episodes, 129s, errors=0
+[sweep_s-0.15_u0.06] 25/90 episodes, 47s, errors=0
+[sweep_s-0.15_u0.06] 50/90 episodes, 93s, errors=0
+[sweep_s-0.15_u0.06] 75/90 episodes, 115s, errors=0
+[sweep_s-0.15_u0.06] 90/90 episodes, 128s, errors=0
+[sweep_s0.0_u0.01] 25/90 episodes, 48s, errors=0
+[sweep_s0.0_u0.01] 50/90 episodes, 95s, errors=0
+[sweep_s0.0_u0.01] 75/90 episodes, 119s, errors=0
+[sweep_s0.0_u0.01] 90/90 episodes, 132s, errors=0
+[sweep_s0.0_u0.03] 25/90 episodes, 48s, errors=0
+[sweep_s0.0_u0.03] 50/90 episodes, 94s, errors=0
+[sweep_s0.0_u0.03] 75/90 episodes, 118s, errors=0
+[sweep_s0.0_u0.03] 90/90 episodes, 130s, errors=0
+[sweep_s0.0_u0.06] 25/90 episodes, 48s, errors=0
+[sweep_s0.0_u0.06] 50/90 episodes, 94s, errors=0
+[sweep_s0.0_u0.06] 75/90 episodes, 117s, errors=0
+[sweep_s0.0_u0.06] 90/90 episodes, 130s, errors=0
+[sweep_s0.15_u0.01] 25/90 episodes, 48s, errors=0
+[sweep_s0.15_u0.01] 50/90 episodes, 95s, errors=0
+[sweep_s0.15_u0.01] 75/90 episodes, 121s, errors=0
+[sweep_s0.15_u0.01] 90/90 episodes, 132s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[sweep_s0.15_u0.03] 25/90 episodes, 48s, errors=0
+[sweep_s0.15_u0.03] 50/90 episodes, 95s, errors=0
+[sweep_s0.15_u0.03] 75/90 episodes, 118s, errors=0
+[sweep_s0.15_u0.03] 90/90 episodes, 130s, errors=0
+[sweep_s0.15_u0.06] 25/90 episodes, 48s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[sweep_s0.15_u0.06] 50/90 episodes, 95s, errors=0
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+/Users/carl/code/contactPassivity/experiments/human_contact_uncertainty_2d_v1/hcu2d/metrics.py:64: RuntimeWarning: All-NaN axis encountered
+  release=rec, recovery_s=float(np.nanmax([r["recovery_s"] for r in rec])) if rec else np.nan,
+[sweep_s0.15_u0.06] 75/90 episodes, 119s, errors=0
+[sweep_s0.15_u0.06] 90/90 episodes, 130s, errors=0
+{
+ "C2": {
+  "n_forks": 4244,
+  "hH_lin": {
+   "z_mean": 0.3576886193885392,
+   "z_sd": 2.4690810765548123,
+   "cover": {
+    "0.5": 0.482799245994345,
+    "0.8": 0.6927426955702167,
+    "0.9": 0.7502356267672008,
+    "0.95": 0.7938265786993403,
+    "0.99": 0.8463713477851084
+   },
+   "cover_all_stages": {
+    "0.5": 0.5380458686773484,
+    "0.8": 0.7040999057492932,
+    "0.9": 0.7509896324222431,
+    "0.95": 0.7805058121269243,
+    "0.99": 0.8177191328934967
+   },
+   "lower_tail_exceed_01": 0.08176248821866164
+  },
+  "hH_mc": {
+   "z_mean": -0.20007593730622664,
+   "z_sd": 1.9931311599233217,
+   "cover": {
+    "0.5": 0.5190857681432611,
+    "0.8": 0.7408105560791706,
+    "0.9": 0.7964184731385485,
+    "0.95": 0.8331762488218661,
+    "0.99": 0.8755890669180019
+   },
+   "cover_all_stages": {
+    "0.5": 0.5347628023876846,
+    "0.8": 0.718316054037072,
+    "0.9": 0.7664153314483192,
+    "0.95": 0.7940936223688344,
+    "0.99": 0.828243795161797
+   },
+   "lower_tail_exceed_01": 0.08553251649387371
+  },
+  "Ec_lin": {
+   "z_mean": 1.2790014598772972,
+   "z_sd": 4.454689096695962,
+   "cover": {
+    "0.5": 0.5016493873704053,
+    "0.8": 0.6873232799245994,
+    "0.9": 0.7492931196983977,
+    "0.95": 0.7928840716305372,
+    "0.99": 0.8423656927426956
+   },
+   "cover_all_stages": {
+    "0.5": 0.4704838202953189,
+    "0.8": 0.6806157712849513,
+    "0.9": 0.7518693056864593,
+    "0.95": 0.7947219604147031,
+    "0.99": 0.8483034872761546
+   },
+   "lower_tail_exceed_01": 0.02544769085768143
+  },
+  "BH_lin": {
+   "z_mean": 0.40960807987200204,
+   "z_sd": 2.4522566369599224,
+   "cover": {
+    "0.5": 0.4839773798303487,
+    "0.8": 0.6929783223374175,
+    "0.9": 0.7544769085768144,
+    "0.95": 0.795004712535344,
+    "0.99": 0.8513195098963242
+   },
+   "cover_all_stages": {
+    "0.5": 0.550439836632108,
+    "0.8": 0.7142318567389255,
+    "0.9": 0.7585611058749607,
+    "0.95": 0.7860666038328621,
+    "0.99": 0.8229500471253535
+   },
+   "lower_tail_exceed_01": 0.07775683317624882
+  },
+  "WH_mc": {
+   "pit_hist": [
+    756,
+    246,
+    397,
+    466,
+    599,
+    410,
+    360,
+    251,
+    236,
+    523
+   ],
+   "exceed_q995": 0.05065975494816211,
+   "exceed_q005": 0.08741753063147974,
+   "cover": {
+    "0.5": 0.5035344015080113,
+    "0.8": 0.6986333647502356,
+    "0.9": 0.7726201696512723,
+    "0.95": 0.8169180018850142,
+    "0.99": 0.8619227144203582
+   }
+  },
+  "mean_power_correction": {
+   "note": "first-order mean W_H minus MC mean W_H over the horizon (J); MC includes \u2212tr Cov(f,v)",
+   "mean": 0.004746764099119159,
+   "median": 0.004705760641360995,
+   "q05": -0.0010050238928751625,
+   "q95": 0.01050279893347222
+  }
+ },
+ "C3": {
+  "n_forks": 4244,
+  "hH_lin": {
+   "z_mean": -0.040782575106438436,
+   "z_sd": 4.034184275573916,
+   "cover": {
+    "0.5": 0.4116399622997172,
+    "0.8": 0.6258246936852027,
+    "0.9": 0.6927426955702167,
+    "0.95": 0.7370405278039586,
+    "0.99": 0.7895852968897267
+   },
+   "cover_all_stages": {
+    "0.5": 0.4744894753377317,
+    "0.8": 0.6547910775997486,
+    "0.9": 0.7117813383600377,
+    "0.95": 0.7455230914231856,
+    "0.99": 0.7869305686459315
+   },
+   "lower_tail_exceed_01": 0.13100848256361922
+  },
+  "hH_mc": {
+   "z_mean": -0.33992719600313487,
+   "z_sd": 3.7619449728023797,
+   "cover": {
+    "0.5": 0.3930254476908577,
+    "0.8": 0.6300659754948162,
+    "0.9": 0.702167766258247,
+    "0.95": 0.7469368520263902,
+    "0.99": 0.7992459943449576
+   },
+   "cover_all_stages": {
+    "0.5": 0.46174992145774424,
+    "0.8": 0.6524662268300345,
+    "0.9": 0.7124725102104933,
+    "0.95": 0.7461671379202011,
+    "0.99": 0.7868677348413446
+   },
+   "lower_tail_exceed_01": 0.1373704052780396
+  },
+  "Ec_lin": {
+   "z_mean": 1.753103049041935,
+   "z_sd": 12.462287975202955,
+   "cover": {
+    "0.5": 0.36404335532516496,
+    "0.8": 0.574693685202639,
+    "0.9": 0.6467954759660698,
+    "0.95": 0.6974552309142319,
+    "0.99": 0.7613100848256362
+   },
+   "cover_all_stages": {
+    "0.5": 0.3521049324536601,
+    "0.8": 0.5705937794533459,
+    "0.9": 0.654602576185988,
+    "0.95": 0.7072258875274898,
+    "0.99": 0.7724316682375117
+   },
+   "lower_tail_exceed_01": 0.10626767200754006
+  },
+  "BH_lin": {
+   "z_mean": 0.11278826539161936,
+   "z_sd": 4.0349513689265954,
+   "cover": {
+    "0.5": 0.4095193213949105,
+    "0.8": 0.6279453345900095,
+    "0.9": 0.6998114985862394,
+    "0.95": 0.7408105560791706,
+    "0.99": 0.7938265786993403
+   },
+   "cover_all_stages": {
+    "0.5": 0.4829563305058121,
+    "0.8": 0.663823437009111,
+    "0.9": 0.7196512723845429,
+    "0.95": 0.7510524662268301,
+    "0.99": 0.7915017279296261
+   },
+   "lower_tail_exceed_01": 0.12064090480678605
+  },
+  "WH_mc": {
+   "pit_hist": [
+    952,
+    324,
+    365,
+    330,
+    359,
+    266,
+    272,
+    291,
+    245,
+    840
+   ],
+   "exceed_q995": 0.12229029217719133,
+   "exceed_q005": 0.1281809613572102,
+   "cover": {
+    "0.5": 0.3520263901979265,
+    "0.8": 0.5777568331762488,
+    "0.9": 0.6588124410933082,
+    "0.95": 0.7028746465598492,
+    "0.99": 0.7495287464655985
+   }
+  },
+  "mean_power_correction": {
+   "note": "first-order mean W_H minus MC mean W_H over the horizon (J); MC includes \u2212tr Cov(f,v)",
+   "mean": 0.0011755129272850596,
+   "median": 0.0012396544536658692,
+   "q05": -0.0013952628612414076,
+   "q95": 0.0035654577087288965
+  }
+ },
+ "meta": {
+  "scenarios": [
+   "block_release",
+   "assist_reverse",
+   "normal_oblique",
+   "moment_arm",
+   "bias_ood"
+  ],
+  "seeds": [
+   200,
+   220
+  ],
+  "every": 3,
+  "wall_s": 399.2213680744171,
+  "note": "forks execute the selected candidate open-loop in the TRUE simulator; no filter, no re-planning"
+ }
+}
+[refine_h0.001] 25/60 episodes, 48s, errors=0
+[refine_h0.001] 50/60 episodes, 64s, errors=0
+[refine_h0.001] 60/60 episodes, 66s, errors=0
+[refine_h0.0005] 25/60 episodes, 49s, errors=0
+[refine_h0.0005] 50/60 episodes, 66s, errors=0
+[refine_h0.0005] 60/60 episodes, 68s, errors=0
+[refine_h0.00025] 25/60 episodes, 53s, errors=0
+[refine_h0.00025] 50/60 episodes, 73s, errors=0
+[refine_h0.00025] 60/60 episodes, 75s, errors=0

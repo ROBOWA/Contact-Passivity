@@ -1,0 +1,3 @@
+/Users/carl/code/contactPassivity                                             5e792cf [main]
+/Users/carl/code/contactPassivity/results/worktrees/human-port-ecbh-20261029  a127f83 [research/human-port-ecbh-20261029]
+/Users/carl/code/contactPassivity/results/worktrees/taskref-ecb-20261029      2e01e11 [research/taskref-ecb-20261029]

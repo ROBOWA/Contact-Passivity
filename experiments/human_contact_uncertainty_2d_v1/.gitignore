@@ -1,0 +1,7 @@
+# Large, deterministically regenerable artefacts (see README "Full suite"); kept on disk, not committed.
+outputs/gp_data/
+outputs/calibration/*_records.json
+outputs/runs/*/traces/
+*.html
+__pycache__/
+.pytest_cache/

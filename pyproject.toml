@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "kuka-table-sim"
 version = "0.1.0"
-description = "KUKA iiwa14 above a table in MuJoCo with a joint-torque holding controller"
+description = "MuJoCo KUKA contact-control and selective-passivity experiments"
 requires-python = ">=3.10"
 dependencies = [
     "mujoco>=3.3,<4",

@@ -1,0 +1,179 @@
+{
+ "label": "main_v1",
+ "utc": "2026-10-30T09:46:32Z",
+ "sha256": {
+  "hcu2d/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "hcu2d/auditor.py": "32de2c087b18f8e9f4183cea5177cd644053e4e8807c5c7848a85db59f889318",
+  "hcu2d/belief.py": "6376c6e410876bdc08c4613c035cf0db4057891515ebf6d89942e9b8a24349a9",
+  "hcu2d/controllers.py": "cc17e3b087ef14c7b5a1fc11799921086dcd0ea24a949b78746f34ca12a946f2",
+  "hcu2d/episode.py": "cc9be8f58c305c56b06d5a006456e444ca0b72f903984d59b19ab499f7e2c2ee",
+  "hcu2d/gp.py": "a519124dbb1d2b5b7b72735d8f25768f3e0b0b89bcfab340ef24920c055cd65f",
+  "hcu2d/kernels.py": "6add9435cdffe3e6e2c2ab482658557071373e25a44a82df880bb6d02e524d6d",
+  "hcu2d/mdpdf.py": "d6325f60014a540f542f8f41e36e520a5166e60eb9905652e14b63907892f364",
+  "hcu2d/metrics.py": "97b3d75afe910a2fbdb2f0a8d7c402cbce42526e50be5b363369f5f3dfd303b1",
+  "hcu2d/model.py": "5f544d7bba6ed94381cc7100a04218f3b633378616eff706bfd098b814c0b7d3",
+  "hcu2d/params.py": "57c53cd9cf3614db7d764807e2e0d61d5528f5dc829e6442c049232f23ed79f1",
+  "hcu2d/planner.py": "3a3a6fd9d7498142dd535e450dda6fa4b8ddd87567396c074216823abe06b0a3",
+  "hcu2d/scenarios.py": "1a2ad31cfd59a7a398739f87cb45c883de41ba7ca5e4705b1a19b8059862e981",
+  "hcu2d/servo.py": "65632dbfa1b99b8578f0aa6297fecc9207ecf4a1cc8757a3d468c22dce27a67d",
+  "hcu2d/truth.py": "746e68285c2c212888edce6553936d3733a6dc14abdf67bb37b8c9ad93c0039a",
+  "hcu2d/viz.py": "0a8bfb9d16982394356312f2ca56628dbd6b3dc432cc11ad4ae9b2c916c101dd",
+  "outputs/models/gp_frozen.json": "f4c65a0266178ac6b6cbd6455afe0505c5c62ec7af8d4f73c4ea99fdb58f52da",
+  "scripts/analyze.py": "c47d5ab37b492e8d6583925721083a3c72871aefbfa61d147f8d67cd4ab76a02",
+  "scripts/calibration_fork.py": "e8310add24c541b55eeb0060a8c7940a19e3f9c83d034d0785fa4bfe273a94ac",
+  "scripts/eval_gp_offline.py": "950ec61ec96e0d93c373e877cf7a04395a9b04520c0afb5b579ddd29ba08ac59",
+  "scripts/fig_closed_loop.py": "82d0cccd0a73eb1ec528c195d6b22cd073c1729f493448f30a0c7a57f04fc933",
+  "scripts/fig_offline.py": "4229bd8ab892cd27378da473cc730439d6817c3c9942ae44e09f40431f40fdbf",
+  "scripts/fit_gp.py": "5de6e77425c2977b9feedac4ae08adc85afd019e8b43d835eef006799bcbe965",
+  "scripts/freeze.py": "6ac5d737d4c8ea515c488f81dde9bc0e5b6ad2975b2b774e3b1ca05a72840b0d",
+  "scripts/gen_gp_data.py": "f8687db3416ba19f4d3d379e1db5c1194734aa8997fada0838316574a0302868",
+  "scripts/make_animation.py": "4c7e5881d5a8e91e64006100230d246bcb4844acf0f7c5fe29cdd387161152fd",
+  "scripts/run_batch.py": "d98349908a5c565011e473d56657129e56f403e622025b4d52bbbf104c31fe9d",
+  "scripts/summarize_offline.py": "dd06eca5ddb3c73c018ecf3e42793cd5496dcb85ec6ea51970b862d11bed9fef",
+  "__default_config__": "1f5bad29fe2027655acaebddce9256b6d3378fc81bf61be18ff807418b6ec21a"
+ },
+ "config": {
+  "body": {
+   "m": 2.0,
+   "I": 0.03,
+   "L": 0.4,
+   "H": 0.1,
+   "r_T": [
+    0.12,
+    -0.1
+   ],
+   "h_e": 0.05,
+   "s_min": -0.18,
+   "s_max": 0.18
+  },
+  "robot": {
+   "B_R": [
+    1.0,
+    1.0,
+    0.005
+   ],
+   "u_max": [
+    40.0,
+    40.0,
+    4.0
+   ]
+  },
+  "contact": {
+   "k_n": 5000.0,
+   "b_n": 150.0,
+   "delta_s": 0.0005,
+   "mu": 0.3,
+   "v_eps": 0.005
+  },
+  "task": {
+   "f_d": 10.0,
+   "v_nom": 0.08,
+   "x_start": -0.25,
+   "x_target": 0.25,
+   "t_start": 0.6,
+   "t_ramp": 0.5,
+   "gap0": 0.002,
+   "T": 9.0
+  },
+  "ctrl": {
+   "K_t": 600.0,
+   "D_t": 50.0,
+   "k_f": 0.6,
+   "k_i": 8.0,
+   "I_max": 10.0,
+   "D_n": 40.0,
+   "K_th": 40.0,
+   "D_th": 2.0,
+   "mu_hat": 0.3,
+   "v_app": 0.03,
+   "D_brake": 400.0,
+   "I_leak": 5.0,
+   "D_brk": [
+    40.0,
+    40.0,
+    1.5
+   ]
+  },
+  "human": {
+   "K": [
+    150.0,
+    150.0
+   ],
+   "D": [
+    15.0,
+    15.0
+   ],
+   "gain_logstd": 0.2,
+   "sigma_p": 0.4,
+   "tau_p": 0.15,
+   "c_g": 1.0,
+   "v_g": 0.05,
+   "F_rel": 35.0,
+   "t_release_ramp": 0.02
+  },
+  "sensors": {
+   "sigma_m": 0.25,
+   "loc_rate": 25.0,
+   "sigma_es": 0.03,
+   "sigma_bs": 0.02,
+   "b_f": [
+    0.0,
+    0.0
+   ],
+   "b_s": null
+  },
+  "accounts": {
+   "Ec0": 0.6,
+   "BH0": 0.15,
+   "Emin": 0.0,
+   "lam_E": 5.0,
+   "lam_H": 5.0
+  },
+  "planner": {
+   "dt_ctrl": 0.02,
+   "N": 15,
+   "dt_sub": 0.005,
+   "N_s": 48,
+   "alpha_E": 0.01,
+   "alpha_H": 0.01,
+   "beta": 2.0,
+   "sig_v": [
+    0.0,
+    0.5,
+    1.0,
+    1.5
+   ],
+   "sig_K": [
+    1.0,
+    0.35
+   ],
+   "sig_F": [
+    1.0,
+    0.5
+   ],
+   "gp_window": 1.6,
+   "gp_rate": 25.0,
+   "cost": {
+    "w_prog": 1.0,
+    "e_prog": 0.02,
+    "w_f": 1.0,
+    "e_f": 3.0,
+    "w_th": 0.5,
+    "e_th": 0.05,
+    "w_u": 0.05,
+    "u_scale": [
+     20.0,
+     20.0,
+     2.0
+    ],
+    "w_du": 0.05,
+    "w_res": 2.0,
+    "R_task": 0.03
+   }
+  },
+  "physics": {
+   "h": 0.001
+  }
+ },
+ "note": "Controller tuning, GP hyperparameters and candidate set frozen before held-out closed-loop runs."
+}
